@@ -14,7 +14,7 @@ import (
 //   dom       -- Domain
 //   nstations -- number of stations
 //   withtext  -- show bending moment values
-//   numfmt    -- number format for values
+//   numfmt    -- number format for values. use "" for default
 //   tolM      -- tolerance to clip absolute values of M
 //   coef      -- coefficient to scale max(dimension) divided by max(Y); e.g. 0.1
 //  Output:

@@ -37,6 +37,7 @@ var (
 	IpsBins   gm.Bins          // bins for integration points
 	IpsMin    []float64        // [ndim] {x,y,z}_min among all ips
 	IpsMax    []float64        // [ndim] {x,y,z}_max among all ips
+	Beams     []*fem.Beam      // beams, if any
 
 	// defined entities and results loaded by LoadResults
 	Planes   map[string]*PlaneData // for points defined on planes. maps aliases to data
@@ -157,5 +158,10 @@ func Start(simfnpath string, stageIdx, regionIdx int) {
 			}
 		}
 		Cid2ips[cid] = ids
+
+		// beams
+		if beam, ok := ele.(*fem.Beam); ok {
+			Beams = append(Beams, beam)
+		}
 	}
 }

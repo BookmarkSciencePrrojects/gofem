@@ -512,7 +512,7 @@ func (o *Beam) PlotDiagMoment(M []float64, withtext bool, numfmt string, tolM, s
 				str = io.Sf(numfmt, mom)
 			} else {
 				if len(str) > 10 {
-					str = io.Sf("%.10f", mom) // truncate number
+					str = io.Sf("%.8f", mom) // truncate number
 					str = io.Sf("%g", io.Atof(str))
 				}
 			}
