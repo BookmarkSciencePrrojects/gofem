@@ -17,10 +17,11 @@ import (
 //   numfmt    -- number format for values. use "" for default
 //   tolM      -- tolerance to clip absolute values of M
 //   coef      -- coefficient to scale max(dimension) divided by max(Y); e.g. 0.1
+//   sf        -- scaling factor. use 0 for automatic computation
 //  Output:
 //   beams -- all beam elements
 //   allM  -- bending moments corresponding to all beams
-func PlotAllBendingMoments(dom *Domain, nstations int, withtext bool, numfmt string, tolM, coef float64) (beams []*Beam, allM [][]float64) {
+func PlotAllBendingMoments(dom *Domain, nstations int, withtext bool, numfmt string, tolM, coef, sf float64) (beams []*Beam, allM [][]float64) {
 
 	// collect beams
 	for _, elem := range dom.Elems {
@@ -36,11 +37,13 @@ func PlotAllBendingMoments(dom *Domain, nstations int, withtext bool, numfmt str
 	}
 
 	// scaling factor
-	maxAbsM := la.MatLargest(allM, 1)
-	dist := utl.Max(dom.Msh.Xmax-dom.Msh.Xmin, dom.Msh.Ymax-dom.Msh.Ymin)
-	sf := 1.0
-	if maxAbsM > 1e-7 {
-		sf = coef * dist / maxAbsM
+	if sf < 1e-8 {
+		maxAbsM := la.MatLargest(allM, 1)
+		dist := utl.Max(dom.Msh.Xmax-dom.Msh.Xmin, dom.Msh.Ymax-dom.Msh.Ymin)
+		sf = 1.0
+		if maxAbsM > 1e-7 {
+			sf = coef * dist / maxAbsM
+		}
 	}
 
 	// draw

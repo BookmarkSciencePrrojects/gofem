@@ -48,10 +48,10 @@ func Test_beamdiag01(tst *testing.T) {
 		LoadResults(nil)
 
 		// plot bending moment diagram
-		withtext, numfmt, tol, coef, onlyLin := true, "", 1e-10, 0.2, false
+		withtext, numfmt, tol, coef, sf, onlyLin := true, "", 1e-10, 0.2, 0.0, false
 		plt.SetForPng(1, 600, 150)
 		Dom.Msh.Draw2d(onlyLin)
-		BeamDiagMoment("", -1, withtext, numfmt, tol, coef)
+		BeamDiagMoment("", -1, withtext, numfmt, tol, coef, sf)
 		plt.SaveD("/tmp/gofem", "test_beamdiag02.png")
 	}
 }

@@ -27,7 +27,8 @@ func DefineBeams() {
 //   numfmt    -- number format for values. use "" for default
 //   tolM      -- tolerance to clip absolute values of M
 //   coef      -- coefficient to scale max(dimension) divided by max(Y); e.g. 0.1
-func BeamDiagMoment(alias string, idxI int, withtext bool, numfmt string, tolM, coef float64) {
+//   sf        -- scaling factor. use 0 for automatic computation
+func BeamDiagMoment(alias string, idxI int, withtext bool, numfmt string, tolM, coef, sf float64) {
 
 	// all beams
 	if alias == "" {
@@ -40,11 +41,13 @@ func BeamDiagMoment(alias string, idxI int, withtext bool, numfmt string, tolM, 
 		}
 
 		// scaling factor
-		maxAbsM := la.MatLargest(allM, 1)
-		dist := utl.Max(Dom.Msh.Xmax-Dom.Msh.Xmin, Dom.Msh.Ymax-Dom.Msh.Ymin)
-		sf := 1.0
-		if maxAbsM > 1e-7 {
-			sf = coef * dist / maxAbsM
+		if sf < 1e-8 {
+			maxAbsM := la.MatLargest(allM, 1)
+			dist := utl.Max(Dom.Msh.Xmax-Dom.Msh.Xmin, Dom.Msh.Ymax-Dom.Msh.Ymin)
+			sf = 1.0
+			if maxAbsM > 1e-7 {
+				sf = coef * dist / maxAbsM
+			}
 		}
 
 		// draw
