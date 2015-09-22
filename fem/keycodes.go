@@ -10,26 +10,6 @@ import (
 	"github.com/cpmech/gosl/io"
 )
 
-/*
-func GetIntegrationPoints(nip, nipf int, cell *inp.Cell) (ipsElem, ipsFace []shp.Ipoint, err error) {
-
-	// get integration points of element
-	ipsElem, err = shp.GetIps(cell.Type, nip)
-	if err != nil {
-		err = chk.Err("cannot get integration points for element with shape type=%q and nip=%d\n%v", cellType, nip, err)
-		return
-	}
-
-	// get integration points of face
-	faceType := shp.GetFaceType(cellType)
-	ipsFace, err = shp.GetIps(faceType, nipf)
-	if err != nil {
-		err = chk.Err("cannot get integration points for face with face-shape type=%q and nip=%d\n%v", faceType, nip, err)
-	}
-	return
-}
-*/
-
 func GetSolidFlags(axisym, pstress bool, extra string) (useB, debug bool, thickness float64) {
 
 	// defaults
