@@ -48,7 +48,6 @@ func BeamDiagMoment(alias string, idxI int, withtext bool, numfmt string, tolM, 
 		}
 
 		// draw
-		Dom.Msh.Draw2d()
 		for i, beam := range Beams {
 			beam.PlotDiagMoment(allM[i], withtext, numfmt, tolM, sf)
 		}
