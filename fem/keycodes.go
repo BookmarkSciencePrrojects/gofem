@@ -27,14 +27,9 @@ func GetSolidFlags(axisym, pstress bool, extra string) (useB, debug bool, thickn
 		useB = true
 	}
 
-	// flag: thickess => plane-stress
+	// flag: thickess
 	if s_thick, found := io.Keycode(extra, "thick"); found {
 		thickness = io.Atof(s_thick)
-	}
-
-	// fix thickness flag
-	if !pstress {
-		thickness = 1.0
 	}
 
 	// flag: debug
