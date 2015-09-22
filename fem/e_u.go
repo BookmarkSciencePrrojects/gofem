@@ -31,7 +31,7 @@ type ElemU struct {
 
 	// optional data
 	UseB      bool    // use B matrix
-	Thickness float64 // thickness (for plane-stress)
+	Thickness float64 // thickness
 	Debug     bool    // debugging flag
 
 	// integration points
