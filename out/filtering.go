@@ -210,7 +210,7 @@ func (o AlongX) Locate() (res Points) {
 	if len(o) > 1 {
 		z_cte = o[1]
 	}
-	return Along{{0, y_cte, z_cte}, {1, y_cte, z_cte}}.Locate()
+	return Along{{Dom.Msh.Xmin, y_cte, z_cte}, {Dom.Msh.Xmax, y_cte, z_cte}}.Locate()
 }
 
 // Locate finds points
@@ -219,13 +219,13 @@ func (o AlongY) Locate() (res Points) {
 	if len(o) > 1 {
 		z_cte = o[1]
 	}
-	return Along{{x_cte, 0, z_cte}, {x_cte, 1, z_cte}}.Locate()
+	return Along{{x_cte, Dom.Msh.Ymin, z_cte}, {x_cte, Dom.Msh.Ymax, z_cte}}.Locate()
 }
 
 // Locate finds points
 func (o AlongZ) Locate() (res Points) {
 	x_cte, y_cte := o[0], o[1]
-	return Along{{x_cte, y_cte, 0}, {x_cte, y_cte, 1}}.Locate()
+	return Along{{x_cte, y_cte, Dom.Msh.Zmin}, {x_cte, y_cte, Dom.Msh.Zmax}}.Locate()
 }
 
 // Locate finds points on z-plane. TODO: use bins to optimise search
