@@ -205,9 +205,10 @@ func Test_beam03(tst *testing.T) {
 	check_M(2, 0, 0, 1e-13)
 	check_M(2, 1, -54.4, 1e-13)
 
-	nstations, withtext, numfmt, tol, coef := 11, true, "", 1e-10, 0.2
+	nstations, withtext, numfmt, tol, coef, onlyLin := 11, true, "", 1e-10, 0.2, false
 	if chk.Verbose {
 		plt.SetForPng(1, 600, 150)
+		dom.Msh.Draw2d(onlyLin)
 		PlotAllBendingMoments(dom, nstations, withtext, numfmt, tol, coef)
 		plt.SaveD("/tmp/gofem", "test_beam03_prob1.png")
 	}
@@ -223,6 +224,7 @@ func Test_beam03(tst *testing.T) {
 
 	if chk.Verbose {
 		plt.SetForPng(1, 600, 150)
+		dom.Msh.Draw2d(onlyLin)
 		PlotAllBendingMoments(dom, nstations, withtext, numfmt, tol, coef)
 		plt.SaveD("/tmp/gofem", "test_beam03_prob2.png")
 	}
@@ -238,6 +240,7 @@ func Test_beam03(tst *testing.T) {
 
 	if chk.Verbose {
 		plt.SetForPng(1, 600, 150)
+		dom.Msh.Draw2d(onlyLin)
 		PlotAllBendingMoments(dom, nstations, withtext, numfmt, tol, coef)
 		plt.SaveD("/tmp/gofem", "test_beam03_prob3.png")
 	}
@@ -257,6 +260,7 @@ func Test_beam03(tst *testing.T) {
 
 	if chk.Verbose {
 		plt.SetForPng(1, 600, 150)
+		dom.Msh.Draw2d(onlyLin)
 		PlotAllBendingMoments(dom, nstations, withtext, numfmt, tol, coef)
 		plt.SaveD("/tmp/gofem", "test_beam03_prob4.png")
 	}

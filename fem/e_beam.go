@@ -131,6 +131,9 @@ func init() {
 
 		// for output
 		o.Nstations = 11
+		if s_nsta, found := io.Keycode(edat.Extra, "nsta"); found {
+			o.Nstations = io.Atoi(s_nsta)
+		}
 
 		// vectors and matrices
 		o.T = la.MatAlloc(o.Nu, o.Nu)

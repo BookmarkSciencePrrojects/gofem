@@ -44,7 +44,6 @@ func PlotAllBendingMoments(dom *Domain, nstations int, withtext bool, numfmt str
 	}
 
 	// draw
-	dom.Msh.Draw2d()
 	for i, beam := range beams {
 		beam.PlotDiagMoment(allM[i], withtext, numfmt, tolM, sf)
 	}
