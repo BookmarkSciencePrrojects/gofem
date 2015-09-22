@@ -417,7 +417,7 @@ func (o Mesh) String() string {
 }
 
 // Draw2d draws 2D mesh
-func (o *Mesh) Draw2d() {
+func (o *Mesh) Draw2d(onlyLin bool) {
 
 	// auxiliary
 	type triple struct{ a, b, c int }   // points on edge
@@ -426,6 +426,12 @@ func (o *Mesh) Draw2d() {
 
 	// loop over cells
 	for _, cell := range o.Cells {
+
+		// lin cell
+		lincell := strings.HasPrefix(cell.Type, "lin")
+		if onlyLin && !lincell {
+			continue
+		}
 
 		// loop edges of cells
 		for _, lvids := range cell.Shp.FaceLocalVerts {
@@ -470,7 +476,7 @@ func (o *Mesh) Draw2d() {
 		}
 
 		// linear cells
-		if strings.HasPrefix(cell.Type, "lin") {
+		if lincell {
 			nv := len(cell.Verts)
 			x := make([]float64, nv)
 			y := make([]float64, nv)
