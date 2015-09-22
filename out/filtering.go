@@ -184,7 +184,7 @@ func (o Along) Locate() (res Points) {
 	B := o[1]
 
 	// node quantities
-	ids := NodBins.FindAlongLine(A, B, TolC)
+	ids := NodBins.FindAlongSegment(A, B, TolC)
 	for _, id := range ids {
 		q := get_nod_point(id, A)
 		if q != nil {
@@ -193,7 +193,7 @@ func (o Along) Locate() (res Points) {
 	}
 
 	// integration point quantitites
-	ids = IpsBins.FindAlongLine(A, B, TolC)
+	ids = IpsBins.FindAlongSegment(A, B, TolC)
 	for _, id := range ids {
 		q := get_ip_point(id, A)
 		if q != nil {
