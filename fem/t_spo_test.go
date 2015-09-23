@@ -38,7 +38,7 @@ func Test_spo751a(tst *testing.T) {
 	 */
 
 	//verbose()
-	chk.PrintTitle("spo751a")
+	chk.PrintTitle("spo751a. cylinder expansion. check DOFs")
 
 	// start simulation
 	analysis := NewFEM("data/spo751.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -141,7 +141,7 @@ func Test_spo751a(tst *testing.T) {
 func Test_spo751b(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("spo751b")
+	chk.PrintTitle("spo751b. cylinder expansion. run")
 
 	// run simulation
 	analysis := NewFEM("data/spo751.sim", "", true, true, false, false, chk.Verbose, 0)
@@ -175,7 +175,7 @@ func Test_spo751b(tst *testing.T) {
 func Test_spo751re(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("spo751re. Richardson extrapolation")
+	chk.PrintTitle("spo751re. cylin exp. Richardson extrapolation")
 
 	// run simulation
 	analysis := NewFEM("data/spo751re.sim", "", true, false, false, false, chk.Verbose, 0)

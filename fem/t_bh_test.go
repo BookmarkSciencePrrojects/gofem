@@ -29,7 +29,7 @@ func Test_bh16a(tst *testing.T) {
 	 */
 
 	//verbose()
-	chk.PrintTitle("bh16a")
+	chk.PrintTitle("bh16a. bracket. check DOFs")
 
 	// start simulation
 	analysis := NewFEM("data/bh16.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -134,7 +134,7 @@ func Test_bh16a(tst *testing.T) {
 func Test_bh16b(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("bh16b")
+	chk.PrintTitle("bh16b. bracket. run")
 
 	// start simulation
 	analysis := NewFEM("data/bh16.sim", "", true, true, false, false, chk.Verbose, 0)
@@ -180,7 +180,7 @@ func Test_bh14a(tst *testing.T) {
 func Test_bh14b(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("bh14b. using SolveOneStage")
+	chk.PrintTitle("bh14b. truss. using SolveOneStage")
 
 	// start simulation
 	analysis := NewFEM("data/bh14.sim", "", true, true, false, false, chk.Verbose, 0)
@@ -210,7 +210,7 @@ func Test_bh14b(tst *testing.T) {
 func Test_bh14c(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("bh14c. using go-routines")
+	chk.PrintTitle("bh14c. truss. using go-routines")
 
 	// channels
 	nch := 2
@@ -256,7 +256,7 @@ func Test_bh14c(tst *testing.T) {
 func Test_bh14erod(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("bh14erod. using ElasticRod")
+	chk.PrintTitle("bh14erod. truss. using ElasticRod")
 
 	// start simulation
 	analysis := NewFEM("data/bh14erod.sim", "", true, true, false, false, chk.Verbose, 0)

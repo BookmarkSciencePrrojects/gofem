@@ -17,7 +17,7 @@ import (
 func Test_beam01a(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("beam01a")
+	chk.PrintTitle("beam01a. check DOFs")
 
 	// fem
 	analysis := NewFEM("data/beam01.sim", "", true, false, false, false, chk.Verbose, 0)

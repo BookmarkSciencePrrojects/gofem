@@ -35,7 +35,7 @@ func Test_sg52a(tst *testing.T) {
 	 */
 
 	//verbose()
-	chk.PrintTitle("sg52a")
+	chk.PrintTitle("sg52a. plane strain tri3. check DOFs")
 
 	// start simulation
 	analysis := NewFEM("data/sg52.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -140,7 +140,7 @@ func Test_sg52a(tst *testing.T) {
 func Test_sg52b(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("sg52b")
+	chk.PrintTitle("sg52b. plane strain tri3. run")
 
 	// run simulation
 	analysis := NewFEM("data/sg52.sim", "", true, true, false, false, chk.Verbose, 0)
@@ -163,7 +163,7 @@ func Test_sg52b(tst *testing.T) {
 func Test_sg57(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("sg57")
+	chk.PrintTitle("sg57. plane strain tri15. qn given")
 
 	// run simulation
 	analysis := NewFEM("data/sg57.sim", "", true, true, false, false, chk.Verbose, 0)
@@ -186,7 +186,7 @@ func Test_sg57(tst *testing.T) {
 func Test_sg511(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("sg511")
+	chk.PrintTitle("sg511. plane strain qua4. disp given")
 
 	// run simulation
 	analysis := NewFEM("data/sg511.sim", "", true, true, false, false, chk.Verbose, 0)
@@ -209,7 +209,7 @@ func Test_sg511(tst *testing.T) {
 func Test_sg515(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("sg515")
+	chk.PrintTitle("sg515. plane strain qua8. qn given")
 
 	// run simulation
 	analysis := NewFEM("data/sg515.sim", "", true, true, false, false, chk.Verbose, 0)
@@ -232,7 +232,7 @@ func Test_sg515(tst *testing.T) {
 func Test_sg517(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("sg517")
+	chk.PrintTitle("sg517. axisymmetric qua4")
 
 	// run simulation
 	analysis := NewFEM("data/sg517.sim", "", true, true, false, false, chk.Verbose, 0)
@@ -255,7 +255,7 @@ func Test_sg517(tst *testing.T) {
 func Test_sg524(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("sg524")
+	chk.PrintTitle("sg524. 3d hex8")
 
 	// run simulation
 	analysis := NewFEM("data/sg524.sim", "", true, true, false, false, chk.Verbose, 0)
@@ -278,7 +278,7 @@ func Test_sg524(tst *testing.T) {
 func Test_sg530(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("sg530")
+	chk.PrintTitle("sg530. 3d tet4")
 
 	// run simulation
 	analysis := NewFEM("data/sg530.sim", "", true, true, false, false, chk.Verbose, 0)

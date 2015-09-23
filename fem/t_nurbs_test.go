@@ -32,7 +32,7 @@ func Test_nurbs01(tst *testing.T) {
 	*/
 
 	//verbose()
-	chk.PrintTitle("nurb01. square with initial stress")
+	chk.PrintTitle("nurbs01. square with initial stress")
 
 	// fem
 	analysis := NewFEM("data/nurbs01.sim", "", true, false, false, false, chk.Verbose, 0)
