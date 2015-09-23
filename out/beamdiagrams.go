@@ -34,15 +34,15 @@ func BeamDiagMoment(alias string, idxI int, withtext bool, numfmt string, tolM, 
 	if alias == "" {
 
 		// bending moments
-		allM := make([][]float64, len(Beams))
+		allMrr := make([][]float64, len(Beams))
 		for i, beam := range Beams {
 			alias = io.Sf("beam%d", beam.Id())
-			allM[i] = GetRes("M", alias, idxI)
+			allMrr[i] = GetRes("Mrr", alias, idxI)
 		}
 
 		// scaling factor
 		if sf < 1e-8 {
-			maxAbsM := la.MatLargest(allM, 1)
+			maxAbsM := la.MatLargest(allMrr, 1)
 			dist := utl.Max(Dom.Msh.Xmax-Dom.Msh.Xmin, Dom.Msh.Ymax-Dom.Msh.Ymin)
 			sf = 1.0
 			if maxAbsM > 1e-7 {
@@ -52,7 +52,7 @@ func BeamDiagMoment(alias string, idxI int, withtext bool, numfmt string, tolM, 
 
 		// draw
 		for i, beam := range Beams {
-			beam.PlotDiagMoment(allM[i], withtext, numfmt, tolM, sf)
+			beam.PlotDiagMoment(allMrr[i], withtext, numfmt, tolM, sf)
 		}
 	}
 }

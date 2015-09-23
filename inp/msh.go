@@ -443,6 +443,9 @@ func (o *Mesh) Draw2d(onlyLin bool) {
 		}
 
 		// loop edges of cells
+		if cell.Shp == nil {
+			continue
+		}
 		for _, lvids := range cell.Shp.FaceLocalVerts {
 
 			// set triple of nodes
