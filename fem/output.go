@@ -33,7 +33,7 @@ func PlotAllBendingMoments(dom *Domain, nstations int, withtext bool, numfmt str
 	// compute bending moments
 	allM = make([][]float64, len(beams))
 	for i, beam := range beams {
-		_, allM[i] = beam.CalcVandM(dom.Sol, 0, nstations)
+		_, allM[i] = beam.CalcVandM2d(dom.Sol, 0, nstations)
 	}
 
 	// scaling factor

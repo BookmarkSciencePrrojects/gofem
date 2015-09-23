@@ -109,6 +109,13 @@ func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string,
 					}
 					chk.Matrix(tst, io.Sf("K%d", eid), tolK, e.K, Ksg)
 				}
+				if e, ok := dom.Elems[eid].(*Beam); ok {
+					err = e.AddToKb(dom.Kb, dom.Sol, true)
+					if err != nil {
+						chk.Panic("TestingCompareResultsU: AddToKb failed\n")
+					}
+					chk.Matrix(tst, io.Sf("K%d", eid), tolK, e.K, Ksg)
+				}
 				if e, ok := dom.Elems[eid].(*Rod); ok {
 					err = e.AddToKb(dom.Kb, dom.Sol, true)
 					if err != nil {
@@ -135,9 +142,13 @@ func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string,
 			iy := dom.Vid2node[nid].Dofs[1].Eq
 			chk.AnaNum(tst, "ux", tolu, dom.Sol.Y[ix], usg[0]*dmult, verbose)
 			chk.AnaNum(tst, "uy", tolu, dom.Sol.Y[iy], usg[1]*dmult, verbose)
-			if len(usg) == 3 {
+			if len(usg) > 2 {
 				iz := dom.Vid2node[nid].Dofs[2].Eq
 				chk.AnaNum(tst, "uz", tolu, dom.Sol.Y[iz], usg[2]*dmult, verbose)
+				for j := 3; j < len(usg); j++ {
+					idx := dom.Vid2node[nid].Dofs[j].Eq
+					chk.AnaNum(tst, io.Sf("u%d", j), tolu, dom.Sol.Y[idx], usg[j]*dmult, verbose)
+				}
 			}
 		}
 

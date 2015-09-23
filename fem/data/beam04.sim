@@ -1,0 +1,34 @@
+{
+  "data" : {
+    "matfile" : "beams.mat",
+    "steady"  : true
+  },
+  "functions" : [
+    { "name":"qs-2", "type":"cte", "prms":[{"n":"c", "v": 0.16666666666666666 }] },
+    { "name":"qs-3", "type":"cte", "prms":[{"n":"c", "v":-0.16666666666666666 }] }
+  ],
+  "regions" : [
+    {
+      "mshfile"   : "beam04.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"beam04column", "type":"beam" },
+        { "tag":-2, "mat":"beam04beam",   "type":"beam" },
+        { "tag":-3, "mat":"beam04beam",   "type":"beam" }
+      ]
+    }
+  ],
+  "stages" : [
+    {
+      "desc": "vertical load",
+      "nodebcs" : [
+        { "tag":-1, "keys":["ux","uy","uz"], "funcs":["zero","zero","zero"] },
+        { "tag":-3, "keys":["ux","ry","rz"], "funcs":["zero","zero","zero"] },
+        { "tag":-4, "keys":["uy","rx","rz"], "funcs":["zero","zero","zero"] }
+      ],
+      "eleconds" : [
+        { "tag":-2, "keys":["qs"], "funcs":["qs-2"] },
+        { "tag":-3, "keys":["qs"], "funcs":["qs-3"] }
+      ]
+    }
+  ]
+}
