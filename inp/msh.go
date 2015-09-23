@@ -53,6 +53,7 @@ type Cell struct {
 	GoroutineId int        // go routine id
 
 	// specific problems data
+	IsBeam    bool         // simple beam element (no need for shape structure)
 	IsJoint   bool         // cell represents joint element
 	SeepVerts map[int]bool // local vertices ids of vertices on seepage faces
 
@@ -227,6 +228,8 @@ func ReadMsh(dir, fn string, goroutineId int) (o *Mesh, err error) {
 
 		// get shape structure
 		switch c.Type {
+		case "beam":
+			c.IsBeam = true
 		case "joint":
 			c.IsJoint = true
 		case "nurbs":
@@ -331,6 +334,11 @@ func (o *Cell) GetNverts(lbb bool) int {
 
 // GetVtkInfo returns information about this cell for generating VTK files
 func (o *Cell) GetVtkInfo(lbb bool) (nvtkverts, vtkcode int) {
+	if o.Type == "beam" {
+		nvtkverts = 2
+		vtkcode = shp.VTK_LINE
+		return
+	}
 	if o.Type == "joint" {
 		nvtkverts = len(o.Verts)
 		vtkcode = shp.VTK_POLY_VERTEX
@@ -387,6 +395,7 @@ func (o *Cell) GetSimilar(lbb bool) (newcell *Cell) {
 	newcell.GoroutineId = o.GoroutineId
 
 	// specific problems data
+	newcell.IsBeam = o.IsBeam
 	newcell.IsJoint = o.IsJoint
 	newcell.SeepVerts = o.SeepVerts
 

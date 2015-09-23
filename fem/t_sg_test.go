@@ -297,3 +297,32 @@ func Test_sg530(tst *testing.T) {
 	tols := 1e-15
 	TestingCompareResultsU(tst, "data/sg530.sim", "cmp/sg530.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
 }
+
+func Test_sg422(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("sg422. small 3D frame")
+
+	// run simulation
+	analysis := NewFEM("data/sg422.sim", "", true, true, false, false, chk.Verbose, 0)
+
+	// run simulation
+	err := analysis.Run()
+	if err != nil {
+		tst.Errorf("Run failed:\n%v", err)
+		return
+	}
+
+	dom := analysis.Domains[0]
+	nod := dom.Nodes[1]
+	eqy := nod.GetEq("uy")
+	uy := dom.Sol.Y[eqy]
+	io.Pforan("uy @ nod 2 = %v\n", uy)
+
+	// check
+	skipK := true
+	tolK := 1e-17
+	tolu := 1e-17
+	tols := 1e-15
+	TestingCompareResultsU(tst, "data/sg422.sim", "cmp/sg422.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+}
