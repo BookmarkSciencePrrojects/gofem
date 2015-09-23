@@ -9,7 +9,7 @@ import (
 	"github.com/cpmech/gosl/utl"
 )
 
-// PlotAllBendingMoments plots all bending moments
+// PlotAllBendingMom2d plots all bending moments (2D beams)
 //  Input:
 //   dom       -- Domain
 //   nstations -- number of stations
@@ -19,9 +19,9 @@ import (
 //   coef      -- coefficient to scale max(dimension) divided by max(Y); e.g. 0.1
 //   sf        -- scaling factor. use 0 for automatic computation
 //  Output:
-//   beams -- all beam elements
-//   allM  -- bending moments corresponding to all beams
-func PlotAllBendingMoments(dom *Domain, nstations int, withtext bool, numfmt string, tolM, coef, sf float64) (beams []*Beam, allM [][]float64) {
+//   beams  -- all beam elements
+//   allMrr -- all Mrr bending moments at all beams
+func PlotAllBendingMom2d(dom *Domain, nstations int, withtext bool, numfmt string, tolM, coef, sf float64) (beams []*Beam, allMrr [][]float64) {
 
 	// collect beams
 	for _, elem := range dom.Elems {
@@ -31,14 +31,14 @@ func PlotAllBendingMoments(dom *Domain, nstations int, withtext bool, numfmt str
 	}
 
 	// compute bending moments
-	allM = make([][]float64, len(beams))
+	allMrr = make([][]float64, len(beams))
 	for i, beam := range beams {
-		_, allM[i] = beam.CalcVandM2d(dom.Sol, 0, nstations)
+		allMrr[i] = beam.CalcMoment2d(dom.Sol, 0, nstations)
 	}
 
 	// scaling factor
 	if sf < 1e-8 {
-		maxAbsM := la.MatLargest(allM, 1)
+		maxAbsM := la.MatLargest(allMrr, 1)
 		dist := utl.Max(dom.Msh.Xmax-dom.Msh.Xmin, dom.Msh.Ymax-dom.Msh.Ymin)
 		sf = 1.0
 		if maxAbsM > 1e-7 {
@@ -48,7 +48,7 @@ func PlotAllBendingMoments(dom *Domain, nstations int, withtext bool, numfmt str
 
 	// draw
 	for i, beam := range beams {
-		beam.PlotDiagMoment(allM[i], withtext, numfmt, tolM, sf)
+		beam.PlotDiagMoment(allMrr[i], withtext, numfmt, tolM, sf)
 	}
 	return
 }

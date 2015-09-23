@@ -117,18 +117,18 @@ func Test_beam01b(tst *testing.T) {
 	// check
 	dom := analysis.Domains[0]
 	ele := dom.Elems[0].(*Beam)
-	_, M := ele.CalcVandM2d(dom.Sol, 0.5, 1)
+	Mrr := ele.CalcMoment2d(dom.Sol, 0.5, 1)
 	qn, L := 15.0, 1.0
 	Mcentre := qn * L * L / 8.0
-	io.Pforan("M = %v (%v)\n", M, Mcentre)
-	chk.Scalar(tst, "M @ centre", 1e-17, M[0], Mcentre)
+	io.Pforan("Mrr = %v (%v)\n", Mrr, Mcentre)
+	chk.Scalar(tst, "Mrr @ centre", 1e-17, Mrr[0], Mcentre)
 
 	// check moment using OutIpsData
 	idx_centre := 5 // considering 11 stations
 	dat := ele.OutIpsData()
 	res := dat[idx_centre].Calc(dom.Sol)
-	io.Pfcyan("M @ centre (OutIpsData) = %v\n", res["M"])
-	chk.Scalar(tst, "M @ centre (OutIpsData)", 1e-17, res["M"], Mcentre)
+	io.Pfcyan("Mrr @ centre (OutIpsData) = %v\n", res["Mrr"])
+	chk.Scalar(tst, "Mrr @ centre (OutIpsData)", 1e-17, res["Mrr"], Mcentre)
 }
 
 func Test_beam02(tst *testing.T) {
@@ -149,11 +149,11 @@ func Test_beam02(tst *testing.T) {
 	// check
 	dom := analysis.Domains[0]
 	ele := dom.Elems[0].(*Beam)
-	_, M := ele.CalcVandM2d(dom.Sol, 0, 1)
+	Mrr := ele.CalcMoment2d(dom.Sol, 0, 1)
 	qn, L := 15.0, 1.0
 	Mleft := -qn * L * L / 2.0
-	io.Pforan("M = %v (%v)\n", M, Mleft)
-	chk.Scalar(tst, "M @ left", 1e-15, M[0], Mleft)
+	io.Pforan("Mrr = %v (%v)\n", Mrr, Mleft)
+	chk.Scalar(tst, "M @ left", 1e-15, Mrr[0], Mleft)
 }
 
 func Test_beam03(tst *testing.T) {
@@ -191,10 +191,10 @@ func Test_beam03(tst *testing.T) {
 	io.Pf("\n")
 
 	// define function to check bending moment
-	check_M := func(beamId int, s, Mref, tol float64) {
+	check_M := func(beamId int, ξ, Mref, tol float64) {
 		ele := dom.Cid2elem[beamId].(*Beam)
-		_, M := ele.CalcVandM2d(dom.Sol, s, 1)
-		chk.Scalar(tst, io.Sf("Beam %d: M(s=%g) = %.6f", ele.Id(), s, M[0]), tol, M[0], Mref)
+		Mrr := ele.CalcMoment2d(dom.Sol, ξ, 1)
+		chk.Scalar(tst, io.Sf("Beam %d: Mrr(ξ=%g) = %.6f", ele.Id(), ξ, Mrr[0]), tol, Mrr[0], Mref)
 	}
 
 	// check
@@ -209,7 +209,7 @@ func Test_beam03(tst *testing.T) {
 	if chk.Verbose {
 		plt.SetForPng(1, 600, 150)
 		dom.Msh.Draw2d(onlyLin)
-		PlotAllBendingMoments(dom, nstations, withtext, numfmt, tol, coef, sf)
+		PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
 		plt.SaveD("/tmp/gofem", "test_beam03_prob1.png")
 	}
 
@@ -225,7 +225,7 @@ func Test_beam03(tst *testing.T) {
 	if chk.Verbose {
 		plt.SetForPng(1, 600, 150)
 		dom.Msh.Draw2d(onlyLin)
-		PlotAllBendingMoments(dom, nstations, withtext, numfmt, tol, coef, sf)
+		PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
 		plt.SaveD("/tmp/gofem", "test_beam03_prob2.png")
 	}
 
@@ -241,7 +241,7 @@ func Test_beam03(tst *testing.T) {
 	if chk.Verbose {
 		plt.SetForPng(1, 600, 150)
 		dom.Msh.Draw2d(onlyLin)
-		PlotAllBendingMoments(dom, nstations, withtext, numfmt, tol, coef, sf)
+		PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
 		plt.SaveD("/tmp/gofem", "test_beam03_prob3.png")
 	}
 
@@ -261,7 +261,7 @@ func Test_beam03(tst *testing.T) {
 	if chk.Verbose {
 		plt.SetForPng(1, 600, 150)
 		dom.Msh.Draw2d(onlyLin)
-		PlotAllBendingMoments(dom, nstations, withtext, numfmt, tol, coef, sf)
+		PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
 		plt.SaveD("/tmp/gofem", "test_beam03_prob4.png")
 	}
 }
@@ -285,6 +285,6 @@ func Test_beam04(tst *testing.T) {
 	skipK := false
 	tolK := 1e-10
 	tolu := 1e-16
-	tols := 1e-17
+	tols := 1e-12
 	TestingCompareResultsU(tst, "data/beam04.sim", "cmp/bh414.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
 }

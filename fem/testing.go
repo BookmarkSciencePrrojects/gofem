@@ -32,7 +32,10 @@ type T_results struct {
 	Disp       [][]float64   // [nnod][ndim] displacements at nodes
 	DispMult   float64       // displacements multiplier
 	Note       string        // note about number of integration points
-	Sigmas     [][][]float64 // [nele][nip][nsig] all stresses @ all ips 2D:{sx, sy, sxy, sz}
+	Stresses   [][][]float64 // [nele][nip][nsig] all stresses @ all ips
+	// Stresses: examples:
+	//   2D solid: [sx, sy, sxy, sz]
+	//   3D beam:  [Mrr, Mss, Mtt, Vs, Vr]
 }
 
 // T_results_set is a set of comparison results
@@ -40,6 +43,9 @@ type T_results_set []*T_results
 
 // testing_compare_results_u compares results with u-formulation
 func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string, tolK, tolu, tols float64, skipK, verbose bool) {
+
+	// flag
+	do_check_stresses := true
 
 	// FEM structure
 	fem := NewFEM(simfilepath, alias, false, false, true, false, verbose, 0)
@@ -153,11 +159,11 @@ func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string,
 		}
 
 		// check stresses
-		if true {
+		if do_check_stresses {
 			if verbose {
-				io.Pfgreen(". . . checking stresses . . .\n")
+				io.Pfgreen(". . . checking stresses (or moments/shear forces). . .\n")
 			}
-			for eid, sig := range cmp.Sigmas {
+			for eid, sig := range cmp.Stresses {
 				if verbose {
 					io.Pforan("eid = %d\n", eid)
 				}
@@ -198,6 +204,25 @@ func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string,
 						res := dat[ip].Calc(dom.Sol)
 						σ := res["sig"]
 						chk.AnaNum(tst, "sig", tols, σ, val[0], verbose)
+					}
+				}
+				if e, ok := dom.Cid2elem[eid].(*Beam); ok {
+					dat := e.OutIpsData()
+					if len(dat) != len(sig) {
+						tst.Errorf("number of stations in cmp file is different than the number of stations in element. %d != %d", len(dat), len(sig))
+						return
+					}
+					for station, val := range sig {
+						if verbose {
+							io.Pfgrey2("station = %d\n", station)
+						}
+						res := dat[station].Calc(dom.Sol)
+						if e.Ndim == 3 {
+							Mrr, Mss, Mtt := res["Mrr"], res["Mss"], res["Mtt"]
+							chk.AnaNum(tst, "Mrr", tols, Mrr, val[0], verbose)
+							chk.AnaNum(tst, "Mss", tols, Mss, val[1], verbose)
+							chk.AnaNum(tst, "Mtt", tols, Mtt, val[2], verbose)
+						}
 					}
 				}
 			}

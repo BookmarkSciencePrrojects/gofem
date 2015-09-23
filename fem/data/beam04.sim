@@ -11,9 +11,9 @@
     {
       "mshfile"   : "beam04.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"beam04column", "type":"beam" },
-        { "tag":-2, "mat":"beam04beam",   "type":"beam" },
-        { "tag":-3, "mat":"beam04beam",   "type":"beam" }
+        { "tag":-1, "mat":"beam04column", "type":"beam", "extra":"!nsta:3" },
+        { "tag":-2, "mat":"beam04beam",   "type":"beam", "extra":"!nsta:3" },
+        { "tag":-3, "mat":"beam04beam",   "type":"beam", "extra":"!nsta:3" }
       ]
     }
   ],

@@ -21,7 +21,7 @@ import (
 //
 //  2D     s     r is out-of-plane              Note: r,s,t not under any right-hand-type rule
 //         ^
-//         |                                    Props:  Nodes:
+//         | qnL          qn            qnR     Props:  Nodes:
 //         o-------------------------------o     E, A    0 and 1
 //         |                               |     Irr
 //         |                               |
@@ -30,13 +30,13 @@ import (
 //  3D                    ,o--------o    ,t
 //                      ,' |     ,' |  ,'
 //         s          ,'       ,'   |,'
-//         ^        ,'       ,'    ,|
-//         |      ,'       ,'    ,  |
+//         ^        ,'qs     ,'    ,|
+//         |      ,'  V    ,'    ,  |
 //         |    ,'       ,'    ,    |
 //         |  ,'       ,'  | ,      |
 //         |,'       ,'   (1) - - - o   -   -  (2)
 //         o--------o    ,        ,'
-//         |        |  ,        ,'    Props:       Nodes:
+//         |        |  ,  <qr   ,'    Props:       Nodes:
 //         |        |,        ,'       E, G, A      0, 1, 2
 //         |       ,|       ,'         Irr = Imax   where node (2) is a point located on plane r-t
 //         |     ,  |     ,'           Iss = Imin   and non-colinear to (0) and (1)
@@ -341,18 +341,22 @@ func (o *Beam) Decode(dec Decoder) (err error) {
 // OutIpsData returns data from all integration points for output
 func (o *Beam) OutIpsData() (data []*OutIpData) {
 	unused := 0
-	ds := 1.0 / float64(o.Nstations-1)
+	dξ := 1.0 / float64(o.Nstations-1)
 	for i := 0; i < o.Nstations; i++ {
-		s := float64(i) * ds
+		ξ := float64(i) * dξ
 		x := make([]float64, o.Ndim)
 		for j := 0; j < o.Ndim; j++ {
-			x[j] = (1.0-s)*o.X[j][0] + s*o.X[j][1]
+			x[j] = (1.0-ξ)*o.X[j][0] + ξ*o.X[j][1]
 		}
 		calc := func(sol *Solution) (vals map[string]float64) {
 			vals = make(map[string]float64)
-			V, M := o.CalcVandM2d(sol, s, unused)
-			vals["V"] = V[0]
-			vals["M"] = M[0]
+			if o.Ndim == 3 {
+				Mrr, Mss, Mtt := o.CalcMoment3d(sol, ξ, unused)
+				vals["Mrr"], vals["Mss"], vals["Mtt"] = Mrr[0], Mss[0], Mtt[0]
+			} else {
+				Mrr := o.CalcMoment2d(sol, ξ, unused)
+				vals["Mrr"] = Mrr[0]
+			}
 			return
 		}
 		data = append(data, &OutIpData{o.Id(), x, calc})
@@ -535,66 +539,7 @@ func (o *Beam) Recompute(withM bool) {
 	}
 }
 
-// CalcVandM calculate shear force and bending moment @ s
-//  Input:
-//   s         -- natural coordinate   0 ≤ s ≤ 1
-//   nstations -- compute many values; otherwise, if nstations<2, compute @ s
-//  Output:
-//   V -- shear force @ stations or s
-//   M -- bending moment @ stations or s
-func (o *Beam) CalcVandM2d(sol *Solution, s float64, nstations int) (V, M []float64) {
-
-	// aligned displacements
-	for i := 0; i < 6; i++ {
-		o.ua[i] = 0
-		for j, J := range o.Umap {
-			o.ua[i] += o.T[i][j] * sol.Y[J]
-		}
-	}
-
-	// results
-	if nstations < 2 {
-		v, m := o.calc_V_and_M_after_ua2d(sol.T, s)
-		V, M = []float64{v}, []float64{m}
-		return
-	}
-	V = make([]float64, nstations)
-	M = make([]float64, nstations)
-	ds := 1.0 / float64(nstations-1)
-	for i := 0; i < nstations; i++ {
-		V[i], M[i] = o.calc_V_and_M_after_ua2d(sol.T, float64(i)*ds)
-	}
-	return
-}
-
-func (o *Beam) calc_V_and_M_after_ua2d(time, s float64) (V, M float64) {
-
-	// auxiliary variables
-	r := s * o.L
-	l := o.L
-	ll := l * l
-	lll := ll * l
-
-	// shear force
-	V = o.E * o.Irr * ((12.0*o.ua[1])/lll + (6.0*o.ua[2])/ll - (12.0*o.ua[4])/lll + (6.0*o.ua[5])/ll)
-
-	// bending moment
-	M = o.E * o.Irr * (o.ua[1]*((12.0*r)/lll-6.0/ll) + o.ua[2]*((6.0*r)/ll-4.0/l) + o.ua[4]*(6.0/ll-(12.0*r)/lll) + o.ua[5]*((6.0*r)/ll-2.0/l))
-
-	// corrections due to applied loads
-	if o.Hasq {
-		qnL, qnR, _, _, _ := o.calc_loads(time)
-		rr := r * r
-		rrr := rr * r
-		V += -(3.0*qnR*ll + 7.0*qnL*ll - 20.0*qnL*r*l - 10.0*qnR*rr + 10.0*qnL*rr) / (20.0 * l)
-		M += (2.0*qnR*lll + 3.0*qnL*lll - 9.0*qnR*r*ll - 21.0*qnL*r*ll + 30.0*qnL*rr*l + 10.0*qnR*rrr - 10.0*qnL*rrr) / (60.0 * l)
-		if qnL > 0.0 {
-			M = -M // swap the sign of M
-		}
-	}
-	return
-}
-
+// calc_loads computes applied distributed loads at given time
 func (o *Beam) calc_loads(time float64) (qnL, qnR, qt, qs, qr float64) {
 	if o.QnL != nil {
 		qnL = o.QnL.F(time, nil)
@@ -610,6 +555,166 @@ func (o *Beam) calc_loads(time float64) (qnL, qnR, qt, qs, qr float64) {
 	}
 	if o.Qr != nil {
 		qr = o.Qr.F(time, nil)
+	}
+	return
+}
+
+// bending moments and forces ///////////////////////////////////////////////////////////////////////
+
+// calc_ua computes local (aligned) displacements
+func (o *Beam) calc_ua(sol *Solution) {
+	for i := 0; i < o.Nu; i++ {
+		o.ua[i] = 0
+		for j, J := range o.Umap {
+			o.ua[i] += o.T[i][j] * sol.Y[J]
+		}
+	}
+}
+
+// CalcMoment3d calculates moments along 3D beam
+//  Input:
+//   ξ         -- natural coordinate along bar   0 ≤ ξ ≤ 1
+//   nstations -- compute many values; otherwise, if nstations<2, compute @ s
+//  Output:
+//   Mrr -- bending moment around r-axis
+//   Mss -- bending moment around s-axis
+//   Mtt -- twisting moment around t-axis
+func (o *Beam) CalcMoment3d(sol *Solution, ξ float64, nstations int) (Mrr, Mss, Mtt []float64) {
+	o.calc_ua(sol)
+	if nstations < 2 {
+		mrr, mss, mtt := o.calc_moment3d_after_ua(sol.T, ξ)
+		Mrr, Mss, Mtt = []float64{mrr}, []float64{mss}, []float64{mtt}
+		return
+	}
+	Mrr = make([]float64, nstations)
+	Mss = make([]float64, nstations)
+	Mtt = make([]float64, nstations)
+	dξ := 1.0 / float64(nstations-1)
+	for i := 0; i < nstations; i++ {
+		Mrr[i], Mss[i], Mtt[i] = o.calc_moment3d_after_ua(sol.T, float64(i)*dξ)
+	}
+	return
+}
+
+// CalcMoment2d calculates bending moment along 2D beam
+//  Input:
+//   ξ         -- natural coordinate along bar   0 ≤ ξ ≤ 1
+//   nstations -- compute many values; otherwise, if nstations<2, compute @ s
+//  Output:
+//   Mrr -- bending moment @ stations or s
+func (o *Beam) CalcMoment2d(sol *Solution, ξ float64, nstations int) (Mrr []float64) {
+	o.calc_ua(sol)
+	if nstations < 2 {
+		m := o.calc_moment2d_after_ua(sol.T, ξ)
+		Mrr = []float64{m}
+		return
+	}
+	Mrr = make([]float64, nstations)
+	dξ := 1.0 / float64(nstations-1)
+	for i := 0; i < nstations; i++ {
+		Mrr[i] = o.calc_moment2d_after_ua(sol.T, float64(i)*dξ)
+	}
+	return
+}
+
+// CalcShearForce2d calculates shear force for 2D beam
+//  Input:
+//   ξ         -- natural coordinate along bar   0 ≤ ξ ≤ 1
+//   nstations -- compute many values; otherwise, if nstations<2, compute @ s
+//  Output:
+//   Vs -- shear force @ stations or s
+func (o *Beam) CalcShearForce2d(sol *Solution, ξ float64, nstations int) (Vs []float64) {
+	o.calc_ua(sol)
+	if nstations < 2 {
+		v := o.calc_shearforce2d_after_ua(sol.T, ξ)
+		Vs = []float64{v}
+		return
+	}
+	Vs = make([]float64, nstations)
+	dξ := 1.0 / float64(nstations-1)
+	for i := 0; i < nstations; i++ {
+		Vs[i] = o.calc_shearforce2d_after_ua(sol.T, float64(i)*dξ)
+	}
+	return
+}
+
+// calc_bendingmom3d_after_ua calculates bending moments (3D) @ station ξ in [0, 1]
+func (o *Beam) calc_moment3d_after_ua(time, ξ float64) (Mrr, Mss, Mtt float64) {
+
+	// auxiliary variables
+	τ := ξ * o.L
+	τ2 := τ * τ
+	l := o.L
+	ll := l * l
+	lll := ll * l
+
+	// constants and loads
+	EIr, EIs, GJ := o.E*o.Irr, o.E*o.Iss, o.G*o.Jtt
+	_, _, _, qs, qr := o.calc_loads(time)
+
+	// displacements and rotations
+	//u := []float64{o.ua[0], o.ua[6]}
+	v := []float64{o.ua[1], o.ua[5], o.ua[7], o.ua[11]}
+	w := []float64{o.ua[2], o.ua[4], o.ua[8], o.ua[10]}
+	θ := []float64{o.ua[3], o.ua[9]}
+
+	// second derivatives of shape functions
+	dnv2 := []float64{12.0*τ/lll - 6.0/ll, 6.0*τ/ll - 4.0/l, 6.0/ll - 12.0*τ/lll, 6.0*τ/ll - 2.0/l}
+	dnw2 := []float64{dnv2[0], -dnv2[1], dnv2[2], -dnv2[3]}
+
+	// bending moments
+	Mrr = +qs * (ll - 6*τ*l + 6*τ2) / 12.0 //   EIr*dnv2*v
+	Mss = -qr * (ll - 6*τ*l + 6*τ2) / 12.0 //  -EIs*dnw2*w
+	for i := 0; i < len(v); i++ {
+		Mrr += EIr * dnv2[i] * v[i]
+		Mss -= EIs * dnw2[i] * w[i]
+	}
+	Mtt = GJ * (θ[1] - θ[0]) / l
+	return
+}
+
+// calc_bendingmom2d_after_ua calculates bending moment (2D) @ station ξ in [0, 1]
+func (o *Beam) calc_moment2d_after_ua(time, ξ float64) (Mrr float64) {
+
+	// auxiliary variables
+	τ := ξ * o.L
+	l := o.L
+	ll := l * l
+	lll := ll * l
+
+	// bending moment
+	Mrr = o.E * o.Irr * (o.ua[1]*((12.0*τ)/lll-6.0/ll) + o.ua[2]*((6.0*τ)/ll-4.0/l) + o.ua[4]*(6.0/ll-(12.0*τ)/lll) + o.ua[5]*((6.0*τ)/ll-2.0/l))
+
+	// corrections due to applied loads
+	if o.Hasq {
+		qnL, qnR, _, _, _ := o.calc_loads(time)
+		τ2 := τ * τ
+		τ3 := τ2 * τ
+		Mrr += (2.0*qnR*lll + 3.0*qnL*lll - 9.0*qnR*τ*ll - 21.0*qnL*τ*ll + 30.0*qnL*τ2*l + 10.0*qnR*τ3 - 10.0*qnL*τ3) / (60.0 * l)
+		if qnL > 0.0 {
+			Mrr = -Mrr // swap the sign of M
+		}
+	}
+	return
+}
+
+// calc_shearforce2d_after_ua calculates shear force (2D) @ station ξ in [0, 1]
+func (o *Beam) calc_shearforce2d_after_ua(time, ξ float64) (Vs float64) {
+
+	// auxiliary variables
+	τ := ξ * o.L
+	l := o.L
+	ll := l * l
+	lll := ll * l
+
+	// shear force
+	Vs = o.E * o.Irr * ((12.0*o.ua[1])/lll + (6.0*o.ua[2])/ll - (12.0*o.ua[4])/lll + (6.0*o.ua[5])/ll)
+
+	// corrections due to applied loads
+	if o.Hasq {
+		qnL, qnR, _, _, _ := o.calc_loads(time)
+		τ2 := τ * τ
+		Vs += -(3.0*qnR*ll + 7.0*qnL*ll - 20.0*qnL*τ*l - 10.0*qnR*τ2 + 10.0*qnL*τ2) / (20.0 * l)
 	}
 	return
 }
