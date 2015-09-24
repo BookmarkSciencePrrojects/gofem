@@ -350,6 +350,13 @@ func pdata_open(buf *bytes.Buffer) {
 		return
 	}
 	io.Ff(buf, "<PointData Scalars=\"TheScalars\">\n")
+
+	// positive vertex tags
+	io.Ff(buf, "<DataArray type=\"Int32\" Name=\"tag\" NumberOfComponents=\"1\" format=\"ascii\">\n")
+	for _, v := range verts {
+		io.Ff(buf, "%d ", iabs(v.Tag))
+	}
+	io.Ff(buf, "\n</DataArray>\n")
 }
 
 func pdata_close(buf *bytes.Buffer) {
