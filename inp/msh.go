@@ -333,9 +333,13 @@ func (o *Cell) GetNverts(lbb bool) int {
 }
 
 // GetVtkInfo returns information about this cell for generating VTK files
-func (o *Cell) GetVtkInfo(lbb bool) (nvtkverts, vtkcode int) {
+func (o *Cell) GetVtkInfo(lbb, v3beam bool) (nvtkverts, vtkcode int) {
 	if o.Type == "beam" {
-		nvtkverts = 2
+		if v3beam {
+			nvtkverts = len(o.Verts)
+		} else {
+			nvtkverts = 2
+		}
 		vtkcode = shp.VTK_LINE
 		return
 	}

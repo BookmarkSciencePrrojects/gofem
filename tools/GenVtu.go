@@ -65,10 +65,12 @@ func main() {
 	simfn, _ := io.ArgToFilename(0, "data/twoqua4", ".sim", true)
 	exnwl := io.ArgToBool(1, false)
 	stgidx := io.ArgToInt(2, 0)
+	v3beam := io.ArgToBool(3, false)
 	io.Pf("\n%s\n", io.ArgsTable(
 		"simulation filename", "simfn", simfn,
 		"extrapolate nwl", "exnwl", exnwl,
 		"stage index", "stgidx", stgidx,
+		"show v3 of beams", "v3beam", v3beam,
 	))
 
 	// start analysis process
@@ -151,7 +153,7 @@ func main() {
 		// generate topology
 		if tidx == 0 {
 			for label, b := range geo {
-				topology(b, label == "ips", lbb)
+				topology(b, label == "ips", lbb, v3beam)
 			}
 
 			// allocate integration points values
@@ -263,7 +265,7 @@ func vtu_write(geo, dat *bytes.Buffer, tidx int, label string) {
 
 // topology ////////////////////////////////////////////////////////////////////////////////////////
 
-func topology(buf *bytes.Buffer, ips, lbb bool) {
+func topology(buf *bytes.Buffer, ips, lbb, v3beam bool) {
 	if buf == nil {
 		return
 	}
@@ -297,7 +299,7 @@ func topology(buf *bytes.Buffer, ips, lbb bool) {
 	} else {
 		for _, e := range elems {
 			cell := cells[e.Id()]
-			nverts, _ := cell.GetVtkInfo(lbb)
+			nverts, _ := cell.GetVtkInfo(lbb, v3beam)
 			for j := 0; j < nverts; j++ {
 				io.Ff(buf, "%d ", cell.Verts[j])
 			}
@@ -315,7 +317,7 @@ func topology(buf *bytes.Buffer, ips, lbb bool) {
 	} else {
 		for _, e := range elems {
 			cell := cells[e.Id()]
-			nverts, _ := cell.GetVtkInfo(lbb)
+			nverts, _ := cell.GetVtkInfo(lbb, v3beam)
 			offset += nverts
 			io.Ff(buf, "%d ", offset)
 		}
@@ -330,7 +332,7 @@ func topology(buf *bytes.Buffer, ips, lbb bool) {
 	} else {
 		for _, e := range elems {
 			cell := cells[e.Id()]
-			_, vtkcode := cell.GetVtkInfo(lbb)
+			_, vtkcode := cell.GetVtkInfo(lbb, v3beam)
 			if vtkcode < 0 {
 				chk.Panic("cannot handle cell type %q", cell.Shp.Type)
 			}

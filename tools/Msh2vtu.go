@@ -35,8 +35,10 @@ func main() {
 	// input data
 	var mshfn string
 	mshfn, fnkey = io.ArgToFilename(0, "data/d2-coarse", ".msh", true)
+	v3beam := io.ArgToBool(1, false)
 	io.Pf("\n%s\n", io.ArgsTable(
 		"mesh filename", "mshfn", mshfn,
+		"keep 3rd vertices of beams", "v3beam", v3beam,
 	))
 
 	// read mesh
@@ -55,7 +57,7 @@ func main() {
 	vtu := new(bytes.Buffer)
 
 	// generate topology
-	topology(geo)
+	topology(geo, v3beam)
 
 	// points data
 	pdata_write(vtu)
@@ -84,7 +86,7 @@ func vtu_write(geo, dat *bytes.Buffer) {
 
 // topology ////////////////////////////////////////////////////////////////////////////////////////
 
-func topology(buf *bytes.Buffer) {
+func topology(buf *bytes.Buffer, v3beam bool) {
 	if buf == nil {
 		return
 	}
@@ -103,7 +105,7 @@ func topology(buf *bytes.Buffer) {
 	// connectivities
 	io.Ff(buf, "<Cells>\n<DataArray type=\"Int32\" Name=\"connectivity\" format=\"ascii\">\n")
 	for _, c := range cells {
-		nverts, _ := c.GetVtkInfo(false)
+		nverts, _ := c.GetVtkInfo(false, v3beam)
 		for j := 0; j < nverts; j++ {
 			io.Ff(buf, "%d ", c.Verts[j])
 		}
@@ -113,7 +115,7 @@ func topology(buf *bytes.Buffer) {
 	io.Ff(buf, "\n</DataArray>\n<DataArray type=\"Int32\" Name=\"offsets\" format=\"ascii\">\n")
 	var offset int
 	for _, c := range cells {
-		nverts, _ := c.GetVtkInfo(false)
+		nverts, _ := c.GetVtkInfo(false, v3beam)
 		offset += nverts
 		io.Ff(buf, "%d ", offset)
 	}
@@ -121,7 +123,7 @@ func topology(buf *bytes.Buffer) {
 	// types of active elements
 	io.Ff(buf, "\n</DataArray>\n<DataArray type=\"UInt8\" Name=\"types\" format=\"ascii\">\n")
 	for _, c := range cells {
-		_, vtkcode := c.GetVtkInfo(false)
+		_, vtkcode := c.GetVtkInfo(false, v3beam)
 		if vtkcode < 0 {
 			chk.Panic("cannot handle cell type %q", c.Shp.Type)
 		}
