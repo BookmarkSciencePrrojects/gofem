@@ -136,7 +136,7 @@ func init() {
 		// parameters
 		matdata := sim.MatParams.Get(edat.Mat)
 		if matdata == nil {
-			return nil
+			chk.Panic("cannot find material %q for beam {tag=%d, id=%d}\n", edat.Mat, cell.Tag, cell.Id)
 		}
 		for _, p := range matdata.Prms {
 			switch p.N {
