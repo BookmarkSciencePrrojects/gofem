@@ -189,7 +189,7 @@ func (o *Material) Init(typ, unitPres string) {
 }
 
 func (o *Material) GetMatString(name, model, numfmt string, section *CrossSection) string {
-	l := io.Sf("      \"name\" : %q,\n", name)
+	l := io.Sf("    {\n      \"name\" : %q,\n", name)
 	if model != "" {
 		l += io.Sf("      \"model\" : %q,\n", model)
 	}
@@ -201,6 +201,6 @@ func (o *Material) GetMatString(name, model, numfmt string, section *CrossSectio
 	if section != nil {
 		l += ",\n" + section.GetMatString(numfmt)
 	}
-	l += io.Sf("\n      ]")
+	l += io.Sf("\n      ]\n    }")
 	return l
 }
