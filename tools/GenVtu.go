@@ -439,6 +439,15 @@ func pdata_write(buf *bytes.Buffer, label string, keys []string, ips bool) {
 		}
 	}
 	io.Ff(buf, "\n</DataArray>\n")
+
+	// positive tags
+	if !ips {
+		io.Ff(buf, "<DataArray type=\"Int32\" Name=\"tag\" NumberOfComponents=\"1\" format=\"ascii\">\n")
+		for _, v := range verts {
+			io.Ff(buf, "%d ", iabs(v.Tag))
+		}
+		io.Ff(buf, "\n</DataArray>\n")
+	}
 }
 
 func cdata_write(buf *bytes.Buffer, ips bool) {
@@ -450,7 +459,7 @@ func cdata_write(buf *bytes.Buffer, ips bool) {
 	io.Ff(buf, "<CellData Scalars=\"TheScalars\">\n")
 
 	// ids
-	io.Ff(buf, "<DataArray type=\"Float64\" Name=\"eid\" NumberOfComponents=\"1\" format=\"ascii\">\n")
+	io.Ff(buf, "<DataArray type=\"Int32\" Name=\"eid\" NumberOfComponents=\"1\" format=\"ascii\">\n")
 	if ips {
 		for _, p := range out.Ipoints {
 			io.Ff(buf, "%d ", p.Eid)
@@ -462,7 +471,7 @@ func cdata_write(buf *bytes.Buffer, ips bool) {
 	}
 
 	// cells positive tags
-	io.Ff(buf, "\n</DataArray>\n<DataArray type=\"Float64\" Name=\"tag\" NumberOfComponents=\"1\" format=\"ascii\">\n")
+	io.Ff(buf, "\n</DataArray>\n<DataArray type=\"Int32\" Name=\"tag\" NumberOfComponents=\"1\" format=\"ascii\">\n")
 	if ips {
 		for _, p := range out.Ipoints {
 			ptag := IP_TAG_INI + iabs(cells[p.Eid].Tag)
