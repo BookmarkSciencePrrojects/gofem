@@ -11,6 +11,7 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
 )
@@ -605,6 +606,9 @@ func (o *ElemU) OutIpsData() (data []*OutIpData) {
 			vals = make(map[string]float64)
 			for i, _ := range keys {
 				vals[keys[i]] = s.Sig[i]
+				for j, alp := range s.Alp {
+					vals[io.Sf("alp%d", j)] = alp
+				}
 			}
 			return
 		}
