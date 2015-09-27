@@ -1,0 +1,41 @@
+{
+  "data" : {
+    "matfile" : "bjoint.mat",
+    "steady" : true,
+    "showR" : true
+  },
+  "functions" : [
+    { "name":"fy", "type":"lin", "prms":[{"n":"m", "v":10}] },
+    { "name":"q0", "type":"cte", "prms":[{"n":"c", "v":-1}] }
+  ],
+  "regions" : [
+    {
+      "desc" : "pullout of compatible beam",
+      "mshfile" : "bjointcomp2d.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"solid", "type":"u" },
+        { "tag":-2, "mat":"beam",  "type":"beam" },
+        { "tag":-3, "mat":"joint", "type":"bjointcomp" }
+      ]
+    }
+  ],
+  "stages" : [
+    {
+      "desc" : "apply force to beam",
+      "inistress" : { "hom":true, "iso":true, "s0":-1 },
+      "nodebcs" : [
+        { "tag":-102, "keys":["fy"], "funcs":["fy"] }
+      ],
+      "facebcs" : [
+        { "tag":-10, "keys":["uy"],  "funcs":["zero"] },
+        { "tag":-11, "keys":["ux"],  "funcs":["zero"] },
+        { "tag":-13, "keys":["ux"],  "funcs":["zero"] },
+        { "tag":-12, "keys":["qn0"], "funcs":["q0"]   }
+      ],
+      "control_" : {
+        "tf" : 1.0,
+        "dt" : 0.1
+      }
+    }
+  ]
+}
