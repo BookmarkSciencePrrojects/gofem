@@ -4,8 +4,8 @@
     "steady"  : true
   },
   "functions" : [
-    { "name":"qs-2", "type":"cte", "prms":[{"n":"c", "v": 0.16666666666666666 }] },
-    { "name":"qs-3", "type":"cte", "prms":[{"n":"c", "v":-0.16666666666666666 }] }
+    { "name":"q1-2", "type":"cte", "prms":[{"n":"c", "v": 0.16666666666666666 }] },
+    { "name":"q1-3", "type":"cte", "prms":[{"n":"c", "v":-0.16666666666666666 }] }
   ],
   "regions" : [
     {
@@ -26,8 +26,8 @@
         { "tag":-4, "keys":["uy","rx","rz"], "funcs":["zero","zero","zero"] }
       ],
       "eleconds" : [
-        { "tag":-2, "keys":["qs"], "funcs":["qs-2"] },
-        { "tag":-3, "keys":["qs"], "funcs":["qs-3"] }
+        { "tag":-2, "keys":["q1"], "funcs":["q1-2"] },
+        { "tag":-3, "keys":["q1"], "funcs":["q1-3"] }
       ]
     }
   ]

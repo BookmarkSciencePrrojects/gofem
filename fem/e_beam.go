@@ -88,8 +88,8 @@ type Beam struct {
 	QnL  fun.Func // distributed normal load functions: left
 	QnR  fun.Func // distributed normal load functions: right
 	Qt   fun.Func // distributed tangential load
-	Qs   fun.Func // 3D: load on plane s-t
-	Qr   fun.Func // 3D: load on plane r-t
+	Q1   fun.Func // 3D: load on plane s-t
+	Q2   fun.Func // 3D: load on plane r-t
 
 	// scratchpad. computed @ each ip
 	grav []float64 // [ndim] gravity vector
@@ -245,10 +245,10 @@ func (o *Beam) SetEleConds(key string, f fun.Func, extra string) (err error) {
 		o.Hasq, o.QnR = true, f
 	case "qt":
 		o.Hasq, o.Qt = true, f
-	case "qs":
-		o.Hasq, o.Qs = true, f
-	case "qr":
-		o.Hasq, o.Qr = true, f
+	case "q1":
+		o.Hasq, o.Q1 = true, f
+	case "q2":
+		o.Hasq, o.Q2 = true, f
 	default:
 		return chk.Err("cannot handle boundary condition named %q", key)
 	}
@@ -288,7 +288,7 @@ func (o *Beam) AddToRhs(fb []float64, sol *Solution) (err error) {
 	if o.Hasq {
 		l := o.L
 		ll := l * l
-		qnL, qnR, qt, qs, qr := o.calc_loads(sol.T)
+		qnL, qnR, qt, q1, q2 := o.calc_loads(sol.T)
 		if o.Ndim == 2 {
 			o.fxl[0] = qt * l / 2.0
 			o.fxl[1] = l * (7.0*qnL + 3.0*qnR) / 20.0
@@ -297,14 +297,14 @@ func (o *Beam) AddToRhs(fb []float64, sol *Solution) (err error) {
 			o.fxl[4] = l * (3.0*qnL + 7.0*qnR) / 20.0
 			o.fxl[5] = -ll * (2.0*qnL + 3.0*qnR) / 60.0
 		} else {
-			o.fxl[1] = l * qs / 2.0
-			o.fxl[2] = l * qr / 2.0
-			o.fxl[4] = -ll * qr / 12.0
-			o.fxl[5] = ll * qs / 12.0
-			o.fxl[7] = l * qs / 2.0
-			o.fxl[8] = l * qr / 2.0
-			o.fxl[10] = ll * qr / 12.0
-			o.fxl[11] = -ll * qs / 12.0
+			o.fxl[1] = l * q1 / 2.0
+			o.fxl[2] = l * q2 / 2.0
+			o.fxl[4] = -ll * q2 / 12.0
+			o.fxl[5] = ll * q1 / 12.0
+			o.fxl[7] = l * q1 / 2.0
+			o.fxl[8] = l * q2 / 2.0
+			o.fxl[10] = ll * q2 / 12.0
+			o.fxl[11] = -ll * q1 / 12.0
 		}
 		la.MatTrVecMulAdd(o.fi, -1.0, o.T, o.fxl) // Rus -= fx; fx = trans(T) * fxl
 	}
@@ -566,7 +566,7 @@ func (o *Beam) Recompute(withM bool) {
 }
 
 // calc_loads computes applied distributed loads at given time
-func (o *Beam) calc_loads(time float64) (qnL, qnR, qt, qs, qr float64) {
+func (o *Beam) calc_loads(time float64) (qnL, qnR, qt, q1, q2 float64) {
 	if o.QnL != nil {
 		qnL = o.QnL.F(time, nil)
 	}
@@ -576,11 +576,11 @@ func (o *Beam) calc_loads(time float64) (qnL, qnR, qt, qs, qr float64) {
 	if o.Qt != nil {
 		qt = o.Qt.F(time, nil)
 	}
-	if o.Qs != nil {
-		qs = o.Qs.F(time, nil)
+	if o.Q1 != nil {
+		q1 = o.Q1.F(time, nil)
 	}
-	if o.Qr != nil {
-		qr = o.Qr.F(time, nil)
+	if o.Q2 != nil {
+		q2 = o.Q2.F(time, nil)
 	}
 	return
 }
@@ -676,7 +676,7 @@ func (o *Beam) calc_moment3d_after_ua(time, ξ float64) (M22, M11, T00 float64) 
 
 	// constants and loads
 	EIr, EIs, GJ := o.E*o.I22, o.E*o.I11, o.G*o.Jtt
-	_, _, _, qs, qr := o.calc_loads(time)
+	_, _, _, q1, q2 := o.calc_loads(time)
 
 	// displacements and rotations
 	//u := []float64{o.ua[0], o.ua[6]}
@@ -689,8 +689,8 @@ func (o *Beam) calc_moment3d_after_ua(time, ξ float64) (M22, M11, T00 float64) 
 	dnw2 := []float64{dnv2[0], -dnv2[1], dnv2[2], -dnv2[3]}
 
 	// bending moments
-	M22 = +qs * (ll - 6*τ*l + 6*τ2) / 12.0 //   EIr*dnv2*v
-	M11 = -qr * (ll - 6*τ*l + 6*τ2) / 12.0 //  -EIs*dnw2*w
+	M22 = +q1 * (ll - 6*τ*l + 6*τ2) / 12.0 //   EIr*dnv2*v
+	M11 = -q2 * (ll - 6*τ*l + 6*τ2) / 12.0 //  -EIs*dnw2*w
 	for i := 0; i < len(v); i++ {
 		M22 += EIr * dnv2[i] * v[i]
 		M11 -= EIs * dnw2[i] * w[i]
