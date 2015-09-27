@@ -117,18 +117,18 @@ func Test_beam01b(tst *testing.T) {
 	// check
 	dom := analysis.Domains[0]
 	ele := dom.Elems[0].(*Beam)
-	Mrr := ele.CalcMoment2d(dom.Sol, 0.5, 1)
+	M22 := ele.CalcMoment2d(dom.Sol, 0.5, 1)
 	qn, L := 15.0, 1.0
 	Mcentre := qn * L * L / 8.0
-	io.Pforan("Mrr = %v (%v)\n", Mrr, Mcentre)
-	chk.Scalar(tst, "Mrr @ centre", 1e-17, Mrr[0], Mcentre)
+	io.Pforan("M22 = %v (%v)\n", M22, Mcentre)
+	chk.Scalar(tst, "M22 @ centre", 1e-17, M22[0], Mcentre)
 
 	// check moment using OutIpsData
 	idx_centre := 5 // considering 11 stations
 	dat := ele.OutIpsData()
 	res := dat[idx_centre].Calc(dom.Sol)
-	io.Pfcyan("Mrr @ centre (OutIpsData) = %v\n", res["Mrr"])
-	chk.Scalar(tst, "Mrr @ centre (OutIpsData)", 1e-17, res["Mrr"], Mcentre)
+	io.Pfcyan("M22 @ centre (OutIpsData) = %v\n", res["M22"])
+	chk.Scalar(tst, "M22 @ centre (OutIpsData)", 1e-17, res["M22"], Mcentre)
 }
 
 func Test_beam02(tst *testing.T) {
@@ -149,11 +149,11 @@ func Test_beam02(tst *testing.T) {
 	// check
 	dom := analysis.Domains[0]
 	ele := dom.Elems[0].(*Beam)
-	Mrr := ele.CalcMoment2d(dom.Sol, 0, 1)
+	M22 := ele.CalcMoment2d(dom.Sol, 0, 1)
 	qn, L := 15.0, 1.0
 	Mleft := -qn * L * L / 2.0
-	io.Pforan("Mrr = %v (%v)\n", Mrr, Mleft)
-	chk.Scalar(tst, "M @ left", 1e-15, Mrr[0], Mleft)
+	io.Pforan("M22 = %v (%v)\n", M22, Mleft)
+	chk.Scalar(tst, "M @ left", 1e-15, M22[0], Mleft)
 }
 
 func Test_beam03(tst *testing.T) {
@@ -193,8 +193,8 @@ func Test_beam03(tst *testing.T) {
 	// define function to check bending moment
 	check_M := func(beamId int, ξ, Mref, tol float64) {
 		ele := dom.Cid2elem[beamId].(*Beam)
-		Mrr := ele.CalcMoment2d(dom.Sol, ξ, 1)
-		chk.Scalar(tst, io.Sf("Beam %d: Mrr(ξ=%g) = %.6f", ele.Id(), ξ, Mrr[0]), tol, Mrr[0], Mref)
+		M22 := ele.CalcMoment2d(dom.Sol, ξ, 1)
+		chk.Scalar(tst, io.Sf("Beam %d: M22(ξ=%g) = %.6f", ele.Id(), ξ, M22[0]), tol, M22[0], Mref)
 	}
 
 	// check

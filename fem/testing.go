@@ -35,7 +35,7 @@ type T_results struct {
 	Stresses   [][][]float64 // [nele][nip][nsig] all stresses @ all ips
 	// Stresses: examples:
 	//   2D solid: [sx, sy, sxy, sz]
-	//   3D beam:  [Mrr, Mss, Mtt, Vs, Vr]
+	//   3D beam:  [M22, M11, Mtt, Vs, Vr]
 }
 
 // T_results_set is a set of comparison results
@@ -218,9 +218,9 @@ func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string,
 						}
 						res := dat[station].Calc(dom.Sol)
 						if e.Ndim == 3 {
-							Mrr, Mss, Mtt := res["Mrr"], res["Mss"], res["Mtt"]
-							chk.AnaNum(tst, "Mrr", tols, Mrr, val[0], verbose)
-							chk.AnaNum(tst, "Mss", tols, Mss, val[1], verbose)
+							M22, M11, Mtt := res["M22"], res["M11"], res["Mtt"]
+							chk.AnaNum(tst, "M22", tols, M22, val[0], verbose)
+							chk.AnaNum(tst, "M11", tols, M11, val[1], verbose)
 							chk.AnaNum(tst, "Mtt", tols, Mtt, val[2], verbose)
 						}
 					}

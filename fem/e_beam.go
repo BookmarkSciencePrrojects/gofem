@@ -19,36 +19,37 @@ import (
 
 // Beam represents a structural beam element (Euler-Bernoulli, linear elastic)
 //
-//  2D     s     r is out-of-plane              Note: r,s,t not under any right-hand-type rule
+//  2D    y1     y2 is out-of-plane
 //         ^
-//         | qnL          qn            qnR     Props:  Nodes:
-//         o-------------------------------o     E, A    0 and 1
-//         |                               |     Irr
+//         | qnL          qn            qnR     Props:    Nodes:
+//         o-------------------------------o     E, A      0 and 1
+//         |                               |     I22
 //         |                               |
-//        (0)-----------------------------(1)------> t
+//       (y2)-----------------------------(1)------> y0
 //
-//  3D                    ,o--------o    ,t
+//  3D                    ,o--------o    ,y0
 //                      ,' |     ,' |  ,'
-//         s          ,'       ,'   |,'
-//         ^        ,'qs     ,'    ,|
+//        y1          ,'       ,'   |,'
+//         ^        ,'q1     ,'    ,|
 //         |      ,'  V    ,'    ,  |
 //         |    ,'       ,'    ,    |
 //         |  ,'       ,'  | ,      |
 //         |,'       ,'   (1) - - - o   -   -  (2)
 //         o--------o    ,        ,'
-//         |        |  ,  <qr   ,'    Props:       Nodes:
-//         |        |,        ,'       E, G, A      0, 1, 2
-//         |       ,|       ,'         Irr = Imax   where node (2) is a point located on plane r-t
-//         |     ,  |     ,'           Iss = Imin   and non-colinear to (0) and (1)
-//         |   ,    |   ,'             Jtt          Node (2) doest not have any DOF
+//         |        |  ,  <q2   ,'    Props:          Nodes:
+//         |        |,        ,'       E, G, A         0, 1, 2
+//         |       ,|       ,'         I22 ~ Imax      where node (2) is a point located on plane
+//         |     ,  |     ,'           I11 ~ Imin      y0-y2 and non-colinear to (0) and (1).
+//         |   ,    |   ,'             Jtt             Node (2) doest not have any DOF
 //         | ,      | ,'
-//        (0)-------o' --------> r
+//        (0)-------o' --------> y2
 //
 type Beam struct {
 
 	// basic data
 	Cell *inp.Cell   // the cell structure
 	X    [][]float64 // matrix of nodal coordinates [ndim][nnode]
+	P02  []float64   // [3] point defining y0-y2 plane (from X matrix or computed here for horizontal/vertical beams)
 	Nu   int         // total number of unknowns
 	Ndim int         // space dimension
 
@@ -56,8 +57,8 @@ type Beam struct {
 	E   float64 // Young's modulus
 	G   float64 // shear modulus
 	A   float64 // cross-sectional area
-	Irr float64 // moment of inertia of cross section about r-axis (maximum principal inertia)
-	Iss float64 // moment of inertia of cross section about s-axis (minimum principal inertia)
+	I22 float64 // moment of inertia of cross section about y2-axis
+	I11 float64 // moment of inertia of cross section about y1-axis
 	Jtt float64 // torsional constant
 	L   float64 // (derived) length of beam
 
@@ -67,6 +68,11 @@ type Beam struct {
 	// variables for dynamics
 	Rho  float64  // density of solids
 	Gfcn fun.Func // gravity function
+
+	// corotational system aligned with beam element
+	e0 []float64 // [3] unit vector aligned with y0-axis
+	e1 []float64 // [3] unit vector aligned with y1-axis
+	e2 []float64 // [3] unit vector aligned with y2-axis
 
 	// vectors and matrices
 	T   [][]float64 // global-to-local transformation matrix [nnode*ndim][nnode*ndim]
@@ -129,6 +135,7 @@ func init() {
 		var o Beam
 		o.Cell = cell
 		o.X = x
+		o.P02 = []float64{0, 0, 1}
 		o.Ndim = len(x)
 		ndof := 3 * (o.Ndim - 1)
 		o.Nu = 2 * ndof
@@ -146,10 +153,10 @@ func init() {
 				o.G = p.V
 			case "A":
 				o.A = p.V
-			case "Irr", "Imax":
-				o.Irr = p.V
-			case "Iss", "Imin":
-				o.Iss = p.V
+			case "I22":
+				o.I22 = p.V
+			case "I11":
+				o.I11 = p.V
 			case "Jtt":
 				o.Jtt = p.V
 			case "rho":
@@ -157,12 +164,12 @@ func init() {
 			}
 		}
 		ϵp := 1e-9
-		if o.E < ϵp || o.A < ϵp || o.Irr < ϵp || o.Rho < ϵp {
-			chk.Panic("E, A, Irr and rho parameters must be all positive")
+		if o.E < ϵp || o.A < ϵp || o.I22 < ϵp || o.Rho < ϵp {
+			chk.Panic("E, A, I22 and rho parameters must be all positive")
 		}
 		if o.Ndim == 3 {
-			if o.G < ϵp || o.Iss < ϵp || o.Jtt < ϵp {
-				chk.Panic("G, Iss, Jtt parameters must be all positive")
+			if o.G < ϵp || o.I11 < ϵp || o.Jtt < ϵp {
+				chk.Panic("G, I11, Jtt parameters must be all positive")
 			}
 		}
 
@@ -171,6 +178,11 @@ func init() {
 		if s_nsta, found := io.Keycode(edat.Extra, "nsta"); found {
 			o.Nstations = io.Atoi(s_nsta)
 		}
+
+		// corotational system aligned with beam element
+		o.e0 = make([]float64, 3)
+		o.e1 = make([]float64, 3)
+		o.e2 = make([]float64, 3)
 
 		// vectors and matrices
 		o.T = la.MatAlloc(o.Nu, o.Nu)
@@ -351,11 +363,11 @@ func (o *Beam) OutIpsData() (data []*OutIpData) {
 		calc := func(sol *Solution) (vals map[string]float64) {
 			vals = make(map[string]float64)
 			if o.Ndim == 3 {
-				Mrr, Mss, Mtt := o.CalcMoment3d(sol, ξ, unused)
-				vals["Mrr"], vals["Mss"], vals["Mtt"] = Mrr[0], Mss[0], Mtt[0]
+				M22, M11, T00 := o.CalcMoment3d(sol, ξ, unused)
+				vals["M22"], vals["M11"], vals["T00"] = M22[0], M11[0], T00[0]
 			} else {
-				Mrr := o.CalcMoment2d(sol, ξ, unused)
-				vals["Mrr"] = Mrr[0]
+				M22 := o.CalcMoment2d(sol, ξ, unused)
+				vals["M22"] = M22[0]
 			}
 			return
 		}
@@ -372,34 +384,44 @@ func (o *Beam) Recompute(withM bool) {
 	// 3D
 	if o.Ndim == 3 {
 
-		// auxiliary vectors
-		v01, v02 := make([]float64, o.Ndim), make([]float64, o.Ndim)
-		for i := 0; i < o.Ndim; i++ {
-			v01[i] = o.X[i][1] - o.X[i][0]
-			v02[i] = o.X[i][2] - o.X[i][0]
+		// point defining y0-y2 plane
+		if len(o.X[0]) == 3 { // point given
+			for i := 0; i < o.Ndim; i++ {
+				o.P02[i] = o.X[i][2]
+			}
+		} else {
+			chk.Panic("computing P02 is not implemented yet")
 		}
-		vs := make([]float64, o.Ndim)
-		utl.Cross3d(vs, v02, v01) // vs := v02 cross v01
-		l := math.Sqrt(utl.Dot3d(v01, v01))
-		o.L = l
-		ls := math.Sqrt(utl.Dot3d(vs, vs))
-		vt := make([]float64, o.Ndim)
+
+		// auxiliary vector
+		o.L = 0.0
+		v02 := make([]float64, o.Ndim)
 		for i := 0; i < o.Ndim; i++ {
-			vt[i] = v01[i] / l
-			vs[i] = vs[i] / ls
+			o.e0[i] = o.X[i][1] - o.X[i][0]
+			v02[i] = o.P02[i] - o.X[i][0]
+			o.L += o.e0[i] * o.e0[i]
 		}
-		vr := make([]float64, o.Ndim)
-		utl.Cross3d(vr, vt, vs) // vr := vt cross vs
+		o.L = math.Sqrt(o.L)
+		utl.Cross3d(o.e1, v02, o.e0) // e1 := v02 cross e0
+
+		// corotational system aligned with beam element
+		nrm1 := la.VecNorm(o.e1)
+		for i := 0; i < o.Ndim; i++ {
+			o.e0[i] = o.e0[i] / o.L
+			o.e1[i] = o.e1[i] / nrm1
+		}
+		utl.Cross3d(o.e2, o.e0, o.e1) // e2 := e0 cross e1
 
 		// global to local transformation matrix
 		for k := 0; k < 4; k++ {
-			o.T[3*k+0][3*k+0], o.T[3*k+0][3*k+1], o.T[3*k+0][3*k+2] = vt[0], vt[1], vt[2]
-			o.T[3*k+1][3*k+0], o.T[3*k+1][3*k+1], o.T[3*k+1][3*k+2] = vs[0], vs[1], vs[2]
-			o.T[3*k+2][3*k+0], o.T[3*k+2][3*k+1], o.T[3*k+2][3*k+2] = vr[0], vr[1], vr[2]
+			o.T[3*k+0][3*k+0], o.T[3*k+0][3*k+1], o.T[3*k+0][3*k+2] = o.e0[0], o.e0[1], o.e0[2]
+			o.T[3*k+1][3*k+0], o.T[3*k+1][3*k+1], o.T[3*k+1][3*k+2] = o.e1[0], o.e1[1], o.e1[2]
+			o.T[3*k+2][3*k+0], o.T[3*k+2][3*k+1], o.T[3*k+2][3*k+2] = o.e2[0], o.e2[1], o.e2[2]
 		}
 
 		// constants
-		EIr, EIs, GJ, EA := o.E*o.Irr, o.E*o.Iss, o.G*o.Jtt, o.E*o.A
+		EIr, EIs, GJ, EA := o.E*o.I22, o.E*o.I11, o.G*o.Jtt, o.E*o.A
+		l := o.L
 		ll := l * l
 		lll := l * ll
 
@@ -484,10 +506,14 @@ func (o *Beam) Recompute(withM bool) {
 	o.T[4][4] = c
 	o.T[5][5] = 1
 
+	// corotational system aligned with beam element
+	o.e0[0], o.e0[1] = c, s
+	o.e1[0], o.e1[1] = -s, c
+
 	// aux vars
 	ll := l * l
 	m := o.E * o.A / l
-	n := o.E * o.Irr / (ll * l)
+	n := o.E * o.I22 / (ll * l)
 
 	// K
 	o.Kl[0][0] = m
@@ -576,22 +602,22 @@ func (o *Beam) calc_ua(sol *Solution) {
 //   ξ         -- natural coordinate along bar   0 ≤ ξ ≤ 1
 //   nstations -- compute many values; otherwise, if nstations<2, compute @ s
 //  Output:
-//   Mrr -- bending moment around r-axis
-//   Mss -- bending moment around s-axis
-//   Mtt -- twisting moment around t-axis
-func (o *Beam) CalcMoment3d(sol *Solution, ξ float64, nstations int) (Mrr, Mss, Mtt []float64) {
+//   M22 -- bending moment about y2-axis
+//   M11 -- bending moment about y1-axis
+//   T00 -- twisting moment around y0-axis
+func (o *Beam) CalcMoment3d(sol *Solution, ξ float64, nstations int) (M22, M11, T00 []float64) {
 	o.calc_ua(sol)
 	if nstations < 2 {
 		mrr, mss, mtt := o.calc_moment3d_after_ua(sol.T, ξ)
-		Mrr, Mss, Mtt = []float64{mrr}, []float64{mss}, []float64{mtt}
+		M22, M11, T00 = []float64{mrr}, []float64{mss}, []float64{mtt}
 		return
 	}
-	Mrr = make([]float64, nstations)
-	Mss = make([]float64, nstations)
-	Mtt = make([]float64, nstations)
+	M22 = make([]float64, nstations)
+	M11 = make([]float64, nstations)
+	T00 = make([]float64, nstations)
 	dξ := 1.0 / float64(nstations-1)
 	for i := 0; i < nstations; i++ {
-		Mrr[i], Mss[i], Mtt[i] = o.calc_moment3d_after_ua(sol.T, float64(i)*dξ)
+		M22[i], M11[i], T00[i] = o.calc_moment3d_after_ua(sol.T, float64(i)*dξ)
 	}
 	return
 }
@@ -601,18 +627,18 @@ func (o *Beam) CalcMoment3d(sol *Solution, ξ float64, nstations int) (Mrr, Mss,
 //   ξ         -- natural coordinate along bar   0 ≤ ξ ≤ 1
 //   nstations -- compute many values; otherwise, if nstations<2, compute @ s
 //  Output:
-//   Mrr -- bending moment @ stations or s
-func (o *Beam) CalcMoment2d(sol *Solution, ξ float64, nstations int) (Mrr []float64) {
+//   M22 -- bending moment @ stations or s
+func (o *Beam) CalcMoment2d(sol *Solution, ξ float64, nstations int) (M22 []float64) {
 	o.calc_ua(sol)
 	if nstations < 2 {
 		m := o.calc_moment2d_after_ua(sol.T, ξ)
-		Mrr = []float64{m}
+		M22 = []float64{m}
 		return
 	}
-	Mrr = make([]float64, nstations)
+	M22 = make([]float64, nstations)
 	dξ := 1.0 / float64(nstations-1)
 	for i := 0; i < nstations; i++ {
-		Mrr[i] = o.calc_moment2d_after_ua(sol.T, float64(i)*dξ)
+		M22[i] = o.calc_moment2d_after_ua(sol.T, float64(i)*dξ)
 	}
 	return
 }
@@ -622,24 +648,24 @@ func (o *Beam) CalcMoment2d(sol *Solution, ξ float64, nstations int) (Mrr []flo
 //   ξ         -- natural coordinate along bar   0 ≤ ξ ≤ 1
 //   nstations -- compute many values; otherwise, if nstations<2, compute @ s
 //  Output:
-//   Vs -- shear force @ stations or s
-func (o *Beam) CalcShearForce2d(sol *Solution, ξ float64, nstations int) (Vs []float64) {
+//   V1 -- shear force @ stations or s
+func (o *Beam) CalcShearForce2d(sol *Solution, ξ float64, nstations int) (V1 []float64) {
 	o.calc_ua(sol)
 	if nstations < 2 {
 		v := o.calc_shearforce2d_after_ua(sol.T, ξ)
-		Vs = []float64{v}
+		V1 = []float64{v}
 		return
 	}
-	Vs = make([]float64, nstations)
+	V1 = make([]float64, nstations)
 	dξ := 1.0 / float64(nstations-1)
 	for i := 0; i < nstations; i++ {
-		Vs[i] = o.calc_shearforce2d_after_ua(sol.T, float64(i)*dξ)
+		V1[i] = o.calc_shearforce2d_after_ua(sol.T, float64(i)*dξ)
 	}
 	return
 }
 
-// calc_bendingmom3d_after_ua calculates bending moments (3D) @ station ξ in [0, 1]
-func (o *Beam) calc_moment3d_after_ua(time, ξ float64) (Mrr, Mss, Mtt float64) {
+// calc_bendingmom3d_after_ua calculates bending moments and torque (3D) @ station ξ in [0, 1]
+func (o *Beam) calc_moment3d_after_ua(time, ξ float64) (M22, M11, T00 float64) {
 
 	// auxiliary variables
 	τ := ξ * o.L
@@ -649,7 +675,7 @@ func (o *Beam) calc_moment3d_after_ua(time, ξ float64) (Mrr, Mss, Mtt float64) 
 	lll := ll * l
 
 	// constants and loads
-	EIr, EIs, GJ := o.E*o.Irr, o.E*o.Iss, o.G*o.Jtt
+	EIr, EIs, GJ := o.E*o.I22, o.E*o.I11, o.G*o.Jtt
 	_, _, _, qs, qr := o.calc_loads(time)
 
 	// displacements and rotations
@@ -663,18 +689,18 @@ func (o *Beam) calc_moment3d_after_ua(time, ξ float64) (Mrr, Mss, Mtt float64) 
 	dnw2 := []float64{dnv2[0], -dnv2[1], dnv2[2], -dnv2[3]}
 
 	// bending moments
-	Mrr = +qs * (ll - 6*τ*l + 6*τ2) / 12.0 //   EIr*dnv2*v
-	Mss = -qr * (ll - 6*τ*l + 6*τ2) / 12.0 //  -EIs*dnw2*w
+	M22 = +qs * (ll - 6*τ*l + 6*τ2) / 12.0 //   EIr*dnv2*v
+	M11 = -qr * (ll - 6*τ*l + 6*τ2) / 12.0 //  -EIs*dnw2*w
 	for i := 0; i < len(v); i++ {
-		Mrr += EIr * dnv2[i] * v[i]
-		Mss -= EIs * dnw2[i] * w[i]
+		M22 += EIr * dnv2[i] * v[i]
+		M11 -= EIs * dnw2[i] * w[i]
 	}
-	Mtt = GJ * (θ[1] - θ[0]) / l
+	T00 = GJ * (θ[1] - θ[0]) / l
 	return
 }
 
 // calc_bendingmom2d_after_ua calculates bending moment (2D) @ station ξ in [0, 1]
-func (o *Beam) calc_moment2d_after_ua(time, ξ float64) (Mrr float64) {
+func (o *Beam) calc_moment2d_after_ua(time, ξ float64) (M22 float64) {
 
 	// auxiliary variables
 	τ := ξ * o.L
@@ -683,23 +709,23 @@ func (o *Beam) calc_moment2d_after_ua(time, ξ float64) (Mrr float64) {
 	lll := ll * l
 
 	// bending moment
-	Mrr = o.E * o.Irr * (o.ua[1]*((12.0*τ)/lll-6.0/ll) + o.ua[2]*((6.0*τ)/ll-4.0/l) + o.ua[4]*(6.0/ll-(12.0*τ)/lll) + o.ua[5]*((6.0*τ)/ll-2.0/l))
+	M22 = o.E * o.I22 * (o.ua[1]*((12.0*τ)/lll-6.0/ll) + o.ua[2]*((6.0*τ)/ll-4.0/l) + o.ua[4]*(6.0/ll-(12.0*τ)/lll) + o.ua[5]*((6.0*τ)/ll-2.0/l))
 
 	// corrections due to applied loads
 	if o.Hasq {
 		qnL, qnR, _, _, _ := o.calc_loads(time)
 		τ2 := τ * τ
 		τ3 := τ2 * τ
-		Mrr += (2.0*qnR*lll + 3.0*qnL*lll - 9.0*qnR*τ*ll - 21.0*qnL*τ*ll + 30.0*qnL*τ2*l + 10.0*qnR*τ3 - 10.0*qnL*τ3) / (60.0 * l)
+		M22 += (2.0*qnR*lll + 3.0*qnL*lll - 9.0*qnR*τ*ll - 21.0*qnL*τ*ll + 30.0*qnL*τ2*l + 10.0*qnR*τ3 - 10.0*qnL*τ3) / (60.0 * l)
 		if qnL > 0.0 {
-			Mrr = -Mrr // swap the sign of M
+			M22 = -M22 // swap the sign of M
 		}
 	}
 	return
 }
 
 // calc_shearforce2d_after_ua calculates shear force (2D) @ station ξ in [0, 1]
-func (o *Beam) calc_shearforce2d_after_ua(time, ξ float64) (Vs float64) {
+func (o *Beam) calc_shearforce2d_after_ua(time, ξ float64) (V1 float64) {
 
 	// auxiliary variables
 	τ := ξ * o.L
@@ -708,13 +734,13 @@ func (o *Beam) calc_shearforce2d_after_ua(time, ξ float64) (Vs float64) {
 	lll := ll * l
 
 	// shear force
-	Vs = o.E * o.Irr * ((12.0*o.ua[1])/lll + (6.0*o.ua[2])/ll - (12.0*o.ua[4])/lll + (6.0*o.ua[5])/ll)
+	V1 = o.E * o.I22 * ((12.0*o.ua[1])/lll + (6.0*o.ua[2])/ll - (12.0*o.ua[4])/lll + (6.0*o.ua[5])/ll)
 
 	// corrections due to applied loads
 	if o.Hasq {
 		qnL, qnR, _, _, _ := o.calc_loads(time)
 		τ2 := τ * τ
-		Vs += -(3.0*qnR*ll + 7.0*qnL*ll - 20.0*qnL*τ*l - 10.0*qnR*τ2 + 10.0*qnL*τ2) / (20.0 * l)
+		V1 += -(3.0*qnR*ll + 7.0*qnL*ll - 20.0*qnL*τ*l - 10.0*qnR*τ2 + 10.0*qnL*τ2) / (20.0 * l)
 	}
 	return
 }
