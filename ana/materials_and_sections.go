@@ -13,14 +13,39 @@ import (
 
 // CrossSection computes cross-sectional moments of inertia and other properties
 //
+//  2D    y1     y2 is out-of-plane
+//         ^
+//         |
+//         o-------------------------------o
+//         |                               |
+//         |                               |
+//       (y2)------------------------------o-------> y0
+//
+//  3D                    ,o--------o    ,y0
+//                      ,' :     ,' |  ,'
+//        y1          ,'       ,'   |,'
+//         ^        ,'     : ,'    ,|
+//         |      ,'       ,'    ,  |
+//         |    ,'       ,'    ,    |
+//         |  ,'       ,'  : ,      |
+//         |,'       ,'    +  - - - o
+//         o--------o    ,        ,'
+//         |        |  ,        ,'
+//         |        |,        ,'
+//         |       ,|       ,'         I22 ~ Imax
+//         |     ,  |     ,'           I11 ~ Imin
+//         |   ,    |   ,'             Jtt
+//         | ,      | ,'
+//         o--------o' --------> y2
+//
 //   typ : rectangle
 //         circle                             tw
 //         I-beam                         -->| |<--
 //                                    ___    | |     ___
-//   ^ s       +-------+            tf |   ########   |
+//   ^ 1       +-------+            tf |   ########   |
 //   |         |       |              ---  ########   |
 //   |         |       |                      ##      |
-//   +----> r  |       | h = hei              ##      | h = hei
+//   +----> 2  |       | h = hei              ##      | h = hei
 //             |       |                      ##      |
 //             |       |              ---  ########   |
 //             +-------+            tf_|_  ########  ---
@@ -39,8 +64,8 @@ type CrossSection struct {
 
 	// derived
 	A   float64 // cross-sectional area
-	Irr float64 // major cross-section moment of inertia (about r-axis)
-	Iss float64 // minor cross-section moment of inertia (about s-axis)
+	I22 float64 // major cross-section moment of inertia (about r-axis)
+	I11 float64 // minor cross-section moment of inertia (about s-axis)
 	Jtt float64 // torsional constant
 }
 
@@ -57,8 +82,8 @@ func (o *CrossSection) Init(typ, unitLen string, wid, hei, tf, tw, rad float64) 
 		b3 := b * b * b
 		h3 := h * h * h
 		o.A = b * h
-		o.Irr = b * h3 / 12.0
-		o.Iss = b3 * h / 12.0
+		o.I22 = b * h3 / 12.0
+		o.I11 = b3 * h / 12.0
 		if b == h {
 			o.Jtt = 9.0 * b3 * b / 64.0
 		} else {
@@ -77,16 +102,16 @@ func (o *CrossSection) Init(typ, unitLen string, wid, hei, tf, tw, rad float64) 
 		l := h - 2.0*tf
 		l3 := l * l * l
 		o.A = b*h - l*(b-tw)
-		o.Irr = b*h3/12.0 - (b-tw)*l3/12.0
-		o.Iss = l*tw3/12.0 + tf*b3/6.0
+		o.I22 = b*h3/12.0 - (b-tw)*l3/12.0
+		o.I11 = l*tw3/12.0 + tf*b3/6.0
 		o.Jtt = (2.0*b*tf3 + (h-2.0*tf)*tw3) / 3.0
 
 	case "circle":
 		r2 := rad * rad
 		o.A = math.Pi * r2
-		o.Irr = math.Pi * r2 * r2 / 4.0
-		o.Iss = o.Irr
-		o.Jtt = o.Irr + o.Iss
+		o.I22 = math.Pi * r2 * r2 / 4.0
+		o.I11 = o.I22
+		o.Jtt = o.I22 + o.I11
 
 	default:
 		chk.Panic("cross-section type %q is unavailable", typ)
@@ -96,8 +121,8 @@ func (o *CrossSection) Init(typ, unitLen string, wid, hei, tf, tw, rad float64) 
 // GetMatString returns string representation of cross-section for .mat file
 func (o *CrossSection) GetMatString(numfmt string) string {
 	l := io.Sf("        {\"n\":\"A\",   \"v\":"+numfmt+", \"u\":\""+o.Unit+"²\"},\n", o.A)
-	l += io.Sf("        {\"n\":\"Irr\", \"v\":"+numfmt+", \"u\":\""+o.Unit+"⁴\"},\n", o.Irr)
-	l += io.Sf("        {\"n\":\"Iss\", \"v\":"+numfmt+", \"u\":\""+o.Unit+"⁴\"},\n", o.Iss)
+	l += io.Sf("        {\"n\":\"I22\", \"v\":"+numfmt+", \"u\":\""+o.Unit+"⁴\"},\n", o.I22)
+	l += io.Sf("        {\"n\":\"I11\", \"v\":"+numfmt+", \"u\":\""+o.Unit+"⁴\"},\n", o.I11)
 	l += io.Sf("        {\"n\":\"Jtt\", \"v\":"+numfmt+", \"u\":\""+o.Unit+"⁴\"}", o.Jtt)
 	return l
 }

@@ -69,7 +69,7 @@ type Beam struct {
 	Rho  float64  // density of solids
 	Gfcn fun.Func // gravity function
 
-	// corotational system aligned with beam element
+	// unit vectors aligned with beam element
 	e0 []float64 // [3] unit vector aligned with y0-axis
 	e1 []float64 // [3] unit vector aligned with y1-axis
 	e2 []float64 // [3] unit vector aligned with y2-axis
@@ -179,7 +179,7 @@ func init() {
 			o.Nstations = io.Atoi(s_nsta)
 		}
 
-		// corotational system aligned with beam element
+		// unit vectors aligned with beam element
 		o.e0 = make([]float64, 3)
 		o.e1 = make([]float64, 3)
 		o.e2 = make([]float64, 3)
@@ -404,7 +404,7 @@ func (o *Beam) Recompute(withM bool) {
 		o.L = math.Sqrt(o.L)
 		utl.Cross3d(o.e1, v02, o.e0) // e1 := v02 cross e0
 
-		// corotational system aligned with beam element
+		// unit vectors aligned with beam element
 		nrm1 := la.VecNorm(o.e1)
 		for i := 0; i < o.Ndim; i++ {
 			o.e0[i] = o.e0[i] / o.L
@@ -506,7 +506,7 @@ func (o *Beam) Recompute(withM bool) {
 	o.T[4][4] = c
 	o.T[5][5] = 1
 
-	// corotational system aligned with beam element
+	// unit vectors aligned with beam element
 	o.e0[0], o.e0[1] = c, s
 	o.e1[0], o.e1[1] = -s, c
 
