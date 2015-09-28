@@ -678,7 +678,7 @@ func (o *Rjoint) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) 
 	o.StatesBkp = make([]*msolid.OnedState, nip)
 	o.StatesAux = make([]*msolid.OnedState, nip)
 	for i := 0; i < nip; i++ {
-		o.States[i], _ = o.Mdl.InitIntVars()
+		o.States[i], _ = o.Mdl.InitIntVars(0, 0, 0) // TODO: fix this
 		o.StatesBkp[i] = o.States[i].GetCopy()
 		o.StatesAux[i] = o.States[i].GetCopy()
 	}

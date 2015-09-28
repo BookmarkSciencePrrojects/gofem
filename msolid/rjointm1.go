@@ -11,6 +11,7 @@ import (
 )
 
 // RjointM1 implements a 1D plasticity model for rod-joints (links/interface)
+//  Note: σc has opposite sign convention: positive means compressive
 type RjointM1 struct {
 	ks  float64 // elasticity constant
 	τy0 float64 // initial yield stress
@@ -46,12 +47,16 @@ func (o RjointM1) GetPrms() fun.Prms {
 }
 
 // InitIntVars initialises internal (secondary) variables
-func (o RjointM1) InitIntVars() (s *OnedState, err error) {
-	s = NewOnedState(1, 2) // 1:{ωpb}  2:{qn1,qn2}
+func (o RjointM1) InitIntVars(τ, q1, q2 float64) (s *OnedState, err error) {
+	s = NewOnedState(1, 2) // 1:{ωpb}  2:{q1,q2}
+	s.Sig = τ
+	s.Phi[0] = q1
+	s.Phi[1] = q2
 	return
 }
 
 // Update updates stresses for given strains
+//  Note: σc has opposite sign convention: positive means compressive
 func (o *RjointM1) Update(s *OnedState, σcNew, Δω float64) (err error) {
 
 	// limit σcNew
