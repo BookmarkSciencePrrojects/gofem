@@ -4,7 +4,7 @@
     "steady" : true
   },
   "functions" : [
-    { "name":"fy", "type":"lin", "prms":[{"n":"m", "v":10}] },
+    { "name":"uy", "type":"lin", "prms":[{"n":"m", "v":0.1}] },
     { "name":"q0", "type":"cte", "prms":[{"n":"c", "v":-1}] }
   ],
   "regions" : [
@@ -26,7 +26,7 @@
       "desc" : "apply force to beam",
       "inistress" : { "hom":true, "iso":true, "s0":-1 },
       "nodebcs" : [
-        { "tag":-102, "keys":["fy"], "funcs":["fy"] }
+        { "tag":-102, "keys":["uy"], "funcs":["uy"] }
       ],
       "facebcs" : [
         { "tag":-10, "keys":["uy"],  "funcs":["zero"] },
@@ -34,7 +34,7 @@
         { "tag":-13, "keys":["ux"],  "funcs":["zero"] },
         { "tag":-12, "keys":["qn0"], "funcs":["q0"]   }
       ],
-      "control_" : {
+      "control" : {
         "tf" : 1.0,
         "dt" : 0.1
       }

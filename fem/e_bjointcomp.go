@@ -13,7 +13,6 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
-	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
 )
@@ -426,7 +425,6 @@ func (o *BjointComp) Update(sol *Solution) (err error) {
 				o.Δw[i] += S[m] * (sol.ΔY[J] - sol.ΔY[I])
 			}
 		}
-		io.Pforan("Δw = %v\n", o.Δw)
 
 		// relative displacents in the coratational system
 		Δwb0, Δwb1, Δwb2 = 0, 0, 0
@@ -466,36 +464,14 @@ func (o *BjointComp) Ipoints() (coords [][]float64) {
 
 // SetIniIvs sets initial ivs for given values in sol and ivs map
 func (o *BjointComp) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
-
-	// allocate arrays
 	nip := len(o.LinIps)
 	o.States = make([]*msolid.OnedState, nip)
 	o.StatesBkp = make([]*msolid.OnedState, nip)
 	o.StatesAux = make([]*msolid.OnedState, nip)
-
-	// compute stresses @ nodes
-	err = o.stress_nodes()
-	if err != nil {
-		return
-	}
-
-	// loop over integration points
-	var p1, p2 float64
-	for idx, ip := range o.LinIps {
-
-		// interpolation functions
-		err = o.LinShp.CalcAtIp(o.Lin.X, ip, false) // can use false because J is not needed
-		if err != nil {
-			return
-		}
-
-		// confining pressure
-		_, p1, p2 = o.confining_pressure_ip()
-
-		// set state arrays
-		o.States[idx], _ = o.Mdl.InitIntVars(0, p1, p2)
-		o.StatesBkp[idx] = o.States[idx].GetCopy()
-		o.StatesAux[idx] = o.States[idx].GetCopy()
+	for i := 0; i < nip; i++ {
+		o.States[i], _ = o.Mdl.InitIntVars(0, 0, 0)
+		o.StatesBkp[i] = o.States[i].GetCopy()
+		o.StatesAux[i] = o.States[i].GetCopy()
 	}
 	return
 }
@@ -545,7 +521,7 @@ func (o *BjointComp) confining_pressure_ip() (σcb, p1, p2 float64) {
 	}
 
 	// confining pressure: compressive is positive
-	σcb = -(p1 + p2) / 2.0 // no need ramp function because model will fix this
+	σcb = -(p1 + p2) / 2.0 // no need ramp function because model will do this
 	return
 }
 

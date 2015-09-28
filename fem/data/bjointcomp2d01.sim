@@ -8,6 +8,7 @@
   ],
   "regions" : [
     {
+      "desc" : "static",
       "mshfile" : "bjointcomp2d.msh",
       "elemsdata" : [
         { "tag":-1, "mat":"solid", "type":"u" },
@@ -21,7 +22,7 @@
   },
   "stages" : [
     {
-      "desc" : "apply force to beam",
+      "desc" : "do nothing",
       "inistress" : { "hom":true, "iso":true, "s0":-1 },
       "facebcs" : [
         { "tag":-10, "keys":["uy"],  "funcs":["zero"] },
