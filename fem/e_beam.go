@@ -509,6 +509,7 @@ func (o *Beam) Recompute(withM bool) {
 	// unit vectors aligned with beam element
 	o.e0[0], o.e0[1] = c, s
 	o.e1[0], o.e1[1] = -s, c
+	o.e2[2] = 1
 
 	// aux vars
 	ll := l * l

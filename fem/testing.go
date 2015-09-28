@@ -488,6 +488,64 @@ func rjoint_DebugKb(fem *FEM, o *testKb) {
 	return
 }
 
+// bjointcomp_DebugKb defines a global function to debug Kb for bjoint-compatible elements
+func bjointcomp_DebugKb(fem *FEM, o *testKb) {
+	fem.DebugKb = func(d *Domain, it int) {
+
+		elem := d.Elems[o.eid]
+		if e, ok := elem.(*BjointComp); ok {
+
+			// skip?
+			o.it = it
+			o.t = d.Sol.T
+			if o.skip() {
+				return
+			}
+
+			// copy states and solution
+			nip := len(e.LinIps)
+			states := make([]*msolid.OnedState, nip)
+			statesBkp := make([]*msolid.OnedState, nip)
+			for i := 0; i < nip; i++ {
+				states[i] = e.States[i].GetCopy()
+				statesBkp[i] = e.StatesBkp[i].GetCopy()
+			}
+			o.aux_arrays(d)
+
+			// make sure to restore states and solution
+			defer func() {
+				for i := 0; i < nip; i++ {
+					e.States[i].Set(states[i])
+					e.StatesBkp[i].Set(statesBkp[i])
+				}
+				copy(d.Sol.ΔY, o.ΔYbkp)
+			}()
+
+			// define restore function
+			restore := func() {
+				if it == 0 {
+					for k := 0; k < nip; k++ {
+						e.States[k].Set(states[k])
+					}
+					return
+				}
+				for k := 0; k < nip; k++ {
+					e.States[k].Set(statesBkp[k])
+				}
+			}
+
+			// check
+			o.check("Kll", d, e, e.LinUmap, e.LinUmap, e.Kll, restore)
+			o.check("Kls", d, e, e.LinUmap, e.SldUmap, e.Kls, restore)
+			o.check("Ksl", d, e, e.SldUmap, e.LinUmap, e.Ksl, restore)
+			o.check("Kss", d, e, e.SldUmap, e.SldUmap, e.Kss, restore)
+		} else {
+			io.Pfred("warning: eid=%d does not correspond to BjointComp element\n", o.eid)
+		}
+	}
+	return
+}
+
 // skip skips test based on it and/or t
 func (o testKb) skip() bool {
 	if o.itmin >= 0 {

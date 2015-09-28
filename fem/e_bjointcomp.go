@@ -15,6 +15,7 @@ import (
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
+	"github.com/cpmech/gosl/tsr"
 )
 
 // BjointComp implements a beam-joint (interface/link) element for embedded beams with nodes
@@ -35,8 +36,13 @@ type BjointComp struct {
 	Sld *ElemU          // solid element
 	Mdl msolid.RjointM1 // material model
 
+	// asembly maps
+	LinUmap []int // beam umap with displacement DOFs equations only
+	SldUmap []int // solid umap with displacement DOFs at nodes connected to beam
+
 	// additional
-	SldLocVid []int // local vertices IDs of solid nodes connected to beam through this joint
+	SldLocVid []int       // local vertices IDs of solid nodes connected to beam through this joint
+	SigNo     [][]float64 // [2][nsig] stresses from surrounding solids @ nodes of beam
 
 	// shape and integration points
 	LinShp *shp.Shape   // lin2 shape
@@ -47,24 +53,22 @@ type BjointComp struct {
 	k1 float64 // lateral stiffness
 	k2 float64 // lateral stiffness
 
-	// variables for Coulomb model
+	// variables for Coulomb model (scratchpad)
 	Coulomb bool      // use Coulomb model
-	t1      []float64 // [ndim] traction vectors for σc
-	t2      []float64 // [ndim] traction vectors for σc
+	t1      []float64 // [3] traction vectors for σc
+	t2      []float64 // [3] traction vectors for σc
+	σ       []float64 // stresses @ ips
 
 	// auxiliary variables
 	fC []float64 // [beamNu] internal/contact forces vector
-	qb []float64 // [ndim] resultant traction vector 'holding' the beam @ ip
-	/*
-		ΔuC [][]float64 // [rodNn][ndim] relative displ. increment of solid @ nodes of beam
-		Δw  []float64   // [ndim] relative velocity
-	*/
+	q  []float64 // [ndim] resultant traction vector 'holding' the beam @ ip
+	Δw []float64 // [ndim] relative displacement
 
 	// temporary Jacobian matrices
-	Kll [][]float64 // [linNu][linNu] K_lin_lin
-	Kls [][]float64 // [linNu][sldNu] K_lin_sld
-	Ksl [][]float64 // [sldNu][linNu] K_sld_lin
-	Kss [][]float64 // [sldNu][sldNu] K_sld_sld
+	Kll [][]float64 // [linNu][linNu] K_lin_lin: ∂fl/∂ub
+	Kls [][]float64 // [linNu][linNu] K_lin_sld: ∂fl/∂u
+	Ksl [][]float64 // [linNu][linNu] K_sld_lin: ∂fs/∂ub
+	Kss [][]float64 // [linNu][linNu] K_sld_sld: ∂fs/∂u
 
 	// internal values
 	States    []*msolid.OnedState // [nip] internal states
@@ -123,18 +127,22 @@ func (o *BjointComp) Connect(cid2elem []Elem, cell *inp.Cell) (nnzK int, err err
 		return
 	}
 
-	// number of nodes of beam/line and DOFs
-	linNn := 2
-	linNu := linNn * o.Ndim // displacement DOFs only
-	o.Ny = linNu + o.Sld.Nu // total number of DOFs
+	// auxiliary
+	nsig := 2 * o.Ndim          // number of stress components
+	linNn := 2                  // number of nodes of beam
+	linNu := linNn * o.Ndim     // all displacement DOFs only
+	nodNdof := 3 * (o.Ndim - 1) // number of DOFs per node, including rotational ones
+
+	// total number of DOFs
+	o.Ny = linNu + o.Sld.Nu
 
 	// data from solid element
 	sldH := o.Sld.Cell.Shp
 	sldNn := sldH.Nverts
-	sldNu := o.Sld.Nu
 
 	// local vertex ids of solid vertices connected to beam via joint
-	o.SldLocVid = make([]int, 2)
+	o.SldLocVid = make([]int, linNn)
+	o.SigNo = la.MatAlloc(linNn, nsig)
 	var idx int
 	var dist float64
 	for i := 0; i < linNn; i++ {
@@ -151,7 +159,26 @@ func (o *BjointComp) Connect(cid2elem []Elem, cell *inp.Cell) (nnzK int, err err
 			}
 		}
 	}
-	io.Pforan("SldLocVid = %v\n", o.SldLocVid)
+
+	// assembly map with displacements DOFs only of beam nodes
+	o.LinUmap = make([]int, linNu)
+	for m := 0; m < linNn; m++ {
+		for i := 0; i < o.Ndim; i++ {
+			r := i + m*o.Ndim
+			s := i + m*nodNdof
+			o.LinUmap[r] = o.Lin.Umap[s]
+		}
+	}
+
+	// assembly map with DOFs of solid nodes connected to beam
+	o.SldUmap = make([]int, linNu)
+	for m, n := range o.SldLocVid {
+		for i := 0; i < o.Ndim; i++ {
+			r := i + m*o.Ndim
+			s := i + n*o.Ndim
+			o.SldUmap[r] = o.Sld.Umap[s]
+		}
+	}
 
 	// material model name
 	matdata := o.Sim.MatParams.Get(o.Edat.Mat)
@@ -183,19 +210,24 @@ func (o *BjointComp) Connect(cid2elem []Elem, cell *inp.Cell) (nnzK int, err err
 		}
 	}
 
+	// variables for Coulomb model (scratchpad)
+	if o.Coulomb {
+		nsig := 2 * o.Ndim
+		o.t1 = make([]float64, 3)
+		o.t2 = make([]float64, 3)
+		o.σ = make([]float64, nsig)
+	}
+
 	// auxiliary variables
 	o.fC = make([]float64, linNu)
-	o.qb = make([]float64, o.Ndim)
-	/*
-		o.ΔuC = la.MatAlloc(2, o.Ndim)
-		o.Δw = make([]float64, o.Ndim)
-	*/
+	o.q = make([]float64, o.Ndim)
+	o.Δw = make([]float64, o.Ndim)
 
 	// temporary Jacobian matrices. see Eq. (57)
 	o.Kll = la.MatAlloc(linNu, linNu)
-	o.Kls = la.MatAlloc(linNu, sldNu)
-	o.Ksl = la.MatAlloc(sldNu, linNu)
-	o.Kss = la.MatAlloc(sldNu, sldNu)
+	o.Kls = la.MatAlloc(linNu, linNu)
+	o.Ksl = la.MatAlloc(linNu, linNu)
+	o.Kss = la.MatAlloc(linNu, linNu)
 
 	// success
 	return o.Ny * o.Ny, nil
@@ -225,12 +257,11 @@ func (o *BjointComp) AddToRhs(fb []float64, sol *Solution) (err error) {
 	la.VecFill(o.fC, 0)
 
 	// auxiliary
-	linNn := 2                  // number of nodes
-	linNdof := 3 * (o.Ndim - 1) // number of DOFs, including rotational ones
+	linNn := 2
 	e0, e1, e2 := o.Lin.e0, o.Lin.e1, o.Lin.e2
 
 	// loop over integration points along line
-	var coef, τ, qn1, qn2 float64
+	var coef, τ, q1, q2 float64
 	for idx, ip := range o.LinIps {
 
 		// interpolation functions and gradients
@@ -243,33 +274,25 @@ func (o *BjointComp) AddToRhs(fb []float64, sol *Solution) (err error) {
 
 		// state variables
 		τ = o.States[idx].Sig
-		qn1 = o.States[idx].Phi[0]
-		qn2 = o.States[idx].Phi[1]
+		q1 = o.States[idx].Phi[0]
+		q2 = o.States[idx].Phi[1]
 
 		// fC vector
 		for i := 0; i < o.Ndim; i++ {
-			o.qb[i] = τ*o.h*e0[i] + qn1*e1[i] + qn2*e2[i]
+			o.q[i] = τ*o.h*e0[i] + q1*e1[i] + q2*e2[i]
 			for m := 0; m < linNn; m++ {
 				r := i + m*o.Ndim
-				o.fC[r] += coef * S[m] * o.qb[i]
+				o.fC[r] += coef * S[m] * o.q[i]
 			}
 		}
 	}
 
 	// fb = -Resid;  fB = -fC  and  fS = fC  =>  fb := {fC, -fC}
-	var r, s, I int
-	for i := 0; i < o.Ndim; i++ {
-		for m := 0; m < linNn; m++ {
-			r = i + m*o.Ndim  // index in fC: does not consider rotation DOFs
-			s = i + m*linNdof // index in beam's Umap: considers rotations
-			I = o.Lin.Umap[s] // global index
-			fb[I] += o.fC[r]  // fb := -fB = +fC
-		}
-		for _, m := range o.SldLocVid {
-			r = i + m*o.Ndim  // index in fC: no rotations
-			I = o.Sld.Umap[r] // global index
-			fb[I] -= o.fC[r]  // fb := -fS = -fC
-		}
+	for i, I := range o.LinUmap {
+		fb[I] += o.fC[i] // fb := -fB = +fC
+	}
+	for i, I := range o.SldUmap {
+		fb[I] -= o.fC[i] // fb := -fS = -fC
 	}
 	return
 }
@@ -280,29 +303,25 @@ func (o *BjointComp) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err e
 	// auxiliary
 	linNn := 2
 	linNu := linNn * o.Ndim
-	sldH := o.Sld.Cell.Shp
-	sldNn := sldH.Nverts
 	e0, e1, e2 := o.Lin.e0, o.Lin.e1, o.Lin.e2
 
 	// zero K matrices
 	for i := 0; i < linNu; i++ {
 		for j := 0; j < linNu; j++ {
 			o.Kll[i][j] = 0
-		}
-		for j := 0; j < o.Sld.Nu; j++ {
 			o.Kls[i][j] = 0
-			o.Ksl[j][i] = 0
+			o.Ksl[i][j] = 0
+			o.Kss[i][j] = 0
 		}
 	}
-	la.MatFill(o.Kss, 0)
 
 	// auxiliary
 	var coef float64
 	var DτDω float64
 	var Dwb0Du_nj, Dwb1Du_nj, Dwb2Du_nj float64
-	var DτDu_nj, DqbDu_nij float64
-	var Dwb0Dur_nj, Dwb1Dur_nj, Dwb2Dur_nj float64
-	var DqbDur_nij float64
+	var DτDu_nj, DqDu_nij float64
+	var Dwb0Dub_nj, Dwb1Dub_nj, Dwb2Dub_nj float64
+	var DqDub_nij float64
 
 	// loop over line's integration points
 	for idx, ip := range o.LinIps {
@@ -324,66 +343,37 @@ func (o *BjointComp) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err e
 		// compute derivatives
 		for j := 0; j < o.Ndim; j++ {
 
-			// Krr and Ksl; derivatives with respect to ur_nj
+			// loop of nodes of line/beam
 			for n := 0; n < linNn; n++ {
 
-				// ∂wb/∂ur Eq (A.4)
-				Dwb0Dur_nj = -S[n] * e0[j]
-				Dwb1Dur_nj = -S[n] * e1[j]
-				Dwb2Dur_nj = -S[n] * e2[j]
+				// ∂wb/∂ub
+				Dwb0Dub_nj = -S[n] * e0[j]
+				Dwb1Dub_nj = -S[n] * e1[j]
+				Dwb2Dub_nj = -S[n] * e2[j]
 
-				// compute ∂■/∂ur derivatives
-				c := j + n*o.Ndim
-				for i := 0; i < o.Ndim; i++ {
+				// ∂wb/∂u
+				Dwb0Du_nj = -Dwb0Dub_nj
+				Dwb1Du_nj = -Dwb1Dub_nj
+				Dwb2Du_nj = -Dwb2Dub_nj
 
-					// ∂qb/∂ur
-					DqbDur_nij = o.h*e0[i]*(DτDω*Dwb0Dur_nj) + o.k1*e1[i]*Dwb1Dur_nj + o.k2*e2[i]*Dwb2Dur_nj
-
-					// Krr := ∂fr/∂ur
-					for m := 0; m < linNn; m++ {
-						r := i + m*o.Ndim
-						o.Kll[r][c] -= coef * S[m] * DqbDur_nij
-					}
-
-					//  Ksl := ∂fs/∂ur
-					for m := 0; m < linNn; m++ {
-						r := i + m*o.Ndim
-						o.Ksl[r][c] += coef * S[m] * DqbDur_nij
-					}
-				}
-			}
-
-			// Kls and Kss
-			for n := 0; n < sldNn; n++ {
-
-				// ∂wb/∂us
-				Dwb0Du_nj, Dwb1Du_nj, Dwb2Du_nj = 0, 0, 0
-				for m := 0; m < linNn; m++ {
-					Dwb0Du_nj += S[m] * e0[j]
-					Dwb1Du_nj += S[m] * e1[j]
-					Dwb2Du_nj += S[m] * e2[j]
-				}
-
-				// ∂τ/∂us_nj
+				// ∂τ/∂u_nj
 				DτDu_nj = DτDω * Dwb0Du_nj
 
-				// compute ∂■/∂us derivatives
+				// compute ∂■/∂ub and ∂■/∂u derivatives
 				c := j + n*o.Ndim
 				for i := 0; i < o.Ndim; i++ {
 
-					// ∂qb/∂us
-					DqbDu_nij = o.h*e0[i]*DτDu_nj + o.k1*e1[i]*Dwb1Du_nj + o.k2*e2[i]*Dwb2Du_nj
+					// ∂q/∂ub and ∂q/∂u
+					DqDub_nij = o.h*e0[i]*(DτDω*Dwb0Dub_nj) + o.k1*e1[i]*Dwb1Dub_nj + o.k2*e2[i]*Dwb2Dub_nj
+					DqDu_nij = o.h*e0[i]*DτDu_nj + o.k1*e1[i]*Dwb1Du_nj + o.k2*e2[i]*Dwb2Du_nj
 
-					// Kls := ∂fr/∂us
+					// K matrices
 					for m := 0; m < linNn; m++ {
 						r := i + m*o.Ndim
-						o.Kls[r][c] -= coef * S[m] * DqbDu_nij
-					}
-
-					// Kss := ∂fs/∂us
-					for m := 0; m < sldNn; m++ {
-						r := i + m*o.Ndim
-						o.Kss[r][c] += coef * S[m] * DqbDu_nij
+						o.Kll[r][c] -= coef * S[m] * DqDub_nij
+						o.Ksl[r][c] += coef * S[m] * DqDub_nij
+						o.Kls[r][c] -= coef * S[m] * DqDu_nij
+						o.Kss[r][c] += coef * S[m] * DqDu_nij
 					}
 				}
 			}
@@ -391,27 +381,75 @@ func (o *BjointComp) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err e
 	}
 
 	// add K to sparse matrix Kb
-	/*
-		for i, I := range o.Rod.Umap {
-			for j, J := range o.Rod.Umap {
-				Kb.Put(I, J, o.Krr[i][j])
-			}
-			for j, J := range o.Sld.Umap {
-				Kb.Put(I, J, o.Kls[i][j])
-				Kb.Put(J, I, o.Ksl[j][i])
-			}
+	for i, I := range o.LinUmap {
+		for j, J := range o.LinUmap {
+			Kb.Put(I, J, o.Kll[i][j])
 		}
-		for i, I := range o.Sld.Umap {
-			for j, J := range o.Sld.Umap {
-				Kb.Put(I, J, o.Kss[i][j])
-			}
+		for j, J := range o.SldUmap {
+			Kb.Put(I, J, o.Kls[i][j])
+			Kb.Put(J, I, o.Ksl[j][i])
 		}
-	*/
+	}
+	for i, I := range o.SldUmap {
+		for j, J := range o.SldUmap {
+			Kb.Put(I, J, o.Kss[i][j])
+		}
+	}
 	return
 }
 
 // Update perform (tangent) update
 func (o *BjointComp) Update(sol *Solution) (err error) {
+
+	// auxiliary
+	linNn := 2
+	e0, e1, e2 := o.Lin.e0, o.Lin.e1, o.Lin.e2
+
+	// for each integration point
+	var Δwb0, Δwb1, Δwb2, σc float64
+	for idx, ip := range o.LinIps {
+
+		// interpolation functions and gradients
+		err = o.LinShp.CalcAtIp(o.Lin.X, ip, true)
+		if err != nil {
+			return
+		}
+		S := o.LinShp.S
+
+		// relative displacements @ ip of line/beam
+		for i := 0; i < o.Ndim; i++ {
+			o.Δw[i] = 0
+			for m := 0; m < linNn; m++ {
+				r := i + m*o.Ndim
+				I := o.LinUmap[r]
+				J := o.SldUmap[r]
+				o.Δw[i] += S[m] * (sol.ΔY[J] - sol.ΔY[I])
+			}
+		}
+		io.Pforan("Δw = %v\n", o.Δw)
+
+		// relative displacents in the coratational system
+		Δwb0, Δwb1, Δwb2 = 0, 0, 0
+		for i := 0; i < o.Ndim; i++ {
+			Δwb0 += e0[i] * o.Δw[i]
+			Δwb1 += e1[i] * o.Δw[i]
+			Δwb2 += e2[i] * o.Δw[i]
+		}
+
+		// updated confining stress
+		σc = 0.0
+		if o.Coulomb {
+			σc, _, _ = o.confining_pressure_ip()
+		}
+
+		// update models
+		err = o.Mdl.Update(o.States[idx], σc, Δwb0)
+		if err != nil {
+			return
+		}
+		o.States[idx].Phi[0] += o.k1 * Δwb1 // q1
+		o.States[idx].Phi[1] += o.k2 * Δwb2 // q2
+	}
 	return
 }
 
@@ -428,15 +466,86 @@ func (o *BjointComp) Ipoints() (coords [][]float64) {
 
 // SetIniIvs sets initial ivs for given values in sol and ivs map
 func (o *BjointComp) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
+
+	// allocate arrays
 	nip := len(o.LinIps)
 	o.States = make([]*msolid.OnedState, nip)
 	o.StatesBkp = make([]*msolid.OnedState, nip)
 	o.StatesAux = make([]*msolid.OnedState, nip)
-	for i := 0; i < nip; i++ {
-		o.States[i], _ = o.Mdl.InitIntVars()
-		o.StatesBkp[i] = o.States[i].GetCopy()
-		o.StatesAux[i] = o.States[i].GetCopy()
+
+	// compute stresses @ nodes
+	err = o.stress_nodes()
+	if err != nil {
+		return
 	}
+
+	// loop over integration points
+	var p1, p2 float64
+	for idx, ip := range o.LinIps {
+
+		// interpolation functions
+		err = o.LinShp.CalcAtIp(o.Lin.X, ip, false) // can use false because J is not needed
+		if err != nil {
+			return
+		}
+
+		// confining pressure
+		_, p1, p2 = o.confining_pressure_ip()
+
+		// set state arrays
+		o.States[idx], _ = o.Mdl.InitIntVars(0, p1, p2)
+		o.StatesBkp[idx] = o.States[idx].GetCopy()
+		o.StatesAux[idx] = o.States[idx].GetCopy()
+	}
+	return
+}
+
+// stress_nodes computes stresses @ nodes by averaging surrounding elements
+func (o *BjointComp) stress_nodes() (err error) {
+	err = o.Sld.ExtrapStress()
+	if err != nil {
+		return
+	}
+	for i, m := range o.SldLocVid {
+		copy(o.SigNo[i], o.Sld.SigNo[m])
+	}
+	return
+}
+
+// confining_pressure_ip computes stresses, tractions and confining pressure @ current ip
+// after the shape functions and stresses @ nodes are calculated
+func (o *BjointComp) confining_pressure_ip() (σcb, p1, p2 float64) {
+
+	// current shape function @ ip
+	S := o.LinShp.S
+
+	// interpolate stresses from nodes
+	nsig := 2 * o.Ndim
+	linNn := 2
+	for i := 0; i < nsig; i++ {
+		o.σ[i] = 0.0
+		for m := 0; m < linNn; m++ {
+			o.σ[i] += S[m] * o.SigNo[m][i]
+		}
+	}
+
+	// calculate t1 and t2
+	for i := 0; i < 3; i++ {
+		o.t1[i], o.t2[i] = 0, 0
+		for j := 0; j < 3; j++ {
+			o.t1[i] += tsr.M2T(o.σ, i, j) * o.Lin.e1[j]
+			o.t2[i] += tsr.M2T(o.σ, i, j) * o.Lin.e2[j]
+		}
+	}
+
+	// calculate p1 and p2
+	for i := 0; i < 3; i++ {
+		p1 += o.t1[i] * o.Lin.e1[i]
+		p2 += o.t2[i] * o.Lin.e2[i]
+	}
+
+	// confining pressure: compressive is positive
+	σcb = -(p1 + p2) / 2.0 // no need ramp function because model will fix this
 	return
 }
 

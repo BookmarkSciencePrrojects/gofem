@@ -49,11 +49,11 @@ type ElemU struct {
 	StatesBkp []*msolid.State // [nip] backup states
 	StatesAux []*msolid.State // [nip] auxiliary backup states
 
-	// problem variables
-	Umap []int // assembly map (location array/element equations)
-
-	// natural boundary conditions
-	NatBcs []*NaturalBc
+	// additional variables
+	Umap   []int        // assembly map (location array/element equations)
+	NatBcs []*NaturalBc // natural boundary conditions
+	Emat   [][]float64  // [nvert][nip] extrapolator matrix; if ExtrapStress() is called
+	SigNo  [][]float64  // [nvert][nsig] stresses @ nodes after ExtrapStress(() is called
 
 	// local starred variables
 	ζs    [][]float64 // [nip][ndim] t2 star vars: ζ* = α1.u + α2.v + α3.a
@@ -613,6 +613,34 @@ func (o *ElemU) OutIpsData() (data []*OutIpData) {
 			return
 		}
 		data = append(data, &OutIpData{o.Id(), x, calc})
+	}
+	return
+}
+
+// extra ////////////////////////////////////////////////////////////////////////////////////////////
+
+// ExtrapStress extrapolates stresses at integration points to nodes
+//  Output: SigNo will hold results
+func (o *ElemU) ExtrapStress() (err error) {
+	nverts := o.Cell.Shp.Nverts
+	nsig := 2 * o.Ndim
+	nip := len(o.IpsElem)
+	if len(o.Emat) == 0 {
+		o.SigNo = la.MatAlloc(nverts, nsig)
+		o.Emat = la.MatAlloc(nverts, nip)
+		err = o.Cell.Shp.Extrapolator(o.Emat, o.IpsElem)
+		if err != nil {
+			return
+		}
+	}
+	la.MatFill(o.SigNo, 0)
+	for idx, _ := range o.IpsElem {
+		σ := o.States[idx].Sig
+		for i := 0; i < nsig; i++ {
+			for m := 0; m < nverts; m++ {
+				o.SigNo[m][i] += o.Emat[m][idx] * σ[i]
+			}
+		}
 	}
 	return
 }
