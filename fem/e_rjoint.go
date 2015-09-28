@@ -18,7 +18,7 @@ import (
 // Rjoint implements the rod-joint (interface/link) element for reinforced solids.
 //  The following convention is considered:
 //   n or N   -- means [N]odes
-//   p or P   -- means integratioin [P]oints
+//   p or P   -- means integration [P]oints
 //   nn or Nn -- number of nodes
 //   np or Np -- number of integration [P]points
 //   ndim     -- space dimension
@@ -495,7 +495,7 @@ func (o *Rjoint) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 					Dwb2Du_nj += rodS[m] * o.Nmat[n][m] * e2[j]
 				}
 
-				// ∂τ/∂us_nj hightlighted term in Eq (A.3)
+				// ∂τ/∂us_nj highlighted term in Eq (A.3)
 				DτDu_nj = DτDω * Dwb0Du_nj
 
 				// compute ∂■/∂us derivatives
@@ -607,7 +607,7 @@ func (o *Rjoint) Update(sol *Solution) (err error) {
 			}
 		}
 
-		// relative displacents in the coratational system
+		// relative displacements in the corotational system
 		Δwb0, Δwb1, Δwb2 = 0, 0, 0
 		for i := 0; i < o.Ndim; i++ {
 			Δwb0 += e0[i] * o.Δw[i]
