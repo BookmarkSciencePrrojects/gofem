@@ -36,6 +36,32 @@ func Test_msh01(tst *testing.T) {
 	}
 }
 
+func Test_msh02(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("msh02")
+
+	msh, err := ReadMsh("data", "ex-beam-joint-comp.msh", 0)
+	if err != nil {
+		tst.Errorf("test failed:\n%v", err)
+		return
+	}
+
+	for id, cell := range msh.Joints {
+		if !(cell.Id == 13 || cell.Id == 15) {
+			tst.Errorf("joint id is wrong. id=%d", id)
+			return
+		}
+	}
+
+	v7 := msh.Verts[7]
+	v21 := msh.Verts[21]
+	v30 := msh.Verts[30]
+	chk.Ints(tst, "vert #  7: SharedBy", v7.SharedBy, []int{0, 1, 2, 3, 4, 5, 6, 7})
+	chk.Ints(tst, "vert # 21: SharedBy", v21.SharedBy, []int{4, 5, 6, 7, 8, 9, 10, 11})
+	chk.Ints(tst, "vert # 30: SharedBy", v30.SharedBy, []int{8, 9, 10, 11})
+}
+
 func Test_sim01(tst *testing.T) {
 
 	//verbose()

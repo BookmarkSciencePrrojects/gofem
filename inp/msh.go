@@ -24,9 +24,10 @@ const Ztol = 1e-7
 
 // Vert holds vertex data
 type Vert struct {
-	Id  int       // id
-	Tag int       // tag
-	C   []float64 // coordinates (size==2 or 3)
+	Id       int       // id
+	Tag      int       // tag
+	C        []float64 // coordinates (size==2 or 3)
+	SharedBy []int     // cells sharing this vertex
 }
 
 // Cell holds cell data
@@ -96,11 +97,13 @@ type Mesh struct {
 	SeamTag2cells map[int][]CellSeamId // seam tag => set of cells
 	Ctype2cells   map[string][]*Cell   // cell type => set of cells
 	Part2cells    map[int][]*Cell      // partition number => set of cells
+	Beams         []*Cell              // cid=>cell: beam cells
+	Joints        []*Cell              // cid=>cell: joint cells
 
 	// NURBS
-	Nurbss   []gm.NurbsD   // all NURBS data (read from file)
+	Nurbss   []gm.NurbsD   // all NURBS' data (read from file)
 	PtNurbs  []*gm.Nurbs   // all NURBS' structures (allocated here)
-	NrbFaces [][]*gm.Nurbs // all NURBS's faces
+	NrbFaces [][]*gm.Nurbs // all NURBS' faces
 }
 
 // ReadMsh reads a mesh for FE analyses
@@ -230,8 +233,10 @@ func ReadMsh(dir, fn string, goroutineId int) (o *Mesh, err error) {
 		switch c.Type {
 		case "beam":
 			c.IsBeam = true
+			o.Beams = append(o.Beams, c)
 		case "joint":
 			c.IsJoint = true
+			o.Joints = append(o.Joints, c)
 		case "nurbs":
 			c.Shp = shp.GetShapeNurbs(o.PtNurbs[c.Nrb], o.NrbFaces[c.Nrb], c.Span)
 			if c.Shp == nil {
@@ -277,14 +282,19 @@ func ReadMsh(dir, fn string, goroutineId int) (o *Mesh, err error) {
 		// partition => cells
 		cells = o.Part2cells[c.Part]
 		o.Part2cells[c.Part] = append(cells, c)
+
+		// set SharedBy information on vertices
+		for _, vid := range c.Verts {
+			if utl.IntIndexSmall(o.Verts[vid].SharedBy, c.Id) < 0 {
+				o.Verts[vid].SharedBy = append(o.Verts[vid].SharedBy, c.Id)
+			}
+		}
 	}
 
 	// remove duplicates
 	for ftag, verts := range o.FaceTag2verts {
 		o.FaceTag2verts[ftag] = utl.IntUnique(verts)
 	}
-
-	// results
 	return
 }
 
