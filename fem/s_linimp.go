@@ -218,11 +218,6 @@ func solve_linear_problem(t float64, d *Domain, dc *DynCoefs, sum *Summary, firs
 	}
 
 	// update secondary variables
-	for _, e := range d.Elems {
-		err = e.Update(d.Sol)
-		if err != nil {
-			break
-		}
-	}
+	err = d.UpdateElems()
 	return
 }

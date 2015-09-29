@@ -158,6 +158,7 @@ func (o *BjointComp) Connect(cid2elem []Elem, cell *inp.Cell) (nnzK int, err err
 			}
 		}
 	}
+	// TODO: check this against msh.data
 
 	// assembly map with displacements DOFs only of beam nodes
 	o.LinUmap = make([]int, linNu)

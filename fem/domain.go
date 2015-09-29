@@ -471,6 +471,17 @@ func (o *Domain) SetIniVals(stgidx int, zeroSol bool) (err error) {
 	return
 }
 
+// UpdateElems update elements after Solution has been updated
+func (o *Domain) UpdateElems() (err error) {
+	for _, e := range o.Elems {
+		err = e.Update(o.Sol)
+		if err != nil {
+			break
+		}
+	}
+	return
+}
+
 // auxiliary functions //////////////////////////////////////////////////////////////////////////////
 
 // Reset clear values

@@ -321,11 +321,9 @@ func run_iterations(t, Δt float64, d *Domain, dc *DynCoefs, sum *Summary, dbgKb
 		}
 
 		// update secondary variables
-		for _, e := range d.Elems {
-			err = e.Update(d.Sol)
-			if err != nil {
-				break
-			}
+		err = d.UpdateElems()
+		if err != nil {
+			break
 		}
 
 		// compute RMS norm of δu and check convegence on δu
