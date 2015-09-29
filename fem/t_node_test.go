@@ -18,7 +18,7 @@ func Test_node01(tst *testing.T) {
 	chk.PrintTitle("node01")
 
 	// new Vertice
-	vert := inp.Vert{0, -1, []float64{0.0, 0.0, 0.0}}
+	vert := inp.Vert{0, -1, []float64{0.0, 0.0, 0.0}, nil}
 	io.Pforan("Vert = %v\n", vert)
 
 	// new list of Dofs

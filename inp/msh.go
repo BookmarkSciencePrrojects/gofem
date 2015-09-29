@@ -99,6 +99,8 @@ type Mesh struct {
 	Part2cells    map[int][]*Cell      // partition number => set of cells
 	Beams         []*Cell              // cid=>cell: beam cells
 	Joints        []*Cell              // cid=>cell: joint cells
+	JntConVerts   map[int][]*Vert      // jointId => vertices of solids connected to it
+	JntConCells   map[int][]*Cell      // jointId => cells connected to it
 
 	// NURBS
 	Nurbss   []gm.NurbsD   // all NURBS' data (read from file)
@@ -237,6 +239,7 @@ func ReadMsh(dir, fn string, goroutineId int) (o *Mesh, err error) {
 		case "joint":
 			c.IsJoint = true
 			o.Joints = append(o.Joints, c)
+			o.solids_around_beam_joint(c)
 		case "nurbs":
 			c.Shp = shp.GetShapeNurbs(o.PtNurbs[c.Nrb], o.NrbFaces[c.Nrb], c.Span)
 			if c.Shp == nil {
@@ -518,4 +521,53 @@ func (o *Mesh) Draw2d(onlyLin bool) {
 	plt.Equal()
 	plt.AxisRange(o.Xmin, o.Xmax, o.Ymin, o.Ymax)
 	plt.AxisOff()
+}
+
+// solids_around_beam_joint sets JntConVerts and JntConCells maps
+func (o *Mesh) solids_around_beam_joint(joint *Cell) {
+
+	// allocate maps
+	if o.JntConVerts == nil {
+		o.JntConVerts = make(map[int][]*Vert)
+		o.JntConCells = make(map[int][]*Cell)
+	}
+
+	// all vertices of one solid connected to joint
+	sld0 := o.Cells[joint.JsldId]
+	sld_verts := make(map[int]*Vert)
+	for _, vid := range sld0.Verts {
+		p := o.Verts[vid]
+		sld_verts[hash_point(p.C)] = p
+	}
+
+	// vertices of solid connected to lincell(beam) via joint
+	lincell := o.Cells[joint.JlinId]
+	for _, vid := range lincell.Verts {
+		q := o.Verts[vid]
+		if p, ok := sld_verts[hash_point(q.C)]; ok {
+			jntverts := o.JntConVerts[joint.Id]
+			o.JntConVerts[joint.Id] = append(jntverts, p)
+		}
+	}
+
+	// find all solids connected to joint
+	added := make(map[int]bool)
+	for _, vert := range o.JntConVerts[joint.Id] {
+		for _, cid := range vert.SharedBy {
+			if !added[cid] {
+				jntcells := o.JntConCells[joint.Id]
+				o.JntConCells[joint.Id] = append(jntcells, o.Cells[cid])
+				added[cid] = true
+			}
+		}
+	}
+}
+
+// hash_point computes a unique hash for a point
+func hash_point(x []float64) int {
+	if len(x) == 2 {
+		return int(x[0]*300 + x[1]*7000)
+	} else {
+		return int(x[0]*300 + x[1]*7000 + x[2]*110000)
+	}
 }
