@@ -60,6 +60,11 @@ type ElemIntvars interface {
 	Ureset(sol *Solution) (err error)                              // fixes internal variables after u (displacements) have been zeroed
 }
 
+// ElemExtrap defines elements with functions to extrapolate internal values
+type ElemExtrap interface {
+	AddToExt(sol *Solution) (err error) // adds extrapolated values to global array
+}
+
 // Info holds all information required to set a simulation stage
 type Info struct {
 
@@ -73,6 +78,9 @@ type Info struct {
 	// t1 and t2 variables (time-derivatives of first and second order)
 	T1vars []string // "pl"
 	T2vars []string // "ux", "uy"
+
+	// required to be extrapolated; e.g. by beam-joints
+	Nextrap int // e.g. "nsig"
 }
 
 // GetElemInfo returns information about elements/formulations

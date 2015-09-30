@@ -57,6 +57,7 @@ type Cell struct {
 	IsBeam    bool         // simple beam element (no need for shape structure)
 	IsJoint   bool         // cell represents joint element
 	SeepVerts map[int]bool // local vertices ids of vertices on seepage faces
+	Extrap    bool         // needs to extrapolate internal values; e.g. because is connected to joint
 
 	// NURBS
 	Nrb  int   // index of NURBS patch to which this cell belongs to
@@ -557,6 +558,7 @@ func (o *Mesh) solids_around_beam_joint(joint *Cell) {
 			if !added[cid] {
 				jntcells := o.JntConCells[joint.Id]
 				o.JntConCells[joint.Id] = append(jntcells, o.Cells[cid])
+				o.Cells[cid].Extrap = true
 				added[cid] = true
 			}
 		}

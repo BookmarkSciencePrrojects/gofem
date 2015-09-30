@@ -477,18 +477,6 @@ func (o *BjointComp) SetIniIvs(sol *Solution, ivs map[string][]float64) (err err
 	return
 }
 
-// stress_nodes computes stresses @ nodes by averaging surrounding elements
-func (o *BjointComp) stress_nodes() (err error) {
-	err = o.Sld.ExtrapStress()
-	if err != nil {
-		return
-	}
-	for i, m := range o.SldLocVid {
-		copy(o.SigNo[i], o.Sld.SigNo[m])
-	}
-	return
-}
-
 // confining_pressure_ip computes stresses, tractions and confining pressure @ current ip
 // after the shape functions and stresses @ nodes are calculated
 func (o *BjointComp) confining_pressure_ip() (σcb, p1, p2 float64) {

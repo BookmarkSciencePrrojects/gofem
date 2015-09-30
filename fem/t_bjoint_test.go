@@ -95,6 +95,10 @@ func Test_bjoint01a(tst *testing.T) {
 	chk.Ints(tst, "joint 0 LinUmap", joint.LinUmap, []int{24, 25, 18, 19})
 	chk.Ints(tst, "joint 0 SldUmap", joint.SldUmap, []int{4, 5, 12, 13})
 
+	// check extrapolated values slice
+	ncells := 4 // number of cells with values to be extrapolated
+	chk.IntAssert(len(dom.ElemExtrap), ncells)
+
 	// intial values @ integration points
 	io.Pforan("initial values @ integration points\n")
 	for _, ele := range solids {
@@ -141,6 +145,12 @@ func Test_bjoint01b(tst *testing.T) {
 	if err != nil {
 		tst.Errorf("Run failed:\n%v", err)
 	}
+
+	// extrapolated values
+	dom := analysis.Domains[0]
+	for vid, vals := range dom.Sol.Ext {
+		chk.Vector(tst, io.Sf("sig @ vid %d", vid), 1e-15, vals, []float64{-1, -1, -1, 0})
+	}
 }
 
 func Test_bjoint02(tst *testing.T) {
@@ -174,4 +184,7 @@ func Test_bjoint02(tst *testing.T) {
 	// stresses along embedded beam
 	emb := dom.Elems[6].(*BjointComp)
 	io.Pfblue2("τ = %v\n", emb.States[0].Sig)
+
+	// extrapolated values
+	io.Pforan("ext = %v\n", dom.Sol.Ext)
 }

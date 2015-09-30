@@ -35,6 +35,10 @@ type Solution struct {
 	Chi []float64 // t2 star vars; e.g. χ* = α4.u + α5.v + α6.a
 	L   []float64 // Lagrange multipliers
 
+	// extrapolated values
+	Ext map[int][]float64 // [optional] extrapolated values. nodeId => values (e.g. σ)
+	Cnt map[int]int       // [optional] counter for number of additions each node of Ext
+
 	// problem definition and constants
 	Steady  bool      // [from Sim] steady simulation
 	Axisym  bool      // [from Sim] axisymmetric
@@ -73,8 +77,9 @@ type Domain struct {
 	Cid2active []bool  // [ncells] CellId => whether cell is active or not in ANY processor
 
 	// stage: subsets of elements
-	ElemIntvars []ElemIntvars   // elements with internal vars in this processor
-	ElemConnect []ElemConnector // connector elements in this processor
+	ElemIntvars []ElemIntvars   // [procNcells] elements with internal vars in this processor
+	ElemConnect []ElemConnector // [procNcells] connector elements in this processor
+	ElemExtrap  []ElemExtrap    // [procNcells] elements with internal values to be extrapolated
 
 	// stage: coefficients and prescribed forces
 	EssenBcs EssentialBcs // constraints (Lagrange multipliers)
@@ -257,7 +262,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 			}
 
 			// subsets of elements
-			o.add_element_to_subsets(ele)
+			o.add_element_to_subsets(info, ele)
 		}
 	}
 
@@ -315,7 +320,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 		}
 	}
 
-	// vertex bounday conditions
+	// vertex boundary conditions
 	for _, nc := range stg.NodeBcs {
 		verts, ok := o.Msh.VertTag2verts[nc.Tag]
 		if !ok {
@@ -387,6 +392,10 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 		o.Sol.Zet = make([]float64, o.Ny)
 		o.Sol.Chi = make([]float64, o.Ny)
 	}
+
+	// extrapolated values array
+	o.Sol.Ext = make(map[int][]float64, 0)
+	o.Sol.Cnt = make(map[int]int, 0)
 
 	// success
 	return
@@ -473,11 +482,34 @@ func (o *Domain) SetIniVals(stgidx int, zeroSol bool) (err error) {
 
 // UpdateElems update elements after Solution has been updated
 func (o *Domain) UpdateElems() (err error) {
+
+	// update elements
 	for _, e := range o.Elems {
 		err = e.Update(o.Sol)
 		if err != nil {
 			break
 		}
+	}
+
+	// compute extrapolated values @ nodes
+	if len(o.ElemExtrap) > 0 {
+		for vid, val := range o.Sol.Ext {
+			la.VecFill(val, 0)
+			o.Sol.Cnt[vid] = 0
+		}
+		for _, e := range o.ElemExtrap {
+			err = e.AddToExt(o.Sol)
+			if err != nil {
+				break
+			}
+		}
+		for vid, val := range o.Sol.Ext {
+			count := float64(o.Sol.Cnt[vid])
+			for i := 0; i < len(val); i++ {
+				val[i] /= count
+			}
+		}
+		// TODO: join Ext from multiple processors
 	}
 	return
 }
@@ -506,12 +538,23 @@ func (o *Solution) Reset(steady bool) {
 }
 
 // add_element_to_subsets adds an Elem to many subsets as it fits
-func (o *Domain) add_element_to_subsets(ele Elem) {
+func (o *Domain) add_element_to_subsets(info *Info, ele Elem) {
+
+	// elements with internal variables
 	if e, ok := ele.(ElemIntvars); ok {
 		o.ElemIntvars = append(o.ElemIntvars, e)
 	}
+
+	// connector elements
 	if e, ok := ele.(ElemConnector); ok {
 		o.ElemConnect = append(o.ElemConnect, e)
+	}
+
+	// subset of elements with data to be extrapolated
+	if info.Nextrap > 0 {
+		if e, ok := ele.(ElemExtrap); ok {
+			o.ElemExtrap = append(o.ElemExtrap, e)
+		}
 	}
 }
 
