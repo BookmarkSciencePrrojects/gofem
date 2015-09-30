@@ -13,6 +13,7 @@ import (
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
+	"github.com/cpmech/gosl/utl"
 )
 
 // Rjoint implements the rod-joint (interface/link) element for reinforced solids.
@@ -104,6 +105,13 @@ type Rjoint struct {
 	States    []*msolid.OnedState // [nip] internal states
 	StatesBkp []*msolid.OnedState // [nip] backup internal states
 	StatesAux []*msolid.OnedState // [nip] backup internal states
+
+	// extra variables for consistent tangent operator
+	Ncns   bool            // use non-consistent model
+	T1     [][]float64     // [rodNp][nsig] tensor (e1 dy e1)
+	T2     [][]float64     // [rodNp][nsig] tensor (e2 dy e2)
+	DσNoDu [][][][]float64 // [sldNn][nsig][sldNn][ndim] ∂σSldNod/∂uSldNod : derivatives of σ @ nodes of solid w.r.t displacements of solid
+	DσDun  [][]float64     // [nsig][ndim] ∂σIp/∂us : derivatives of σ @ ip of solid w.r.t displacements of solid
 }
 
 // initialisation ///////////////////////////////////////////////////////////////////////////////////
@@ -123,6 +131,10 @@ func init() {
 		o.Edat = edat
 		o.Cell = cell
 		o.Ndim = sim.Ndim
+		if s_ncns, found := io.Keycode(edat.Extra, "ncns"); found {
+			o.Ncns = io.Atob(s_ncns)
+		}
+		io.Pforan("ncns = %v\n", o.Ncns)
 		return &o
 	}
 }
@@ -229,6 +241,14 @@ func (o *Rjoint) Connect(cid2elem []Elem, c *inp.Cell) (nnzK int, err error) {
 		o.t1 = make([]float64, o.Ndim)
 		o.t2 = make([]float64, o.Ndim)
 
+		// fully consistent model
+		if !o.Ncns {
+			o.T1 = la.MatAlloc(rodNp, nsig)
+			o.T2 = la.MatAlloc(rodNp, nsig)
+			o.DσNoDu = utl.Deep4alloc(sldNn, nsig, sldNn, o.Ndim)
+			o.DσDun = la.MatAlloc(nsig, o.Ndim)
+		}
+
 		// extrapolator matrix
 		err = sldH.Extrapolator(o.Emat, o.Sld.IpsElem)
 		if err != nil {
@@ -300,6 +320,10 @@ func (o *Rjoint) Connect(cid2elem []Elem, c *inp.Cell) (nnzK int, err error) {
 					e1_dy_e1[i][j] = e1[i] * e1[j]
 					e2_dy_e2[i][j] = e2[i] * e2[j]
 				}
+			}
+			if !o.Ncns {
+				tsr.Ten2Man(o.T1[idx], e1_dy_e1)
+				tsr.Ten2Man(o.T2[idx], e2_dy_e2)
 			}
 		}
 	}
@@ -411,6 +435,42 @@ func (o *Rjoint) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 	sldH := o.Sld.Cell.Shp
 	sldNn := sldH.Nverts
 
+	// compute DσNoDu
+	nsig := 2 * o.Ndim
+	if o.Coulomb && !o.Ncns {
+
+		// clear deep4 structure
+		utl.Deep4set(o.DσNoDu, 0)
+
+		// loop over solid's integration points
+		for idx, ip := range o.Sld.IpsElem {
+
+			// interpolation functions, gradients and variables @ ip
+			err = sldH.CalcAtIp(o.Sld.X, ip, true)
+			if err != nil {
+				return
+			}
+
+			// consistent tangent model matrix
+			err = o.Sld.MdlSmall.CalcD(o.Sld.D, o.Sld.States[idx], firstIt)
+			if err != nil {
+				return
+			}
+
+			// extrapolate derivatives
+			for n := 0; n < sldNn; n++ {
+				DerivSig(o.DσDun, n, o.Ndim, sldH.G, o.Sld.D)
+				for m := 0; m < sldNn; m++ {
+					for i := 0; i < nsig; i++ {
+						for j := 0; j < o.Ndim; j++ {
+							o.DσNoDu[m][i][n][j] += o.Emat[m][idx] * o.DσDun[i][j]
+						}
+					}
+				}
+			}
+		}
+	}
+
 	// zero K matrices
 	for i, _ := range o.Rod.Umap {
 		for j, _ := range o.Rod.Umap {
@@ -431,6 +491,10 @@ func (o *Rjoint) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 	var Dwb0Dur_nj, Dwb1Dur_nj, Dwb2Dur_nj float64
 	var DqbDur_nij float64
 
+	// for consistent tanget operator
+	var DτDσc, DσcDu_nj float64
+	var Dp1Du_nj, Dp2Du_nj float64
+
 	// loop over rod's integration points
 	for idx, ip := range o.Rod.IpsElem {
 
@@ -445,7 +509,7 @@ func (o *Rjoint) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 		coef = ip[3] * rodH.J
 
 		// model derivatives
-		DτDω, err = o.Mdl.CalcD(o.States[idx], firstIt)
+		DτDω, DτDσc, err = o.Mdl.CalcD(o.States[idx], firstIt)
 		if err != nil {
 			return
 		}
@@ -487,6 +551,21 @@ func (o *Rjoint) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 			// Krs and Kss
 			for n := 0; n < sldNn; n++ {
 
+				// ∂σc/∂us_nj
+				DσcDu_nj = 0
+				if o.Coulomb && !o.Ncns {
+
+					// Eqs (A.10) (A.11) and (A.12)
+					Dp1Du_nj, Dp2Du_nj = 0, 0
+					for m := 0; m < sldNn; m++ {
+						for i := 0; i < nsig; i++ {
+							Dp1Du_nj += o.Pmat[m][idx] * o.T1[idx][i] * o.DσNoDu[m][i][n][j]
+							Dp2Du_nj += o.Pmat[m][idx] * o.T2[idx][i] * o.DσNoDu[m][i][n][j]
+						}
+					}
+					DσcDu_nj = (Dp1Du_nj + Dp2Du_nj) / 2.0
+				}
+
 				// ∂wb/∂us Eq (A.5)
 				Dwb0Du_nj, Dwb1Du_nj, Dwb2Du_nj = 0, 0, 0
 				for m := 0; m < rodNn; m++ {
@@ -497,6 +576,9 @@ func (o *Rjoint) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 
 				// ∂τ/∂us_nj highlighted term in Eq (A.3)
 				DτDu_nj = DτDω * Dwb0Du_nj
+				if !o.Ncns {
+					DτDu_nj += DτDσc * DσcDu_nj
+				}
 
 				// compute ∂■/∂us derivatives
 				c := j + n*o.Ndim
@@ -561,14 +643,16 @@ func (o *Rjoint) Update(sol *Solution) (err error) {
 	// extrapolate stresses at integration points of solid element to its nodes
 	if o.Coulomb {
 		la.MatFill(o.σNo, 0)
-		for idx, _ := range o.Sld.IpsElem {
-			σ := o.Sld.States[idx].Sig
-			for i := 0; i < nsig; i++ {
-				for m := 0; m < sldNn; m++ {
-					o.σNo[m][i] += o.Emat[m][idx] * σ[i]
-				}
+		//for idx, _ := range o.Sld.IpsElem {
+		//σ := o.Sld.States[idx].Sig
+		for i := 0; i < nsig; i++ {
+			for m := 0; m < sldNn; m++ {
+				//o.σNo[m][i] += o.Emat[m][idx] * σ[i]
+				vid := o.Sld.Cell.Verts[m]
+				o.σNo[m][i] = sol.Ext[vid][i]
 			}
 		}
+		//}
 	}
 
 	// interpolate Δu of solid to find ΔuC @ rod node; Eq (30)
