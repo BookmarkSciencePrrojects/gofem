@@ -20,7 +20,10 @@ import (
 )
 
 // constants
-const Ztol = 1e-7
+const (
+	TOL_ZMIN_FOR_3D      = 1e-7
+	TOL_COINCIDENT_VERTS = 1e-5
+)
 
 // Vert holds vertex data
 type Vert struct {
@@ -171,7 +174,7 @@ func ReadMsh(dir, fn string, goroutineId int) (o *Mesh, err error) {
 			return
 		}
 		if nd == 3 {
-			if math.Abs(v.C[2]) > Ztol {
+			if math.Abs(v.C[2]) > TOL_ZMIN_FOR_3D { // TODO: check this
 				o.Ndim = 3
 			}
 		}
@@ -236,7 +239,10 @@ func ReadMsh(dir, fn string, goroutineId int) (o *Mesh, err error) {
 			c.IsBeam = true
 		case "joint":
 			c.IsJoint = true
-			o.solids_around_beam_joint(c)
+			err = o.solids_around_beam_joint(c)
+			if err != nil {
+				return
+			}
 		case "nurbs":
 			c.Shp = shp.GetShapeNurbs(o.PtNurbs[c.Nrb], o.NrbFaces[c.Nrb], c.Span)
 			if c.Shp == nil {
@@ -521,24 +527,23 @@ func (o *Mesh) Draw2d(onlyLin bool) {
 }
 
 // solids_around_beam_joint sets JntConVerts and JntConCells maps
-func (o *Mesh) solids_around_beam_joint(joint *Cell) {
-
-	// all vertices of one solid connected to joint
-	sld0 := o.Cells[joint.JsldId]
-	sld_verts := make(map[int]*Vert)
-	for _, vid := range sld0.Verts {
-		p := o.Verts[vid]
-		sld_verts[hash_point(p.C)] = p
-	}
+func (o *Mesh) solids_around_beam_joint(joint *Cell) (err error) {
 
 	// vertices of solid connected to lincell(beam) via joint
-	lincell := o.Cells[joint.JlinId]
-	for _, vid := range lincell.Verts {
-		q := o.Verts[vid]
-		if p, ok := sld_verts[hash_point(q.C)]; ok {
-			joint.JntConVerts = append(joint.JntConVerts, p.Id)
+	sld0 := o.Cells[joint.JsldId]
+	linc := o.Cells[joint.JlinId]
+	for _, a := range linc.Verts {
+		p := o.Verts[a].C
+		for _, b := range sld0.Verts {
+			q := o.Verts[b].C
+			dist := utl.L2norm(p, q)
+			//io.Pforan("p=%v q=%v dist = %v\n", p, q, dist)
+			if dist < TOL_COINCIDENT_VERTS {
+				joint.JntConVerts = append(joint.JntConVerts, o.Verts[b].Id)
+			}
 		}
 	}
+	//io.Pfblue2("jntconverts = %v\n", joint.JntConVerts)
 
 	// find all solids connected to joint
 	added := make(map[int]bool)
@@ -551,13 +556,5 @@ func (o *Mesh) solids_around_beam_joint(joint *Cell) {
 			}
 		}
 	}
-}
-
-// hash_point computes a unique hash for a point
-func hash_point(x []float64) int {
-	if len(x) == 2 {
-		return int(x[0]*300 + x[1]*7000)
-	} else {
-		return int(x[0]*300 + x[1]*7000 + x[2]*110000)
-	}
+	return
 }
