@@ -385,7 +385,17 @@ func (o *Beam) Recompute(withM bool) {
 				o.P02[i] = o.X[i][2]
 			}
 		} else {
-			chk.Panic("computing P02 is not implemented yet")
+			dx := make([]float64, 3)
+			for i := 0; i < 3; i++ {
+				dx[i] = o.X[i][1] - o.X[i][0]
+			}
+			tol := 1e-5                                         // tolerance to find horizontal/vertical beams
+			if math.Abs(dx[0]) < tol && math.Abs(dx[1]) < tol { // vertical (parallel to z)
+				δ := 0.1 * dx[2] // + if 0->1 is going up
+				o.P02[0], o.P02[1], o.P02[2] = o.X[0][0]+δ, o.X[1][0], o.X[2][0]
+			} else {
+				chk.Panic("Beam: cannot compute P02 point for non-vertical beams yet")
+			}
 		}
 
 		// auxiliary vector
