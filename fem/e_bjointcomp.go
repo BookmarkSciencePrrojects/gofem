@@ -47,10 +47,9 @@ type BjointComp struct {
 	k2 float64 // lateral stiffness
 
 	// variables for Coulomb model (scratchpad)
-	Coulomb bool      // use Coulomb model
-	t1      []float64 // [3] traction vectors for σc
-	t2      []float64 // [3] traction vectors for σc
-	σ       []float64 // stresses @ ips
+	t1 []float64 // [3] traction vectors for σc
+	t2 []float64 // [3] traction vectors for σc
+	σ  []float64 // stresses @ ips
 
 	// auxiliary variables
 	fC []float64 // [beamNu] internal/contact forces vector
@@ -183,20 +182,14 @@ func (o *BjointComp) Connect(cid2elem []Elem, cell *inp.Cell) (nnzK int, err err
 			o.k1 = p.V
 		case "k2":
 			o.k2 = p.V
-		case "mu": // no need to store value here because it goes to model
-			if p.V > 0.0 {
-				o.Coulomb = true
-			}
 		}
 	}
 
 	// variables for Coulomb model (scratchpad)
-	if o.Coulomb {
-		nsig := 2 * o.Ndim
-		o.t1 = make([]float64, 3)
-		o.t2 = make([]float64, 3)
-		o.σ = make([]float64, nsig)
-	}
+	nsig := 2 * o.Ndim
+	o.t1 = make([]float64, 3)
+	o.t2 = make([]float64, 3)
+	o.σ = make([]float64, nsig)
 
 	// auxiliary variables
 	o.fC = make([]float64, linNu)
@@ -416,10 +409,7 @@ func (o *BjointComp) Update(sol *Solution) (err error) {
 		}
 
 		// updated confining stress
-		σcb = 0.0
-		if o.Coulomb {
-			σcb, _, _ = o.confining_pressure_ip(sol)
-		}
+		σcb, _, _ = o.confining_pressure_ip(sol)
 
 		// update models
 		err = o.Mdl.Update(o.States[idx], σcb, Δwb0)
