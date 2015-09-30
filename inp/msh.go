@@ -54,10 +54,12 @@ type Cell struct {
 	GoroutineId int        // go routine id
 
 	// specific problems data
-	IsBeam    bool         // simple beam element (no need for shape structure)
-	IsJoint   bool         // cell represents joint element
-	SeepVerts map[int]bool // local vertices ids of vertices on seepage faces
-	Extrap    bool         // needs to extrapolate internal values; e.g. because is connected to joint
+	IsBeam      bool         // simple beam element (no need for shape structure)
+	IsJoint     bool         // cell represents joint element
+	SeepVerts   map[int]bool // local vertices ids of vertices on seepage faces
+	Extrap      bool         // needs to extrapolate internal values; e.g. because is connected to joint
+	JntConVerts []int        // vertices of solids connected to it
+	JntConCells []int        // cells connected to it
 
 	// NURBS
 	Nrb  int   // index of NURBS patch to which this cell belongs to
@@ -98,10 +100,6 @@ type Mesh struct {
 	SeamTag2cells map[int][]CellSeamId // seam tag => set of cells
 	Ctype2cells   map[string][]*Cell   // cell type => set of cells
 	Part2cells    map[int][]*Cell      // partition number => set of cells
-	Beams         []*Cell              // cid=>cell: beam cells
-	Joints        []*Cell              // cid=>cell: joint cells
-	JntConVerts   map[int][]*Vert      // jointId => vertices of solids connected to it
-	JntConCells   map[int][]*Cell      // jointId => cells connected to it
 
 	// NURBS
 	Nurbss   []gm.NurbsD   // all NURBS' data (read from file)
@@ -236,10 +234,8 @@ func ReadMsh(dir, fn string, goroutineId int) (o *Mesh, err error) {
 		switch c.Type {
 		case "beam":
 			c.IsBeam = true
-			o.Beams = append(o.Beams, c)
 		case "joint":
 			c.IsJoint = true
-			o.Joints = append(o.Joints, c)
 			o.solids_around_beam_joint(c)
 		case "nurbs":
 			c.Shp = shp.GetShapeNurbs(o.PtNurbs[c.Nrb], o.NrbFaces[c.Nrb], c.Span)
@@ -527,12 +523,6 @@ func (o *Mesh) Draw2d(onlyLin bool) {
 // solids_around_beam_joint sets JntConVerts and JntConCells maps
 func (o *Mesh) solids_around_beam_joint(joint *Cell) {
 
-	// allocate maps
-	if o.JntConVerts == nil {
-		o.JntConVerts = make(map[int][]*Vert)
-		o.JntConCells = make(map[int][]*Cell)
-	}
-
 	// all vertices of one solid connected to joint
 	sld0 := o.Cells[joint.JsldId]
 	sld_verts := make(map[int]*Vert)
@@ -546,18 +536,16 @@ func (o *Mesh) solids_around_beam_joint(joint *Cell) {
 	for _, vid := range lincell.Verts {
 		q := o.Verts[vid]
 		if p, ok := sld_verts[hash_point(q.C)]; ok {
-			jntverts := o.JntConVerts[joint.Id]
-			o.JntConVerts[joint.Id] = append(jntverts, p)
+			joint.JntConVerts = append(joint.JntConVerts, p.Id)
 		}
 	}
 
 	// find all solids connected to joint
 	added := make(map[int]bool)
-	for _, vert := range o.JntConVerts[joint.Id] {
-		for _, cid := range vert.SharedBy {
+	for _, vid := range joint.JntConVerts {
+		for _, cid := range o.Verts[vid].SharedBy {
 			if !added[cid] {
-				jntcells := o.JntConCells[joint.Id]
-				o.JntConCells[joint.Id] = append(jntcells, o.Cells[cid])
+				joint.JntConCells = append(joint.JntConCells, cid)
 				o.Cells[cid].Extrap = true
 				added[cid] = true
 			}

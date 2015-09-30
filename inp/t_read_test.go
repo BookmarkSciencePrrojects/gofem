@@ -47,13 +47,6 @@ func Test_msh02(tst *testing.T) {
 		return
 	}
 
-	for id, cell := range msh.Joints {
-		if !(cell.Id == 13 || cell.Id == 15) {
-			tst.Errorf("joint id is wrong. id=%d", id)
-			return
-		}
-	}
-
 	v7 := msh.Verts[7]
 	v21 := msh.Verts[21]
 	v30 := msh.Verts[30]
@@ -61,29 +54,10 @@ func Test_msh02(tst *testing.T) {
 	chk.Ints(tst, "vert # 21: SharedBy", v21.SharedBy, []int{4, 5, 6, 7, 8, 9, 10, 11})
 	chk.Ints(tst, "vert # 30: SharedBy", v30.SharedBy, []int{8, 9, 10, 11})
 
-	var vids13 []int
-	for _, vert := range msh.JntConVerts[13] {
-		vids13 = append(vids13, vert.Id)
-	}
-	chk.Ints(tst, "vids connected to joint 13", vids13, []int{7, 21})
-
-	var vids15 []int
-	for _, vert := range msh.JntConVerts[15] {
-		vids15 = append(vids15, vert.Id)
-	}
-	chk.Ints(tst, "vids connected to joint 15", vids15, []int{21, 30})
-
-	var cids13 []int
-	for _, cell := range msh.JntConCells[13] {
-		cids13 = append(cids13, cell.Id)
-	}
-	chk.Ints(tst, "cids connected to joint 13", cids13, []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11})
-
-	var cids15 []int
-	for _, cell := range msh.JntConCells[15] {
-		cids15 = append(cids15, cell.Id)
-	}
-	chk.Ints(tst, "cids connected to joint 15", cids15, []int{4, 5, 6, 7, 8, 9, 10, 11})
+	chk.Ints(tst, "vids connected to joint 13", msh.Cells[13].JntConVerts, []int{7, 21})
+	chk.Ints(tst, "cids connected to joint 13", msh.Cells[13].JntConCells, []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11})
+	chk.Ints(tst, "vids connected to joint 15", msh.Cells[15].JntConVerts, []int{21, 30})
+	chk.Ints(tst, "cids connected to joint 15", msh.Cells[15].JntConCells, []int{4, 5, 6, 7, 8, 9, 10, 11})
 }
 
 func Test_sim01(tst *testing.T) {
