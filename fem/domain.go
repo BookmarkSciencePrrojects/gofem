@@ -77,9 +77,11 @@ type Domain struct {
 	Cid2active []bool  // [ncells] CellId => whether cell is active or not in ANY processor
 
 	// stage: subsets of elements
-	ElemIntvars []ElemIntvars   // [procNcells] elements with internal vars in this processor
-	ElemConnect []ElemConnector // [procNcells] connector elements in this processor
-	ElemExtrap  []ElemExtrap    // [procNcells] elements with internal values to be extrapolated
+	ElemIntvars   []ElemIntvars   // elements with internal vars in this processor
+	ElemIvsCon    []ElemIntvars   // elements with internal vars that are connectors
+	ElemIvsNotCon []ElemIntvars   // elements with internal vars that are not connectors
+	ElemConnect   []ElemConnector // connector elements in this processor
+	ElemExtrap    []ElemExtrap    // elements with internal values to be extrapolated
 
 	// stage: coefficients and prescribed forces
 	EssenBcs EssentialBcs // constraints (Lagrange multipliers)
@@ -483,8 +485,8 @@ func (o *Domain) SetIniVals(stgidx int, zeroSol bool) (err error) {
 // UpdateElems update elements after Solution has been updated
 func (o *Domain) UpdateElems() (err error) {
 
-	// update elements
-	for _, e := range o.Elems {
+	// update elements with internal values that aren't connectors
+	for _, e := range o.ElemIvsNotCon {
 		err = e.Update(o.Sol)
 		if err != nil {
 			break
@@ -510,6 +512,14 @@ func (o *Domain) UpdateElems() (err error) {
 			}
 		}
 		// TODO: join Ext from multiple processors
+	}
+
+	// update elements with internal values that are connectors
+	for _, e := range o.ElemIvsCon {
+		err = e.Update(o.Sol)
+		if err != nil {
+			break
+		}
 	}
 	return
 }
@@ -543,6 +553,11 @@ func (o *Domain) add_element_to_subsets(info *Info, ele Elem) {
 	// elements with internal variables
 	if e, ok := ele.(ElemIntvars); ok {
 		o.ElemIntvars = append(o.ElemIntvars, e)
+		if _, connector := ele.(ElemConnector); connector {
+			o.ElemIvsCon = append(o.ElemIvsCon, e)
+		} else {
+			o.ElemIvsNotCon = append(o.ElemIvsNotCon, e)
+		}
 	}
 
 	// connector elements

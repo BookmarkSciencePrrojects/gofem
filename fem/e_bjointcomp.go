@@ -5,8 +5,6 @@
 package fem
 
 import (
-	"math"
-
 	"github.com/cpmech/gofem/inp"
 	"github.com/cpmech/gofem/msolid"
 	"github.com/cpmech/gofem/shp"
@@ -38,10 +36,6 @@ type BjointComp struct {
 	// asembly maps
 	LinUmap []int // beam umap with displacement DOFs equations only
 	SldUmap []int // solid umap with displacement DOFs at nodes connected to beam
-
-	// additional
-	SldLocVid []int       // local vertices IDs of solid nodes connected to beam through this joint
-	SigNo     [][]float64 // [2][nsig] stresses from surrounding solids @ nodes of beam
 
 	// shape and integration points
 	LinShp *shp.Shape   // lin2 shape
@@ -127,7 +121,6 @@ func (o *BjointComp) Connect(cid2elem []Elem, cell *inp.Cell) (nnzK int, err err
 	}
 
 	// auxiliary
-	nsig := 2 * o.Ndim          // number of stress components
 	linNn := 2                  // number of nodes of beam
 	linNu := linNn * o.Ndim     // all displacement DOFs only
 	nodNdof := 3 * (o.Ndim - 1) // number of DOFs per node, including rotational ones
@@ -135,30 +128,17 @@ func (o *BjointComp) Connect(cid2elem []Elem, cell *inp.Cell) (nnzK int, err err
 	// total number of DOFs
 	o.Ny = linNu + o.Sld.Nu
 
-	// data from solid element
-	sldH := o.Sld.Cell.Shp
-	sldNn := sldH.Nverts
-
-	// local vertex ids of solid vertices connected to beam via joint
-	o.SldLocVid = make([]int, linNn)
-	o.SigNo = la.MatAlloc(linNn, nsig)
-	var idx int
-	var dist float64
-	for i := 0; i < linNn; i++ {
-		for j := 0; j < sldNn; j++ {
-			dist = 0.0
-			for k := 0; k < o.Ndim; k++ {
-				dist += math.Pow(o.Lin.X[k][i]-o.Sld.X[k][j], 2.0)
-			}
-			dist = math.Sqrt(dist)
-			if dist < o.TolNod {
-				o.SldLocVid[idx] = j
-				idx++
-				break
+	// local vertices IDs of solid nodes connected to beam through this joint
+	chk.IntAssert(len(o.Cell.JntConVerts), 2) // global vertices IDs
+	sldlocvid := make([]int, linNn)
+	for i, a := range o.Cell.JntConVerts {
+		for j, b := range o.Sld.Cell.Verts {
+			if a == b {
+				sldlocvid[i] = j
+				continue
 			}
 		}
 	}
-	// TODO: check this against msh.data
 
 	// assembly map with displacements DOFs only of beam nodes
 	o.LinUmap = make([]int, linNu)
@@ -172,7 +152,7 @@ func (o *BjointComp) Connect(cid2elem []Elem, cell *inp.Cell) (nnzK int, err err
 
 	// assembly map with DOFs of solid nodes connected to beam
 	o.SldUmap = make([]int, linNu)
-	for m, n := range o.SldLocVid {
+	for m, n := range sldlocvid {
 		for i := 0; i < o.Ndim; i++ {
 			r := i + m*o.Ndim
 			s := i + n*o.Ndim
@@ -406,7 +386,7 @@ func (o *BjointComp) Update(sol *Solution) (err error) {
 	e0, e1, e2 := o.Lin.e0, o.Lin.e1, o.Lin.e2
 
 	// for each integration point
-	var Δwb0, Δwb1, Δwb2, σc float64
+	var Δwb0, Δwb1, Δwb2, σcb float64
 	for idx, ip := range o.LinIps {
 
 		// interpolation functions and gradients
@@ -436,13 +416,13 @@ func (o *BjointComp) Update(sol *Solution) (err error) {
 		}
 
 		// updated confining stress
-		σc = 0.0
+		σcb = 0.0
 		if o.Coulomb {
-			σc, _, _ = o.confining_pressure_ip()
+			σcb, _, _ = o.confining_pressure_ip(sol)
 		}
 
 		// update models
-		err = o.Mdl.Update(o.States[idx], σc, Δwb0)
+		err = o.Mdl.Update(o.States[idx], σcb, Δwb0)
 		if err != nil {
 			return
 		}
@@ -479,18 +459,17 @@ func (o *BjointComp) SetIniIvs(sol *Solution, ivs map[string][]float64) (err err
 
 // confining_pressure_ip computes stresses, tractions and confining pressure @ current ip
 // after the shape functions and stresses @ nodes are calculated
-func (o *BjointComp) confining_pressure_ip() (σcb, p1, p2 float64) {
+func (o *BjointComp) confining_pressure_ip(sol *Solution) (σcb, p1, p2 float64) {
 
 	// current shape function @ ip
 	S := o.LinShp.S
 
 	// interpolate stresses from nodes
 	nsig := 2 * o.Ndim
-	linNn := 2
 	for i := 0; i < nsig; i++ {
 		o.σ[i] = 0.0
-		for m := 0; m < linNn; m++ {
-			o.σ[i] += S[m] * o.SigNo[m][i]
+		for m, vid := range o.Cell.JntConVerts {
+			o.σ[i] += S[m] * sol.Ext[vid][i]
 		}
 	}
 

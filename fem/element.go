@@ -35,7 +35,6 @@ type Elem interface {
 	// called for each iteration
 	AddToRhs(fb []float64, sol *Solution) (err error)                // adds -R to global residual vector fb
 	AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error) // adds element K to global Jacobian matrix Kb
-	Update(sol *Solution) (err error)                                // perform (tangent) update
 
 	// reading and writing of element data
 	Encode(enc Encoder) (err error) // encodes internal variables
@@ -45,19 +44,20 @@ type Elem interface {
 	OutIpsData() (data []*OutIpData) // returns data from all integration points for output
 }
 
-// ElemConnector defines connector elements; elements that depend upon others
-type ElemConnector interface {
-	Id() int                                                    // returns the cell Id
-	Connect(cid2elem []Elem, c *inp.Cell) (nnzK int, err error) // connect multiple elements; e.g.: connect rod/solid elements in Rjoints
-}
-
 // ElemIntvars defines elements with {z,q} internal variables
 type ElemIntvars interface {
+	Update(sol *Solution) (err error)                              // perform (tangent) update
 	Ipoints() (coords [][]float64)                                 // returns the real coordinates of integration points [nip][ndim]
 	SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) // sets initial ivs for given values in sol and ivs map
 	BackupIvs(aux bool) (err error)                                // create copy of internal variables
 	RestoreIvs(aux bool) (err error)                               // restore internal variables from copies
 	Ureset(sol *Solution) (err error)                              // fixes internal variables after u (displacements) have been zeroed
+}
+
+// ElemConnector defines connector elements; elements that depend upon others
+type ElemConnector interface {
+	Id() int                                                    // returns the cell Id
+	Connect(cid2elem []Elem, c *inp.Cell) (nnzK int, err error) // connect multiple elements; e.g.: connect rod/solid elements in Rjoints
 }
 
 // ElemExtrap defines elements with functions to extrapolate internal values

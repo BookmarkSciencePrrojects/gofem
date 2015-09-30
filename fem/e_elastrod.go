@@ -203,19 +203,6 @@ func (o *ElastRod) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err err
 	return
 }
 
-// Update perform (tangent) update
-func (o *ElastRod) Update(sol *Solution) (err error) {
-	for i := 0; i < 2; i++ {
-		o.ua[i] = 0
-		for j, J := range o.Umap {
-			o.ua[i] += o.T[i][j] * sol.Y[J]
-		}
-	}
-	εa := (o.ua[1] - o.ua[0]) / o.L // axial strain
-	o.Sig = o.E * εa
-	return
-}
-
 // writer ///////////////////////////////////////////////////////////////////////////////////////////
 
 // Encode encodes internal variables
@@ -236,7 +223,14 @@ func (o *ElastRod) OutIpsData() (data []*OutIpData) {
 	}
 	calc := func(sol *Solution) (vals map[string]float64) {
 		vals = make(map[string]float64)
-		vals["sig"] = o.Sig // axial stress
+		for i := 0; i < 2; i++ {
+			o.ua[i] = 0
+			for j, J := range o.Umap {
+				o.ua[i] += o.T[i][j] * sol.Y[J]
+			}
+		}
+		εa := (o.ua[1] - o.ua[0]) / o.L // axial strain
+		vals["sig"] = o.E * εa          // axial stress
 		return
 	}
 	data = append(data, &OutIpData{o.Id(), x, calc})

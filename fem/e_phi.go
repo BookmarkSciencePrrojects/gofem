@@ -209,11 +209,6 @@ func (o *ElemPhi) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err erro
 	return
 }
 
-// Update perform (tangent) update
-func (o *ElemPhi) Update(sol *Solution) (err error) {
-	return
-}
-
 // writer ///////////////////////////////////////////////////////////////////////////////////////////
 
 // Encode encodes internal variables

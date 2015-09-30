@@ -618,7 +618,9 @@ func (o *testKb) check(label string, d *Domain, e Elem, Imap, Jmap []int, Kana [
 					d.Sol.ΔY[k] = d.Sol.Y[k] - o.Yold[k]
 				}
 				restore()
-				e.Update(d.Sol)
+				if ele, ok := e.(ElemIntvars); ok {
+					ele.Update(d.Sol)
+				}
 				e.AddToRhs(o.Fbtmp, d.Sol)
 				res = -o.Fbtmp[I]
 				d.Sol.Y[J] = tmp

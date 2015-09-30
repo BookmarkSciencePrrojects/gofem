@@ -91,7 +91,6 @@ func Test_bjoint01a(tst *testing.T) {
 	chk.Ints(tst, "solid 3 Umap", solids[3].Umap, []int{4, 5, 10, 11, 16, 17, 12, 13})
 	chk.Ints(tst, "beam  0 Umap", beams[0].Umap, []int{18, 19, 20, 21, 22, 23})
 	chk.Ints(tst, "beam  1 Umap", beams[1].Umap, []int{24, 25, 26, 18, 19, 20})
-	chk.Ints(tst, "joint SldLocVid", joint.SldLocVid, []int{1, 2})
 	chk.Ints(tst, "joint 0 LinUmap", joint.LinUmap, []int{24, 25, 18, 19})
 	chk.Ints(tst, "joint 0 SldUmap", joint.SldUmap, []int{4, 5, 12, 13})
 

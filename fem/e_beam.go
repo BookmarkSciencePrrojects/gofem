@@ -335,11 +335,6 @@ func (o *Beam) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error) 
 	return
 }
 
-// Update perform (tangent) update
-func (o *Beam) Update(sol *Solution) (err error) {
-	return
-}
-
 // Encode encodes internal variables
 func (o *Beam) Encode(enc Encoder) (err error) {
 	return
