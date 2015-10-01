@@ -186,8 +186,8 @@ func (o *Shape) CalcAtIp(x [][]float64, ip Ipoint, derivs bool) (err error) {
 
 	if o.Gndim == 1 {
 		// calculate Jvec3d == dxdR
+		o.Jvec3d[0], o.Jvec3d[1], o.Jvec3d[2] = 0, 0, 0
 		for i := 0; i < len(x); i++ {
-			o.Jvec3d[i] = 0.0
 			for m := 0; m < o.Nverts; m++ {
 				o.Jvec3d[i] += x[i][m] * o.DSdR[m][0] // dxdR := x * dSdR
 			}
