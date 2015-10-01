@@ -193,8 +193,16 @@ func (o *Domain) SetGeoSt(stg *inp.Stage) (err error) {
 	}
 
 	// make sure all elements tags were handled
-	for tag, _ := range o.Msh.CellTag2cells {
-		if !ctaghandled[tag] {
+	lins_and_joints := make(map[int]bool)
+	for tag, cells := range o.Msh.CellTag2cells {
+		solids := true
+		for _, cell := range cells {
+			if cell.Type[:3] == "lin" || cell.Type == "beam" || cell.Type == "joint" {
+				lins_and_joints[cell.Id] = true
+				solids = false
+			}
+		}
+		if solids && !ctaghandled[tag] {
 			return chk.Err("geost: there are cells not included in any layer: ctag=%d", tag)
 		}
 	}
@@ -263,6 +271,19 @@ func (o *Domain) SetGeoSt(stg *inp.Stage) (err error) {
 				err = ele.SetIniIvs(o.Sol, ivs)
 				if err != nil {
 					return chk.Err("geost: element's internal values setting failed:\n%v", err)
+				}
+			}
+		}
+	}
+
+	// set initial values of lines and joints
+	for cid, _ := range lins_and_joints {
+		elem := o.Cid2elem[cid]
+		if elem != nil {
+			if ele, okk := elem.(ElemIntvars); okk {
+				err = ele.SetIniIvs(o.Sol, nil)
+				if err != nil {
+					return chk.Err("geost: cannot set lines or joints internal values failed:\n%v", err)
 				}
 			}
 		}
