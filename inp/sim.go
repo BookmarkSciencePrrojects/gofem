@@ -344,19 +344,12 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 		// get ndim and max elevation
 		if i == 0 {
 			o.Ndim = reg.Msh.Ndim
-			o.MaxElev = reg.Msh.Ymax
-			if o.Ndim == 3 {
-				o.MaxElev = reg.Msh.Zmax
-			}
+			o.MaxElev = reg.Msh.MaxElev
 		} else {
 			if reg.Msh.Ndim != o.Ndim {
 				chk.Panic("ReadSim: Ndim value is inconsistent: %d != %d", reg.Msh.Ndim, o.Ndim)
 			}
-			if o.Ndim == 2 {
-				o.MaxElev = utl.Max(o.MaxElev, reg.Msh.Ymax)
-			} else {
-				o.MaxElev = utl.Max(o.MaxElev, reg.Msh.Zmax)
-			}
+			o.MaxElev = utl.Max(o.MaxElev, reg.Msh.MaxElev)
 		}
 
 		// get water data
