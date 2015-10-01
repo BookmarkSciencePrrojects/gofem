@@ -197,7 +197,7 @@ func (o *Domain) SetGeoSt(stg *inp.Stage) (err error) {
 	for tag, cells := range o.Msh.CellTag2cells {
 		solids := true
 		for _, cell := range cells {
-			if cell.Type[:3] == "lin" || cell.Type == "beam" || cell.Type == "joint" {
+			if !cell.IsSolid {
 				lins_and_joints[cell.Id] = true
 				solids = false
 			}
