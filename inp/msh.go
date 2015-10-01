@@ -59,6 +59,7 @@ type Cell struct {
 	// specific problems data
 	IsBeam      bool         // simple beam element (no need for shape structure)
 	IsJoint     bool         // cell represents joint element
+	IsSolid     bool         // is 2D or 3D solid element; i.e. not "lin#", not "beam", not "joint"
 	SeepVerts   map[int]bool // local vertices ids of vertices on seepage faces
 	Extrap      bool         // needs to extrapolate internal values; e.g. because is connected to joint
 	JntConVerts []int        // vertices of solids connected to it
@@ -94,6 +95,7 @@ type Mesh struct {
 	Xmin, Xmax float64 // min and max x-coordinate
 	Ymin, Ymax float64 // min and max x-coordinate
 	Zmin, Zmax float64 // min and max x-coordinate
+	MaxElev    float64 // max elevation; considering solids only
 
 	// derived: maps
 	VertTag2verts map[int][]*Vert      // vertex tag => set of vertices
@@ -249,11 +251,15 @@ func ReadMsh(dir, fn string, goroutineId int) (o *Mesh, err error) {
 				err = chk.Err("cannot allocate \"shape\" structure for cell type = %q\n", c.Type)
 				return
 			}
+			c.IsSolid = true
 		default:
 			c.Shp = shp.Get(c.Type, goroutineId)
 			if c.Shp == nil {
 				err = chk.Err("cannot allocate \"shape\" structure for cell type = %q\n", c.Type)
 				return
+			}
+			if c.Type[:3] != "lin" {
+				c.IsSolid = true
 			}
 		}
 		c.GoroutineId = goroutineId
@@ -293,6 +299,16 @@ func ReadMsh(dir, fn string, goroutineId int) (o *Mesh, err error) {
 		for _, vid := range c.Verts {
 			if utl.IntIndexSmall(o.Verts[vid].SharedBy, c.Id) < 0 {
 				o.Verts[vid].SharedBy = append(o.Verts[vid].SharedBy, c.Id)
+			}
+		}
+
+		// compute max elevation
+		if c.IsSolid {
+			if i == 0 {
+				o.MaxElev = o.Verts[c.Verts[0]].C[o.Ndim-1]
+			}
+			for _, vid := range c.Verts {
+				o.MaxElev = utl.Max(o.MaxElev, o.Verts[vid].C[o.Ndim-1])
 			}
 		}
 	}

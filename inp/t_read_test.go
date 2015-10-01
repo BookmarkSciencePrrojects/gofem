@@ -58,6 +58,45 @@ func Test_msh02(tst *testing.T) {
 	chk.Ints(tst, "cids connected to joint 13", msh.Cells[13].JntConCells, []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11})
 	chk.Ints(tst, "vids connected to joint 15", msh.Cells[15].JntConVerts, []int{21, 30})
 	chk.Ints(tst, "cids connected to joint 15", msh.Cells[15].JntConCells, []int{4, 5, 6, 7, 8, 9, 10, 11})
+
+	io.Pforan("MaxElev = %v\n", msh.MaxElev)
+	chk.Scalar(tst, "MaxElev", 1e-17, msh.MaxElev, 1)
+}
+
+func Test_msh03(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("msh03")
+
+	msh, err := ReadMsh("data", "bjointcomp3d.msh", 0)
+	if err != nil {
+		tst.Errorf("test failed:\n%v", err)
+		return
+	}
+
+	io.Pforan(" 0 (hex8)  : IsSolid = %v\n", msh.Cells[0].IsSolid)
+	io.Pforan(" 8 (beam)  : IsSolid = %v\n", msh.Cells[8].IsSolid)
+	io.Pforan(" 9 (beam)  : IsSolid = %v\n", msh.Cells[9].IsSolid)
+	io.Pforan("10 (joint) : IsSolid = %v\n", msh.Cells[10].IsSolid)
+	if !msh.Cells[0].IsSolid {
+		tst.Errorf("test failed\n")
+		return
+	}
+	if msh.Cells[8].IsSolid {
+		tst.Errorf("test failed\n")
+		return
+	}
+	if msh.Cells[9].IsSolid {
+		tst.Errorf("test failed\n")
+		return
+	}
+	if msh.Cells[10].IsSolid {
+		tst.Errorf("test failed\n")
+		return
+	}
+
+	io.Pforan("MaxElev = %v\n", msh.MaxElev)
+	chk.Scalar(tst, "MaxElev", 1e-17, msh.MaxElev, 1)
 }
 
 func Test_sim01(tst *testing.T) {
