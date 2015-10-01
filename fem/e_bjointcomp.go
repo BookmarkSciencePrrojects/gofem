@@ -308,7 +308,7 @@ func (o *BjointComp) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err e
 		S := o.LinShp.S
 
 		// model derivatives
-		DτDω, err = o.Mdl.CalcD(o.States[idx], firstIt)
+		DτDω, _, err = o.Mdl.CalcD(o.States[idx], firstIt)
 		if err != nil {
 			return
 		}

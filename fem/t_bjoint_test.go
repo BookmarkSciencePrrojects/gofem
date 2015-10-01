@@ -161,9 +161,9 @@ func Test_bjoint02(tst *testing.T) {
 	analysis := NewFEM("data/bjointcomp2d02.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// for debugging Kb
-	if true {
+	if false {
 		bjointcomp_DebugKb(analysis, &testKb{tst: tst, verb: chk.Verbose, eid: 6,
-			ni: -1, nj: -1, itmin: 1, itmax: -1, tmin: -1, tmax: -1, tol: 1e-10,
+			ni: 2, nj: -1, itmin: 2, itmax: 2, tmin: 0.1, tmax: 0.1, tol: 1e-9,
 		})
 	}
 
@@ -171,6 +171,7 @@ func Test_bjoint02(tst *testing.T) {
 	err := analysis.Run()
 	if err != nil {
 		tst.Errorf("Run failed:\n%v", err)
+		return
 	}
 
 	// displacements @ tip
@@ -183,7 +184,72 @@ func Test_bjoint02(tst *testing.T) {
 	// stresses along embedded beam
 	emb := dom.Elems[6].(*BjointComp)
 	io.Pfblue2("τ = %v\n", emb.States[0].Sig)
+}
 
-	// extrapolated values
-	io.Pforan("ext = %v\n", dom.Sol.Ext)
+func Test_bjoint03(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("bjoint03. beam joint compatible. static. run")
+
+	// start simulation
+	analysis := NewFEM("data/bjointcomp3d01.sim", "", true, true, false, false, chk.Verbose, 0)
+
+	// for debugging Kb
+	if true {
+		bjointcomp_DebugKb(analysis, &testKb{tst: tst, verb: chk.Verbose, eid: 10,
+			ni: -1, nj: -1, itmin: -1, itmax: -1, tmin: -1, tmax: -1, tol: 1e-9,
+		})
+	}
+
+	// run simulation
+	err := analysis.Run()
+	if err != nil {
+		tst.Errorf("Run failed:\n%v", err)
+		return
+	}
+
+	// displacements @ tip
+	dom := analysis.Domains[0]
+	tip := dom.Msh.VertTag2verts[-102][0].Id
+	nod := dom.Nodes[tip]
+	eqx, eqy, eqz := nod.GetEq("ux"), nod.GetEq("uy"), nod.GetEq("uz")
+	io.Pforan("u @ tip (%d,%d) = %v, %v, %v\n", -102, tip, dom.Sol.Y[eqx], dom.Sol.Y[eqy], dom.Sol.Y[eqz])
+
+	// stresses along embedded beam
+	emb := dom.Elems[10].(*BjointComp)
+	io.Pfblue2("τ = %v\n", emb.States[0].Sig)
+}
+
+func Test_bjoint04(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("bjoint04. beam joint compatible. displace beam. run")
+
+	// start simulation
+	analysis := NewFEM("data/bjointcomp3d02.sim", "", true, true, false, false, chk.Verbose, 0)
+
+	// for debugging Kb
+	if false {
+		bjointcomp_DebugKb(analysis, &testKb{tst: tst, verb: chk.Verbose, eid: 10,
+			ni: -1, nj: -1, itmin: -1, itmax: -1, tmin: -1, tmax: -1, tol: 1e-5,
+		})
+	}
+
+	// run simulation
+	err := analysis.Run()
+	if err != nil {
+		tst.Errorf("Run failed:\n%v", err)
+		return
+	}
+
+	// displacements @ tip
+	dom := analysis.Domains[0]
+	tip := dom.Msh.VertTag2verts[-102][0].Id
+	nod := dom.Nodes[tip]
+	eqx, eqy, eqz := nod.GetEq("ux"), nod.GetEq("uy"), nod.GetEq("uz")
+	io.Pforan("u @ tip (%d,%d) = %v, %v, %v\n", -102, tip, dom.Sol.Y[eqx], dom.Sol.Y[eqy], dom.Sol.Y[eqz])
+
+	// stresses along embedded beam
+	emb := dom.Elems[10].(*BjointComp)
+	io.Pfblue2("τ = %v\n", emb.States[0].Sig)
 }
