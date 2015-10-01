@@ -175,6 +175,7 @@ type GeoStData struct {
 	K0     []float64 `json:"K0"`     // [nlayers] Earth pressure coefficient at rest to compute effective horizontal stresses
 	UseK0  []bool    `json:"useK0"`  // [nlayers] use K0 to compute effective horizontal stresses instead of "nu"
 	Layers [][]int   `json:"layers"` // [nlayers][ntagsInLayer]; e.g. [[-1,-2], [-3,-4]] => 2 layers
+	Total  bool      `json:"total"`  // total stress analysis
 }
 
 // IniStressData holds data for setting initial stresses

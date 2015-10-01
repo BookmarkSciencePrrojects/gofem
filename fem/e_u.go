@@ -526,33 +526,6 @@ func (o *ElemU) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
 	o.StatesBkp = make([]*msolid.State, nip)
 	o.StatesAux = make([]*msolid.State, nip)
 
-	// total stresses given
-	if _, okk := ivs["svT"]; okk {
-
-		// total vertical stresses and K0
-		svT := ivs["svT"]
-		K0s := ivs["K0"]
-		chk.IntAssert(len(svT), nip)
-		chk.IntAssert(len(K0s), 1)
-		K0 := K0s[0]
-
-		// for each integration point
-		sx := make([]float64, nip)
-		sy := make([]float64, nip)
-		sz := make([]float64, nip)
-		for i, _ := range o.IpsElem {
-
-			// compute effective stresses
-			svE := svT[i]
-			shE := K0 * svE
-			sx[i], sy[i], sz[i] = shE, svE, shE
-			if o.Ndim == 3 {
-				sx[i], sy[i], sz[i] = shE, shE, svE
-			}
-		}
-		ivs = map[string][]float64{"sx": sx, "sy": sy, "sz": sz}
-	}
-
 	// has specified stresses?
 	_, has_sig := ivs["sx"]
 

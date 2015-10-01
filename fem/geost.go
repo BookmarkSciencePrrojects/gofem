@@ -47,12 +47,13 @@ type GeoLayer struct {
 	RhoS0 float64    // initial density of solids
 	nf0   float64    // initial (constant) porosity
 	K0    float64    // earth-pressure at rest
-	Dpl   float64    // liquid pressure added by this layer
-	DsigV float64    // absolute value of vertical stress increment added by this layer
 	top   *geostate  // state @ top of layer
 	fcn   ode.Cb_fcn // function for ode solver
 	Jac   ode.Cb_jac // Jacobian for ode solver
 	sol   ode.ODE    // ode solver
+	Total bool       // total stress analysis
+	Rho   float64    // density for total stress analyses
+	g     float64    // gravity
 }
 
 // Start starts ODE solver for computing state variables in Calc
@@ -61,6 +62,7 @@ func (o *GeoLayer) Start(prev *geostate, g float64) {
 
 	// set state @ top
 	o.top = prev
+	o.g = g
 
 	// y := {pl, ρL, ρ, σV} == geostate
 	nf := o.nf0
@@ -84,8 +86,11 @@ func (o *GeoLayer) Start(prev *geostate, g float64) {
 
 // Calc computes state @ level z
 func (o GeoLayer) Calc(z float64) (*geostate, error) {
-	y := []float64{o.top.pl, o.top.ρL, o.top.ρ, o.top.σV}
 	Δz := o.Zmax - z
+	if o.Total {
+		return &geostate{0, 0, o.top.ρ, o.top.σV + o.top.ρ*o.g*Δz}, nil
+	}
+	y := []float64{o.top.pl, o.top.ρL, o.top.ρ, o.top.σV}
 	err := o.sol.Solve(y, 0, 1, 1, false, Δz)
 	if err != nil {
 		err = chk.Err("geost: failed when calculating state sing ODE solver: %v", err)
@@ -150,9 +155,14 @@ func (o *Domain) SetGeoSt(stg *inp.Stage) (err error) {
 		L[i].Zmin = o.Sim.MaxElev
 		L[i].Zmax = 0
 		L[i].Cl = o.Sim.WaterRho0 / o.Sim.WaterBulk
+		L[i].Total = geo.Total
 
 		// get porous parameters
-		L[i].RhoS0, L[i].nf0, err = get_porous_parameters(o.Sim.MatParams, reg, tags[0])
+		if geo.Total {
+			L[i].Rho, err = get_solid_parameters(o.Sim.MatParams, reg, tags[0])
+		} else {
+			L[i].RhoS0, L[i].nf0, err = get_porous_parameters(o.Sim.MatParams, reg, tags[0])
+		}
 		if err != nil {
 			return
 		}
@@ -233,21 +243,33 @@ func (o *Domain) SetGeoSt(stg *inp.Stage) (err error) {
 			top.ρ = nf*sl*ρL + (1.0-nf)*ρS
 		}
 
+		// total stress analysis
+		if geo.Total {
+			top.pl = 0
+			top.ρL = 0
+			top.ρ = lay.Rho
+		}
+
 		// start layer
 		lay.Start(top, grav)
 
 		// set nodes
-		for _, nod := range lay.Nodes {
-			z := nod.Vert.C[ndim-1]
-			s, err := lay.Calc(z)
-			if err != nil {
-				return chk.Err("cannot compute state @ node z = %g\n%v", z, err)
-			}
-			dof := nod.GetDof("pl")
-			if dof != nil {
-				o.Sol.Y[dof.Eq] = s.pl
+		if !geo.Total {
+			for _, nod := range lay.Nodes {
+				z := nod.Vert.C[ndim-1]
+				s, err := lay.Calc(z)
+				if err != nil {
+					return chk.Err("cannot compute state @ node z = %g\n%v", z, err)
+				}
+				dof := nod.GetDof("pl")
+				if dof != nil {
+					o.Sol.Y[dof.Eq] = s.pl
+				}
 			}
 		}
+
+		//s, _ := lay.Calc(0.0)
+		//io.Pforan("s @ 0 = %v\n", s)
 
 		// set elements
 		for _, elem := range lay.Elems {
@@ -265,7 +287,23 @@ func (o *Domain) SetGeoSt(stg *inp.Stage) (err error) {
 					}
 					svT[i] = -s.σV
 				}
-				ivs := map[string][]float64{"svT": svT, "K0": []float64{lay.K0}}
+				var ivs map[string][]float64
+				if geo.Total {
+					sx := make([]float64, nip)
+					sy := make([]float64, nip)
+					sz := make([]float64, nip)
+					for i := 0; i < nip; i++ {
+						sv := svT[i]
+						sh := lay.K0 * sv
+						sx[i], sy[i], sz[i] = sh, sv, sh
+						if ndim == 3 {
+							sx[i], sy[i], sz[i] = sh, sh, sv
+						}
+					}
+					ivs = map[string][]float64{"sx": sx, "sy": sy, "sz": sz}
+				} else {
+					ivs = map[string][]float64{"svT": svT, "K0": []float64{lay.K0}}
+				}
 
 				// set element's states
 				err = ele.SetIniIvs(o.Sol, ivs)
@@ -292,6 +330,22 @@ func (o *Domain) SetGeoSt(stg *inp.Stage) (err error) {
 }
 
 // auxiliary //////////////////////////////////////////////////////////////////////////////////////////
+
+// get_solid_parameters extracts parameters based on region data
+func get_solid_parameters(mdb *inp.MatDb, reg *inp.Region, ctag int) (Rho float64, err error) {
+	edat := reg.Etag2data(ctag)
+	mat := mdb.Get(edat.Mat)
+	for _, p := range mat.Prms {
+		switch p.N {
+		case "rho", "Rho":
+			Rho = p.V
+		}
+	}
+	if Rho < 1e-7 {
+		err = chk.Err("geost: initial density Rho=%g is incorrect", Rho)
+	}
+	return
+}
 
 // get_porous_parameters extracts parameters based on region data
 func get_porous_parameters(mdb *inp.MatDb, reg *inp.Region, ctag int) (RhoS0, nf0 float64, err error) {
