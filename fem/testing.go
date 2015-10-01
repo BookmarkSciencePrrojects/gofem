@@ -9,8 +9,6 @@ import (
 	"math"
 	"testing"
 
-	"github.com/cpmech/gofem/mporous"
-	"github.com/cpmech/gofem/msolid"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/num"
@@ -246,6 +244,7 @@ type testKb struct {
 	it    int       // current iteration
 	t     float64   // current time
 	Fbtmp []float64 // auxiliary array
+	Ybkp  []float64 // auxiliary array
 	ΔYbkp []float64 // auxiliary array
 	Yold  []float64 // auxiliary array
 }
@@ -264,43 +263,15 @@ func p_DebugKb(fem *FEM, o *testKb) {
 				return
 			}
 
-			// copy states and solution
-			nip := len(e.IpsElem)
-			states := make([]*mporous.State, nip)
-			statesBkp := make([]*mporous.State, nip)
-			for i := 0; i < nip; i++ {
-				states[i] = e.States[i].GetCopy()
-				statesBkp[i] = e.StatesBkp[i].GetCopy()
-			}
-			o.aux_arrays(d)
-
-			// make sure to restore states and solution
-			defer func() {
-				for i := 0; i < nip; i++ {
-					e.States[i].Set(states[i])
-					e.StatesBkp[i].Set(statesBkp[i])
-				}
-				copy(d.Sol.ΔY, o.ΔYbkp)
-			}()
-
-			// define restore function
-			restore := func() {
-				if it == 0 {
-					for k := 0; k < nip; k++ {
-						e.States[k].Set(states[k])
-					}
-					return
-				}
-				for k := 0; k < nip; k++ {
-					e.States[k].Set(statesBkp[k])
-				}
-			}
+			// backup and restore upon exit
+			o.aux_backup(d)
+			defer func() { o.aux_restore(d) }()
 
 			// check
-			o.check("Kpp", d, e, e.Pmap, e.Pmap, e.Kpp, restore)
-			o.check("Kpf", d, e, e.Pmap, e.Fmap, e.Kpf, restore)
-			o.check("Kfp", d, e, e.Fmap, e.Pmap, e.Kfp, restore)
-			o.check("Kff", d, e, e.Fmap, e.Fmap, e.Kff, restore)
+			o.check("Kpp", d, e, e.Pmap, e.Pmap, e.Kpp)
+			o.check("Kpf", d, e, e.Pmap, e.Fmap, e.Kpf)
+			o.check("Kfp", d, e, e.Fmap, e.Pmap, e.Kfp)
+			o.check("Kff", d, e, e.Fmap, e.Fmap, e.Kff)
 		}
 	}
 }
@@ -319,45 +290,17 @@ func u_DebugKb(fem *FEM, o *testKb) {
 				return
 			}
 
-			// copy states and solution
-			nip := len(e.IpsElem)
-			states := make([]*msolid.State, nip)
-			statesBkp := make([]*msolid.State, nip)
-			for i := 0; i < nip; i++ {
-				states[i] = e.States[i].GetCopy()
-				statesBkp[i] = e.StatesBkp[i].GetCopy()
-			}
-			o.aux_arrays(d)
-
-			// make sure to restore states and solution
-			defer func() {
-				for i := 0; i < nip; i++ {
-					e.States[i].Set(states[i])
-					e.StatesBkp[i].Set(statesBkp[i])
-				}
-				copy(d.Sol.ΔY, o.ΔYbkp)
-			}()
-
-			// define restore function
-			restore := func() {
-				if it == 0 {
-					for k := 0; k < nip; k++ {
-						e.States[k].Set(states[k])
-					}
-					return
-				}
-				for k := 0; k < nip; k++ {
-					e.States[k].Set(statesBkp[k])
-				}
-			}
+			// backup and restore upon exit
+			o.aux_backup(d)
+			defer func() { o.aux_restore(d) }()
 
 			// check
 			if e.HasContact {
-				o.check("Kqq", d, e, e.Qmap, e.Qmap, e.Kqq, restore)
-				o.check("Kqu", d, e, e.Qmap, e.Umap, e.Kqu, restore)
-				o.check("Kuq", d, e, e.Umap, e.Qmap, e.Kuq, restore)
+				o.check("Kqq", d, e, e.Qmap, e.Qmap, e.Kqq)
+				o.check("Kqu", d, e, e.Qmap, e.Umap, e.Kqu)
+				o.check("Kuq", d, e, e.Umap, e.Qmap, e.Kuq)
 			}
-			o.check("K", d, e, e.Umap, e.Umap, e.K, restore)
+			o.check("K", d, e, e.Umap, e.Umap, e.K)
 		}
 	}
 	return
@@ -377,54 +320,18 @@ func up_DebugKb(fem *FEM, o *testKb) {
 				return
 			}
 
-			// copy states and solution
-			nip := len(e.U.IpsElem)
-			u_states := make([]*msolid.State, nip)
-			p_states := make([]*mporous.State, nip)
-			u_statesBkp := make([]*msolid.State, nip)
-			p_statesBkp := make([]*mporous.State, nip)
-			for i := 0; i < nip; i++ {
-				u_states[i] = e.U.States[i].GetCopy()
-				p_states[i] = e.P.States[i].GetCopy()
-				u_statesBkp[i] = e.U.StatesBkp[i].GetCopy()
-				p_statesBkp[i] = e.P.StatesBkp[i].GetCopy()
-			}
-			o.aux_arrays(d)
-
-			// make sure to restore states and solution
-			defer func() {
-				for i := 0; i < nip; i++ {
-					e.U.States[i].Set(u_states[i])
-					e.P.States[i].Set(p_states[i])
-					e.U.StatesBkp[i].Set(u_statesBkp[i])
-					e.P.StatesBkp[i].Set(p_statesBkp[i])
-				}
-				copy(d.Sol.ΔY, o.ΔYbkp)
-			}()
-
-			// define restore function
-			restore := func() {
-				if it == 0 {
-					for k := 0; k < nip; k++ {
-						e.U.States[k].Set(u_states[k])
-						e.P.States[k].Set(p_states[k])
-					}
-					return
-				}
-				for k := 0; k < nip; k++ {
-					e.U.States[k].Set(u_statesBkp[k])
-					e.P.States[k].Set(p_statesBkp[k])
-				}
-			}
+			// backup and restore upon exit
+			o.aux_backup(d)
+			defer func() { o.aux_restore(d) }()
 
 			// check
-			o.check("Kuu", d, e, e.U.Umap, e.U.Umap, e.U.K, restore)
-			o.check("Kup", d, e, e.U.Umap, e.P.Pmap, e.Kup, restore)
-			o.check("Kpu", d, e, e.P.Pmap, e.U.Umap, e.Kpu, restore)
-			o.check("Kpp", d, e, e.P.Pmap, e.P.Pmap, e.P.Kpp, restore)
-			o.check("Kpf", d, e, e.P.Pmap, e.P.Fmap, e.P.Kpf, restore)
-			o.check("Kfp", d, e, e.P.Fmap, e.P.Pmap, e.P.Kfp, restore)
-			o.check("Kff", d, e, e.P.Fmap, e.P.Fmap, e.P.Kff, restore)
+			o.check("Kuu", d, e, e.U.Umap, e.U.Umap, e.U.K)
+			o.check("Kup", d, e, e.U.Umap, e.P.Pmap, e.Kup)
+			o.check("Kpu", d, e, e.P.Pmap, e.U.Umap, e.Kpu)
+			o.check("Kpp", d, e, e.P.Pmap, e.P.Pmap, e.P.Kpp)
+			o.check("Kpf", d, e, e.P.Pmap, e.P.Fmap, e.P.Kpf)
+			o.check("Kfp", d, e, e.P.Fmap, e.P.Pmap, e.P.Kfp)
+			o.check("Kff", d, e, e.P.Fmap, e.P.Fmap, e.P.Kff)
 		}
 	}
 	return
@@ -444,43 +351,15 @@ func rjoint_DebugKb(fem *FEM, o *testKb) {
 				return
 			}
 
-			// copy states and solution
-			nip := len(e.Rod.IpsElem)
-			states := make([]*msolid.OnedState, nip)
-			statesBkp := make([]*msolid.OnedState, nip)
-			for i := 0; i < nip; i++ {
-				states[i] = e.States[i].GetCopy()
-				statesBkp[i] = e.StatesBkp[i].GetCopy()
-			}
-			o.aux_arrays(d)
-
-			// make sure to restore states and solution
-			defer func() {
-				for i := 0; i < nip; i++ {
-					e.States[i].Set(states[i])
-					e.StatesBkp[i].Set(statesBkp[i])
-				}
-				copy(d.Sol.ΔY, o.ΔYbkp)
-			}()
-
-			// define restore function
-			restore := func() {
-				if it == 0 {
-					for k := 0; k < nip; k++ {
-						e.States[k].Set(states[k])
-					}
-					return
-				}
-				for k := 0; k < nip; k++ {
-					e.States[k].Set(statesBkp[k])
-				}
-			}
+			// backup and restore upon exit
+			o.aux_backup(d)
+			defer func() { o.aux_restore(d) }()
 
 			// check
-			o.check("Krr", d, e, e.Rod.Umap, e.Rod.Umap, e.Krr, restore)
-			o.check("Krs", d, e, e.Rod.Umap, e.Sld.Umap, e.Krs, restore)
-			o.check("Ksr", d, e, e.Sld.Umap, e.Rod.Umap, e.Ksr, restore)
-			o.check("Kss", d, e, e.Sld.Umap, e.Sld.Umap, e.Kss, restore)
+			o.check("Krr", d, e, e.Rod.Umap, e.Rod.Umap, e.Krr)
+			o.check("Krs", d, e, e.Rod.Umap, e.Sld.Umap, e.Krs)
+			o.check("Ksr", d, e, e.Sld.Umap, e.Rod.Umap, e.Ksr)
+			o.check("Kss", d, e, e.Sld.Umap, e.Sld.Umap, e.Kss)
 		} else {
 			io.Pfred("warning: eid=%d does not correspond to Rjoint element\n", o.eid)
 		}
@@ -502,43 +381,15 @@ func bjointcomp_DebugKb(fem *FEM, o *testKb) {
 				return
 			}
 
-			// copy states and solution
-			nip := len(e.LinIps)
-			states := make([]*msolid.OnedState, nip)
-			statesBkp := make([]*msolid.OnedState, nip)
-			for i := 0; i < nip; i++ {
-				states[i] = e.States[i].GetCopy()
-				statesBkp[i] = e.StatesBkp[i].GetCopy()
-			}
-			o.aux_arrays(d)
-
-			// make sure to restore states and solution
-			defer func() {
-				for i := 0; i < nip; i++ {
-					e.States[i].Set(states[i])
-					e.StatesBkp[i].Set(statesBkp[i])
-				}
-				copy(d.Sol.ΔY, o.ΔYbkp)
-			}()
-
-			// define restore function
-			restore := func() {
-				if it == 0 {
-					for k := 0; k < nip; k++ {
-						e.States[k].Set(states[k])
-					}
-					return
-				}
-				for k := 0; k < nip; k++ {
-					e.States[k].Set(statesBkp[k])
-				}
-			}
+			// backup and restore upon exit
+			o.aux_backup(d)
+			defer func() { o.aux_restore(d) }()
 
 			// check
-			o.check("Kll", d, e, e.LinUmap, e.LinUmap, e.Kll, restore)
-			o.check("Kls", d, e, e.LinUmap, e.SldUmap, e.Kls, restore)
-			o.check("Ksl", d, e, e.SldUmap, e.LinUmap, e.Ksl, restore)
-			o.check("Kss", d, e, e.SldUmap, e.SldUmap, e.Kss, restore)
+			o.check("Kll", d, e, e.LinUmap, e.LinUmap, e.Kll)
+			o.check("Kls", d, e, e.LinUmap, e.SldUmap, e.Kls)
+			o.check("Ksl", d, e, e.SldUmap, e.LinUmap, e.Ksl)
+			o.check("Kss", d, e, e.SldUmap, e.SldUmap, e.Kss)
 		} else {
 			io.Pfred("warning: eid=%d does not correspond to BjointComp element\n", o.eid)
 		}
@@ -575,20 +426,33 @@ func (o testKb) skip() bool {
 }
 
 // aux_arrays generates auxiliary arrays
-func (o *testKb) aux_arrays(d *Domain) {
-	if len(o.Fbtmp) != d.Ny {
-		o.Fbtmp = make([]float64, d.Ny)
-		o.Yold = make([]float64, d.Ny)
-		o.ΔYbkp = make([]float64, d.Ny)
-	}
+func (o *testKb) aux_backup(d *Domain) {
+	o.Fbtmp = make([]float64, d.Ny)
+	o.Yold = make([]float64, d.Ny)
+	o.Ybkp = make([]float64, d.Ny)
+	o.ΔYbkp = make([]float64, d.Ny)
 	for i := 0; i < d.Ny; i++ {
 		o.Yold[i] = d.Sol.Y[i] - d.Sol.ΔY[i]
+		o.Ybkp[i] = d.Sol.Y[i]
 		o.ΔYbkp[i] = d.Sol.ΔY[i]
+	}
+	for _, eivs := range d.ElemIntvars {
+		eivs.BackupIvs(true) // true => aux
+	}
+}
+
+func (o *testKb) aux_restore(d *Domain) {
+	for i := 0; i < d.Ny; i++ {
+		d.Sol.Y[i] = o.Ybkp[i]
+		d.Sol.ΔY[i] = o.ΔYbkp[i]
+	}
+	for _, eivs := range d.ElemIntvars {
+		eivs.RestoreIvs(true) // true => aux
 	}
 }
 
 // check performs the checking of Kb using numerical derivatives
-func (o *testKb) check(label string, d *Domain, e Elem, Imap, Jmap []int, Kana [][]float64, restore func()) {
+func (o *testKb) check(label string, d *Domain, e Elem, Imap, Jmap []int, Kana [][]float64) {
 	var imap, jmap []int
 	if o.ni < 0 {
 		imap = Imap
@@ -617,7 +481,9 @@ func (o *testKb) check(label string, d *Domain, e Elem, Imap, Jmap []int, Kana [
 					o.Fbtmp[k] = 0
 					d.Sol.ΔY[k] = d.Sol.Y[k] - o.Yold[k]
 				}
-				restore()
+				for _, eivs := range d.ElemIntvars {
+					eivs.RestoreIvs(false)
+				}
 				err := d.UpdateElems()
 				if err != nil {
 					chk.Panic("testing: check: cannot update elements")
