@@ -389,12 +389,26 @@ func (o *Beam) Recompute(withM bool) {
 			for i := 0; i < 3; i++ {
 				dx[i] = o.X[i][1] - o.X[i][0]
 			}
-			tol := 1e-5                                         // tolerance to find horizontal/vertical beams
-			if math.Abs(dx[0]) < tol && math.Abs(dx[1]) < tol { // vertical (parallel to z)
+			tol := 1e-5 // tolerance to find horizontal/vertical beams
+			switch {
+
+			// vertical (parallel to z)
+			case math.Abs(dx[0]) < tol && math.Abs(dx[1]) < tol:
 				δ := 0.1 * dx[2] // + if 0->1 is going up
 				o.P02[0], o.P02[1], o.P02[2] = o.X[0][0]+δ, o.X[1][0], o.X[2][0]
-			} else {
-				chk.Panic("Beam: cannot compute P02 point for non-vertical beams yet")
+
+			// horizontal (perpendicular to z)
+			case math.Abs(dx[2]) < tol:
+				o.e0[0], o.e0[1], o.e0[2] = dx[0], dx[1], 0
+				o.e1[0], o.e1[1], o.e1[2] = 0, 0, 1
+				utl.Cross3d(o.e2, o.e0, o.e1) // e2 := e0 cross e1
+				l0 := la.VecNorm(o.e0)
+				l2 := la.VecNorm(o.e2)
+				δ := 0.1 * l0 / l2
+				o.P02[0], o.P02[1], o.P02[2] = o.X[0][0]+δ*o.e2[0], o.X[1][0]+δ*o.e2[1], o.X[2][0]
+
+			default:
+				chk.Panic("Beam: can only compute P02 vertex for vertical and horizontal beams")
 			}
 		}
 

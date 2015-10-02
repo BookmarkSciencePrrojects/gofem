@@ -288,3 +288,30 @@ func Test_beam04(tst *testing.T) {
 	tols := 1e-12
 	TestingCompareResultsU(tst, "data/beam04.sim", "cmp/bh414.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
 }
+
+func Test_beam05(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("beam04. 3D frame")
+
+	// fem
+	analysis := NewFEM("data/frame01.sim", "", true, true, false, false, chk.Verbose, 0)
+
+	// run simulation
+	err := analysis.Run()
+	if err != nil {
+		tst.Errorf("Run failed:\n%v", err)
+		return
+	}
+
+	// displacement @ top
+	dom := analysis.Domains[0]
+	nod := dom.Vid2node[7]
+	eqx := nod.GetEq("ux")
+	eqy := nod.GetEq("uy")
+	eqz := nod.GetEq("uz")
+	u := []float64{dom.Sol.Y[eqx], dom.Sol.Y[eqy], dom.Sol.Y[eqz]}
+	io.Pforan("u @ sel node = %v\n", u)
+
+	// TODO: add tests here
+}
