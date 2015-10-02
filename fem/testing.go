@@ -168,7 +168,7 @@ func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string,
 				if e, ok := dom.Cid2elem[eid].(*ElemU); ok {
 					for ip, val := range sig {
 						if verbose {
-							io.Pfgrey2("ip = %d\n", ip)
+							io.Pfgrey2("ip = %d @ %v\n", ip, e.Cell.Shp.IpRealCoords(e.X, e.IpsElem[ip]))
 						}
 						σ := e.States[ip].Sig
 						if len(val) == 6 {
