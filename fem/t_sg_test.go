@@ -221,12 +221,57 @@ func Test_sg515(tst *testing.T) {
 		return
 	}
 
+	// displacement @ top
+	dom := analysis.Domains[0]
+	nod := dom.Vid2node[0]
+	eqy := nod.GetEq("uy")
+	uy := dom.Sol.Y[eqy]
+	uy_cor := -5.310671749739340E-06
+	io.Pforan("uy @ top = %v (%v)\n", uy, uy_cor)
+	chk.Scalar(tst, "uy @ top", 1e-12, uy, uy_cor)
+
 	// check
-	skipK := false
-	tolK := 0.15
-	tolu := 3e-13
-	tols := 3e-8
-	TestingCompareResultsU(tst, "data/sg515.sim", "cmp/sg515.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	if true {
+		skipK := false
+		tolK := 0.15
+		tolu := 3e-13
+		tols := 3e-8
+		TestingCompareResultsU(tst, "data/sg515.sim", "cmp/sg515.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	}
+}
+
+func Test_sg527(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("sg527. plane strain qua9. qn given")
+
+	// run simulation
+	analysis := NewFEM("data/sg527.sim", "", true, true, false, false, chk.Verbose, 0)
+
+	// run simulation
+	err := analysis.Run()
+	if err != nil {
+		tst.Errorf("Run failed:\n%v", err)
+		return
+	}
+
+	// displacement @ top
+	dom := analysis.Domains[0]
+	nod := dom.Vid2node[0]
+	eqy := nod.GetEq("uy")
+	uy := dom.Sol.Y[eqy]
+	uy_cor := -5.298917281673461E-06
+	io.Pforan("uy @ top = %v (%v)\n", uy, uy_cor)
+	chk.Scalar(tst, "uy @ top", 1e-12, uy, uy_cor)
+
+	// check
+	if true {
+		skipK := true
+		tolK := 1e-17
+		tolu := 3e-13
+		tols := 5e-8
+		TestingCompareResultsU(tst, "data/sg527.sim", "cmp/sg527.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	}
 }
 
 func Test_sg517(tst *testing.T) {
