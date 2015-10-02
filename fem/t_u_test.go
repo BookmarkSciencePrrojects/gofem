@@ -169,3 +169,89 @@ func Test_square01(tst *testing.T) {
 		sol.CheckStress(tst, t, σ, x, tols)
 	}
 }
+
+func Test_selfweight01(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("selfweight01. self-weight")
+
+	// fem
+	analysis := NewFEM("data/selfweight01.sim", "", true, true, false, false, chk.Verbose, 0)
+
+	// run simulation
+	err := analysis.Run()
+	if err != nil {
+		tst.Errorf("Run failed\n%v", err)
+		return
+	}
+
+	// displacement @ top
+	dom := analysis.Domains[0]
+	nod := dom.Vid2node[0]
+	eqy := nod.GetEq("uy")
+	uy := dom.Sol.Y[eqy]
+	uy_cor := -8.737017006803450E-05
+	io.Pforan("uy @ top = %v (%v)\n", uy, uy_cor)
+	chk.Scalar(tst, "uy @ top", 1e-11, uy, uy_cor)
+
+	// check
+	if true {
+		skipK := true
+		tolK := 1e-17
+		tolu := 1e-11
+		tols := 1e-5
+		TestingCompareResultsU(tst, "data/selfweight01.sim", "cmp/singleq9grav.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	}
+}
+
+func Test_selfweight02(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("selfweight02. self-weight")
+
+	// fem
+	analysis := NewFEM("data/selfweight02.sim", "", true, true, false, false, chk.Verbose, 0)
+
+	// run simulation
+	err := analysis.Run()
+	if err != nil {
+		tst.Errorf("Run failed\n%v", err)
+		return
+	}
+
+	// domain and element
+	dom := analysis.Domains[0]
+	ele := dom.Elems[0].(*ElemU)
+
+	// solution
+	var sol ana.ConfinedSelfWeight
+	sol.Init(fun.Prms{
+		&fun.Prm{N: "E", V: 1e3},
+		&fun.Prm{N: "nu", V: 0.25},
+		&fun.Prm{N: "rho", V: 2.0},
+		&fun.Prm{N: "g", V: 10.0},
+		&fun.Prm{N: "h", V: 1.0},
+		&fun.Prm{N: "w", V: 1.0},
+	})
+
+	// check displacements
+	t := 1.0
+	tolu := 1e-16
+	for _, n := range dom.Nodes {
+		eqx := n.GetEq("ux")
+		eqy := n.GetEq("uy")
+		eqz := n.GetEq("uz")
+		u := []float64{dom.Sol.Y[eqx], dom.Sol.Y[eqy], dom.Sol.Y[eqz]}
+		io.Pfyel("x=%v u=%v\n", n.Vert.C, u)
+		sol.CheckDispl(tst, t, u, n.Vert.C, tolu)
+	}
+
+	// check stresses
+	tols := 1e-13
+	for idx, ip := range ele.IpsElem {
+		x := ele.Cell.Shp.IpRealCoords(ele.X, ip)
+		σ := ele.States[idx].Sig
+		//io.Pforan("\nσ = %v\n", σ)
+		sol.CheckStress(tst, t, σ, x, tols)
+	}
+}

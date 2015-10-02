@@ -1,0 +1,33 @@
+{
+  "data" : {
+    "matfile" : "simple.mat",
+    "steady"  : true,
+    "showR"   : true
+  },
+  "functions" : [
+    { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10.0, "u":"m/s²" }] }
+  ],
+  "regions" : [
+    {
+      "mshfile" : "box.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"elast", "type":"u", "extra":"!debug:0" }
+      ]
+    }
+  ],
+  "stages" : [
+    {
+      "desc" : "apply gravity",
+      "facebcs" : [
+        { "tag":-10, "keys":["ux"], "funcs":["zero"] },
+        { "tag":-11, "keys":["ux"], "funcs":["zero"] },
+        { "tag":-20, "keys":["uy"], "funcs":["zero"] },
+        { "tag":-21, "keys":["uy"], "funcs":["zero"] },
+        { "tag":-30, "keys":["uz"], "funcs":["zero"] }
+      ],
+      "eleconds" : [
+        { "tag":-1, "keys":["g"], "funcs":["grav"] }
+      ]
+    }
+  ]
+}

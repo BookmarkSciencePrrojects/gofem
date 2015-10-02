@@ -321,6 +321,11 @@ func (o *ElemU) AddToRhs(fb []float64, sol *Solution) (err error) {
 		la.VecFill(o.fi, 0)
 	}
 
+	// compute gravity
+	if o.Gfcn != nil {
+		o.grav[o.Ndim-1] = -o.Gfcn.F(sol.T, nil)
+	}
+
 	// for each integration point
 	nverts := o.Cell.Shp.Nverts
 	for idx, ip := range o.IpsElem {
@@ -357,7 +362,15 @@ func (o *ElemU) AddToRhs(fb []float64, sol *Solution) (err error) {
 		}
 
 		// dynamic term
-		if !sol.Steady {
+		if sol.Steady {
+			if o.Gfcn != nil {
+				for m := 0; m < nverts; m++ {
+					i := o.Ndim - 1
+					r := o.Umap[i+m*o.Ndim]
+					fb[r] += coef * S[m] * o.Rho * o.grav[i] // +fx
+				}
+			}
+		} else {
 			α1 := sol.DynCfs.α1
 			α4 := sol.DynCfs.α4
 			for m := 0; m < nverts; m++ {
