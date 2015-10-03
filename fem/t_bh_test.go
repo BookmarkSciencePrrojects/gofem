@@ -213,7 +213,7 @@ func Test_bh14c(tst *testing.T) {
 	chk.PrintTitle("bh14c. truss. using go-routines")
 
 	// channels
-	nch := 2
+	nch := 3
 	done := make(chan int, nch)
 
 	// allocate structures and set stage

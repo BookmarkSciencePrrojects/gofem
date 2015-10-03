@@ -8,6 +8,7 @@ package shp
 import (
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/gm"
+	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/utl"
 )
@@ -129,6 +130,9 @@ func (o Shape) GetCopy() *Shape {
 // factory holds all Shapes available
 var factory = make(map[string]*Shape)
 
+// _shapes (internal) holds pre-allocated shapes with goroutineId > 0; key => Shape
+var _shapes = make(map[string]*Shape)
+
 // Get returns an existent Shape structure
 //  Note: 1) returns nil on errors
 //        2) use goroutineId > 0 to get a copy
@@ -138,7 +142,13 @@ func Get(geoType string, goroutineId int) *Shape {
 		return nil
 	}
 	if goroutineId > 0 {
-		return s.GetCopy()
+		key := io.Sf("%s_%d", geoType, goroutineId)
+		if shape, found := _shapes[key]; found {
+			return shape
+		}
+		shape := s.GetCopy()
+		_shapes[key] = shape
+		return shape
 	}
 	return s
 }
