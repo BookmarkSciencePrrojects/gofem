@@ -166,7 +166,7 @@ func Test_spo751b(tst *testing.T) {
 		verb := false
 		skipK := true
 		tolK := 1e-17
-		tolu := 1e-13
+		tolu := 1e-12
 		tols := 1e-14
 		TestingCompareResultsU(tst, "data/spo751.sim", "cmp/spo751.cmp", "", tolK, tolu, tols, skipK, verb)
 	}
