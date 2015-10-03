@@ -16,7 +16,7 @@ type RjointM1 struct {
 	ks  float64 // elasticity constant
 	τy0 float64 // initial yield stress
 	kh  float64 // hardening modulus
-	μ   float64 // frictioin coefficient
+	μ   float64 // friction coefficient
 }
 
 // Init initialises model
@@ -53,6 +53,11 @@ func (o RjointM1) InitIntVars(τ, q1, q2 float64) (s *OnedState, err error) {
 	s.Phi[0] = q1
 	s.Phi[1] = q2
 	return
+}
+
+// Set_mu sets μ parameter
+func (o *RjointM1) Set_mu(mu float64) {
+	o.μ = mu
 }
 
 // Update updates stresses for given strains

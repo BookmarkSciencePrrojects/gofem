@@ -112,6 +112,7 @@ type Domain struct {
 // Clean cleans memory allocated by domain
 func (o *Domain) Clean() {
 	o.LinSol.Clean()
+	o.InitLSol = true // tell solver that lis has to be initialised before use
 }
 
 // NewDomains returns domains
