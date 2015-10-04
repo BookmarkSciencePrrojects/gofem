@@ -18,6 +18,10 @@
       ]
     }
   ],
+  "linsol" : {
+    "name" : "mumps",
+    "verbose" : true
+  },
   "stages" : [
     {
       "desc"    : "apply loading",

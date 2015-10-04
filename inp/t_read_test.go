@@ -120,6 +120,8 @@ func Test_sim01(tst *testing.T) {
 	io.Pfyel("Wrho0   = %v\n", sim.WaterRho0)
 	io.Pfyel("Wbulk   = %v\n", sim.WaterBulk)
 	io.Pfyel("Wlevel  = %v\n", sim.WaterLevel)
+
+	io.Pfcyan("\nLinSol.Name = %v\n", sim.LinSol.Name)
 }
 
 func Test_sim02(tst *testing.T) {
