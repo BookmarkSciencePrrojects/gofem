@@ -37,7 +37,7 @@ func main() {
 	erasePrev := io.ArgToBool(2, true)
 	saveSummary := io.ArgToBool(3, true)
 	allowParallel := io.ArgToBool(4, true)
-	alias := io.ArgToString(5, "")
+	doprof := io.ArgToInt(5, 0)
 
 	// message
 	if mpi.Rank() == 0 && verbose {
@@ -52,14 +52,17 @@ func main() {
 			"erase previous results", "erasePrev", erasePrev,
 			"save summary", "saveSummary", saveSummary,
 			"allow parallel run", "allowParallel", allowParallel,
-			"word to add to results", "alias", alias,
+			"profiling: 0=none 1=CPU 2=MEM", "doprof", doprof,
 		))
 	}
 
 	// profiling?
-	defer utl.DoProf(false)()
+	if doprof > 0 {
+		defer utl.DoProf(false, doprof)()
+	}
 
 	// analysis data
+	alias := ""
 	readSummary := false
 	analysis := fem.NewFEM(fnamepath, alias, erasePrev, saveSummary, readSummary, allowParallel, verbose, 0)
 
