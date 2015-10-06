@@ -230,8 +230,6 @@ package mreten implements models for liquid retention curves
 			<p>
 			<span style="font-size:90%">
 			
-				<a href="/src/github.com/cpmech/gofem/mreten/auxiliary.go">auxiliary.go</a>
-			
 				<a href="/src/github.com/cpmech/gofem/mreten/bc.go">bc.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/mreten/lin.go">lin.go</a>
@@ -661,7 +659,7 @@ Nonrate is a subset of LRM that directly computes saturation from capillary pres
 		
 			
 			
-			<h2 id="RefM1">type <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=1094:1778#L15">RefM1</a></h2>
+			<h2 id="RefM1">type <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=1124:1808#L16">RefM1</a></h2>
 			<pre>type RefM1 struct {
     A <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Amplitude and pc_ref for non-default model</span>
 
@@ -699,7 +697,7 @@ RefM1 implements a nonlinear liquid retention model based on the concept of refe
 
 			
 				
-				<h3 id="RefM1.Cc">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=3440:3511#L114">Cc</a></h3>
+				<h3 id="RefM1.Cc">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=3470:3541#L115">Cc</a></h3>
 				<pre>func (o *<a href="#RefM1">RefM1</a>) Cc(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (Ccval <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 compute Cc(pc,sl) := dsl/dpc
@@ -710,7 +708,7 @@ compute Cc(pc,sl) := dsl/dpc
 				
 			
 				
-				<h3 id="RefM1.Derivs">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=4858:4944#L177">Derivs</a></h3>
+				<h3 id="RefM1.Derivs">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=4892:4978#L178">Derivs</a></h3>
 				<pre>func (o *<a href="#RefM1">RefM1</a>) Derivs(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (L, Lx, J, Jx, Jy <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 derivatives
@@ -721,7 +719,7 @@ derivatives
 				
 			
 				
-				<h3 id="RefM1.GetPrms">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=2923:2968#L92">GetPrms</a></h3>
+				<h3 id="RefM1.GetPrms">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=2953:2998#L93">GetPrms</a></h3>
 				<pre>func (o <a href="#RefM1">RefM1</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
@@ -732,7 +730,7 @@ GetPrms gets (an example) of parameters
 				
 			
 				
-				<h3 id="RefM1.Init">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=1906:1953#L39">Init</a></h3>
+				<h3 id="RefM1.Init">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=1936:1983#L40">Init</a></h3>
 				<pre>func (o *<a href="#RefM1">RefM1</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
@@ -743,7 +741,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="RefM1.J">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=4342:4401#L156">J</a></h3>
+				<h3 id="RefM1.J">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=4372:4431#L157">J</a></h3>
 				<pre>func (o <a href="#RefM1">RefM1</a>) J(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 J computes J = ∂Cc/∂sl
@@ -754,7 +752,7 @@ J computes J = ∂Cc/∂sl
 				
 			
 				
-				<h3 id="RefM1.L">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=3745:3804#L132">L</a></h3>
+				<h3 id="RefM1.L">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=3775:3834#L133">L</a></h3>
 				<pre>func (o <a href="#RefM1">RefM1</a>) L(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L computes L = ∂Cc/∂pc
@@ -765,7 +763,7 @@ L computes L = ∂Cc/∂pc
 				
 			
 				
-				<h3 id="RefM1.SlMin">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=3359:3389#L109">SlMin</a></h3>
+				<h3 id="RefM1.SlMin">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mreten/refm1.go?s=3389:3419#L110">SlMin</a></h3>
 				<pre>func (o <a href="#RefM1">RefM1</a>) SlMin() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 SlMin returns sl_min

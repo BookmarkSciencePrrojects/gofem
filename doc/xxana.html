@@ -54,6 +54,12 @@ package ana implements analytical solutions
 <p>
 package ana implements analytical solutions
 </p>
+<p>
+package ana implements analytical solutions
+</p>
+<p>
+package ana implements analytical solutions
+</p>
 
 			</div>
 		</div>
@@ -77,6 +83,37 @@ package ana implements analytical solutions
 			
 			
 				
+				<dd><a href="#ConfinedSelfWeight">type ConfinedSelfWeight</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ConfinedSelfWeight.CheckDispl">func (o ConfinedSelfWeight) CheckDispl(tst *testing.T, t float64, u, x []float64, tol float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ConfinedSelfWeight.CheckStress">func (o ConfinedSelfWeight) CheckStress(tst *testing.T, t float64, σ, x []float64, tol float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ConfinedSelfWeight.Displ">func (o ConfinedSelfWeight) Displ(t float64, x []float64) (u []float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ConfinedSelfWeight.Init">func (o *ConfinedSelfWeight) Init(prms fun.Prms)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ConfinedSelfWeight.Stress">func (o ConfinedSelfWeight) Stress(t float64, x []float64) (σ []float64)</a></dd>
+				
+			
+				
+				<dd><a href="#CrossSection">type CrossSection</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CrossSection.GetMatString">func (o *CrossSection) GetMatString(numfmt string) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CrossSection.Init">func (o *CrossSection) Init(typ, unitLen string, wid, hei, tf, tw, rad float64)</a></dd>
+				
+			
+				
 				<dd><a href="#CteStressPstrain">type CteStressPstrain</a></dd>
 				
 				
@@ -91,6 +128,34 @@ package ana implements analytical solutions
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#CteStressPstrain.Solution">func (o CteStressPstrain) Solution(t float64) (σx, σy, σz, εx, εy float64)</a></dd>
+				
+			
+				
+				<dd><a href="#Material">type Material</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Material.GetMatString">func (o *Material) GetMatString(name, model, numfmt string, section *CrossSection) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Material.Init">func (o *Material) Init(typ, unitPres string)</a></dd>
+				
+			
+				
+				<dd><a href="#PlateHole">type PlateHole</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PlateHole.CompareStress">func (o *PlateHole) CompareStress(t float64, x, σ []float64, tol float64, verbose bool) (e []float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PlateHole.Init">func (o *PlateHole) Init(prms fun.Prms)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PlateHole.PlotStress">func (o *PlateHole) PlotStress(t, L float64, npts int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PlateHole.Stress">func (o *PlateHole) Stress(t float64, x []float64) (sx, sy, sz, sxy float64)</a></dd>
 				
 			
 				
@@ -130,7 +195,13 @@ package ana implements analytical solutions
 			<p>
 			<span style="font-size:90%">
 			
+				<a href="/src/github.com/cpmech/gofem/ana/confined-selfweight.go">confined-selfweight.go</a>
+			
 				<a href="/src/github.com/cpmech/gofem/ana/constantstress.go">constantstress.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ana/materials_and_sections.go">materials_and_sections.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ana/plate_hole.go">plate_hole.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/ana/polar_stresses.go">polar_stresses.go</a>
 			
@@ -195,6 +266,194 @@ Cartesian components
 			
 
 		
+		
+			
+			
+			<h2 id="ConfinedSelfWeight">type <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=735:1070#L15">ConfinedSelfWeight</a></h2>
+			<pre>type ConfinedSelfWeight struct {
+    <span class="comment">// input</span>
+    E <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young&#39;s modulus</span>
+
+    M <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// P-wave modulus</span>
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+ConfinedSelfWeight computes the solution to a simple confined linear elastic domain under gravity
+</p>
+<pre>   ▷ o-----------o ◁
+   ▷ |           | ◁
+   ▷ |    E, ρ   | ◁       negative stress means compression
+h  ▷ |    ν, g   | ◁       g = 10  =&gt;  b = -10 * ρ (body force)
+   ▷ |           | ◁
+   ▷ o-----------o ◁
+     △  △  △  △  △
+           w
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="ConfinedSelfWeight.CheckDispl">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=2855:2949#L104">CheckDispl</a></h3>
+				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) CheckDispl(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, t <a href="/pkg/builtin/#float64">float64</a>, u, x []<a href="/pkg/builtin/#float64">float64</a>, tol <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+CheckDispl checks displacements
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ConfinedSelfWeight.CheckStress">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=2654:2750#L98">CheckStress</a></h3>
+				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) CheckStress(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, t <a href="/pkg/builtin/#float64">float64</a>, σ, x []<a href="/pkg/builtin/#float64">float64</a>, tol <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+CheckStress check stresses
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ConfinedSelfWeight.Displ">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=2181:2252#L82">Displ</a></h3>
+				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) Displ(t <a href="/pkg/builtin/#float64">float64</a>, x []<a href="/pkg/builtin/#float64">float64</a>) (u []<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+Displ computes displacement components
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ConfinedSelfWeight.Init">func (*ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=1107:1155#L30">Init</a></h3>
+				<pre>func (o *<a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>)</pre>
+				<p>
+Init initialises this structure
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ConfinedSelfWeight.Stress">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=1689:1762#L66">Stress</a></h3>
+				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) Stress(t <a href="/pkg/builtin/#float64">float64</a>, x []<a href="/pkg/builtin/#float64">float64</a>) (σ []<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+Stress computes stress components
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="CrossSection">type <a href="https://github.com/cpmech/gofem/blob/master/ana/materials_and_sections.go?s=1873:2426#L44">CrossSection</a></h2>
+			<pre>type CrossSection struct {
+
+    <span class="comment">// input</span>
+    Type <a href="/pkg/builtin/#string">string</a>  <span class="comment">// &#34;rectangle&#34;, &#34;I-beam&#34; or &#34;circle&#34;</span>
+    Unit <a href="/pkg/builtin/#string">string</a>  <span class="comment">// unit of length</span>
+    Wid  <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// width (b) if not circular</span>
+    Hei  <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// height (h) if not circular</span>
+    Tf   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// flange thickness if I-beam</span>
+    Tw   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// web thickness if I-beam</span>
+    R    <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// radius if circular</span>
+
+    <span class="comment">// derived</span>
+    A   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// cross-sectional area</span>
+    I22 <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// major cross-section moment of inertia (about r-axis)</span>
+    I11 <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// minor cross-section moment of inertia (about s-axis)</span>
+    Jtt <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// torsional constant</span>
+}</pre>
+			<p>
+CrossSection computes cross-sectional moments of inertia and other properties
+</p>
+<pre>2D    y1     y2 is out-of-plane
+       ^
+       |
+       o-------------------------------o
+       |                               |
+       |                               |
+     (y2)------------------------------o-------&gt; y0
+
+3D                    ,o--------o    ,y0
+                    ,&#39; :     ,&#39; |  ,&#39;
+      y1          ,&#39;       ,&#39;   |,&#39;
+       ^        ,&#39;     : ,&#39;    ,|
+       |      ,&#39;       ,&#39;    ,  |
+       |    ,&#39;       ,&#39;    ,    |
+       |  ,&#39;       ,&#39;  : ,      |
+       |,&#39;       ,&#39;    +  - - - o
+       o--------o    ,        ,&#39;
+       |        |  ,        ,&#39;
+       |        |,        ,&#39;
+       |       ,|       ,&#39;         I22 ~ Imax
+       |     ,  |     ,&#39;           I11 ~ Imin
+       |   ,    |   ,&#39;             Jtt
+       | ,      | ,&#39;
+       o--------o&#39; --------&gt; y2
+
+ typ : rectangle
+       circle                             tw
+       I-beam                         --&gt;| |&lt;--
+                                  ___    | |     ___
+ ^ 1       +-------+            tf |   ########   |
+ |         |       |              ---  ########   |
+ |         |       |                      ##      |
+ +----&gt; 2  |       | h = hei              ##      | h = hei
+           |       |                      ##      |
+           |       |              ---  ########   |
+           +-------+            tf_|_  ########  ---
+            b = wid                    b = wid
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="CrossSection.GetMatString">func (*CrossSection) <a href="https://github.com/cpmech/gofem/blob/master/ana/materials_and_sections.go?s=3582:3639#L112">GetMatString</a></h3>
+				<pre>func (o *<a href="#CrossSection">CrossSection</a>) GetMatString(numfmt <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+GetMatString returns string representation of cross-section for .mat file
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="CrossSection.Init">func (*CrossSection) <a href="https://github.com/cpmech/gofem/blob/master/ana/materials_and_sections.go?s=2489:2568#L63">Init</a></h3>
+				<pre>func (o *<a href="#CrossSection">CrossSection</a>) Init(typ, unitLen <a href="/pkg/builtin/#string">string</a>, wid, hei, tf, tw, rad <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+Init initialises structure and computes moment of inertia
+</p>
+
+				
+				
+				
+			
 		
 			
 			
@@ -269,6 +528,147 @@ Init initialises this structure
 				<pre>func (o <a href="#CteStressPstrain">CteStressPstrain</a>) Solution(t <a href="/pkg/builtin/#float64">float64</a>) (σx, σy, σz, εx, εy <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Solution computes solution
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Material">type <a href="https://github.com/cpmech/gofem/blob/master/ana/materials_and_sections.go?s=4074:4424#L121">Material</a></h2>
+			<pre>type Material struct {
+
+    <span class="comment">// input</span>
+    Type     <a href="/pkg/builtin/#string">string</a> <span class="comment">// type of material; e.g. &#34;steel&#34;</span>
+    UnitPres <a href="/pkg/builtin/#string">string</a> <span class="comment">// unit of pressure</span>
+
+    <span class="comment">// derived</span>
+    UnitDens <a href="/pkg/builtin/#string">string</a>  <span class="comment">// unit of density</span>
+    Desc     <a href="/pkg/builtin/#string">string</a>  <span class="comment">// description</span>
+    E        <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young&#39;s modulus</span>
+    Nu       <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Poisson&#39;s coefficient</span>
+    G        <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// shear modulus</span>
+    Rho      <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// density</span>
+}</pre>
+			<p>
+Material holds parameters of some reference materials
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Material.GetMatString">func (*Material) <a href="https://github.com/cpmech/gofem/blob/master/ana/materials_and_sections.go?s=6327:6416#L206">GetMatString</a></h3>
+				<pre>func (o *<a href="#Material">Material</a>) GetMatString(name, model, numfmt <a href="/pkg/builtin/#string">string</a>, section *<a href="#CrossSection">CrossSection</a>) <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Material.Init">func (*Material) <a href="https://github.com/cpmech/gofem/blob/master/ana/materials_and_sections.go?s=4605:4650#L141">Init</a></h3>
+				<pre>func (o *<a href="#Material">Material</a>) Init(typ, unitPres <a href="/pkg/builtin/#string">string</a>)</pre>
+				<p>
+Init initialises material paramters
+</p>
+<pre>Input:
+ unitPres:  &#34;kPa&#34; =&gt; E:[kPa], rho:[Mg/m^3]
+		    &#34;MPa&#34; =&gt; E:[MPa], rho:[Gg/m^3]
+		    &#34;GPa&#34; =&gt; E:[GPa], rho:[Tg/m^3]
+</pre>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="PlateHole">type <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=758:1027#L20">PlateHole</a></h2>
+			<pre>type PlateHole struct {
+    E <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young&#39;s modulus</span>
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+PlateHole implements Kirsch&#39;s solution to 2D Plate with hole
+</p>
+<pre>y ^
+  |    qnV
+  ↓↓↓↓↓↓↓↓↓↓↓↓↓
+  ------------- ←
+  |           | ←
+ ▷|      E    | ←
+  |      ν    | ← qnH
+  `&#39;-.        | ←
+      \       | ←
+   r   -------- ← ---&gt; x
+          △
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="PlateHole.CompareStress">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=2298:2400#L98">CompareStress</a></h3>
+				<pre>func (o *<a href="#PlateHole">PlateHole</a>) CompareStress(t <a href="/pkg/builtin/#float64">float64</a>, x, σ []<a href="/pkg/builtin/#float64">float64</a>, tol <a href="/pkg/builtin/#float64">float64</a>, verbose <a href="/pkg/builtin/#bool">bool</a>) (e []<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+CompareStress compares stresses
+</p>
+<pre>Output:
+ e -- L² error for each component
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="PlateHole.Init">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=1064:1103#L32">Init</a></h3>
+				<pre>func (o *<a href="#PlateHole">PlateHole</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>)</pre>
+				<p>
+Init initialises this structure
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="PlateHole.PlotStress">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=2926:2980#L122">PlotStress</a></h3>
+				<pre>func (o *<a href="#PlateHole">PlateHole</a>) PlotStress(t, L <a href="/pkg/builtin/#float64">float64</a>, npts <a href="/pkg/builtin/#int">int</a>)</pre>
+				<p>
+PlotStress plots stresses along y=0 (horizontal line) and x=0 (vertical line)
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="PlateHole.Stress">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=1477:1553#L61">Stress</a></h3>
+				<pre>func (o *<a href="#PlateHole">PlateHole</a>) Stress(t <a href="/pkg/builtin/#float64">float64</a>, x []<a href="/pkg/builtin/#float64">float64</a>) (sx, sy, sz, sxy <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+Stress computes stresses @ (x,y) and time t
 </p>
 
 				

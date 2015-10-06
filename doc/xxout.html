@@ -73,6 +73,9 @@ package out implements FE simulation output handling for analyses and plotting
 			
 			
 				
+				<dd><a href="#BeamDiagMoment">func BeamDiagMoment(alias string, idxI int, withtext bool, numfmt string, tolM, coef, sf float64)</a></dd>
+			
+				
 				<dd><a href="#CombineEidIps">func CombineEidIps(eids, ips []int) (eids_ips [][]int)</a></dd>
 			
 				
@@ -80,6 +83,9 @@ package out implements FE simulation output handling for analyses and plotting
 			
 				
 				<dd><a href="#Define">func Define(alias string, loc Locator)</a></dd>
+			
+				
+				<dd><a href="#DefineBeams">func DefineBeams()</a></dd>
 			
 				
 				<dd><a href="#Draw">func Draw(dirout, fname string, show bool, extra ExtraPlt)</a></dd>
@@ -293,6 +299,8 @@ package out implements FE simulation output handling for analyses and plotting
 			
 				<a href="/src/github.com/cpmech/gofem/out/auxiliary.go">auxiliary.go</a>
 			
+				<a href="/src/github.com/cpmech/gofem/out/beamdiagrams.go">beamdiagrams.go</a>
+			
 				<a href="/src/github.com/cpmech/gofem/out/extrap.go">extrap.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/out/filtering.go">filtering.go</a>
@@ -389,6 +397,7 @@ constants
     <span id="IpsBins">IpsBins</span>   <a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Bins">Bins</a>          <span class="comment">// bins for integration points</span>
     <span id="IpsMin">IpsMin</span>    []<a href="/pkg/builtin/#float64">float64</a>        <span class="comment">// [ndim] {x,y,z}_min among all ips</span>
     <span id="IpsMax">IpsMax</span>    []<a href="/pkg/builtin/#float64">float64</a>        <span class="comment">// [ndim] {x,y,z}_max among all ips</span>
+    <span id="Beams">Beams</span>     []*<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Beam">Beam</a>      <span class="comment">// beams, if any</span>
 
     <span class="comment">// defined entities and results loaded by LoadResults</span>
     <span id="Planes">Planes</span>   map[<a href="/pkg/builtin/#string">string</a>]*<a href="#PlaneData">PlaneData</a> <span class="comment">// for points defined on planes. maps aliases to data</span>
@@ -410,6 +419,28 @@ Global variables
 
 			
 		
+		
+			
+			
+			<h2 id="BeamDiagMoment">func <a href="https://github.com/cpmech/gofem/blob/master/out/beamdiagrams.go?s=1104:1201#L21">BeamDiagMoment</a></h2>
+			<pre>func BeamDiagMoment(alias <a href="/pkg/builtin/#string">string</a>, idxI <a href="/pkg/builtin/#int">int</a>, withtext <a href="/pkg/builtin/#bool">bool</a>, numfmt <a href="/pkg/builtin/#string">string</a>, tolM, coef, sf <a href="/pkg/builtin/#float64">float64</a>)</pre>
+			<p>
+BeamDiagMoment plots beam&#39;s bending moment diagram
+</p>
+<pre>Input
+ alias -- use &#34;&#34; for all beams
+ idxI  -- index in TimeInds slice corresponding to selected output time; use -1 for the last item.
+         If alias defines a single point, the whole time series is returned and idxI is ignored.
+ withtext  -- show bending moment values
+ numfmt    -- number format for values. use &#34;&#34; for default
+ tolM      -- tolerance to clip absolute values of M
+ coef      -- coefficient to scale max(dimension) divided by max(Y); e.g. 0.1
+ sf        -- scaling factor. use 0 for automatic computation
+</pre>
+
+			
+			
+
 		
 			
 			
@@ -445,6 +476,18 @@ Define defines aliases
 Note:
   To use spaces in aliases, prefix the alias with an exclamation mark; e.g &#34;!right column&#34;
 </pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="DefineBeams">func <a href="https://github.com/cpmech/gofem/blob/master/out/beamdiagrams.go?s=357:375#L4">DefineBeams</a></h2>
+			<pre>func DefineBeams()</pre>
+			<p>
+DefineBeams define aliases for beams; e.g. &#34;beam0&#34;, &#34;beam1&#34;, etc.
+</p>
 
 			
 			
@@ -660,7 +703,7 @@ SplotConfig configures units and scales of axes
 		
 			
 			
-			<h2 id="Start">func <a href="https://github.com/cpmech/gofem/blob/master/out/out.go?s=1991:2044#L47">Start</a></h2>
+			<h2 id="Start">func <a href="https://github.com/cpmech/gofem/blob/master/out/out.go?s=2036:2089#L48">Start</a></h2>
 			<pre>func Start(simfnpath <a href="/pkg/builtin/#string">string</a>, stageIdx, regionIdx <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Start starts handling of results given a simulation input file
@@ -726,7 +769,7 @@ AlongX implements LineLocator with []float64{y_cte} or []float64{y_cte, z_cte}
 
 			
 				
-				<h3 id="AlongX.Locate">func (AlongX) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4295:4332#L198">Locate</a></h3>
+				<h3 id="AlongX.Locate">func (AlongX) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4301:4338#L198">Locate</a></h3>
 				<pre>func (o <a href="#AlongX">AlongX</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points
@@ -758,7 +801,7 @@ AlongY implements LineLocator with []float64{x_cte} or []float64{x_cte, z_cte}
 
 			
 				
-				<h3 id="AlongY.Locate">func (AlongY) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4484:4521#L207">Locate</a></h3>
+				<h3 id="AlongY.Locate">func (AlongY) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4512:4549#L207">Locate</a></h3>
 				<pre>func (o <a href="#AlongY">AlongY</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points
@@ -790,7 +833,7 @@ AlongZ implements LineLocator with []float64{x_cte, y_cte}
 
 			
 				
-				<h3 id="AlongZ.Locate">func (AlongZ) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4673:4710#L216">Locate</a></h3>
+				<h3 id="AlongZ.Locate">func (AlongZ) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4723:4760#L216">Locate</a></h3>
 				<pre>func (o <a href="#AlongZ">AlongZ</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points
@@ -933,7 +976,7 @@ Ids or tags of vertices can be stored in Verts
 
 			
 				
-				<h3 id="AllNodes">func <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=5261:5278#L246">AllNodes</a></h3>
+				<h3 id="AllNodes">func <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=5333:5350#L246">AllNodes</a></h3>
 				<pre>func AllNodes() <a href="#N">N</a></pre>
 				<p>
 AllNodes returns all nodes
@@ -980,7 +1023,7 @@ OnZplane implements locator for nodes/ips on plane perpendicular to z-axis
 
 			
 				
-				<h3 id="OnZplane.Locate">func (OnZplane) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4874:4913#L222">Locate</a></h3>
+				<h3 id="OnZplane.Locate">func (OnZplane) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4946:4985#L222">Locate</a></h3>
 				<pre>func (o <a href="#OnZplane">OnZplane</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points on z-plane. TODO: use bins to optimise search
@@ -1014,7 +1057,7 @@ Pairs of ids or tags of cells and integration points indices can be stored in Ce
 
 			
 				
-				<h3 id="AllIps">func <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=5091:5106#L235">AllIps</a></h3>
+				<h3 id="AllIps">func <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=5163:5178#L235">AllIps</a></h3>
 				<pre>func AllIps() <a href="#P">P</a></pre>
 				<p>
 AllIps returns all cell/ip indices
@@ -1039,7 +1082,7 @@ Locate finds points
 		
 			
 			
-			<h2 id="PlaneData">type <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=490:1333#L9">PlaneData</a></h2>
+			<h2 id="PlaneData">type <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=489:1332#L9">PlaneData</a></h2>
 			<pre>type PlaneData struct {
     Plane <a href="/pkg/builtin/#int">int</a>          <span class="comment">// Plane indicator: {0,1,2} == {x-pane, y-plane, z-plane}. plane perpendicular to {x,y,z}</span>
     Ids   map[<a href="/pkg/builtin/#int">int</a>]<a href="/pkg/builtin/#bool">bool</a> <span class="comment">// Ids in Dom.Msh.Verts or Ipoints of notes/ips on plane</span>
@@ -1068,7 +1111,7 @@ PlaneData holds data for handling planes described by {u,v}-coordinates
 
 			
 				
-				<h3 id="NodesOnPlane">func <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=2952:2990#L77">NodesOnPlane</a></h3>
+				<h3 id="NodesOnPlane">func <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=2951:2989#L77">NodesOnPlane</a></h3>
 				<pre>func NodesOnPlane(ftag <a href="/pkg/builtin/#int">int</a>) *<a href="#PlaneData">PlaneData</a></pre>
 				<p>
 NodesOnPlane finds vertices located on {x,y,z} plane and returns an iterator
@@ -1093,7 +1136,7 @@ Note:
 
 			
 				
-				<h3 id="PlaneData.ConnectResults">func (*PlaneData) <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=1742:1790#L42">ConnectResults</a></h3>
+				<h3 id="PlaneData.ConnectResults">func (*PlaneData) <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=1741:1789#L42">ConnectResults</a></h3>
 				<pre>func (o *<a href="#PlaneData">PlaneData</a>) ConnectResults(alias <a href="/pkg/builtin/#string">string</a>)</pre>
 				<p>
 ConnectResults connects Ids to Points in Results structure
@@ -1104,7 +1147,7 @@ ConnectResults connects Ids to Points in Results structure
 				
 			
 				
-				<h3 id="PlaneData.Locate">func (PlaneData) <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=1402:1442#L26">Locate</a></h3>
+				<h3 id="PlaneData.Locate">func (PlaneData) <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=1401:1441#L26">Locate</a></h3>
 				<pre>func (o <a href="#PlaneData">PlaneData</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points on plane =&gt; implement the Locator interface

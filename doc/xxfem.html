@@ -89,9 +89,6 @@ package fem contains elements and solvers for running simulations using the fini
 				<dd><a href="#GetContactFaceFlags">func GetContactFaceFlags(extra string) (Macaulay bool, BetRamp, Kappa float64)</a></dd>
 			
 				
-				<dd><a href="#GetIntegrationPoints">func GetIntegrationPoints(nip, nipf int, cellType string) (ipsElem, ipsFace []*shp.Ipoint, err error)</a></dd>
-			
-				
 				<dd><a href="#GetIsEssenKeyMap">func GetIsEssenKeyMap() map[string]bool</a></dd>
 			
 				
@@ -125,6 +122,9 @@ package fem contains elements and solvers for running simulations using the fini
 				<dd><a href="#NewDomains">func NewDomains(sim *inp.Simulation, dyncfs *DynCoefs, hydsta *HydroStatic, proc, nproc int, distr bool) (doms []*Domain)</a></dd>
 			
 				
+				<dd><a href="#PlotAllBendingMom2d">func PlotAllBendingMom2d(dom *Domain, nstations int, withtext bool, numfmt string, tolM, coef, sf float64) (beams []*Beam, allMrr [][]float64)</a></dd>
+			
+				
 				<dd><a href="#StressKeys">func StressKeys(ndim int) []string</a></dd>
 			
 				
@@ -136,25 +136,40 @@ package fem contains elements and solvers for running simulations using the fini
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Beam.AddToKb">func (o Beam) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Beam.AddToKb">func (o *Beam) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Beam.AddToRhs">func (o Beam) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Beam.AddToRhs">func (o *Beam) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Beam.Decode">func (o Beam) Decode(dec Decoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Beam.CalcMoment2d">func (o *Beam) CalcMoment2d(sol *Solution, ξ float64, nstations int) (M22 []float64)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Beam.Encode">func (o Beam) Encode(enc Encoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Beam.CalcMoment3d">func (o *Beam) CalcMoment3d(sol *Solution, ξ float64, nstations int) (M22, M11, T00 []float64)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Beam.Id">func (o Beam) Id() int</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Beam.CalcShearForce2d">func (o *Beam) CalcShearForce2d(sol *Solution, ξ float64, nstations int) (V1 []float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Beam.Decode">func (o *Beam) Decode(dec Decoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Beam.Encode">func (o *Beam) Encode(enc Encoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Beam.Id">func (o *Beam) Id() int</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Beam.InterpStarVars">func (o *Beam) InterpStarVars(sol *Solution) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Beam.OutIpsData">func (o Beam) OutIpsData() (data []*OutIpData)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Beam.OutIpsData">func (o *Beam) OutIpsData() (data []*OutIpData)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Beam.PlotDiagMoment">func (o *Beam) PlotDiagMoment(M []float64, withtext bool, numfmt string, tolM, sf float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Beam.Recompute">func (o *Beam) Recompute(withM bool)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Beam.SetEleConds">func (o *Beam) SetEleConds(key string, f fun.Func, extra string) (err error)</a></dd>
@@ -162,8 +177,58 @@ package fem contains elements and solvers for running simulations using the fini
 					
 					<dd>&nbsp; &nbsp; <a href="#Beam.SetEqs">func (o *Beam) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
 				
+			
+				
+				<dd><a href="#BjointComp">type BjointComp</a></dd>
+				
+				
 					
-					<dd>&nbsp; &nbsp; <a href="#Beam.Update">func (o *Beam) Update(sol *Solution) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.AddToKb">func (o *BjointComp) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.AddToRhs">func (o *BjointComp) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.BackupIvs">func (o *BjointComp) BackupIvs(aux bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.Connect">func (o *BjointComp) Connect(cid2elem []Elem, cell *inp.Cell) (nnzK int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.Decode">func (o *BjointComp) Decode(dec Decoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.Encode">func (o *BjointComp) Encode(enc Encoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.Id">func (o *BjointComp) Id() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.InterpStarVars">func (o *BjointComp) InterpStarVars(sol *Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.Ipoints">func (o *BjointComp) Ipoints() (coords [][]float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.OutIpsData">func (o *BjointComp) OutIpsData() (data []*OutIpData)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.RestoreIvs">func (o *BjointComp) RestoreIvs(aux bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.SetEleConds">func (o *BjointComp) SetEleConds(key string, f fun.Func, extra string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.SetEqs">func (o *BjointComp) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.SetIniIvs">func (o *BjointComp) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.Update">func (o *BjointComp) Update(sol *Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BjointComp.Ureset">func (o *BjointComp) Ureset(sol *Solution) (err error)</a></dd>
 				
 			
 				
@@ -230,6 +295,9 @@ package fem contains elements and solvers for running simulations using the fini
 					
 					<dd>&nbsp; &nbsp; <a href="#Domain.SetStage">func (o *Domain) SetStage(stgidx int) (err error)</a></dd>
 				
+					
+					<dd>&nbsp; &nbsp; <a href="#Domain.UpdateElems">func (o *Domain) UpdateElems() (err error)</a></dd>
+				
 			
 				
 				<dd><a href="#DynCoefs">type DynCoefs</a></dd>
@@ -252,38 +320,38 @@ package fem contains elements and solvers for running simulations using the fini
 				
 			
 				
-				<dd><a href="#ElasticRod">type ElasticRod</a></dd>
+				<dd><a href="#ElastRod">type ElastRod</a></dd>
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElasticRod.AddToKb">func (o ElasticRod) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElastRod.AddToKb">func (o *ElastRod) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElasticRod.AddToRhs">func (o ElasticRod) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElastRod.AddToRhs">func (o *ElastRod) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElasticRod.Decode">func (o ElasticRod) Decode(dec Decoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElastRod.Decode">func (o *ElastRod) Decode(dec Decoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElasticRod.Encode">func (o ElasticRod) Encode(enc Encoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElastRod.Encode">func (o *ElastRod) Encode(enc Encoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElasticRod.Id">func (o ElasticRod) Id() int</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElastRod.Id">func (o *ElastRod) Id() int</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElasticRod.InterpStarVars">func (o *ElasticRod) InterpStarVars(sol *Solution) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElastRod.InterpStarVars">func (o *ElastRod) InterpStarVars(sol *Solution) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElasticRod.OutIpsData">func (o ElasticRod) OutIpsData() (data []*OutIpData)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElastRod.OutIpsData">func (o *ElastRod) OutIpsData() (data []*OutIpData)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElasticRod.SetEleConds">func (o *ElasticRod) SetEleConds(key string, f fun.Func, extra string) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElastRod.Recompute">func (o *ElastRod) Recompute(withM bool)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElasticRod.SetEqs">func (o *ElasticRod) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElastRod.SetEleConds">func (o *ElastRod) SetEleConds(key string, f fun.Func, extra string) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElasticRod.Update">func (o *ElasticRod) Update(sol *Solution) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElastRod.SetEqs">func (o *ElastRod) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
 				
 			
 				
@@ -300,6 +368,11 @@ package fem contains elements and solvers for running simulations using the fini
 				
 			
 				
+				<dd><a href="#ElemExtrap">type ElemExtrap</a></dd>
+				
+				
+			
+				
 				<dd><a href="#ElemIntvars">type ElemIntvars</a></dd>
 				
 				
@@ -309,31 +382,31 @@ package fem contains elements and solvers for running simulations using the fini
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemP.AddToKb">func (o ElemP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemP.AddToKb">func (o *ElemP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemP.AddToRhs">func (o ElemP) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemP.AddToRhs">func (o *ElemP) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#ElemP.BackupIvs">func (o *ElemP) BackupIvs(aux bool) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemP.Decode">func (o ElemP) Decode(dec Decoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemP.Decode">func (o *ElemP) Decode(dec Decoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemP.Encode">func (o ElemP) Encode(enc Encoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemP.Encode">func (o *ElemP) Encode(enc Encoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemP.Id">func (o ElemP) Id() int</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemP.Id">func (o *ElemP) Id() int</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#ElemP.InterpStarVars">func (o *ElemP) InterpStarVars(sol *Solution) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemP.Ipoints">func (o ElemP) Ipoints() (coords [][]float64)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemP.Ipoints">func (o *ElemP) Ipoints() (coords [][]float64)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemP.OutIpsData">func (o ElemP) OutIpsData() (data []*OutIpData)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemP.OutIpsData">func (o *ElemP) OutIpsData() (data []*OutIpData)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#ElemP.RestoreIvs">func (o *ElemP) RestoreIvs(aux bool) (err error)</a></dd>
@@ -385,13 +458,13 @@ package fem contains elements and solvers for running simulations using the fini
 					
 					<dd>&nbsp; &nbsp; <a href="#ElemPhi.SetEqs">func (o *ElemPhi) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
 				
-					
-					<dd>&nbsp; &nbsp; <a href="#ElemPhi.Update">func (o *ElemPhi) Update(sol *Solution) (err error)</a></dd>
-				
 			
 				
 				<dd><a href="#ElemU">type ElemU</a></dd>
 				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ElemU.AddToExt">func (o *ElemU) AddToExt(sol *Solution) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#ElemU.AddToKb">func (o *ElemU) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
@@ -403,22 +476,22 @@ package fem contains elements and solvers for running simulations using the fini
 					<dd>&nbsp; &nbsp; <a href="#ElemU.BackupIvs">func (o *ElemU) BackupIvs(aux bool) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemU.Decode">func (o ElemU) Decode(dec Decoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemU.Decode">func (o *ElemU) Decode(dec Decoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemU.Encode">func (o ElemU) Encode(enc Encoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemU.Encode">func (o *ElemU) Encode(enc Encoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemU.Id">func (o ElemU) Id() int</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemU.Id">func (o *ElemU) Id() int</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#ElemU.InterpStarVars">func (o *ElemU) InterpStarVars(sol *Solution) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemU.Ipoints">func (o ElemU) Ipoints() (coords [][]float64)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemU.Ipoints">func (o *ElemU) Ipoints() (coords [][]float64)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemU.OutIpsData">func (o ElemU) OutIpsData() (data []*OutIpData)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemU.OutIpsData">func (o *ElemU) OutIpsData() (data []*OutIpData)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#ElemU.RestoreIvs">func (o *ElemU) RestoreIvs(aux bool) (err error)</a></dd>
@@ -444,31 +517,31 @@ package fem contains elements and solvers for running simulations using the fini
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemUP.AddToKb">func (o ElemUP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemUP.AddToKb">func (o *ElemUP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemUP.AddToRhs">func (o ElemUP) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemUP.AddToRhs">func (o *ElemUP) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#ElemUP.BackupIvs">func (o *ElemUP) BackupIvs(aux bool) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemUP.Decode">func (o ElemUP) Decode(dec Decoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemUP.Decode">func (o *ElemUP) Decode(dec Decoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemUP.Encode">func (o ElemUP) Encode(enc Encoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemUP.Encode">func (o *ElemUP) Encode(enc Encoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemUP.Id">func (o ElemUP) Id() int</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemUP.Id">func (o *ElemUP) Id() int</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#ElemUP.InterpStarVars">func (o *ElemUP) InterpStarVars(sol *Solution) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemUP.Ipoints">func (o ElemUP) Ipoints() (coords [][]float64)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemUP.Ipoints">func (o *ElemUP) Ipoints() (coords [][]float64)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#ElemUP.OutIpsData">func (o ElemUP) OutIpsData() (data []*OutIpData)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#ElemUP.OutIpsData">func (o *ElemUP) OutIpsData() (data []*OutIpData)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#ElemUP.RestoreIvs">func (o *ElemUP) RestoreIvs(aux bool) (err error)</a></dd>
@@ -680,22 +753,22 @@ package fem contains elements and solvers for running simulations using the fini
 					<dd>&nbsp; &nbsp; <a href="#Rjoint.Connect">func (o *Rjoint) Connect(cid2elem []Elem, c *inp.Cell) (nnzK int, err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rjoint.Decode">func (o Rjoint) Decode(dec Decoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rjoint.Decode">func (o *Rjoint) Decode(dec Decoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rjoint.Encode">func (o Rjoint) Encode(enc Encoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rjoint.Encode">func (o *Rjoint) Encode(enc Encoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rjoint.Id">func (o Rjoint) Id() int</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rjoint.Id">func (o *Rjoint) Id() int</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Rjoint.InterpStarVars">func (o *Rjoint) InterpStarVars(sol *Solution) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rjoint.Ipoints">func (o Rjoint) Ipoints() (coords [][]float64)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rjoint.Ipoints">func (o *Rjoint) Ipoints() (coords [][]float64)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rjoint.OutIpsData">func (o Rjoint) OutIpsData() (data []*OutIpData)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rjoint.OutIpsData">func (o *Rjoint) OutIpsData() (data []*OutIpData)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Rjoint.RestoreIvs">func (o *Rjoint) RestoreIvs(aux bool) (err error)</a></dd>
@@ -721,31 +794,31 @@ package fem contains elements and solvers for running simulations using the fini
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rod.AddToKb">func (o Rod) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rod.AddToKb">func (o *Rod) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rod.AddToRhs">func (o Rod) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rod.AddToRhs">func (o *Rod) AddToRhs(fb []float64, sol *Solution) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Rod.BackupIvs">func (o *Rod) BackupIvs(aux bool) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rod.Decode">func (o Rod) Decode(dec Decoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rod.Decode">func (o *Rod) Decode(dec Decoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rod.Encode">func (o Rod) Encode(enc Encoder) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rod.Encode">func (o *Rod) Encode(enc Encoder) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rod.Id">func (o Rod) Id() int</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rod.Id">func (o *Rod) Id() int</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Rod.InterpStarVars">func (o *Rod) InterpStarVars(sol *Solution) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rod.Ipoints">func (o Rod) Ipoints() (coords [][]float64)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rod.Ipoints">func (o *Rod) Ipoints() (coords [][]float64)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Rod.OutIpsData">func (o Rod) OutIpsData() (data []*OutIpData)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Rod.OutIpsData">func (o *Rod) OutIpsData() (data []*OutIpData)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Rod.RestoreIvs">func (o *Rod) RestoreIvs(aux bool) (err error)</a></dd>
@@ -783,6 +856,14 @@ package fem contains elements and solvers for running simulations using the fini
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#SolverImplicit.Run">func (o *SolverImplicit) Run(tf float64, dtFunc, dtoFunc fun.Func, verbose bool, dbgKb DebugKb_t) (err error)</a></dd>
+				
+			
+				
+				<dd><a href="#SolverLinearImplicit">type SolverLinearImplicit</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolverLinearImplicit.Run">func (o *SolverLinearImplicit) Run(tf float64, dtFunc, dtoFunc fun.Func, verbose bool, notused DebugKb_t) (err error)</a></dd>
 				
 			
 				
@@ -825,8 +906,6 @@ package fem contains elements and solvers for running simulations using the fini
 			<p>
 			<span style="font-size:90%">
 			
-				<a href="/src/github.com/cpmech/gofem/fem/auxiliary.go">auxiliary.go</a>
-			
 				<a href="/src/github.com/cpmech/gofem/fem/auxsolid.go">auxsolid.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/fem/domain.go">domain.go</a>
@@ -834,6 +913,8 @@ package fem contains elements and solvers for running simulations using the fini
 				<a href="/src/github.com/cpmech/gofem/fem/dyncoefs.go">dyncoefs.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/fem/e_beam.go">e_beam.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/fem/e_bjointcomp.go">e_bjointcomp.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/fem/e_elastrod.go">e_elastrod.go</a>
 			
@@ -846,6 +927,10 @@ package fem contains elements and solvers for running simulations using the fini
 				<a href="/src/github.com/cpmech/gofem/fem/e_rod.go">e_rod.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/fem/e_u.go">e_u.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/fem/e_u_contact.go">e_u_contact.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/fem/e_u_xfem.go">e_u_xfem.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/fem/e_up.go">e_up.go</a>
 			
@@ -873,9 +958,13 @@ package fem contains elements and solvers for running simulations using the fini
 			
 				<a href="/src/github.com/cpmech/gofem/fem/node.go">node.go</a>
 			
+				<a href="/src/github.com/cpmech/gofem/fem/output.go">output.go</a>
+			
 				<a href="/src/github.com/cpmech/gofem/fem/ptnatbcs.go">ptnatbcs.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/fem/s_implicit.go">s_implicit.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/fem/s_linimp.go">s_linimp.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/fem/s_richardson.go">s_richardson.go</a>
 			
@@ -937,7 +1026,7 @@ package fem contains elements and solvers for running simulations using the fini
 		
 			
 			
-			<h2 id="BuildCoordsMatrix">func <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=4837:4906#L111">BuildCoordsMatrix</a></h2>
+			<h2 id="BuildCoordsMatrix">func <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=5106:5175#L119">BuildCoordsMatrix</a></h2>
 			<pre>func BuildCoordsMatrix(cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>, msh *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Mesh">Mesh</a>) (x [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 			<p>
 BuildCoordsMatrix returns the coordinate matrix of a particular Cell
@@ -994,17 +1083,8 @@ It returns nil on errors, after logging
 		
 			
 			
-			<h2 id="GetContactFaceFlags">func <a href="https://github.com/cpmech/gofem/blob/master/fem/keycodes.go?s=2050:2128#L81">GetContactFaceFlags</a></h2>
+			<h2 id="GetContactFaceFlags">func <a href="https://github.com/cpmech/gofem/blob/master/fem/keycodes.go?s=1318:1396#L56">GetContactFaceFlags</a></h2>
 			<pre>func GetContactFaceFlags(extra <a href="/pkg/builtin/#string">string</a>) (Macaulay <a href="/pkg/builtin/#bool">bool</a>, BetRamp, Kappa <a href="/pkg/builtin/#float64">float64</a>)</pre>
-			
-			
-			
-
-		
-			
-			
-			<h2 id="GetIntegrationPoints">func <a href="https://github.com/cpmech/gofem/blob/master/fem/keycodes.go?s=301:402#L5">GetIntegrationPoints</a></h2>
-			<pre>func GetIntegrationPoints(nip, nipf <a href="/pkg/builtin/#int">int</a>, cellType <a href="/pkg/builtin/#string">string</a>) (ipsElem, ipsFace []*<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 			
 			
 			
@@ -1028,7 +1108,7 @@ hst    -- set hydrostatic pressures
 		
 			
 			
-			<h2 id="GetSeepFaceFlags">func <a href="https://github.com/cpmech/gofem/blob/master/fem/keycodes.go?s=1547:1622#L57">GetSeepFaceFlags</a></h2>
+			<h2 id="GetSeepFaceFlags">func <a href="https://github.com/cpmech/gofem/blob/master/fem/keycodes.go?s=815:890#L32">GetSeepFaceFlags</a></h2>
 			<pre>func GetSeepFaceFlags(extra <a href="/pkg/builtin/#string">string</a>) (Macaulay <a href="/pkg/builtin/#bool">bool</a>, BetRamp, Kappa <a href="/pkg/builtin/#float64">float64</a>)</pre>
 			
 			
@@ -1037,7 +1117,7 @@ hst    -- set hydrostatic pressures
 		
 			
 			
-			<h2 id="GetSolidFlags">func <a href="https://github.com/cpmech/gofem/blob/master/fem/keycodes.go?s=896:988#L23">GetSolidFlags</a></h2>
+			<h2 id="GetSolidFlags">func <a href="https://github.com/cpmech/gofem/blob/master/fem/keycodes.go?s=240:332#L3">GetSolidFlags</a></h2>
 			<pre>func GetSolidFlags(axisym, pstress <a href="/pkg/builtin/#bool">bool</a>, extra <a href="/pkg/builtin/#string">string</a>) (useB, debug <a href="/pkg/builtin/#bool">bool</a>, thickness <a href="/pkg/builtin/#float64">float64</a>)</pre>
 			
 			
@@ -1115,11 +1195,35 @@ i -- index of integration point
 		
 			
 			
-			<h2 id="NewDomains">func <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=4293:4414#L100">NewDomains</a></h2>
+			<h2 id="NewDomains">func <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=4861:4982#L109">NewDomains</a></h2>
 			<pre>func NewDomains(sim *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a>, dyncfs *<a href="#DynCoefs">DynCoefs</a>, hydsta *<a href="#HydroStatic">HydroStatic</a>, proc, nproc <a href="/pkg/builtin/#int">int</a>, distr <a href="/pkg/builtin/#bool">bool</a>) (doms []*<a href="#Domain">Domain</a>)</pre>
 			<p>
 NewDomains returns domains
 </p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="PlotAllBendingMom2d">func <a href="https://github.com/cpmech/gofem/blob/master/fem/output.go?s=804:946#L14">PlotAllBendingMom2d</a></h2>
+			<pre>func PlotAllBendingMom2d(dom *<a href="#Domain">Domain</a>, nstations <a href="/pkg/builtin/#int">int</a>, withtext <a href="/pkg/builtin/#bool">bool</a>, numfmt <a href="/pkg/builtin/#string">string</a>, tolM, coef, sf <a href="/pkg/builtin/#float64">float64</a>) (beams []*<a href="#Beam">Beam</a>, allMrr [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+			<p>
+PlotAllBendingMom2d plots all bending moments (2D beams)
+</p>
+<pre>Input:
+ dom       -- Domain
+ nstations -- number of stations
+ withtext  -- show bending moment values
+ numfmt    -- number format for values. use &#34;&#34; for default
+ tolM      -- tolerance to clip absolute values of M
+ coef      -- coefficient to scale max(dimension) divided by max(Y); e.g. 0.1
+ sf        -- scaling factor. use 0 for automatic computation
+Output:
+ beams  -- all beam elements
+ allMrr -- all Mrr bending moments at all beams
+</pre>
 
 			
 			
@@ -1136,7 +1240,7 @@ NewDomains returns domains
 		
 			
 			
-			<h2 id="TestingCompareResultsU">func <a href="https://github.com/cpmech/gofem/blob/master/fem/testing.go?s=1257:1384#L32">TestingCompareResultsU</a></h2>
+			<h2 id="TestingCompareResultsU">func <a href="https://github.com/cpmech/gofem/blob/master/fem/testing.go?s=1265:1392#L33">TestingCompareResultsU</a></h2>
 			<pre>func TestingCompareResultsU(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, simfilepath, cmpfname, alias <a href="/pkg/builtin/#string">string</a>, tolK, tolu, tols <a href="/pkg/builtin/#float64">float64</a>, skipK, verbose <a href="/pkg/builtin/#bool">bool</a>)</pre>
 			<p>
 testing_compare_results_u compares results with u-formulation
@@ -1149,19 +1253,27 @@ testing_compare_results_u compares results with u-formulation
 		
 			
 			
-			<h2 id="Beam">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=411:1681#L8">Beam</a></h2>
+			<h2 id="Beam">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=1675:3721#L37">Beam</a></h2>
 			<pre>type Beam struct {
 
     <span class="comment">// basic data</span>
     Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>   <span class="comment">// the cell structure</span>
     X    [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// matrix of nodal coordinates [ndim][nnode]</span>
-    Nu   <a href="/pkg/builtin/#int">int</a>         <span class="comment">// total number of unknowns == 2 * nsn</span>
+    P02  []<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// [3] point defining y0-y2 plane (from X matrix or computed here for horizontal/vertical beams)</span>
+    Nu   <a href="/pkg/builtin/#int">int</a>         <span class="comment">// total number of unknowns</span>
     Ndim <a href="/pkg/builtin/#int">int</a>         <span class="comment">// space dimension</span>
 
-    <span class="comment">// parameters</span>
+    <span class="comment">// parameters and properties</span>
     E   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young&#39;s modulus</span>
+    G   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// shear modulus</span>
     A   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// cross-sectional area</span>
-    Izz <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Inertia zz</span>
+    I22 <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// moment of inertia of cross section about y2-axis</span>
+    I11 <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// moment of inertia of cross section about y1-axis</span>
+    Jtt <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// torsional constant</span>
+    L   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// (derived) length of beam</span>
+
+    <span class="comment">// for output</span>
+    Nstations <a href="/pkg/builtin/#int">int</a> <span class="comment">// number of points along beam to generate bending moment / shear force diagrams</span>
 
     <span class="comment">// variables for dynamics</span>
     Rho  <a href="/pkg/builtin/#float64">float64</a>  <span class="comment">// density of solids</span>
@@ -1181,11 +1293,38 @@ testing_compare_results_u compares results with u-formulation
     QnL  <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// distributed normal load functions: left</span>
     QnR  <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// distributed normal load functions: right</span>
     Qt   <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// distributed tangential load</span>
+    Q1   <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// 3D: load on plane s-t</span>
+    Q2   <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// 3D: load on plane r-t</span>
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
 			<p>
 Beam represents a structural beam element (Euler-Bernoulli, linear elastic)
 </p>
+<pre>2D    y1     y2 is out-of-plane
+       ^
+       | qnL          qn            qnR     Props:    Nodes:
+       o-------------------------------o     E, A      0 and 1
+       |                               |     I22
+       |                               |
+     (y2)-----------------------------(1)------&gt; y0
+
+3D                    ,o--------o    ,y0
+                    ,&#39; |     ,&#39; |  ,&#39;
+      y1          ,&#39;       ,&#39;   |,&#39;
+       ^        ,&#39;q1     ,&#39;    ,|
+       |      ,&#39;  V    ,&#39;    ,  |
+       |    ,&#39;       ,&#39;    ,    |
+       |  ,&#39;       ,&#39;  | ,      |
+       |,&#39;       ,&#39;   (1) - - - o   -   -  (2)
+       o--------o    ,        ,&#39;
+       |        |  ,  &lt;q2   ,&#39;    Props:          Nodes:
+       |        |,        ,&#39;       E, G, A         0, 1, 2
+       |       ,|       ,&#39;         I22 ~ Imax      where node (2) is a point located on plane
+       |     ,  |     ,&#39;           I11 ~ Imin      y0-y2 and non-colinear to (0) and (1).
+       |   ,    |   ,&#39;             Jtt             Node (2) doest not have any DOF
+       | ,      | ,&#39;
+      (0)-------o&#39; --------&gt; y2
+</pre>
 
 
 			
@@ -1200,8 +1339,8 @@ Beam represents a structural beam element (Euler-Bernoulli, linear elastic)
 
 			
 				
-				<h3 id="Beam.AddToKb">func (Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=7061:7139#L294">AddToKb</a></h3>
-				<pre>func (o <a href="#Beam">Beam</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Beam.AddToKb">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=8568:8647#L310">AddToKb</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds element K to global Jacobian matrix Kb
 </p>
@@ -1211,8 +1350,8 @@ adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="Beam.AddToRhs">func (Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=6002:6065#L249">AddToRhs</a></h3>
-				<pre>func (o <a href="#Beam">Beam</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Beam.AddToRhs">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=7352:7416#L257">AddToRhs</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds -R to global residual vector fb
 </p>
@@ -1222,8 +1361,61 @@ adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="Beam.Decode">func (Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=7636:7681#L323">Decode</a></h3>
-				<pre>func (o <a href="#Beam">Beam</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Beam.CalcMoment2d">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=17253:17338#L641">CalcMoment2d</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) CalcMoment2d(sol *<a href="#Solution">Solution</a>, ξ <a href="/pkg/builtin/#float64">float64</a>, nstations <a href="/pkg/builtin/#int">int</a>) (M22 []<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+CalcMoment2d calculates bending moment along 2D beam
+</p>
+<pre>Input:
+ ξ         -- natural coordinate along bar   0 ≤ ξ ≤ 1
+ nstations -- compute many values; otherwise, if nstations&lt;2, compute @ s
+Output:
+ M22 -- bending moment @ stations or s
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="Beam.CalcMoment3d">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=16462:16557#L618">CalcMoment3d</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) CalcMoment3d(sol *<a href="#Solution">Solution</a>, ξ <a href="/pkg/builtin/#float64">float64</a>, nstations <a href="/pkg/builtin/#int">int</a>) (M22, M11, T00 []<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+CalcMoment3d calculates moments along 3D beam
+</p>
+<pre>Input:
+ ξ         -- natural coordinate along bar   0 ≤ ξ ≤ 1
+ nstations -- compute many values; otherwise, if nstations&lt;2, compute @ s
+Output:
+ M22 -- bending moment about y2-axis
+ M11 -- bending moment about y1-axis
+ T00 -- twisting moment around y0-axis
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="Beam.CalcShearForce2d">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=17889:17977#L662">CalcShearForce2d</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) CalcShearForce2d(sol *<a href="#Solution">Solution</a>, ξ <a href="/pkg/builtin/#float64">float64</a>, nstations <a href="/pkg/builtin/#int">int</a>) (V1 []<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+CalcShearForce2d calculates shear force for 2D beam
+</p>
+<pre>Input:
+ ξ         -- natural coordinate along bar   0 ≤ ξ ≤ 1
+ nstations -- compute many values; otherwise, if nstations&lt;2, compute @ s
+Output:
+ V1 -- shear force @ stations or s
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="Beam.Decode">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=9048:9094#L334">Decode</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
 </p>
@@ -1233,8 +1425,8 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="Beam.Encode">func (Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=7540:7585#L318">Encode</a></h3>
-				<pre>func (o <a href="#Beam">Beam</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Beam.Encode">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=8951:8997#L329">Encode</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
 </p>
@@ -1244,8 +1436,8 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="Beam.Id">func (Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=4950:4972#L200">Id</a></h3>
-				<pre>func (o <a href="#Beam">Beam</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<h3 id="Beam.Id">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=6225:6248#L204">Id</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
 </p>
@@ -1255,7 +1447,7 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="Beam.InterpStarVars">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=5837:5893#L241">InterpStarVars</a></h3>
+				<h3 id="Beam.InterpStarVars">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=7187:7243#L249">InterpStarVars</a></h3>
 				<pre>func (o *<a href="#Beam">Beam</a>) InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolates star variables to integration points
@@ -1266,8 +1458,8 @@ InterpStarVars interpolates star variables to integration points
 				
 			
 				
-				<h3 id="Beam.OutIpsData">func (Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=7761:7807#L328">OutIpsData</a></h3>
-				<pre>func (o <a href="#Beam">Beam</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
+				<h3 id="Beam.OutIpsData">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=9174:9221#L339">OutIpsData</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
 				<p>
 OutIpsData returns data from all integration points for output
 </p>
@@ -1277,7 +1469,36 @@ OutIpsData returns data from all integration points for output
 				
 			
 				
-				<h3 id="Beam.SetEleConds">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=5344:5420#L216">SetEleConds</a></h3>
+				<h3 id="Beam.PlotDiagMoment">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=21048:21138#L767">PlotDiagMoment</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) PlotDiagMoment(M []<a href="/pkg/builtin/#float64">float64</a>, withtext <a href="/pkg/builtin/#bool">bool</a>, numfmt <a href="/pkg/builtin/#string">string</a>, tolM, sf <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+PlotDiagMoment plots bending moment diagram
+</p>
+<pre>Input:
+ M        -- moment along stations
+ withtext -- show bending moment values
+ numfmt   -- number format for values. use &#34;&#34; to chose default one
+ tolM     -- tolerance to clip absolute values of M
+ sf       -- scaling factor
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="Beam.Recompute">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=10033:10069#L367">Recompute</a></h3>
+				<pre>func (o *<a href="#Beam">Beam</a>) Recompute(withM <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				<p>
+Recompute re-compute matrices after dimensions or parameters are externally changed
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Beam.SetEleConds">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=6620:6696#L220">SetEleConds</a></h3>
 				<pre>func (o *<a href="#Beam">Beam</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds set element conditions
@@ -1288,7 +1509,7 @@ SetEleConds set element conditions
 				
 			
 				
-				<h3 id="Beam.SetEqs">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=5064:5131#L203">SetEqs</a></h3>
+				<h3 id="Beam.SetEqs">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=6340:6407#L207">SetEqs</a></h3>
 				<pre>func (o *<a href="#Beam">Beam</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs set equations [2][?]. Format of eqs == format of info.Dofs
@@ -1298,11 +1519,236 @@ SetEqs set equations [2][?]. Format of eqs == format of info.Dofs
 				
 				
 			
+		
+			
+			
+			<h2 id="BjointComp">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=671:2528#L11">BjointComp</a></h2>
+			<pre>type BjointComp struct {
+
+    <span class="comment">// basic data</span>
+    Sim    *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a> <span class="comment">// simulation</span>
+    Cell   *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>       <span class="comment">// the cell structure</span>
+    Edat   *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#ElemData">ElemData</a>   <span class="comment">// element data; stored in allocator to be used in Connect</span>
+    Ny     <a href="/pkg/builtin/#int">int</a>             <span class="comment">// total number of dofs == LinNu + sld.Nu where LinNu is the number of displacement DOFs of beam == 2*Ndim</span>
+    Ndim   <a href="/pkg/builtin/#int">int</a>             <span class="comment">// space dimension</span>
+    TolNod <a href="/pkg/builtin/#float64">float64</a>         <span class="comment">// tolerance to find beam/solid compatible nodes</span>
+
+    <span class="comment">// essential</span>
+    Lin *<a href="#Beam">Beam</a>           <span class="comment">// beam (line) element</span>
+    Sld *<a href="#ElemU">ElemU</a>          <span class="comment">// solid element</span>
+    Mdl <a href="/pkg/github.com/cpmech/gofem/msolid/">msolid</a>.<a href="/pkg/github.com/cpmech/gofem/msolid/#RjointM1">RjointM1</a> <span class="comment">// material model</span>
+
+    <span class="comment">// asembly maps</span>
+    LinUmap []<a href="/pkg/builtin/#int">int</a> <span class="comment">// beam umap with displacement DOFs equations only</span>
+    SldUmap []<a href="/pkg/builtin/#int">int</a> <span class="comment">// solid umap with displacement DOFs at nodes connected to beam</span>
+
+    <span class="comment">// shape and integration points</span>
+    LinShp *<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Shape">Shape</a>   <span class="comment">// lin2 shape</span>
+    LinIps []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points along line of beam / joint</span>
+
+    Δw []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [ndim] relative displacement</span>
+
+    <span class="comment">// temporary Jacobian matrices</span>
+    Kll [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [linNu][linNu] K_lin_lin: ∂fl/∂ub</span>
+    Kls [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [linNu][linNu] K_lin_sld: ∂fl/∂u</span>
+    Ksl [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [linNu][linNu] K_sld_lin: ∂fs/∂ub</span>
+    Kss [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [linNu][linNu] K_sld_sld: ∂fs/∂u</span>
+
+    <span class="comment">// internal values</span>
+    States    []*<a href="/pkg/github.com/cpmech/gofem/msolid/">msolid</a>.<a href="/pkg/github.com/cpmech/gofem/msolid/#OnedState">OnedState</a> <span class="comment">// [nip] internal states</span>
+    StatesBkp []*<a href="/pkg/github.com/cpmech/gofem/msolid/">msolid</a>.<a href="/pkg/github.com/cpmech/gofem/msolid/#OnedState">OnedState</a> <span class="comment">// [nip] backup internal states</span>
+    StatesAux []*<a href="/pkg/github.com/cpmech/gofem/msolid/">msolid</a>.<a href="/pkg/github.com/cpmech/gofem/msolid/#OnedState">OnedState</a> <span class="comment">// [nip] backup internal states</span>
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+BjointComp implements a beam-joint (interface/link) element for embedded beams with nodes
+compatible with the nodes of the surrounding solid elements
+</p>
+<pre>Note: beamNu corresponds to the number of displacemetns DOFs of beam; i.e. without rotations
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
 				
-				<h3 id="Beam.Update">func (*Beam) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_beam.go?s=7441:7489#L313">Update</a></h3>
-				<pre>func (o *<a href="#Beam">Beam</a>) Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="BjointComp.AddToKb">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=7649:7734#L264">AddToKb</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+adds element K to global Jacobian matrix Kb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.AddToRhs">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=6616:6686#L217">AddToRhs</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+adds -R to global residual vector fb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.BackupIvs">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=12866:12918#L477">BackupIvs</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+BackupIvs create copy of internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.Connect">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=3625:3708#L96">Connect</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) Connect(cid2elem []<a href="#Elem">Elem</a>, cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>) (nnzK <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Connect connects rod/solid elements in this BjointComp
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.Decode">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=13738:13790#L517">Decode</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Decode decodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.Encode">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=13614:13666#L512">Encode</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Encode encodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.Id">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=3515:3544#L93">Id</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+Id returns the cell Id
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.InterpStarVars">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=6500:6562#L212">InterpStarVars</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+InterpStarVars interpolates star variables to integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.Ipoints">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=11208:11259#L418">Ipoints</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+Ipoints returns the real coordinates of integration points [nip][ndim]
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.OutIpsData">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=13947:14000#L526">OutIpsData</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
+				<p>
+OutIpsData returns data from all integration points for output
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.RestoreIvs">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=13124:13177#L491">RestoreIvs</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+RestoreIvs restore internal variables from copies
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.SetEleConds">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=6336:6418#L207">SetEleConds</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEleConds set element conditions
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.SetEqs">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=6211:6284#L202">SetEqs</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEqs set equations
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.SetIniIvs">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=11471:11554#L427">SetIniIvs</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) SetIniIvs(sol *<a href="#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetIniIvs sets initial ivs for given values in sol and ivs map
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.Update">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=9920:9974#L365">Update</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update perform (tangent) update
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BjointComp.Ureset">func (*BjointComp) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_bjointcomp.go?s=13406:13460#L505">Ureset</a></h3>
+				<pre>func (o *<a href="#BjointComp">BjointComp</a>) Ureset(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Ureset fixes internal variables after u (displacements) have been zeroed
 </p>
 
 				
@@ -1312,7 +1758,7 @@ Update perform (tangent) update
 		
 			
 			
-			<h2 id="DebugKb_t">type <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=514:552#L10">DebugKb_t</a></h2>
+			<h2 id="DebugKb_t">type <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=548:586#L11">DebugKb_t</a></h2>
 			<pre>type DebugKb_t func(d *<a href="#Domain">Domain</a>, it <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 function to debug global Jacobian matrix
@@ -1401,7 +1847,7 @@ String returns the string representation of this Dof
 		
 			
 			
-			<h2 id="Domain">type <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=1469:4170#L37">Domain</a></h2>
+			<h2 id="Domain">type <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=1706:4662#L42">Domain</a></h2>
 			<pre>type Domain struct {
 
     <span class="comment">// init: auxiliary variables</span>
@@ -1430,8 +1876,11 @@ String returns the string representation of this Dof
     Cid2active []<a href="/pkg/builtin/#bool">bool</a>  <span class="comment">// [ncells] CellId =&gt; whether cell is active or not in ANY processor</span>
 
     <span class="comment">// stage: subsets of elements</span>
-    ElemIntvars []<a href="#ElemIntvars">ElemIntvars</a>   <span class="comment">// elements with internal vars in this processor</span>
-    ElemConnect []<a href="#ElemConnector">ElemConnector</a> <span class="comment">// connector elements in this processor</span>
+    ElemIntvars   []<a href="#ElemIntvars">ElemIntvars</a>   <span class="comment">// elements with internal vars in this processor</span>
+    ElemIvsCon    []<a href="#ElemIntvars">ElemIntvars</a>   <span class="comment">// elements with internal vars that are connectors</span>
+    ElemIvsNotCon []<a href="#ElemIntvars">ElemIntvars</a>   <span class="comment">// elements with internal vars that are not connectors</span>
+    ElemConnect   []<a href="#ElemConnector">ElemConnector</a> <span class="comment">// connector elements in this processor</span>
+    ElemExtrap    []<a href="#ElemExtrap">ElemExtrap</a>    <span class="comment">// elements with internal values to be extrapolated</span>
 
     <span class="comment">// stage: coefficients and prescribed forces</span>
     EssenBcs <a href="#EssentialBcs">EssentialBcs</a> <span class="comment">// constraints (Lagrange multipliers)</span>
@@ -1475,7 +1924,7 @@ all cells might be recorded as well.
 
 			
 				
-				<h3 id="Domain.Clean">func (*Domain) <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=4215:4239#L95">Clean</a></h3>
+				<h3 id="Domain.Clean">func (*Domain) <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=4707:4731#L103">Clean</a></h3>
 				<pre>func (o *<a href="#Domain">Domain</a>) Clean()</pre>
 				<p>
 Clean cleans memory allocated by domain
@@ -1558,7 +2007,7 @@ SaveSol saves solution (o.Sol) to a file which name is set with tidx (time outpu
 				
 			
 				
-				<h3 id="Domain.SetGeoSt">func (*Domain) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=3478:3531#L105">SetGeoSt</a></h3>
+				<h3 id="Domain.SetGeoSt">func (*Domain) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=3589:3642#L111">SetGeoSt</a></h3>
 				<pre>func (o *<a href="#Domain">Domain</a>) SetGeoSt(stg *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Stage">Stage</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetGeoSt sets the initial state to a hydrostatic condition
@@ -1591,7 +2040,7 @@ SetIniStress sets the initial state with initial stresses
 				
 			
 				
-				<h3 id="Domain.SetIniVals">func (*Domain) <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=11851:11916#L385">SetIniVals</a></h3>
+				<h3 id="Domain.SetIniVals">func (*Domain) <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=12532:12597#L398">SetIniVals</a></h3>
 				<pre>func (o *<a href="#Domain">Domain</a>) SetIniVals(stgidx <a href="/pkg/builtin/#int">int</a>, zeroSol <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetIniVals sets/resets initial values (nodes and integration points)
@@ -1613,10 +2062,21 @@ SetInitial sets the initial state
 				
 			
 				
-				<h3 id="Domain.SetStage">func (*Domain) <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=5024:5073#L122">SetStage</a></h3>
+				<h3 id="Domain.SetStage">func (*Domain) <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=5592:5641#L131">SetStage</a></h3>
 				<pre>func (o *<a href="#Domain">Domain</a>) SetStage(stgidx <a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetStage set nodes, equation numbers and auxiliary data for given stage
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Domain.UpdateElems">func (*Domain) <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=14494:14536#L477">UpdateElems</a></h3>
+				<pre>func (o *<a href="#Domain">Domain</a>) UpdateElems() (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+UpdateElems update elements after Solution has been updated
 </p>
 
 				
@@ -1712,8 +2172,8 @@ Print prints coefficients
 		
 			
 			
-			<h2 id="ElasticRod">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=521:1471#L9">ElasticRod</a></h2>
-			<pre>type ElasticRod struct {
+			<h2 id="ElastRod">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=519:1410#L9">ElastRod</a></h2>
+			<pre>type ElastRod struct {
 
     <span class="comment">// basic data</span>
     Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>   <span class="comment">// the cell structure</span>
@@ -1722,9 +2182,10 @@ Print prints coefficients
     Ndim <a href="/pkg/builtin/#int">int</a>         <span class="comment">// space dimension</span>
 
     <span class="comment">// parameters and properties</span>
-    E <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young&#39;s modulus</span>
-    A <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// cross-sectional area</span>
-    L <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// length of rod</span>
+    E   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young&#39;s modulus</span>
+    A   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// cross-sectional area</span>
+    L   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// length of rod</span>
+    Sig <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// axial stress (constant) along rod</span>
 
     <span class="comment">// variables for dynamics</span>
     Rho  <a href="/pkg/builtin/#float64">float64</a>  <span class="comment">// density of solids</span>
@@ -1740,7 +2201,7 @@ Print prints coefficients
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
 			<p>
-ElasticRod represents a structural rod element (for axial loads only) with 2 nodes only and
+ElastRod represents a structural rod element (for axial loads only) with 2 nodes only and
 simply implemented with constant stiffness matrix; i.e. no numerical integration is needed
 </p>
 
@@ -1757,8 +2218,8 @@ simply implemented with constant stiffness matrix; i.e. no numerical integration
 
 			
 				
-				<h3 id="ElasticRod.AddToKb">func (ElasticRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=5212:5296#L207">AddToKb</a></h3>
-				<pre>func (o <a href="#ElasticRod">ElasticRod</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElastRod.AddToKb">func (*ElastRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=4750:4833#L187">AddToKb</a></h3>
+				<pre>func (o *<a href="#ElastRod">ElastRod</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToKb adds element K to global Jacobian matrix Kb
 </p>
@@ -1768,8 +2229,8 @@ AddToKb adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="ElasticRod.AddToRhs">func (ElasticRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=4722:4791#L184">AddToRhs</a></h3>
-				<pre>func (o <a href="#ElasticRod">ElasticRod</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElastRod.AddToRhs">func (*ElastRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=4509:4577#L177">AddToRhs</a></h3>
+				<pre>func (o *<a href="#ElastRod">ElastRod</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToRhs adds -R to global residual vector fb
 </p>
@@ -1779,8 +2240,8 @@ AddToRhs adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="ElasticRod.Decode">func (ElasticRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=5746:5797#L229">Decode</a></h3>
-				<pre>func (o <a href="#ElasticRod">ElasticRod</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElastRod.Decode">func (*ElastRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=5197:5247#L204">Decode</a></h3>
+				<pre>func (o *<a href="#ElastRod">ElastRod</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
 </p>
@@ -1790,8 +2251,8 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="ElasticRod.Encode">func (ElasticRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=5644:5695#L224">Encode</a></h3>
-				<pre>func (o <a href="#ElasticRod">ElasticRod</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElastRod.Encode">func (*ElastRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=5078:5128#L199">Encode</a></h3>
+				<pre>func (o *<a href="#ElastRod">ElastRod</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
 </p>
@@ -1801,8 +2262,8 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="ElasticRod.Id">func (ElasticRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=3938:3966#L153">Id</a></h3>
-				<pre>func (o <a href="#ElasticRod">ElasticRod</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<h3 id="ElastRod.Id">func (*ElastRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=3736:3763#L146">Id</a></h3>
+				<pre>func (o *<a href="#ElastRod">ElastRod</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
 </p>
@@ -1812,8 +2273,8 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="ElasticRod.InterpStarVars">func (*ElasticRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=4307:4369#L168">InterpStarVars</a></h3>
-				<pre>func (o *<a href="#ElasticRod">ElasticRod</a>) InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElastRod.InterpStarVars">func (*ElastRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=4102:4162#L161">InterpStarVars</a></h3>
+				<pre>func (o *<a href="#ElastRod">ElastRod</a>) InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolates star variables to integration points
 </p>
@@ -1823,8 +2284,8 @@ InterpStarVars interpolates star variables to integration points
 				
 			
 				
-				<h3 id="ElasticRod.OutIpsData">func (ElasticRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=5877:5929#L234">OutIpsData</a></h3>
-				<pre>func (o <a href="#ElasticRod">ElasticRod</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
+				<h3 id="ElastRod.OutIpsData">func (*ElastRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=5346:5397#L209">OutIpsData</a></h3>
+				<pre>func (o *<a href="#ElastRod">ElastRod</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
 				<p>
 OutIpsData returns data from all integration points for output
 </p>
@@ -1834,8 +2295,19 @@ OutIpsData returns data from all integration points for output
 				
 			
 				
-				<h3 id="ElasticRod.SetEleConds">func (*ElasticRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=4492:4574#L175">SetEleConds</a></h3>
-				<pre>func (o *<a href="#ElasticRod">ElasticRod</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElastRod.Recompute">func (*ElastRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=6088:6128#L233">Recompute</a></h3>
+				<pre>func (o *<a href="#ElastRod">ElastRod</a>) Recompute(withM <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				<p>
+Recompute re-compute matrices after dimensions or parameters are externally changed
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ElastRod.SetEleConds">func (*ElastRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=4283:4363#L168">SetEleConds</a></h3>
+				<pre>func (o *<a href="#ElastRod">ElastRod</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds set element conditions
 </p>
@@ -1845,21 +2317,10 @@ SetEleConds set element conditions
 				
 			
 				
-				<h3 id="ElasticRod.SetEqs">func (*ElasticRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=4013:4086#L156">SetEqs</a></h3>
-				<pre>func (o *<a href="#ElasticRod">ElasticRod</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElastRod.SetEqs">func (*ElastRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=3810:3881#L149">SetEqs</a></h3>
+				<pre>func (o *<a href="#ElastRod">ElastRod</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs set equations
-</p>
-
-				
-				
-				
-			
-				
-				<h3 id="ElasticRod.Update">func (*ElasticRod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_elastrod.go?s=5436:5490#L217">Update</a></h3>
-				<pre>func (o *<a href="#ElasticRod">ElasticRod</a>) Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
-				<p>
-Update perform (tangent) update
 </p>
 
 				
@@ -1869,7 +2330,7 @@ Update perform (tangent) update
 		
 			
 			
-			<h2 id="Elem">type <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=735:1813#L13">Elem</a></h2>
+			<h2 id="Elem">type <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=735:1719#L13">Elem</a></h2>
 			<pre>type Elem interface {
 
     <span class="comment">// information and initialisation</span>
@@ -1885,7 +2346,6 @@ Update perform (tangent) update
     <span class="comment">// called for each iteration</span>
     AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)                <span class="comment">// adds -R to global residual vector fb</span>
     AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// adds element K to global Jacobian matrix Kb</span>
-    Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)                                <span class="comment">// perform (tangent) update</span>
 
     <span class="comment">// reading and writing of element data</span>
     Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// encodes internal variables</span>
@@ -1909,7 +2369,7 @@ Elem defines what elements must calculate
 
 			
 				
-				<h3 id="NewElem">func <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=4153:4241#L91">NewElem</a></h3>
+				<h3 id="NewElem">func <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=4422:4510#L99">NewElem</a></h3>
 				<pre>func NewElem(cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>, reg *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Region">Region</a>, sim *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a>) (ele <a href="#Elem">Elem</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 NewElem returns a new element from its type; e.g. &#34;p&#34;, &#34;u&#34; or &#34;up&#34;
@@ -1923,7 +2383,7 @@ NewElem returns a new element from its type; e.g. &#34;p&#34;, &#34;u&#34; or &#
 		
 			
 			
-			<h2 id="ElemConnector">type <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=1893:2144#L39">ElemConnector</a></h2>
+			<h2 id="ElemConnector">type <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=2575:2826#L48">ElemConnector</a></h2>
 			<pre>type ElemConnector interface {
     Id() <a href="/pkg/builtin/#int">int</a>                                                    <span class="comment">// returns the cell Id</span>
     Connect(cid2elem []<a href="#Elem">Elem</a>, c *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>) (nnzK <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// connect multiple elements; e.g.: connect rod/solid elements in Rjoints</span>
@@ -1947,8 +2407,32 @@ ElemConnector defines connector elements; elements that depend upon others
 		
 			
 			
-			<h2 id="ElemIntvars">type <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=2208:2828#L45">ElemIntvars</a></h2>
+			<h2 id="ElemExtrap">type <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=2905:3015#L54">ElemExtrap</a></h2>
+			<pre>type ElemExtrap interface {
+    AddToExt(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// adds extrapolated values to global array</span>
+}</pre>
+			<p>
+ElemExtrap defines elements with functions to extrapolate internal values
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ElemIntvars">type <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=1783:2495#L38">ElemIntvars</a></h2>
 			<pre>type ElemIntvars interface {
+    Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)                              <span class="comment">// perform (tangent) update</span>
     Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)                                 <span class="comment">// returns the real coordinates of integration points [nip][ndim]</span>
     SetIniIvs(sol *<a href="#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// sets initial ivs for given values in sol and ivs map</span>
     BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)                                <span class="comment">// create copy of internal variables</span>
@@ -1974,19 +2458,18 @@ ElemIntvars defines elements with {z,q} internal variables
 		
 			
 			
-			<h2 id="ElemP">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=757:3430#L16">ElemP</a></h2>
+			<h2 id="ElemP">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=757:3391#L16">ElemP</a></h2>
 			<pre>type ElemP struct {
 
     <span class="comment">// basic data</span>
     Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>   <span class="comment">// the cell structure</span>
     X    [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// matrix of nodal coordinates [ndim][nnode]</span>
-    Shp  *<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Shape">Shape</a>  <span class="comment">// shape structure</span>
     Np   <a href="/pkg/builtin/#int">int</a>         <span class="comment">// total number of unknowns == number of vertices</span>
     Ndim <a href="/pkg/builtin/#int">int</a>         <span class="comment">// space dimension</span>
 
     <span class="comment">// integration points</span>
-    IpsElem []*<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points of element</span>
-    IpsFace []*<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points corresponding to faces</span>
+    IpsElem []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points of element</span>
+    IpsFace []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points corresponding to faces</span>
 
     <span class="comment">// material model</span>
     Mdl *<a href="/pkg/github.com/cpmech/gofem/mporous/">mporous</a>.<a href="/pkg/github.com/cpmech/gofem/mporous/#Model">Model</a> <span class="comment">// model</span>
@@ -2047,8 +2530,8 @@ ElemP implements an element for transient seepage analyses [1]
 
 			
 				
-				<h3 id="ElemP.AddToKb">func (ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=9796:9875#L336">AddToKb</a></h3>
-				<pre>func (o <a href="#ElemP">ElemP</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElemP.AddToKb">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=9755:9835#L334">AddToKb</a></h3>
+				<pre>func (o *<a href="#ElemP">ElemP</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToKb adds element K to global Jacobian matrix Kb
 </p>
@@ -2058,8 +2541,8 @@ AddToKb adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="ElemP.AddToRhs">func (ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=8360:8424#L274">AddToRhs</a></h3>
-				<pre>func (o <a href="#ElemP">ElemP</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElemP.AddToRhs">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=8297:8362#L272">AddToRhs</a></h3>
+				<pre>func (o *<a href="#ElemP">ElemP</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToRhs adds -R to global residual vector fb
 </p>
@@ -2069,7 +2552,7 @@ AddToRhs adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="ElemP.BackupIvs">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=14819:14866#L559">BackupIvs</a></h3>
+				<h3 id="ElemP.BackupIvs">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=14865:14912#L557">BackupIvs</a></h3>
 				<pre>func (o *<a href="#ElemP">ElemP</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 BackupIvs creates copy of internal variables
@@ -2080,8 +2563,8 @@ BackupIvs creates copy of internal variables
 				
 			
 				
-				<h3 id="ElemP.Decode">func (ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=15671:15717#L599">Decode</a></h3>
-				<pre>func (o <a href="#ElemP">ElemP</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElemP.Decode">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=15718:15765#L597">Decode</a></h3>
+				<pre>func (o *<a href="#ElemP">ElemP</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
 </p>
@@ -2091,8 +2574,8 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="ElemP.Encode">func (ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=15553:15599#L594">Encode</a></h3>
-				<pre>func (o <a href="#ElemP">ElemP</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElemP.Encode">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=15599:15646#L592">Encode</a></h3>
+				<pre>func (o *<a href="#ElemP">ElemP</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
 </p>
@@ -2102,8 +2585,8 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="ElemP.Id">func (ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=7343:7366#L228">Id</a></h3>
-				<pre>func (o <a href="#ElemP">ElemP</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<h3 id="ElemP.Id">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=7259:7283#L226">Id</a></h3>
+				<pre>func (o *<a href="#ElemP">ElemP</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
 </p>
@@ -2113,7 +2596,7 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="ElemP.InterpStarVars">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=7913:7970#L253">InterpStarVars</a></h3>
+				<h3 id="ElemP.InterpStarVars">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=7835:7892#L251">InterpStarVars</a></h3>
 				<pre>func (o *<a href="#ElemP">ElemP</a>) InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolates star variables to integration points
@@ -2124,8 +2607,8 @@ InterpStarVars interpolates star variables to integration points
 				
 			
 				
-				<h3 id="ElemP.Ipoints">func (ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=12805:12850#L470">Ipoints</a></h3>
-				<pre>func (o <a href="#ElemP">ElemP</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<h3 id="ElemP.Ipoints">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=12806:12852#L468">Ipoints</a></h3>
+				<pre>func (o *<a href="#ElemP">ElemP</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Ipoints returns the real coordinates of integration points [nip][ndim]
 </p>
@@ -2135,8 +2618,8 @@ Ipoints returns the real coordinates of integration points [nip][ndim]
 				
 			
 				
-				<h3 id="ElemP.OutIpsData">func (ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=15874:15921#L608">OutIpsData</a></h3>
-				<pre>func (o <a href="#ElemP">ElemP</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
+				<h3 id="ElemP.OutIpsData">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=15922:15970#L606">OutIpsData</a></h3>
+				<pre>func (o *<a href="#ElemP">ElemP</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
 				<p>
 OutIpsData returns data from all integration points for output
 </p>
@@ -2146,7 +2629,7 @@ OutIpsData returns data from all integration points for output
 				
 			
 				
-				<h3 id="ElemP.RestoreIvs">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=15073:15121#L573">RestoreIvs</a></h3>
+				<h3 id="ElemP.RestoreIvs">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=15119:15167#L571">RestoreIvs</a></h3>
 				<pre>func (o *<a href="#ElemP">ElemP</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 RestoreIvs restores internal variables from copies
@@ -2157,7 +2640,7 @@ RestoreIvs restores internal variables from copies
 				
 			
 				
-				<h3 id="ElemP.SetEleConds">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=7710:7787#L245">SetEleConds</a></h3>
+				<h3 id="ElemP.SetEleConds">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=7632:7709#L243">SetEleConds</a></h3>
 				<pre>func (o *<a href="#ElemP">ElemP</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds sets element conditions
@@ -2168,7 +2651,7 @@ SetEleConds sets element conditions
 				
 			
 				
-				<h3 id="ElemP.SetEqs">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=7414:7482#L231">SetEqs</a></h3>
+				<h3 id="ElemP.SetEqs">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=7331:7399#L229">SetEqs</a></h3>
 				<pre>func (o *<a href="#ElemP">ElemP</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs sets equations
@@ -2179,7 +2662,7 @@ SetEqs sets equations
 				
 			
 				
-				<h3 id="ElemP.SetIniIvs">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=13057:13139#L479">SetIniIvs</a></h3>
+				<h3 id="ElemP.SetIniIvs">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=13064:13146#L477">SetIniIvs</a></h3>
 				<pre>func (o *<a href="#ElemP">ElemP</a>) SetIniIvs(sol *<a href="#Solution">Solution</a>, ignored map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetIniIvs sets initial ivs for given values in sol and ivs map
@@ -2190,7 +2673,7 @@ SetIniIvs sets initial ivs for given values in sol and ivs map
 				
 			
 				
-				<h3 id="ElemP.Update">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=12044:12093#L438">Update</a></h3>
+				<h3 id="ElemP.Update">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=12025:12074#L436">Update</a></h3>
 				<pre>func (o *<a href="#ElemP">ElemP</a>) Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update performs (tangent) update
@@ -2201,7 +2684,7 @@ Update performs (tangent) update
 				
 			
 				
-				<h3 id="ElemP.Ureset">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=15350:15399#L587">Ureset</a></h3>
+				<h3 id="ElemP.Ureset">func (*ElemP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_p.go?s=15396:15445#L585">Ureset</a></h3>
 				<pre>func (o *<a href="#ElemP">ElemP</a>) Ureset(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Ureset fixes internal variables after u (displacements) have been zeroed
@@ -2214,18 +2697,17 @@ Ureset fixes internal variables after u (displacements) have been zeroed
 		
 			
 			
-			<h2 id="ElemPhi">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=529:1152#L10">ElemPhi</a></h2>
+			<h2 id="ElemPhi">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=529:1114#L10">ElemPhi</a></h2>
 			<pre>type ElemPhi struct {
 
     <span class="comment">// basic data</span>
     Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>   <span class="comment">// the cell structure</span>
     X    [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [ndim][nnode] matrix of nodal coordinates</span>
-    Shp  *<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Shape">Shape</a>  <span class="comment">// shape structure</span>
     Nu   <a href="/pkg/builtin/#int">int</a>         <span class="comment">// total number of unknowns == number of vertices</span>
     Ndim <a href="/pkg/builtin/#int">int</a>         <span class="comment">// space dimension</span>
 
     <span class="comment">// integration points</span>
-    IpsElem []*<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// [nip] integration points of element</span>
+    IpsElem []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// [nip] integration points of element</span>
 
     <span class="comment">// scratchpad. computed @ each ip</span>
     K [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nu][nu] consistent tangent matrix</span>
@@ -2258,7 +2740,7 @@ Notes: v is a constant vector
 
 			
 				
-				<h3 id="ElemPhi.AddToKb">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=4269:4351#L165">AddToKb</a></h3>
+				<h3 id="ElemPhi.AddToKb">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=4169:4251#L163">AddToKb</a></h3>
 				<pre>func (o *<a href="#ElemPhi">ElemPhi</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToKb adds element K to global Jacobian matrix Kb
@@ -2269,7 +2751,7 @@ AddToKb adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="ElemPhi.AddToRhs">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=3445:3512#L128">AddToRhs</a></h3>
+				<h3 id="ElemPhi.AddToRhs">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=3319:3386#L126">AddToRhs</a></h3>
 				<pre>func (o *<a href="#ElemPhi">ElemPhi</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToRhs adds -R to global residual vector fb
@@ -2280,7 +2762,7 @@ AddToRhs adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="ElemPhi.Decode">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=5327:5376#L217">Decode</a></h3>
+				<h3 id="ElemPhi.Decode">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=5148:5197#L210">Decode</a></h3>
 				<pre>func (o *<a href="#ElemPhi">ElemPhi</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
@@ -2291,7 +2773,7 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="ElemPhi.Encode">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=5227:5276#L212">Encode</a></h3>
+				<h3 id="ElemPhi.Encode">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=5048:5097#L205">Encode</a></h3>
 				<pre>func (o *<a href="#ElemPhi">ElemPhi</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
@@ -2302,7 +2784,7 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="ElemPhi.Id">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=2565:2591#L90">Id</a></h3>
+				<h3 id="ElemPhi.Id">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=2429:2455#L88">Id</a></h3>
 				<pre>func (o *<a href="#ElemPhi">ElemPhi</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
@@ -2313,7 +2795,7 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="ElemPhi.InterpStarVars">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=3004:3063#L107">InterpStarVars</a></h3>
+				<h3 id="ElemPhi.InterpStarVars">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=2868:2927#L105">InterpStarVars</a></h3>
 				<pre>func (o *<a href="#ElemPhi">ElemPhi</a>) InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolate star variables to integration points
@@ -2324,7 +2806,7 @@ InterpStarVars interpolate star variables to integration points
 				
 			
 				
-				<h3 id="ElemPhi.OutIpsData">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=5456:5506#L222">OutIpsData</a></h3>
+				<h3 id="ElemPhi.OutIpsData">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=5277:5327#L215">OutIpsData</a></h3>
 				<pre>func (o *<a href="#ElemPhi">ElemPhi</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
 				<p>
 OutIpsData returns data from all integration points for output
@@ -2335,7 +2817,7 @@ OutIpsData returns data from all integration points for output
 				
 			
 				
-				<h3 id="ElemPhi.SetEleConds">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=2844:2923#L102">SetEleConds</a></h3>
+				<h3 id="ElemPhi.SetEleConds">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=2708:2787#L100">SetEleConds</a></h3>
 				<pre>func (o *<a href="#ElemPhi">ElemPhi</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds set element conditions
@@ -2346,7 +2828,7 @@ SetEleConds set element conditions
 				
 			
 				
-				<h3 id="ElemPhi.SetEqs">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=2638:2708#L93">SetEqs</a></h3>
+				<h3 id="ElemPhi.SetEqs">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=2502:2572#L91">SetEqs</a></h3>
 				<pre>func (o *<a href="#ElemPhi">ElemPhi</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs set equations
@@ -2356,27 +2838,15 @@ SetEqs set equations
 				
 				
 			
-				
-				<h3 id="ElemPhi.Update">func (*ElemPhi) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_phi.go?s=5022:5073#L205">Update</a></h3>
-				<pre>func (o *<a href="#ElemPhi">ElemPhi</a>) Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
-				<p>
-Update perform (tangent) update
-</p>
-
-				
-				
-				
-			
 		
 			
 			
-			<h2 id="ElemU">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=526:3506#L10">ElemU</a></h2>
+			<h2 id="ElemU">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=525:4189#L10">ElemU</a></h2>
 			<pre>type ElemU struct {
 
     <span class="comment">// basic data</span>
     Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>   <span class="comment">// the cell structure</span>
     X    [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// matrix of nodal coordinates [ndim][nnode]</span>
-    Shp  *<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Shape">Shape</a>  <span class="comment">// shape structure</span>
     Nu   <a href="/pkg/builtin/#int">int</a>         <span class="comment">// total number of unknowns</span>
     Ndim <a href="/pkg/builtin/#int">int</a>         <span class="comment">// space dimension</span>
 
@@ -2387,12 +2857,12 @@ Update perform (tangent) update
 
     <span class="comment">// optional data</span>
     UseB      <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// use B matrix</span>
-    Thickness <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// thickness (for plane-stress)</span>
+    Thickness <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// thickness</span>
     Debug     <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// debugging flag</span>
 
     <span class="comment">// integration points</span>
-    IpsElem []*<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points of element</span>
-    IpsFace []*<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points corresponding to faces</span>
+    IpsElem []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points of element</span>
+    IpsFace []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points corresponding to faces</span>
 
     <span class="comment">// material model and internal variables</span>
     Model    <a href="/pkg/github.com/cpmech/gofem/msolid/">msolid</a>.<a href="/pkg/github.com/cpmech/gofem/msolid/#Model">Model</a> <span class="comment">// material model</span>
@@ -2404,11 +2874,10 @@ Update perform (tangent) update
     StatesBkp []*<a href="/pkg/github.com/cpmech/gofem/msolid/">msolid</a>.<a href="/pkg/github.com/cpmech/gofem/msolid/#State">State</a> <span class="comment">// [nip] backup states</span>
     StatesAux []*<a href="/pkg/github.com/cpmech/gofem/msolid/">msolid</a>.<a href="/pkg/github.com/cpmech/gofem/msolid/#State">State</a> <span class="comment">// [nip] auxiliary backup states</span>
 
-    <span class="comment">// problem variables</span>
-    Umap []<a href="/pkg/builtin/#int">int</a> <span class="comment">// assembly map (location array/element equations)</span>
-
-    <span class="comment">// natural boundary conditions</span>
-    NatBcs []*<a href="#NaturalBc">NaturalBc</a>
+    <span class="comment">// additional variables</span>
+    Umap   []<a href="/pkg/builtin/#int">int</a>        <span class="comment">// assembly map (location array/element equations)</span>
+    NatBcs []*<a href="#NaturalBc">NaturalBc</a> <span class="comment">// natural boundary conditions</span>
+    Emat   [][]<a href="/pkg/builtin/#float64">float64</a>  <span class="comment">// [nvert][nip] extrapolator matrix; if AddToExt is called</span>
 
     K [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nu][nu] consistent tangent (stiffness) matrix</span>
     B [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nsig][nu] B matrix for axisymetric case</span>
@@ -2416,7 +2885,7 @@ Update perform (tangent) update
 
     Δε []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// incremental strains leading to updated strains</span>
 
-    <span class="comment">// contact</span>
+    <span class="comment">// contact (see e_u_contact.go)</span>
     Nq            <a href="/pkg/builtin/#int">int</a>   <span class="comment">// number of qb variables</span>
     HasContact    <a href="/pkg/builtin/#bool">bool</a>  <span class="comment">// indicates if this element has contact faces</span>
     Vid2contactId []<a href="/pkg/builtin/#int">int</a> <span class="comment">// [nverts] maps local vertex id to index in Qmap</span>
@@ -2424,10 +2893,19 @@ Update perform (tangent) update
     Qmap          []<a href="/pkg/builtin/#int">int</a> <span class="comment">// [nq] map of &#34;qb&#34; variables (contact face)</span>
     Macaulay      <a href="/pkg/builtin/#bool">bool</a>  <span class="comment">// contact: use discrete ramp function instead of smooth ramp</span>
 
-    <span class="comment">// for contact</span>
     Kuq [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nu][nq] Kuq := dRu/dq consistent tangent matrix</span>
     Kqu [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nq][nu] Kqu := dRq/du consistent tangent matrix</span>
     Kqq [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nq][nq] Kqq := dRq/dq consistent tangent matrix</span>
+
+    <span class="comment">// XFEM (material interface or not)</span>
+    Xmat <a href="/pkg/builtin/#bool">bool</a>        <span class="comment">// material interface</span>
+    Xcrk <a href="/pkg/builtin/#bool">bool</a>        <span class="comment">// crack</span>
+    Xfem <a href="/pkg/builtin/#bool">bool</a>        <span class="comment">// Xmat || Xcrk</span>
+    Na   <a href="/pkg/builtin/#int">int</a>         <span class="comment">// number of additional degrees of freedom (XFEM)</span>
+    Amap []<a href="/pkg/builtin/#int">int</a>       <span class="comment">// additional DOFs map</span>
+    Kua  [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// TODO: [nu][na] Kua := dRu/da consistent tangent matrix</span>
+    Kau  [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// TODO: [na][nu] Kau := dRa/du consistent tangent matrix</span>
+    Kaa  [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// TODO: [na][na] Kaa := dRa/da consistent tangent matrix</span>
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
 			<p>
@@ -2447,7 +2925,18 @@ ElemU represents a solid element with displacements u as primary variables
 
 			
 				
-				<h3 id="ElemU.AddToKb">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=10434:10514#L377">AddToKb</a></h3>
+				<h3 id="ElemU.AddToExt">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=16720:16771#L630">AddToExt</a></h3>
+				<pre>func (o *<a href="#ElemU">ElemU</a>) AddToExt(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddToExt extrapolates stresses at integration points to nodes
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ElemU.AddToKb">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=11167:11247#L397">AddToKb</a></h3>
 				<pre>func (o *<a href="#ElemU">ElemU</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToKb adds element K to global Jacobian matrix Kb
@@ -2458,7 +2947,7 @@ AddToKb adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="ElemU.AddToRhs">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=8923:8988#L310">AddToRhs</a></h3>
+				<h3 id="ElemU.AddToRhs">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=9187:9252#L307">AddToRhs</a></h3>
 				<pre>func (o *<a href="#ElemU">ElemU</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToRhs adds -R to global residual vector fb
@@ -2469,7 +2958,7 @@ AddToRhs adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="ElemU.BackupIvs">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=14326:14373#L543">BackupIvs</a></h3>
+				<h3 id="ElemU.BackupIvs">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=14872:14919#L552">BackupIvs</a></h3>
 				<pre>func (o *<a href="#ElemU">ElemU</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 BackupIvs create copy of internal variables
@@ -2480,8 +2969,8 @@ BackupIvs create copy of internal variables
 				
 			
 				
-				<h3 id="ElemU.Decode">func (ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=15320:15366#L589">Decode</a></h3>
-				<pre>func (o <a href="#ElemU">ElemU</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElemU.Decode">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=15867:15914#L598">Decode</a></h3>
+				<pre>func (o *<a href="#ElemU">ElemU</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
 </p>
@@ -2491,8 +2980,8 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="ElemU.Encode">func (ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=15202:15248#L584">Encode</a></h3>
-				<pre>func (o <a href="#ElemU">ElemU</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElemU.Encode">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=15748:15795#L593">Encode</a></h3>
+				<pre>func (o *<a href="#ElemU">ElemU</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
 </p>
@@ -2502,8 +2991,8 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="ElemU.Id">func (ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=7639:7662#L254">Id</a></h3>
-				<pre>func (o <a href="#ElemU">ElemU</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<h3 id="ElemU.Id">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=7565:7589#L233">Id</a></h3>
+				<pre>func (o *<a href="#ElemU">ElemU</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
 </p>
@@ -2513,7 +3002,7 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="ElemU.InterpStarVars">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=8276:8333#L282">InterpStarVars</a></h3>
+				<h3 id="ElemU.InterpStarVars">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=8508:8565#L277">InterpStarVars</a></h3>
 				<pre>func (o *<a href="#ElemU">ElemU</a>) InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolates star variables to integration points
@@ -2524,8 +3013,8 @@ InterpStarVars interpolates star variables to integration points
 				
 			
 				
-				<h3 id="ElemU.Ipoints">func (ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=13404:13449#L506">Ipoints</a></h3>
-				<pre>func (o <a href="#ElemU">ElemU</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<h3 id="ElemU.Ipoints">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=13944:13990#L515">Ipoints</a></h3>
+				<pre>func (o *<a href="#ElemU">ElemU</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Ipoints returns the real coordinates of integration points [nip][ndim]
 </p>
@@ -2535,8 +3024,8 @@ Ipoints returns the real coordinates of integration points [nip][ndim]
 				
 			
 				
-				<h3 id="ElemU.OutIpsData">func (ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=15523:15570#L598">OutIpsData</a></h3>
-				<pre>func (o <a href="#ElemU">ElemU</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
+				<h3 id="ElemU.OutIpsData">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=16071:16119#L607">OutIpsData</a></h3>
+				<pre>func (o *<a href="#ElemU">ElemU</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
 				<p>
 OutIpsData returns data from all integration points for output
 </p>
@@ -2546,7 +3035,7 @@ OutIpsData returns data from all integration points for output
 				
 			
 				
-				<h3 id="ElemU.RestoreIvs">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=14579:14627#L557">RestoreIvs</a></h3>
+				<h3 id="ElemU.RestoreIvs">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=15125:15173#L566">RestoreIvs</a></h3>
 				<pre>func (o *<a href="#ElemU">ElemU</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 RestoreIvs restore internal variables from copies
@@ -2557,7 +3046,7 @@ RestoreIvs restore internal variables from copies
 				
 			
 				
-				<h3 id="ElemU.SetEleConds">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=8073:8150#L274">SetEleConds</a></h3>
+				<h3 id="ElemU.SetEleConds">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=8305:8382#L269">SetEleConds</a></h3>
 				<pre>func (o *<a href="#ElemU">ElemU</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds set element conditions
@@ -2568,7 +3057,7 @@ SetEleConds set element conditions
 				
 			
 				
-				<h3 id="ElemU.SetEqs">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=7709:7777#L257">SetEqs</a></h3>
+				<h3 id="ElemU.SetEqs">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=7636:7704#L236">SetEqs</a></h3>
 				<pre>func (o *<a href="#ElemU">ElemU</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs set equations
@@ -2579,7 +3068,7 @@ SetEqs set equations
 				
 			
 				
-				<h3 id="ElemU.SetIniIvs">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=13656:13734#L515">SetIniIvs</a></h3>
+				<h3 id="ElemU.SetIniIvs">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=14202:14280#L524">SetIniIvs</a></h3>
 				<pre>func (o *<a href="#ElemU">ElemU</a>) SetIniIvs(sol *<a href="#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetIniIvs sets initial ivs for given values in sol and ivs map
@@ -2590,7 +3079,7 @@ SetIniIvs sets initial ivs for given values in sol and ivs map
 				
 			
 				
-				<h3 id="ElemU.Update">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=12350:12399#L468">Update</a></h3>
+				<h3 id="ElemU.Update">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=12865:12914#L477">Update</a></h3>
 				<pre>func (o *<a href="#ElemU">ElemU</a>) Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update perform (tangent) update
@@ -2601,7 +3090,7 @@ Update perform (tangent) update
 				
 			
 				
-				<h3 id="ElemU.Ureset">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=14856:14905#L571">Ureset</a></h3>
+				<h3 id="ElemU.Ureset">func (*ElemU) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_u.go?s=15402:15451#L580">Ureset</a></h3>
 				<pre>func (o *<a href="#ElemU">ElemU</a>) Ureset(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Ureset fixes internal variables after u (displacements) have been zeroed
@@ -2614,14 +3103,15 @@ Ureset fixes internal variables after u (displacements) have been zeroed
 		
 			
 			
-			<h2 id="ElemUP">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=907:1747#L15">ElemUP</a></h2>
+			<h2 id="ElemUP">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=876:1836#L14">ElemUP</a></h2>
 			<pre>type ElemUP struct {
 
     <span class="comment">// auxiliary</span>
-    Sim  *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a> <span class="comment">// simulation</span>
-    Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>       <span class="comment">// cell</span>
-    Edat *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#ElemData">ElemData</a>   <span class="comment">// element data; stored in allocator to be used in Connect</span>
-    Ndim <a href="/pkg/builtin/#int">int</a>             <span class="comment">// space dimension</span>
+    Sim     *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a> <span class="comment">// simulation</span>
+    Cell    *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>       <span class="comment">// cell</span>
+    LbbCell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>       <span class="comment">// if LBB==false, same as Cell; otherwise LbbCell is a new cell with less vertices</span>
+    Edat    *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#ElemData">ElemData</a>   <span class="comment">// element data; stored in allocator to be used in Connect</span>
+    Ndim    <a href="/pkg/builtin/#int">int</a>             <span class="comment">// space dimension</span>
 
     <span class="comment">// underlying elements</span>
     U *<a href="#ElemU">ElemU</a> <span class="comment">// u-element</span>
@@ -2656,8 +3146,8 @@ ElemUP represents an element for porous media based on the u-p formulation [1]
 
 			
 				
-				<h3 id="ElemUP.AddToKb">func (ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=9372:9452#L358">AddToKb</a></h3>
-				<pre>func (o <a href="#ElemUP">ElemUP</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElemUP.AddToKb">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=9292:9373#L349">AddToKb</a></h3>
+				<pre>func (o *<a href="#ElemUP">ElemUP</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds element K to global Jacobian matrix Kb
 </p>
@@ -2667,8 +3157,8 @@ adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="ElemUP.AddToRhs">func (ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=6474:6539#L236">AddToRhs</a></h3>
-				<pre>func (o <a href="#ElemUP">ElemUP</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElemUP.AddToRhs">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=6352:6418#L227">AddToRhs</a></h3>
+				<pre>func (o *<a href="#ElemUP">ElemUP</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds -R to global residual vector fb
 </p>
@@ -2678,7 +3168,7 @@ adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="ElemUP.BackupIvs">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=16157:16205#L636">BackupIvs</a></h3>
+				<h3 id="ElemUP.BackupIvs">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=16140:16188#L627">BackupIvs</a></h3>
 				<pre>func (o *<a href="#ElemUP">ElemUP</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 BackupIvs create copy of internal variables
@@ -2689,8 +3179,8 @@ BackupIvs create copy of internal variables
 				
 			
 				
-				<h3 id="ElemUP.Decode">func (ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=17428:17475#L691">Decode</a></h3>
-				<pre>func (o <a href="#ElemUP">ElemUP</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElemUP.Decode">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=17427:17475#L682">Decode</a></h3>
+				<pre>func (o *<a href="#ElemUP">ElemUP</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
 </p>
@@ -2700,8 +3190,8 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="ElemUP.Encode">func (ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=17262:17309#L682">Encode</a></h3>
-				<pre>func (o <a href="#ElemUP">ElemUP</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="ElemUP.Encode">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=17260:17308#L673">Encode</a></h3>
+				<pre>func (o *<a href="#ElemUP">ElemUP</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
 </p>
@@ -2711,8 +3201,8 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="ElemUP.Id">func (ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=4162:4186#L136">Id</a></h3>
-				<pre>func (o <a href="#ElemUP">ElemUP</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<h3 id="ElemUP.Id">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=4125:4150#L132">Id</a></h3>
+				<pre>func (o *<a href="#ElemUP">ElemUP</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
 </p>
@@ -2722,7 +3212,7 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="ElemUP.InterpStarVars">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=5472:5530#L189">InterpStarVars</a></h3>
+				<h3 id="ElemUP.InterpStarVars">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=5315:5373#L180">InterpStarVars</a></h3>
 				<pre>func (o *<a href="#ElemUP">ElemUP</a>) InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolates star variables to integration points
@@ -2733,8 +3223,8 @@ InterpStarVars interpolates star variables to integration points
 				
 			
 				
-				<h3 id="ElemUP.Ipoints">func (ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=14755:14801#L575">Ipoints</a></h3>
-				<pre>func (o <a href="#ElemUP">ElemUP</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<h3 id="ElemUP.Ipoints">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=14717:14764#L566">Ipoints</a></h3>
+				<pre>func (o *<a href="#ElemUP">ElemUP</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Ipoints returns the real coordinates of integration points [nip][ndim]
 </p>
@@ -2744,8 +3234,8 @@ Ipoints returns the real coordinates of integration points [nip][ndim]
 				
 			
 				
-				<h3 id="ElemUP.OutIpsData">func (ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=17623:17671#L700">OutIpsData</a></h3>
-				<pre>func (o <a href="#ElemUP">ElemUP</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
+				<h3 id="ElemUP.OutIpsData">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=17623:17672#L691">OutIpsData</a></h3>
+				<pre>func (o *<a href="#ElemUP">ElemUP</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
 				<p>
 OutIpsData returns data from all integration points for output
 </p>
@@ -2755,7 +3245,7 @@ OutIpsData returns data from all integration points for output
 				
 			
 				
-				<h3 id="ElemUP.RestoreIvs">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=16346:16395#L645">RestoreIvs</a></h3>
+				<h3 id="ElemUP.RestoreIvs">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=16329:16378#L636">RestoreIvs</a></h3>
 				<pre>func (o *<a href="#ElemUP">ElemUP</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 RestoreIvs restore internal variables from copies
@@ -2766,7 +3256,7 @@ RestoreIvs restore internal variables from copies
 				
 			
 				
-				<h3 id="ElemUP.SetEleConds">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=5214:5292#L180">SetEleConds</a></h3>
+				<h3 id="ElemUP.SetEleConds">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=5057:5135#L171">SetEleConds</a></h3>
 				<pre>func (o *<a href="#ElemUP">ElemUP</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds set element conditions
@@ -2777,7 +3267,7 @@ SetEleConds set element conditions
 				
 			
 				
-				<h3 id="ElemUP.SetEqs">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=4233:4302#L139">SetEqs</a></h3>
+				<h3 id="ElemUP.SetEqs">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=4197:4266#L135">SetEqs</a></h3>
 				<pre>func (o *<a href="#ElemUP">ElemUP</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs set equations
@@ -2788,7 +3278,7 @@ SetEqs set equations
 				
 			
 				
-				<h3 id="ElemUP.SetIniIvs">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=15016:15095#L584">SetIniIvs</a></h3>
+				<h3 id="ElemUP.SetIniIvs">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=14984:15063#L575">SetIniIvs</a></h3>
 				<pre>func (o *<a href="#ElemUP">ElemUP</a>) SetIniIvs(sol *<a href="#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetIniIvs sets initial ivs for given values in sol and ivs map
@@ -2799,7 +3289,7 @@ SetIniIvs sets initial ivs for given values in sol and ivs map
 				
 			
 				
-				<h3 id="ElemUP.Update">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=14446:14496#L564">Update</a></h3>
+				<h3 id="ElemUP.Update">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=14408:14458#L555">Update</a></h3>
 				<pre>func (o *<a href="#ElemUP">ElemUP</a>) Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update perform (tangent) update
@@ -2810,7 +3300,7 @@ Update perform (tangent) update
 				
 			
 				
-				<h3 id="ElemUP.Ureset">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=16561:16611#L654">Ureset</a></h3>
+				<h3 id="ElemUP.Ureset">func (*ElemUP) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_up.go?s=16544:16594#L645">Ureset</a></h3>
 				<pre>func (o *<a href="#ElemUP">ElemUP</a>) Ureset(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Ureset fixes internal variables after u (displacements) have been zeroed
@@ -2989,7 +3479,7 @@ Notes: 1) the default for key is single point constraint; e.g. &#34;ux&#34;, &#3
 		
 			
 			
-			<h2 id="FEM">type <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=940:1522#L21">FEM</a></h2>
+			<h2 id="FEM">type <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=974:1556#L22">FEM</a></h2>
 			<pre>type FEM struct {
     Sim     *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a> <span class="comment">// simulation data</span>
     Summary *<a href="#Summary">Summary</a>        <span class="comment">// summary structure</span>
@@ -3017,7 +3507,7 @@ FEM holds all data for a simulation using the finite element method
 
 			
 				
-				<h3 id="NewFEM">func <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=2038:2168#L43">NewFEM</a></h3>
+				<h3 id="NewFEM">func <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=2072:2202#L44">NewFEM</a></h3>
 				<pre>func NewFEM(simfilepath, alias <a href="/pkg/builtin/#string">string</a>, erasePrev, saveSummary, readSummary, allowParallel, verbose <a href="/pkg/builtin/#bool">bool</a>, goroutineId <a href="/pkg/builtin/#int">int</a>) (o *<a href="#FEM">FEM</a>)</pre>
 				<p>
 NewFEM returns a new FEM structure
@@ -3038,7 +3528,7 @@ NewFEM returns a new FEM structure
 
 			
 				
-				<h3 id="FEM.Run">func (*FEM) <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=3470:3501#L101">Run</a></h3>
+				<h3 id="FEM.Run">func (*FEM) <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=3504:3535#L102">Run</a></h3>
 				<pre>func (o *<a href="#FEM">FEM</a>) Run() (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Run runs FE simulation
@@ -3049,7 +3539,7 @@ Run runs FE simulation
 				
 			
 				
-				<h3 id="FEM.SetStage">func (*FEM) <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=4343:4389#L150">SetStage</a></h3>
+				<h3 id="FEM.SetStage">func (*FEM) <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=4377:4423#L151">SetStage</a></h3>
 				<pre>func (o *<a href="#FEM">FEM</a>) SetStage(stgidx <a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetStage sets stage for all domains
@@ -3063,7 +3553,7 @@ SetStage sets stage for all domains
 				
 			
 				
-				<h3 id="FEM.SolveOneStage">func (*FEM) <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=5132:5199#L179">SolveOneStage</a></h3>
+				<h3 id="FEM.SolveOneStage">func (*FEM) <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=5166:5233#L180">SolveOneStage</a></h3>
 				<pre>func (o *<a href="#FEM">FEM</a>) SolveOneStage(stgidx <a href="/pkg/builtin/#int">int</a>, zerostage <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SolveOneStage solves one stage that was already set
@@ -3078,7 +3568,7 @@ SolveOneStage solves one stage that was already set
 				
 			
 				
-				<h3 id="FEM.ZeroStage">func (*FEM) <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=4775:4836#L165">ZeroStage</a></h3>
+				<h3 id="FEM.ZeroStage">func (*FEM) <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=4809:4870#L166">ZeroStage</a></h3>
 				<pre>func (o *<a href="#FEM">FEM</a>) ZeroStage(stgidx <a href="/pkg/builtin/#int">int</a>, zeroSol <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ZeroStage zeroes solution varaibles; i.e. it initialises solution vectors (Y, dYdt, internal
@@ -3096,7 +3586,7 @@ values such as States.Sig, etc.) in all domains for all nodes and all elements
 		
 			
 			
-			<h2 id="FEsolver">type <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=607:720#L13">FEsolver</a></h2>
+			<h2 id="FEsolver">type <a href="https://github.com/cpmech/gofem/blob/master/fem/fem.go?s=641:754#L14">FEsolver</a></h2>
 			<pre>type FEsolver interface {
     Run(tf <a href="/pkg/builtin/#float64">float64</a>, dtFunc, dtoFunc <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, verbose <a href="/pkg/builtin/#bool">bool</a>, dbgKb <a href="#DebugKb_t">DebugKb_t</a>) (err <a href="/pkg/builtin/#error">error</a>)
 }</pre>
@@ -3119,7 +3609,7 @@ FEsolver implements the actual solver (time loop)
 		
 			
 			
-			<h2 id="GeoLayer">type <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=1151:1916#L29">GeoLayer</a></h2>
+			<h2 id="GeoLayer">type <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=1181:1931#L30">GeoLayer</a></h2>
 			<pre>type GeoLayer struct {
     Tags  []<a href="/pkg/builtin/#int">int</a>   <span class="comment">// tags of cells within this layer</span>
     Zmin  <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// coordinate (elevation) at bottom of layer</span>
@@ -3129,11 +3619,12 @@ FEsolver implements the actual solver (time loop)
     Cl    <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// liquid compressibility</span>
     RhoS0 <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// initial density of solids</span>
 
-    K0    <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// earth-pressure at rest</span>
-    Dpl   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// liquid pressure added by this layer</span>
-    DsigV <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// absolute value of vertical stress increment added by this layer</span>
+    K0 <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// earth-pressure at rest</span>
 
     Jac <a href="/pkg/github.com/cpmech/gosl/ode/">ode</a>.<a href="/pkg/github.com/cpmech/gosl/ode/#Cb_jac">Cb_jac</a> <span class="comment">// Jacobian for ode solver</span>
+
+    Total <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// total stress analysis</span>
+    Rho   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// density for total stress analyses</span>
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
 			<p>
@@ -3171,7 +3662,7 @@ dY/dT = | dρL/dT | = | Cl・dpl/dT     |
 
 			
 				
-				<h3 id="GeoLayer.Calc">func (GeoLayer) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=2723:2775#L75">Calc</a></h3>
+				<h3 id="GeoLayer.Calc">func (GeoLayer) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=2747:2799#L78">Calc</a></h3>
 				<pre>func (o <a href="#GeoLayer">GeoLayer</a>) Calc(z <a href="/pkg/builtin/#float64">float64</a>) (*geostate, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Calc computes state @ level z
@@ -3182,7 +3673,7 @@ Calc computes state @ level z
 				
 			
 				
-				<h3 id="GeoLayer.Start">func (*GeoLayer) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=2030:2081#L49">Start</a></h3>
+				<h3 id="GeoLayer.Start">func (*GeoLayer) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=2045:2096#L51">Start</a></h3>
 				<pre>func (o *<a href="#GeoLayer">GeoLayer</a>) Start(prev *geostate, g <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Start starts ODE solver for computing state variables in Calc
@@ -3197,7 +3688,7 @@ Start starts ODE solver for computing state variables in Calc
 		
 			
 			
-			<h2 id="GeoLayers">type <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=3099:3125#L87">GeoLayers</a></h2>
+			<h2 id="GeoLayers">type <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=3210:3236#L93">GeoLayers</a></h2>
 			<pre>type GeoLayers []*<a href="#GeoLayer">GeoLayer</a></pre>
 			<p>
 GeoLayers is a set of Layer
@@ -3216,7 +3707,7 @@ GeoLayers is a set of Layer
 
 			
 				
-				<h3 id="GeoLayers.Len">func (GeoLayers) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=3155:3183#L90">Len</a></h3>
+				<h3 id="GeoLayers.Len">func (GeoLayers) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=3266:3294#L96">Len</a></h3>
 				<pre>func (o <a href="#GeoLayers">GeoLayers</a>) Len() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Len the length of Layers
@@ -3227,7 +3718,7 @@ Len the length of Layers
 				
 			
 				
-				<h3 id="GeoLayers.Less">func (GeoLayers) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=3342:3380#L100">Less</a></h3>
+				<h3 id="GeoLayers.Less">func (GeoLayers) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=3453:3491#L106">Less</a></h3>
 				<pre>func (o <a href="#GeoLayers">GeoLayers</a>) Less(i, j <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
 				<p>
 Less compares Layers: sort from top to bottom
@@ -3238,7 +3729,7 @@ Less compares Layers: sort from top to bottom
 				
 			
 				
-				<h3 id="GeoLayers.String">func (GeoLayers) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=8378:8412#L299">String</a></h3>
+				<h3 id="GeoLayers.String">func (GeoLayers) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=10159:10193#L375">String</a></h3>
 				<pre>func (o <a href="#GeoLayers">GeoLayers</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String prints a json formatted string with GeoLayers&#39; content
@@ -3249,7 +3740,7 @@ String prints a json formatted string with GeoLayers&#39; content
 				
 			
 				
-				<h3 id="GeoLayers.Swap">func (GeoLayers) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=3229:3262#L95">Swap</a></h3>
+				<h3 id="GeoLayers.Swap">func (GeoLayers) <a href="https://github.com/cpmech/gofem/blob/master/fem/geost.go?s=3340:3373#L101">Swap</a></h3>
 				<pre>func (o <a href="#GeoLayers">GeoLayers</a>) Swap(i, j <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 Swap swaps two Layers
@@ -3323,7 +3814,7 @@ Init initialises this structure
 		
 			
 			
-			<h2 id="Info">type <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=2895:3343#L54">Info</a></h2>
+			<h2 id="Info">type <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=3082:3612#L59">Info</a></h2>
 			<pre>type Info struct {
 
     <span class="comment">// essential</span>
@@ -3336,6 +3827,9 @@ Init initialises this structure
     <span class="comment">// t1 and t2 variables (time-derivatives of first and second order)</span>
     T1vars []<a href="/pkg/builtin/#string">string</a> <span class="comment">// &#34;pl&#34;</span>
     T2vars []<a href="/pkg/builtin/#string">string</a> <span class="comment">// &#34;ux&#34;, &#34;uy&#34;</span>
+
+    <span class="comment">// required to be extrapolated; e.g. by beam-joints</span>
+    Nextrap <a href="/pkg/builtin/#int">int</a> <span class="comment">// e.g. &#34;nsig&#34;</span>
 }</pre>
 			<p>
 Info holds all information required to set a simulation stage
@@ -3352,7 +3846,7 @@ Info holds all information required to set a simulation stage
 
 			
 				
-				<h3 id="GetElemInfo">func <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=3461:3570#L71">GetElemInfo</a></h3>
+				<h3 id="GetElemInfo">func <a href="https://github.com/cpmech/gofem/blob/master/fem/element.go?s=3730:3839#L79">GetElemInfo</a></h3>
 				<pre>func GetElemInfo(cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>, reg *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Region">Region</a>, sim *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a>) (info *<a href="#Info">Info</a>, inactive <a href="/pkg/builtin/#bool">bool</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 GetElemInfo returns information about elements/formulations
@@ -3624,7 +4118,7 @@ Set sets new point natural boundary condition data
 		
 			
 			
-			<h2 id="RichardsonExtrap">type <a href="https://github.com/cpmech/gofem/blob/master/fem/s_richardson.go?s=416:1119#L7">RichardsonExtrap</a></h2>
+			<h2 id="RichardsonExtrap">type <a href="https://github.com/cpmech/gofem/blob/master/fem/s_richardson.go?s=446:1149#L8">RichardsonExtrap</a></h2>
 			<pre>type RichardsonExtrap struct {
 
     <span class="comment">// variables after big step</span>
@@ -3652,7 +4146,7 @@ RichardsonExtrap solves FEM problem implicitely and with Richardson&#39;s extrap
 
 			
 				
-				<h3 id="RichardsonExtrap.Init">func (*RichardsonExtrap) <a href="https://github.com/cpmech/gofem/blob/master/fem/s_richardson.go?s=1366:1399#L47">Init</a></h3>
+				<h3 id="RichardsonExtrap.Init">func (*RichardsonExtrap) <a href="https://github.com/cpmech/gofem/blob/master/fem/s_richardson.go?s=1396:1429#L48">Init</a></h3>
 				<pre>func (o *<a href="#RichardsonExtrap">RichardsonExtrap</a>) Init()</pre>
 				
 				
@@ -3660,7 +4154,7 @@ RichardsonExtrap solves FEM problem implicitely and with Richardson&#39;s extrap
 				
 			
 				
-				<h3 id="RichardsonExtrap.Run">func (*RichardsonExtrap) <a href="https://github.com/cpmech/gofem/blob/master/fem/s_richardson.go?s=1710:1821#L68">Run</a></h3>
+				<h3 id="RichardsonExtrap.Run">func (*RichardsonExtrap) <a href="https://github.com/cpmech/gofem/blob/master/fem/s_richardson.go?s=1740:1851#L69">Run</a></h3>
 				<pre>func (o *<a href="#RichardsonExtrap">RichardsonExtrap</a>) Run(tf <a href="/pkg/builtin/#float64">float64</a>, dtFunc, dtoFunc <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, verbose <a href="/pkg/builtin/#bool">bool</a>, dbgKb <a href="#DebugKb_t">DebugKb_t</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				
 				
@@ -3670,7 +4164,7 @@ RichardsonExtrap solves FEM problem implicitely and with Richardson&#39;s extrap
 		
 			
 			
-			<h2 id="Rjoint">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=2365:4741#L44">Rjoint</a></h2>
+			<h2 id="Rjoint">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=2394:5255#L45">Rjoint</a></h2>
 			<pre>type Rjoint struct {
 
     <span class="comment">// basic data</span>
@@ -3707,6 +4201,13 @@ RichardsonExtrap solves FEM problem implicitely and with Richardson&#39;s extrap
     States    []*<a href="/pkg/github.com/cpmech/gofem/msolid/">msolid</a>.<a href="/pkg/github.com/cpmech/gofem/msolid/#OnedState">OnedState</a> <span class="comment">// [nip] internal states</span>
     StatesBkp []*<a href="/pkg/github.com/cpmech/gofem/msolid/">msolid</a>.<a href="/pkg/github.com/cpmech/gofem/msolid/#OnedState">OnedState</a> <span class="comment">// [nip] backup internal states</span>
     StatesAux []*<a href="/pkg/github.com/cpmech/gofem/msolid/">msolid</a>.<a href="/pkg/github.com/cpmech/gofem/msolid/#OnedState">OnedState</a> <span class="comment">// [nip] backup internal states</span>
+
+    <span class="comment">// extra variables for consistent tangent operator</span>
+    Ncns   <a href="/pkg/builtin/#bool">bool</a>            <span class="comment">// use non-consistent model</span>
+    T1     [][]<a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// [rodNp][nsig] tensor (e1 dy e1)</span>
+    T2     [][]<a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// [rodNp][nsig] tensor (e2 dy e2)</span>
+    DσNoDu [][][][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [sldNn][nsig][sldNn][ndim] ∂σSldNod/∂uSldNod : derivatives of σ @ nodes of solid w.r.t displacements of solid</span>
+    DσDun  [][]<a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// [nsig][ndim] ∂σIp/∂us : derivatives of σ @ ip of solid w.r.t displacements of solid</span>
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
 			<p>
@@ -3714,7 +4215,7 @@ Rjoint implements the rod-joint (interface/link) element for reinforced solids.
 </p>
 <pre>The following convention is considered:
  n or N   -- means [N]odes
- p or P   -- means integratioin [P]oints
+ p or P   -- means integration [P]oints
  nn or Nn -- number of nodes
  np or Np -- number of integration [P]points
  ndim     -- space dimension
@@ -3762,7 +4263,7 @@ References:
 
 			
 				
-				<h3 id="Rjoint.AddToKb">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=11473:11554#L395">AddToKb</a></h3>
+				<h3 id="Rjoint.AddToKb">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=12449:12530#L419">AddToKb</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds element K to global Jacobian matrix Kb
@@ -3773,7 +4274,7 @@ adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="Rjoint.AddToRhs">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=10173:10239#L337">AddToRhs</a></h3>
+				<h3 id="Rjoint.AddToRhs">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=11138:11204#L361">AddToRhs</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds -R to global residual vector fb
@@ -3784,7 +4285,7 @@ adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="Rjoint.BackupIvs">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=18040:18088#L679">BackupIvs</a></h3>
+				<h3 id="Rjoint.BackupIvs">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=20503:20551#L763">BackupIvs</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 BackupIvs create copy of internal variables
@@ -3795,7 +4296,7 @@ BackupIvs create copy of internal variables
 				
 			
 				
-				<h3 id="Rjoint.Connect">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=5380:5456#L124">Connect</a></h3>
+				<h3 id="Rjoint.Connect">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=6024:6100#L136">Connect</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) Connect(cid2elem []<a href="#Elem">Elem</a>, c *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>) (nnzK <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Connect connects rod/solid elements in this Rjoint
@@ -3806,8 +4307,8 @@ Connect connects rod/solid elements in this Rjoint
 				
 			
 				
-				<h3 id="Rjoint.Decode">func (Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=18895:18942#L719">Decode</a></h3>
-				<pre>func (o <a href="#Rjoint">Rjoint</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Rjoint.Decode">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=21359:21407#L803">Decode</a></h3>
+				<pre>func (o *<a href="#Rjoint">Rjoint</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
 </p>
@@ -3817,8 +4318,8 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="Rjoint.Encode">func (Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=18776:18823#L714">Encode</a></h3>
-				<pre>func (o <a href="#Rjoint">Rjoint</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Rjoint.Encode">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=21239:21287#L798">Encode</a></h3>
+				<pre>func (o *<a href="#Rjoint">Rjoint</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
 </p>
@@ -3828,8 +4329,8 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="Rjoint.Id">func (Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=5279:5303#L121">Id</a></h3>
-				<pre>func (o <a href="#Rjoint">Rjoint</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<h3 id="Rjoint.Id">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=5922:5947#L133">Id</a></h3>
+				<pre>func (o *<a href="#Rjoint">Rjoint</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
 </p>
@@ -3839,7 +4340,7 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="Rjoint.InterpStarVars">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=10061:10119#L332">InterpStarVars</a></h3>
+				<h3 id="Rjoint.InterpStarVars">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=11026:11084#L356">InterpStarVars</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolates star variables to integration points
@@ -3850,8 +4351,8 @@ InterpStarVars interpolates star variables to integration points
 				
 			
 				
-				<h3 id="Rjoint.Ipoints">func (Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=17444:17490#L660">Ipoints</a></h3>
-				<pre>func (o <a href="#Rjoint">Rjoint</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<h3 id="Rjoint.Ipoints">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=19899:19946#L744">Ipoints</a></h3>
+				<pre>func (o *<a href="#Rjoint">Rjoint</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Ipoints returns the real coordinates of integration points [nip][ndim]
 </p>
@@ -3861,8 +4362,8 @@ Ipoints returns the real coordinates of integration points [nip][ndim]
 				
 			
 				
-				<h3 id="Rjoint.OutIpsData">func (Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=19099:19147#L728">OutIpsData</a></h3>
-				<pre>func (o <a href="#Rjoint">Rjoint</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
+				<h3 id="Rjoint.OutIpsData">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=21564:21613#L812">OutIpsData</a></h3>
+				<pre>func (o *<a href="#Rjoint">Rjoint</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
 				<p>
 OutIpsData returns data from all integration points for output
 </p>
@@ -3872,7 +4373,7 @@ OutIpsData returns data from all integration points for output
 				
 			
 				
-				<h3 id="Rjoint.RestoreIvs">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=18294:18343#L693">RestoreIvs</a></h3>
+				<h3 id="Rjoint.RestoreIvs">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=20757:20806#L777">RestoreIvs</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 RestoreIvs restore internal variables from copies
@@ -3883,7 +4384,7 @@ RestoreIvs restore internal variables from copies
 				
 			
 				
-				<h3 id="Rjoint.SetEleConds">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=9901:9979#L327">SetEleConds</a></h3>
+				<h3 id="Rjoint.SetEleConds">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=10866:10944#L351">SetEleConds</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds set element conditions
@@ -3894,7 +4395,7 @@ SetEleConds set element conditions
 				
 			
 				
-				<h3 id="Rjoint.SetEqs">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=9780:9849#L322">SetEqs</a></h3>
+				<h3 id="Rjoint.SetEqs">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=10745:10814#L346">SetEqs</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs set equations
@@ -3905,7 +4406,7 @@ SetEqs set equations
 				
 			
 				
-				<h3 id="Rjoint.SetIniIvs">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=17586:17665#L665">SetIniIvs</a></h3>
+				<h3 id="Rjoint.SetIniIvs">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=20042:20121#L749">SetIniIvs</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) SetIniIvs(sol *<a href="#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetIniIvs sets initial ivs for given values in sol and ivs map
@@ -3916,7 +4417,7 @@ SetIniIvs sets initial ivs for given values in sol and ivs map
 				
 			
 				
-				<h3 id="Rjoint.Update">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=14757:14807#L541">Update</a></h3>
+				<h3 id="Rjoint.Update">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=17132:17182#L623">Update</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update perform (tangent) update
@@ -3927,7 +4428,7 @@ Update perform (tangent) update
 				
 			
 				
-				<h3 id="Rjoint.Ureset">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=18572:18622#L707">Ureset</a></h3>
+				<h3 id="Rjoint.Ureset">func (*Rjoint) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rjoint.go?s=21035:21085#L791">Ureset</a></h3>
 				<pre>func (o *<a href="#Rjoint">Rjoint</a>) Ureset(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Ureset fixes internal variables after u (displacements) have been zeroed
@@ -3940,13 +4441,12 @@ Ureset fixes internal variables after u (displacements) have been zeroed
 		
 			
 			
-			<h2 id="Rod">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=454:1495#L8">Rod</a></h2>
+			<h2 id="Rod">type <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=454:1457#L8">Rod</a></h2>
 			<pre>type Rod struct {
 
     <span class="comment">// basic data</span>
     Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>   <span class="comment">// the cell structure</span>
     X    [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// matrix of nodal coordinates [ndim][nnode]</span>
-    Shp  *<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Shape">Shape</a>  <span class="comment">// shape structure</span>
     Nu   <a href="/pkg/builtin/#int">int</a>         <span class="comment">// total number of unknowns == 2 * nsn</span>
     Ndim <a href="/pkg/builtin/#int">int</a>         <span class="comment">// space dimension</span>
 
@@ -3958,7 +4458,7 @@ Ureset fixes internal variables after u (displacements) have been zeroed
     Gfcn <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// gravity function</span>
 
     <span class="comment">// integration points</span>
-    IpsElem []*<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points of element</span>
+    IpsElem []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points of element</span>
 
     <span class="comment">// vectors and matrices</span>
     K [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// element K matrix</span>
@@ -3991,8 +4491,8 @@ Rod represents a structural rod element (for only axial loads)
 
 			
 				
-				<h3 id="Rod.AddToKb">func (Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=5008:5085#L194">AddToKb</a></h3>
-				<pre>func (o <a href="#Rod">Rod</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Rod.AddToKb">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=4944:5022#L192">AddToKb</a></h3>
+				<pre>func (o *<a href="#Rod">Rod</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToKb adds element K to global Jacobian matrix Kb
 </p>
@@ -4002,8 +4502,8 @@ AddToKb adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="Rod.AddToRhs">func (Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=4375:4437#L164">AddToRhs</a></h3>
-				<pre>func (o <a href="#Rod">Rod</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Rod.AddToRhs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=4294:4357#L162">AddToRhs</a></h3>
+				<pre>func (o *<a href="#Rod">Rod</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToRhs adds -R to global residual vector fb
 </p>
@@ -4013,7 +4513,7 @@ AddToRhs adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="Rod.BackupIvs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=7983:8028#L323">BackupIvs</a></h3>
+				<h3 id="Rod.BackupIvs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=7967:8012#L321">BackupIvs</a></h3>
 				<pre>func (o *<a href="#Rod">Rod</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 BackupIvs create copy of internal variables
@@ -4024,8 +4524,8 @@ BackupIvs create copy of internal variables
 				
 			
 				
-				<h3 id="Rod.Decode">func (Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=8826:8870#L363">Decode</a></h3>
-				<pre>func (o <a href="#Rod">Rod</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Rod.Decode">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=8811:8856#L361">Decode</a></h3>
+				<pre>func (o *<a href="#Rod">Rod</a>) Decode(dec <a href="#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
 </p>
@@ -4035,8 +4535,8 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="Rod.Encode">func (Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=8710:8754#L358">Encode</a></h3>
-				<pre>func (o <a href="#Rod">Rod</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Rod.Encode">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=8694:8739#L356">Encode</a></h3>
+				<pre>func (o *<a href="#Rod">Rod</a>) Encode(enc <a href="#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
 </p>
@@ -4046,8 +4546,8 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="Rod.Id">func (Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=3731:3752#L136">Id</a></h3>
-				<pre>func (o <a href="#Rod">Rod</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<h3 id="Rod.Id">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=3644:3666#L134">Id</a></h3>
+				<pre>func (o *<a href="#Rod">Rod</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
 </p>
@@ -4057,7 +4557,7 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="Rod.InterpStarVars">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=4097:4152#L151">InterpStarVars</a></h3>
+				<h3 id="Rod.InterpStarVars">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=4016:4071#L149">InterpStarVars</a></h3>
 				<pre>func (o *<a href="#Rod">Rod</a>) InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolates star variables to integration points
@@ -4068,8 +4568,8 @@ InterpStarVars interpolates star variables to integration points
 				
 			
 				
-				<h3 id="Rod.Ipoints">func (Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=6912:6955#L283">Ipoints</a></h3>
-				<pre>func (o <a href="#Rod">Rod</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<h3 id="Rod.Ipoints">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=6890:6934#L281">Ipoints</a></h3>
+				<pre>func (o *<a href="#Rod">Rod</a>) Ipoints() (coords [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Ipoints returns the real coordinates of integration points [nip][ndim]
 </p>
@@ -4079,8 +4579,8 @@ Ipoints returns the real coordinates of integration points [nip][ndim]
 				
 			
 				
-				<h3 id="Rod.OutIpsData">func (Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=9027:9072#L372">OutIpsData</a></h3>
-				<pre>func (o <a href="#Rod">Rod</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
+				<h3 id="Rod.OutIpsData">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=9013:9059#L370">OutIpsData</a></h3>
+				<pre>func (o *<a href="#Rod">Rod</a>) OutIpsData() (data []*<a href="#OutIpData">OutIpData</a>)</pre>
 				<p>
 OutIpsData returns data from all integration points for output
 </p>
@@ -4090,7 +4590,7 @@ OutIpsData returns data from all integration points for output
 				
 			
 				
-				<h3 id="Rod.RestoreIvs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=8234:8280#L337">RestoreIvs</a></h3>
+				<h3 id="Rod.RestoreIvs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=8218:8264#L335">RestoreIvs</a></h3>
 				<pre>func (o *<a href="#Rod">Rod</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 RestoreIvs restore internal variables from copies
@@ -4101,7 +4601,7 @@ RestoreIvs restore internal variables from copies
 				
 			
 				
-				<h3 id="Rod.SetEleConds">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=4204:4279#L156">SetEleConds</a></h3>
+				<h3 id="Rod.SetEleConds">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=4123:4198#L154">SetEleConds</a></h3>
 				<pre>func (o *<a href="#Rod">Rod</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds set element conditions
@@ -4112,7 +4612,7 @@ SetEleConds set element conditions
 				
 			
 				
-				<h3 id="Rod.SetEqs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=3799:3865#L139">SetEqs</a></h3>
+				<h3 id="Rod.SetEqs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=3713:3779#L137">SetEqs</a></h3>
 				<pre>func (o *<a href="#Rod">Rod</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs set equations
@@ -4123,7 +4623,7 @@ SetEqs set equations
 				
 			
 				
-				<h3 id="Rod.SetIniIvs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=7162:7238#L292">SetIniIvs</a></h3>
+				<h3 id="Rod.SetIniIvs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=7146:7222#L290">SetIniIvs</a></h3>
 				<pre>func (o *<a href="#Rod">Rod</a>) SetIniIvs(sol *<a href="#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetIniIvs sets initial ivs for given values in sol and ivs map
@@ -4134,7 +4634,7 @@ SetIniIvs sets initial ivs for given values in sol and ivs map
 				
 			
 				
-				<h3 id="Rod.SetIvs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=7862:7922#L318">SetIvs</a></h3>
+				<h3 id="Rod.SetIvs">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=7846:7906#L316">SetIvs</a></h3>
 				<pre>func (o *<a href="#Rod">Rod</a>) SetIvs(zvars map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetIvs set secondary variables; e.g. during initialisation via files
@@ -4145,7 +4645,7 @@ SetIvs set secondary variables; e.g. during initialisation via files
 				
 			
 				
-				<h3 id="Rod.Update">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=6085:6132#L245">Update</a></h3>
+				<h3 id="Rod.Update">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=6043:6090#L243">Update</a></h3>
 				<pre>func (o *<a href="#Rod">Rod</a>) Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update perform (tangent) update
@@ -4156,7 +4656,7 @@ Update perform (tangent) update
 				
 			
 				
-				<h3 id="Rod.Ureset">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=8509:8556#L351">Ureset</a></h3>
+				<h3 id="Rod.Ureset">func (*Rod) <a href="https://github.com/cpmech/gofem/blob/master/fem/e_rod.go?s=8493:8540#L349">Ureset</a></h3>
 				<pre>func (o *<a href="#Rod">Rod</a>) Ureset(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Ureset fixes internal variables after u (displacements) have been zeroed
@@ -4169,7 +4669,7 @@ Ureset fixes internal variables after u (displacements) have been zeroed
 		
 			
 			
-			<h2 id="Solution">type <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=486:1249#L12">Solution</a></h2>
+			<h2 id="Solution">type <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=486:1486#L12">Solution</a></h2>
 			<pre>type Solution struct {
 
     <span class="comment">// current state</span>
@@ -4179,11 +4679,16 @@ Ureset fixes internal variables after u (displacements) have been zeroed
     D2ydt2 []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// d²y/dt²</span>
 
     <span class="comment">// auxiliary</span>
+    Dt  <a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// current time increment</span>
     ΔY  []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// total increment (for nonlinear solver)</span>
     Psi []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// t1 star vars; e.g. ψ* = β1.p + β2.dpdt</span>
     Zet []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// t2 star vars; e.g. ζ* = α1.u + α2.v + α3.a</span>
     Chi []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// t2 star vars; e.g. χ* = α4.u + α5.v + α6.a</span>
     L   []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Lagrange multipliers</span>
+
+    <span class="comment">// extrapolated values</span>
+    Ext map[<a href="/pkg/builtin/#int">int</a>][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [optional] extrapolated values. nodeId =&gt; values (e.g. σ)</span>
+    Cnt map[<a href="/pkg/builtin/#int">int</a>]<a href="/pkg/builtin/#int">int</a>       <span class="comment">// [optional] counter for number of additions each node of Ext</span>
 
     <span class="comment">// problem definition and constants</span>
     Steady  <a href="/pkg/builtin/#bool">bool</a>      <span class="comment">// [from Sim] steady simulation</span>
@@ -4214,7 +4719,7 @@ yb =  | p |         \ p / (ny x 1)
 
 			
 				
-				<h3 id="Solution.Reset">func (*Solution) <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=13875:13912#L466">Reset</a></h3>
+				<h3 id="Solution.Reset">func (*Solution) <a href="https://github.com/cpmech/gofem/blob/master/fem/domain.go?s=15426:15463#L521">Reset</a></h3>
 				<pre>func (o *<a href="#Solution">Solution</a>) Reset(steady <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				<p>
 Reset clear values
@@ -4250,6 +4755,38 @@ SolverImplicit solves FEM problem using an implicit procedure (with Newthon-Raph
 				
 				<h3 id="SolverImplicit.Run">func (*SolverImplicit) <a href="https://github.com/cpmech/gofem/blob/master/fem/s_implicit.go?s=751:860#L23">Run</a></h3>
 				<pre>func (o *<a href="#SolverImplicit">SolverImplicit</a>) Run(tf <a href="/pkg/builtin/#float64">float64</a>, dtFunc, dtoFunc <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, verbose <a href="/pkg/builtin/#bool">bool</a>, dbgKb <a href="#DebugKb_t">DebugKb_t</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="SolverLinearImplicit">type <a href="https://github.com/cpmech/gofem/blob/master/fem/s_linimp.go?s=465:543#L7">SolverLinearImplicit</a></h2>
+			<pre>type SolverLinearImplicit struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+SolverLinearImplicit solves **linear** FEM problem using an implicit procedure
+(with Newthon-Raphson method)
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="SolverLinearImplicit.Run">func (*SolverLinearImplicit) <a href="https://github.com/cpmech/gofem/blob/master/fem/s_linimp.go?s=885:1002#L27">Run</a></h3>
+				<pre>func (o *<a href="#SolverLinearImplicit">SolverLinearImplicit</a>) Run(tf <a href="/pkg/builtin/#float64">float64</a>, dtFunc, dtoFunc <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, verbose <a href="/pkg/builtin/#bool">bool</a>, notused <a href="#DebugKb_t">DebugKb_t</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				
 				
 				
@@ -4321,7 +4858,7 @@ SaveDomains save the results from all domains (nodes and elements)
 		
 			
 			
-			<h2 id="T_iteration">type <a href="https://github.com/cpmech/gofem/blob/master/fem/testing.go?s=439:576#L10">T_iteration</a></h2>
+			<h2 id="T_iteration">type <a href="https://github.com/cpmech/gofem/blob/master/fem/testing.go?s=370:507#L8">T_iteration</a></h2>
 			<pre>type T_iteration struct {
     It     <a href="/pkg/builtin/#int">int</a>     <span class="comment">// iteration number</span>
     ResRel <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// relative residual</span>
@@ -4346,7 +4883,7 @@ T_iteration testing: iteration results
 		
 			
 			
-			<h2 id="T_results">type <a href="https://github.com/cpmech/gofem/blob/master/fem/testing.go?s=608:1109#L17">T_results</a></h2>
+			<h2 id="T_results">type <a href="https://github.com/cpmech/gofem/blob/master/fem/testing.go?s=539:1117#L15">T_results</a></h2>
 			<pre>type T_results struct {
     Status     <a href="/pkg/builtin/#string">string</a>        <span class="comment">// status message</span>
     LoadFactor <a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// load factor</span>
@@ -4355,7 +4892,8 @@ T_iteration testing: iteration results
     Disp       [][]<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// [nnod][ndim] displacements at nodes</span>
     DispMult   <a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// displacements multiplier</span>
     Note       <a href="/pkg/builtin/#string">string</a>        <span class="comment">// note about number of integration points</span>
-    Sigmas     [][][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nele][nip][nsig] all stresses @ all ips 2D:{sx, sy, sxy, sz}</span>
+    Stresses   [][][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nele][nip][nsig] all stresses @ all ips</span>
+
 }</pre>
 			<p>
 T_results testing: results
@@ -4376,7 +4914,7 @@ T_results testing: results
 		
 			
 			
-			<h2 id="T_results_set">type <a href="https://github.com/cpmech/gofem/blob/master/fem/testing.go?s=1159:1190#L29">T_results_set</a></h2>
+			<h2 id="T_results_set">type <a href="https://github.com/cpmech/gofem/blob/master/fem/testing.go?s=1167:1198#L30">T_results_set</a></h2>
 			<pre>type T_results_set []*<a href="#T_results">T_results</a></pre>
 			<p>
 T_results_set is a set of comparison results
