@@ -25,10 +25,9 @@ type ElastRod struct {
 	Ndim int         // space dimension
 
 	// parameters and properties
-	E   float64 // Young's modulus
-	A   float64 // cross-sectional area
-	L   float64 // length of rod
-	Sig float64 // axial stress (constant) along rod
+	E float64 // Young's modulus
+	A float64 // cross-sectional area
+	L float64 // length of rod
 
 	// variables for dynamics
 	Rho  float64  // density of solids
@@ -207,12 +206,12 @@ func (o *ElastRod) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err err
 
 // Encode encodes internal variables
 func (o *ElastRod) Encode(enc Encoder) (err error) {
-	return enc.Encode(o.Sig)
+	return nil
 }
 
 // Decode decodes internal variables
 func (o *ElastRod) Decode(dec Decoder) (err error) {
-	return dec.Decode(&o.Sig)
+	return nil
 }
 
 // OutIpsData returns data from all integration points for output
@@ -222,19 +221,24 @@ func (o *ElastRod) OutIpsData() (data []*OutIpData) {
 		x[i] = (o.X[i][0] + o.X[i][1]) / 2.0 // centroid
 	}
 	calc := func(sol *Solution) (vals map[string]float64) {
-		vals = make(map[string]float64)
-		for i := 0; i < 2; i++ {
-			o.ua[i] = 0
-			for j, J := range o.Umap {
-				o.ua[i] += o.T[i][j] * sol.Y[J]
-			}
-		}
-		εa := (o.ua[1] - o.ua[0]) / o.L // axial strain
-		vals["sig"] = o.E * εa          // axial stress
-		return
+		return map[string]float64{"sig": o.CalcSig(sol)}
 	}
 	data = append(data, &OutIpData{o.Id(), x, calc})
 	return
+}
+
+// specific methods /////////////////////////////////////////////////////////////////////////////////
+
+// CalcSig computes the axial stress for given nodal displacements
+func (o *ElastRod) CalcSig(sol *Solution) float64 {
+	for i := 0; i < 2; i++ {
+		o.ua[i] = 0
+		for j, J := range o.Umap {
+			o.ua[i] += o.T[i][j] * sol.Y[J]
+		}
+	}
+	εa := (o.ua[1] - o.ua[0]) / o.L // axial strain
+	return o.E * εa                 // axial stress
 }
 
 // auxiliary ////////////////////////////////////////////////////////////////////////////////////////
