@@ -132,6 +132,14 @@ func ReadMsh(dir, fn string, goroutineId int) (o *Mesh, err error) {
 		return
 	}
 
+	// compute derived quantities
+	err = o.CalcDerived(goroutineId)
+	return
+}
+
+// CalcDerived computes derived quantities
+func (o *Mesh) CalcDerived(goroutineId int) (err error) {
+
 	// check
 	if len(o.Verts) < 2 {
 		err = chk.Err("at least 2 vertices are required in mesh\n")
