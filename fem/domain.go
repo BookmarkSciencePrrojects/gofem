@@ -191,7 +191,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 		}
 
 		// skip inactive element
-		if inactive {
+		if inactive || cell.Disabled {
 			continue
 		}
 		o.Cid2active[cell.Id] = true

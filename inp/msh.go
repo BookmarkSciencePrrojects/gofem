@@ -55,6 +55,7 @@ type Cell struct {
 	Shp         *shp.Shape // shape structure
 	FaceBcs     FaceConds  // face boundary condition
 	GoroutineId int        // go routine id
+	Disabled    bool       // cell is disabled (regardless inactive flag)
 
 	// specific problems data
 	IsBeam      bool         // simple beam element (no need for shape structure)
