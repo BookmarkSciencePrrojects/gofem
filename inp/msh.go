@@ -481,6 +481,11 @@ func (o *Mesh) Draw2d(onlyLin bool) {
 	// loop over cells
 	for _, cell := range o.Cells {
 
+		// skip disabled cells
+		if cell.Disabled {
+			continue
+		}
+
 		// lin cell
 		lincell := strings.HasPrefix(cell.Type, "lin")
 		if onlyLin && !lincell {
