@@ -47,7 +47,7 @@ func (o *HydroStatic) Init(waterLevel, waterRho0, waterBulk, g float64) {
 	o.g = g
 
 	// x := {pl, ρL}
-	o.fcn = func(f []float64, x float64, y []float64, args ...interface{}) error {
+	o.fcn = func(f []float64, dx, x float64, y []float64, args ...interface{}) error {
 		Δz := args[0].(float64)
 		//ρL := o.ρL0
 		ρL := y[1]
@@ -56,7 +56,7 @@ func (o *HydroStatic) Init(waterLevel, waterRho0, waterBulk, g float64) {
 		return nil
 	}
 
-	o.Jac = func(dfdy *la.Triplet, x float64, y []float64, args ...interface{}) error {
+	o.Jac = func(dfdy *la.Triplet, dx, x float64, y []float64, args ...interface{}) error {
 		if dfdy.Max() == 0 {
 			dfdy.Init(2, 2, 4)
 		}

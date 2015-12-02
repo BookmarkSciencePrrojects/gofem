@@ -67,7 +67,7 @@ func (o *GeoLayer) Start(prev *geostate, g float64) {
 	// y := {pl, ρL, ρ, σV} == geostate
 	nf := o.nf0
 	sl := 1.0
-	o.fcn = func(f []float64, x float64, y []float64, args ...interface{}) error {
+	o.fcn = func(f []float64, dx, x float64, y []float64, args ...interface{}) error {
 		Δz := args[0].(float64)
 		ρL := y[1]
 		ρ := y[2]

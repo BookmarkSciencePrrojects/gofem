@@ -62,12 +62,12 @@ func Update(mdl Model, pc0, sl0, Δpc float64) (slNew float64, err error) {
 	//   y[0]   = sl
 	//   f(x,y) = dy/dx = dsl/dpc * dpc/dx = Cc * Δpc
 	//   J(x,y) = df/dy = DCcDsl * Δpc
-	fcn := func(f []float64, x float64, y []float64, args ...interface{}) (e error) {
+	fcn := func(f []float64, dx, x float64, y []float64, args ...interface{}) (e error) {
 		f[0], e = mdl.Cc(pc0+x*Δpc, y[0], wet)
 		f[0] *= Δpc
 		return nil
 	}
-	jac := func(dfdy *la.Triplet, x float64, y []float64, args ...interface{}) (e error) {
+	jac := func(dfdy *la.Triplet, dx, x float64, y []float64, args ...interface{}) (e error) {
 		if dfdy.Max() == 0 {
 			dfdy.Init(1, 1, 1)
 		}
