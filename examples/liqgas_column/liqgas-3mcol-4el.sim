@@ -1,0 +1,42 @@
+{
+  "data" : {
+    "desc"    : "flow along column -- liquid-gas version",
+    "matfile" : "porous.mat",
+    "showr"   : false
+  },
+  "functions" : [
+    { "name":"pbot", "type":"rmp", "prms":[
+      { "n":"ca", "v":30.00000020454543 },
+      { "n":"cb", "v":0 },
+      { "n":"ta", "v":0 },
+      { "n":"tb", "v":2e3 }]
+    },
+    { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] }
+  ],
+  "regions" : [
+    {
+      "mshfile" : "col3m4eQ9.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"porous1", "type":"pp" }
+      ]
+    }
+  ],
+  "stages" : [
+    {
+      "desc"    : "decrease liquid pressure @ bottom",
+      "hydrost" : true,
+      "facebcs" : [
+        { "tag":-10, "keys":["pg","pl"], "funcs":["zero","pbot"] },
+        { "tag":-12, "keys":["pg"],      "funcs":["zero"] }
+      ],
+      "eleconds" : [
+        { "tag":-1, "keys":["g"], "funcs":["grav"] }
+      ],
+      "control" : {
+        "tf"    : 2000,
+        "dt"    : 10,
+        "dtout" : 10
+      }
+    }
+  ]
+}

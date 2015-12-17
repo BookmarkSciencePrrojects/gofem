@@ -720,6 +720,7 @@ func (o *ElemPP) OutIpsData() (data []*OutIpData) {
 				"sg": 1.0 - s.A_sl,
 				"pl": o.pl,
 				"pg": o.pg,
+				"pc": o.pg - o.pl,
 				"nf": 1.0 - s.A_ns0,
 			}
 			for i := 0; i < o.Ndim; i++ {
