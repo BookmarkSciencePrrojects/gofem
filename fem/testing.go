@@ -276,6 +276,36 @@ func p_DebugKb(fem *FEM, o *testKb) {
 	}
 }
 
+// pp_DebugKb defines a global function to debug Kb for p-elements
+func pp_DebugKb(fem *FEM, o *testKb) {
+	fem.DebugKb = func(d *Domain, it int) {
+
+		elem := d.Elems[o.eid]
+		if e, ok := elem.(*ElemPP); ok {
+
+			// skip?
+			o.it = it
+			o.t = d.Sol.T
+			if o.skip() {
+				return
+			}
+
+			// backup and restore upon exit
+			o.aux_backup(d)
+			defer func() { o.aux_restore(d) }()
+
+			// check
+			o.check("Kll", d, e, e.Plmap, e.Plmap, e.Kll)
+			o.check("Klg", d, e, e.Plmap, e.Pgmap, e.Klg)
+			o.check("Kgl", d, e, e.Pgmap, e.Plmap, e.Kgl)
+			o.check("Kgg", d, e, e.Pgmap, e.Pgmap, e.Kgg)
+			o.check("Klf", d, e, e.Plmap, e.Flmap, e.Klf)
+			o.check("Kfl", d, e, e.Flmap, e.Plmap, e.Kfl)
+			o.check("Kff", d, e, e.Flmap, e.Flmap, e.Kff)
+		}
+	}
+}
+
 // u_DebugKb defines a global function to debug Kb for u-elements
 func u_DebugKb(fem *FEM, o *testKb) {
 	fem.DebugKb = func(d *Domain, it int) {

@@ -223,10 +223,18 @@ func StressKeys(ndim int) []string {
 	return []string{"sx", "sy", "sz", "sxy", "syz", "szx"}
 }
 
-func FlowKeys(ndim int) []string {
+func LiqFlowKeys(ndim int) []string {
 	// nwl == nl・wl == filter velocity
 	if ndim == 2 {
 		return []string{"nwlx", "nwly"}
 	}
 	return []string{"nwlx", "nwly", "nwlz"}
+}
+
+func GasFlowKeys(ndim int) []string {
+	// nwg == ng・wg == figter vegocity
+	if ndim == 2 {
+		return []string{"nwgx", "nwgy"}
+	}
+	return []string{"nwgx", "nwgy", "nwgz"}
 }

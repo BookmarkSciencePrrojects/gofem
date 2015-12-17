@@ -700,7 +700,7 @@ func (o *ElemUP) Decode(dec Decoder) (err error) {
 
 // OutIpsData returns data from all integration points for output
 func (o *ElemUP) OutIpsData() (data []*OutIpData) {
-	flow := FlowKeys(o.Ndim)
+	flow := LiqFlowKeys(o.Ndim)
 	sigs := StressKeys(o.Ndim)
 	for idx, ip := range o.U.IpsElem {
 		r := o.P.States[idx]
