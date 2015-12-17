@@ -106,8 +106,8 @@ type ElemData struct {
 	Extra string `json:"extra"` // extra flags (in keycode format). ex: "!thick:0.2 !nip:4"
 	Inact bool   `json:"inact"` // whether element starts inactive or not
 
-	// derived
-	Lbb bool // LBB element; e.g. if "up", "upp", etc., unless NoLBB is true
+	// auxiliary/internal
+	Lbb bool // LBB element
 }
 
 // Region holds region data
@@ -361,15 +361,6 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 				}
 				if prm := mat.Prms.Find("BulkL"); prm != nil {
 					o.WaterBulk = prm.V
-				}
-			}
-		}
-
-		// set LBB flag
-		if !o.Data.NoLBB {
-			for _, ed := range reg.ElemsData {
-				if ed.Type == "up" {
-					ed.Lbb = true
 				}
 			}
 		}

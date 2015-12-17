@@ -60,6 +60,7 @@ func init() {
 		u_info := infogetters["u"](sim, cell, edat)
 
 		// p-element info
+		edat.Lbb = !sim.Data.NoLBB
 		p_info := infogetters["p"](sim, cell, edat)
 
 		// solution variables

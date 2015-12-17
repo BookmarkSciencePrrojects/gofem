@@ -21,7 +21,7 @@ func Test_up01a(tst *testing.T) {
 	 * by reducing the initial hydrostatic pressure at
 	 * at the bottom of the column
 	 *
-	 *   using mesh from col104elay.msh
+	 *   using mesh from col10m4e2lay.msh
 	 *
 	 *      Nodes / Tags                       Equations
 	 *                              ux uy pl               ux uy pl
@@ -66,7 +66,7 @@ func Test_up01a(tst *testing.T) {
 		return
 	}
 
-	// initialise solution vectros
+	// initialise solution vectors
 	err = analysis.ZeroStage(0, true)
 	if err != nil {
 		tst.Errorf("ZeroStage failed:\n%v", err)
