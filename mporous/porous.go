@@ -184,10 +184,11 @@ func (o Model) GetPrms(example bool) fun.Prms {
 // NewState creates and initialises a new state structure
 //  Note: returns nil on errors
 func (o Model) NewState(ρL, ρG, pl, pg float64) (s *State, err error) {
-	sl := 1.0
+	sl0 := o.Lrm.SlMax()
+	sl := sl0
 	pc := pg - pl
 	if pc > 0 {
-		sl, err = mreten.Update(o.Lrm, 0, 1, pc)
+		sl, err = mreten.Update(o.Lrm, 0, sl0, pc)
 		if err != nil {
 			return
 		}
@@ -202,6 +203,7 @@ func (o Model) NewState(ρL, ρG, pl, pg float64) (s *State, err error) {
 func (o Model) Update(s *State, Δpl, Δpg, pl, pg float64) (err error) {
 
 	// auxiliary variables
+	slmax := o.Lrm.SlMax()
 	slmin := o.Lrm.SlMin()
 	Δpc := Δpg - Δpl
 	wet := Δpc < 0
@@ -214,7 +216,7 @@ func (o Model) Update(s *State, Δpl, Δpg, pl, pg float64) (err error) {
 
 	// update liquid saturation
 	if pc <= 0.0 {
-		sl = 1 // full liquid saturation if capillary pressure is ineffective
+		sl = slmax // max liquid saturation if capillary pressure is ineffective
 
 	} else if o.nonrateLrm != nil && !o.AllBE {
 		sl = o.nonrateLrm.Sl(pc) // handle simple retention models
@@ -241,8 +243,8 @@ func (o Model) Update(s *State, Δpl, Δpg, pl, pg float64) (err error) {
 		if sl < slmin {
 			sl = slmin
 		}
-		if sl > 1 {
-			sl = 1
+		if sl > slmax {
+			sl = slmax
 		}
 
 		// message
@@ -289,8 +291,8 @@ func (o Model) Update(s *State, Δpl, Δpg, pl, pg float64) (err error) {
 	}
 
 	// check results
-	if pc < 0 && sl < 1 {
-		return chk.Err("inconsistent results: saturation must be equal to one when the capillary pressure is ineffective. pc = %g < 0 and sl = %g < 1 is incorrect", pc, sl)
+	if pc < 0 && sl < slmax {
+		return chk.Err("inconsistent results: saturation must be equal to slmax=%g when the capillary pressure is ineffective. pc = %g < 0 and sl = %g < 1 is incorrect", slmax, pc, sl)
 	}
 	if sl < slmin {
 		return chk.Err("inconsistent results: saturation must be greater than minimum saturation. sl = %g < %g is incorrect", sl, slmin)

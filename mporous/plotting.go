@@ -30,7 +30,7 @@ func PlotSimple(o *Model, dirout, fname string, pcmax float64, np int, returnTo0
 	if err != nil {
 		chk.Panic("cannot create new state:\n%v", err)
 	}
-	Y[0] = 1.0
+	Y[0] = o.Lrm.SlMax()
 	for i := 1; i < len(X); i++ {
 		Δpc := X[i] - X[i-1]
 		pl := -X[i]

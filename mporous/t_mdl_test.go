@@ -38,7 +38,17 @@ func Test_mdl01(tst *testing.T) {
 	lrm_name := "ref-m1"
 	//lrm_name := "vg"
 	lrm := mreten.GetModel(simfnk, matname, lrm_name, getnew)
-	err = lrm.Init(lrm.GetPrms(example))
+	prm := lrm.GetPrms(example)
+	sl0 := 0.95
+	switch lrm_name {
+	case "ref-m1":
+		y0 := prm.Find("y0")
+		y0.V = sl0
+	case "vg":
+		slmax := prm.Find("slmax")
+		slmax.V = sl0
+	}
+	err = lrm.Init(prm)
 	if err != nil {
 		tst.Errorf("mreten.Init failed: %v\n", err)
 		return
@@ -56,14 +66,13 @@ func Test_mdl01(tst *testing.T) {
 
 	// initial and final values
 	pc0 := -5.0
-	sl0 := 1.0
 	pcf := 20.0
 
 	// plot lrm
 	if doplot {
 		npts := 41
 		plt.Reset()
-		mreten.Plot(mdl.Lrm, pc0, sl0, pcf, npts, "'b.-'", "'r+-'", lrm_name)
+		mreten.Plot(mdl.Lrm, pc0, sl0, pcf, npts, "'b.-'", "", lrm_name)
 	}
 
 	// state A
@@ -89,10 +98,20 @@ func Test_mdl01(tst *testing.T) {
 	}
 
 	// incremental update
-	//Δpl := -20.0 // << problems with this one and VG
-	Δpl := -5.0
-	n := 23
-	iwet := 10
+	test := 0
+	var Δpl float64
+	var n, iwet int
+	switch test {
+	case 1:
+		Δpl = -5.0
+		n, iwet = 23, 10
+	case 2:
+		Δpl = -20.0
+		n, iwet = 10, 2
+	default:
+		Δpl = -1.0
+		n, iwet = 41, 15
+	}
 	Pc := make([]float64, n)
 	Sl := make([]float64, n)
 	pl := -pcA

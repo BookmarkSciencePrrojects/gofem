@@ -40,7 +40,17 @@ func Test_plot01(tst *testing.T) {
 	lrm_name := "ref-m1"
 	//lrm_name := "vg"
 	lrm := mreten.GetModel(simfnk, matname, lrm_name, getnew)
-	err = lrm.Init(lrm.GetPrms(example))
+	prm := lrm.GetPrms(example)
+	sl0 := 0.95
+	switch lrm_name {
+	case "ref-m1":
+		y0 := prm.Find("y0")
+		y0.V = sl0
+	case "vg":
+		slmax := prm.Find("slmax")
+		slmax.V = sl0
+	}
+	err = lrm.Init(prm)
 	if err != nil {
 		tst.Errorf("mreten.Init failed: %v\n", err)
 		return
