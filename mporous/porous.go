@@ -13,7 +13,6 @@
 package mporous
 
 import (
-	"log"
 	"math"
 
 	"github.com/cpmech/gofem/mconduct"
@@ -358,39 +357,3 @@ func (o Model) Ccd(s *State, pc float64) (dCcdpc float64, err error) {
 	dCcdpc = (2.0*L + Δpc*LL + (2.0*J+Δpc*JJ)*Ccb) / (1.0 - Δpc*J)
 	return
 }
-
-// GetModel returns (existent or new) model for porous media
-//  simfnk    -- unique simulation filename key
-//  matname   -- name of material
-//  getnew    -- force a new allocation; i.e. do not use any model found in database
-//  Note: returns nil on errors
-func GetModel(simfnk, matname string, getnew bool) *Model {
-
-	// get new model, regardless whether it exists in database or not
-	if getnew {
-		return new(Model)
-	}
-
-	// search database
-	key := io.Sf("%s_%s", simfnk, matname)
-	if model, ok := _models[key]; ok {
-		return model
-	}
-
-	// if not found, get new
-	model := new(Model)
-	_models[key] = model
-	return model
-}
-
-// LogModels prints to log information on existent and allocated Models
-func LogModels() {
-	l := "mporous: allocated:"
-	for key, _ := range _models {
-		l += " " + io.Sf("%q", key)
-	}
-	log.Println(l)
-}
-
-// _models holds pre-allocated models
-var _models = map[string]*Model{}

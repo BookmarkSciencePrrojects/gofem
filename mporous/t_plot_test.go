@@ -10,6 +10,7 @@ import (
 	"github.com/cpmech/gofem/mconduct"
 	"github.com/cpmech/gofem/mreten"
 	"github.com/cpmech/gosl/chk"
+	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/plt"
 )
 
@@ -22,14 +23,9 @@ func Test_plot01(tst *testing.T) {
 		return
 	}
 
-	// info
-	simfnk := "derivs01"
-	matname := "mat1"
-	getnew := false
-	example := true
-
 	// conductivity model
-	cnd := mconduct.GetModel(simfnk, matname, "m1", getnew)
+	example := true
+	cnd := new(mconduct.M1)
 	err := cnd.Init(cnd.GetPrms(example))
 	if err != nil {
 		tst.Errorf("mconduct.Init failed: %v\n", err)
@@ -39,14 +35,18 @@ func Test_plot01(tst *testing.T) {
 	// liquid retention model
 	lrm_name := "ref-m1"
 	//lrm_name := "vg"
-	lrm := mreten.GetModel(simfnk, matname, lrm_name, getnew)
-	prm := lrm.GetPrms(example)
+	var lrm mreten.Model
+	var prm fun.Prms
 	sl0 := 0.95
 	switch lrm_name {
 	case "ref-m1":
+		lrm = new(mreten.RefM1)
+		prm = lrm.GetPrms(example)
 		y0 := prm.Find("y0")
 		y0.V = sl0
 	case "vg":
+		lrm = new(mreten.VanGen)
+		prm = lrm.GetPrms(example)
 		slmax := prm.Find("slmax")
 		slmax.V = sl0
 	}
@@ -57,7 +57,7 @@ func Test_plot01(tst *testing.T) {
 	}
 
 	// porous model
-	mdl := GetModel(simfnk, matname, getnew)
+	mdl := new(Model)
 	err = mdl.Init(mdl.GetPrms(example), cnd, lrm)
 	if err != nil {
 		tst.Errorf("mporous.Init failed: %v\n", err)

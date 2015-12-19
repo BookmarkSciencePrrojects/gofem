@@ -21,14 +21,9 @@ func Test_derivs01(tst *testing.T) {
 	doplot := false
 	chk.PrintTitle("derivs01")
 
-	// info
-	simfnk := "derivs01"
-	matname := "mat1"
-	getnew := false
-	example := true
-
 	// conductivity model
-	cnd := mconduct.GetModel(simfnk, matname, "m1", getnew)
+	example := true
+	cnd := new(mconduct.M1)
 	err := cnd.Init(cnd.GetPrms(example))
 	if err != nil {
 		tst.Errorf("mconduct.Init failed: %v\n", err)
@@ -37,8 +32,7 @@ func Test_derivs01(tst *testing.T) {
 
 	// liquid retention model
 	lrm_name := "ref-m1"
-	//lrm_name := "vg"
-	lrm := mreten.GetModel(simfnk, matname, lrm_name, getnew)
+	lrm := new(mreten.RefM1)
 	err = lrm.Init(lrm.GetPrms(example))
 	if err != nil {
 		tst.Errorf("mreten.Init failed: %v\n", err)
@@ -46,7 +40,7 @@ func Test_derivs01(tst *testing.T) {
 	}
 
 	// porous model
-	mdl := GetModel(simfnk, matname, getnew)
+	mdl := new(Model)
 	err = mdl.Init(mdl.GetPrms(example), cnd, lrm)
 	if err != nil {
 		tst.Errorf("mporous.Init failed: %v\n", err)
