@@ -13,20 +13,22 @@ import (
 
 func Test_refm1a(tst *testing.T) {
 
-	doplot := false
-	//doplot := true
+	//verbose()
 	chk.PrintTitle("refm1a")
 
 	mdl := GetModel("testsim", "mat1", "ref-m1", false)
-	mdl.Init(mdl.GetPrms(true))
+	prm := mdl.GetPrms(true)
+	y0 := prm.Find("y0")
+	y0.V = 0.95
+	mdl.Init(prm)
 
 	pc0 := -5.0
-	sl0 := 1.0
+	sl0 := mdl.SlMax()
 	pcf := 20.0
 	nptsA := 41
 	nptsB := 11
 
-	if doplot {
+	if chk.Verbose {
 		plt.Reset()
 		Plot(mdl, pc0, sl0, pcf, nptsA, "'b.-'", "'r+-'", "ref-m1_drying")
 	}
@@ -34,7 +36,7 @@ func Test_refm1a(tst *testing.T) {
 	tolCc := 1e-17
 	tolD1a, tolD1b := 1e-11, 1e-11
 	tolD2a, tolD2b := 1e-12, 1e-10
-	Check(tst, mdl, pc0, sl0, pcf, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0}, 1e-7, doplot)
+	Check(tst, mdl, pc0, sl0, pcf, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0}, 1e-7, chk.Verbose)
 
 	slf, err := Update(mdl, pc0, sl0, pcf-pc0)
 	if err != nil {
@@ -42,15 +44,15 @@ func Test_refm1a(tst *testing.T) {
 		return
 	}
 
-	if doplot {
+	if chk.Verbose {
 		Plot(mdl, pcf, slf, pc0, nptsA, "'b*-'", "'r+:'", "ref-m1_wetting")
 	}
 
 	tolD1b = 1e-4
 	tolD2a, tolD2b = 1e-11, 1e-10
-	Check(tst, mdl, pcf, slf, pc0, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0}, 1e-7, doplot)
+	Check(tst, mdl, pcf, slf, pc0, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0}, 1e-7, chk.Verbose)
 
-	if doplot {
+	if chk.Verbose {
 		PlotEnd(true)
 	}
 }

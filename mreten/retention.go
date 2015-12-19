@@ -39,6 +39,7 @@ type Model interface {
 	Init(prms fun.Prms) error                                              // initialises retention model
 	GetPrms(example bool) fun.Prms                                         // gets (an example) of parameters
 	SlMin() float64                                                        // returns sl_min
+	SlMax() float64                                                        // returns sl_max
 	Cc(pc, sl float64, wet bool) (float64, error)                          // computes Cc = f = ∂sl/∂pc
 	L(pc, sl float64, wet bool) (float64, error)                           // computes L = ∂Cc/∂pc
 	J(pc, sl float64, wet bool) (float64, error)                           // computes J = ∂Cc/∂sl

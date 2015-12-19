@@ -49,7 +49,7 @@ func init() {
 // Init initialises model
 func (o *RefM1) Init(prms fun.Prms) (err error) {
 
-	o.model, o.A, o.pcr = 0, 70.0, 0.02
+	o.model, o.A, o.pcr, o.y0 = 0, 70.0, 0.02, 1.0
 	for _, p := range prms {
 		switch p.N {
 		case "lamd":
@@ -62,6 +62,8 @@ func (o *RefM1) Init(prms fun.Prms) (err error) {
 			o.xrw = p.V
 		case "yr":
 			o.yr = p.V
+		case "y0":
+			o.y0 = p.V
 		case "betd":
 			o.βd = p.V
 		case "betw":
@@ -89,7 +91,6 @@ func (o *RefM1) Init(prms fun.Prms) (err error) {
 		o.λw, o.xrw, o.βw, o.β1 = o.λd, o.xrd, o.β2, o.βd
 	}
 
-	o.y0 = 1.0
 	o.c1d = o.βd * o.λd
 	o.c2d = math.Exp(o.βd * o.yr)
 	o.c3d = math.Exp(o.βd*(o.y0+o.λd*o.xrd)) - o.c2d*math.Exp(o.c1d*o.xrd)
@@ -106,6 +107,7 @@ func (o RefM1) GetPrms(example bool) fun.Prms {
 		&fun.Prm{N: "lamw", V: 3},
 		&fun.Prm{N: "xrd", V: 2.0},
 		&fun.Prm{N: "xrw", V: 2.0},
+		&fun.Prm{N: "y0", V: 1.0},
 		&fun.Prm{N: "yr", V: 0.005},
 		&fun.Prm{N: "betd", V: 2},
 		&fun.Prm{N: "betw", V: 2},
@@ -119,6 +121,11 @@ func (o RefM1) GetPrms(example bool) fun.Prms {
 // SlMin returns sl_min
 func (o RefM1) SlMin() float64 {
 	return o.yr
+}
+
+// SlMax returns sl_max
+func (o RefM1) SlMax() float64 {
+	return o.y0
 }
 
 // compute Cc(pc,sl) := dsl/dpc

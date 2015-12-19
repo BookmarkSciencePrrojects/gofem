@@ -18,6 +18,7 @@ type VanGen struct {
 	// parameters
 	α, m, n float64 // parameters
 	slmin   float64 // minimum sl
+	slmax   float64 // maximum sl
 	pcmin   float64 // pc limit to consider zero slope
 }
 
@@ -28,7 +29,7 @@ func init() {
 
 // Init initialises model
 func (o *VanGen) Init(prms fun.Prms) (err error) {
-	o.pcmin = 1e-3
+	o.pcmin, o.slmax = 1e-3, 1.0
 	for _, p := range prms {
 		switch strings.ToLower(p.N) {
 		case "alp":
@@ -39,6 +40,8 @@ func (o *VanGen) Init(prms fun.Prms) (err error) {
 			o.n = p.V
 		case "slmin":
 			o.slmin = p.V
+		case "slmax":
+			o.slmax = p.V
 		case "pcmin":
 			o.pcmin = p.V
 		default:
@@ -55,6 +58,7 @@ func (o VanGen) GetPrms(example bool) fun.Prms {
 		&fun.Prm{N: "m", V: 4},
 		&fun.Prm{N: "n", V: 4},
 		&fun.Prm{N: "slmin", V: 0.01},
+		&fun.Prm{N: "slmax", V: 1.0},
 		&fun.Prm{N: "pcmin", V: 1e-3},
 	}
 }
@@ -64,13 +68,18 @@ func (o VanGen) SlMin() float64 {
 	return o.slmin
 }
 
+// SlMax returns sl_max
+func (o VanGen) SlMax() float64 {
+	return o.slmax
+}
+
 // Sl computes sl directly from pc
 func (o VanGen) Sl(pc float64) float64 {
 	if pc <= o.pcmin {
-		return 1
+		return o.slmax
 	}
 	c := math.Pow(o.α*pc, o.n)
-	fac := 1.0 - o.slmin
+	fac := o.slmax - o.slmin
 	return fac * math.Pow(1+c, -o.m)
 }
 
@@ -80,7 +89,7 @@ func (o VanGen) Cc(pc, sl float64, wet bool) (float64, error) {
 		return 0, nil
 	}
 	c := math.Pow(o.α*pc, o.n)
-	fac := 1.0 - o.slmin
+	fac := o.slmax - o.slmin
 	return -fac * c * math.Pow(c+1.0, -o.m-1.0) * o.m * o.n / pc, nil
 }
 
@@ -91,7 +100,7 @@ func (o VanGen) L(pc, sl float64, wet bool) (float64, error) {
 	}
 	c := math.Pow(o.α*pc, o.n)
 	mn := o.m * o.n
-	fac := 1.0 - o.slmin
+	fac := o.slmax - o.slmin
 	return fac * c * math.Pow(c+1.0, -o.m-2.0) * mn * (c*mn - o.n + c + 1.0) / (pc * pc), nil
 }
 
@@ -111,7 +120,7 @@ func (o VanGen) Derivs(pc, sl float64, wet bool) (L, Lx, J, Jx, Jy float64, err 
 	nn := o.n * o.n
 	mn := o.m * o.n
 	ppp := pc * pc * pc
-	fac := 1.0 - o.slmin
+	fac := o.slmax - o.slmin
 	L = fac * c * math.Pow(c+1.0, -o.m-2.0) * mn * (c*mn - o.n + c + 1.0) / (pc * pc)
 	Lx = -fac * c * math.Pow(c+1.0, -o.m-3.0) * mn * (d*mm*nn - 3.0*c*o.m*nn - c*nn + nn + 3.0*d*mn + 3.0*c*mn - 3.0*c*o.n - 3.0*o.n + 2.0*d + 4.0*c + 2.0) / ppp
 	return

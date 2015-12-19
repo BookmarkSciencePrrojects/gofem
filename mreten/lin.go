@@ -18,7 +18,8 @@ type Lin struct {
 	// parameters
 	λ     float64 // slope coefficient
 	pcae  float64 // air-entry pressure
-	slmin float64 // residual (minium) saturation
+	slmin float64 // residual (minimum) saturation
+	slmax float64 // maximum saturation
 
 	// derived
 	pcres float64 // residual pc corresponding to slmin
@@ -31,6 +32,7 @@ func init() {
 
 // Init initialises model
 func (o *Lin) Init(prms fun.Prms) (err error) {
+	o.slmax = 1.0
 	for _, p := range prms {
 		switch strings.ToLower(p.N) {
 		case "lam":
@@ -39,6 +41,8 @@ func (o *Lin) Init(prms fun.Prms) (err error) {
 			o.pcae = p.V
 		case "slmin":
 			o.slmin = p.V
+		case "slmax":
+			o.slmax = p.V
 		default:
 			return chk.Err("lin: parameter named %q is incorrect\n", p.N)
 		}
@@ -47,7 +51,7 @@ func (o *Lin) Init(prms fun.Prms) (err error) {
 		o.λ = 0
 		o.pcres = math.MaxFloat64
 	} else {
-		o.pcres = o.pcae + (1-o.slmin)/o.λ
+		o.pcres = o.pcae + (o.slmax-o.slmin)/o.λ
 	}
 	return
 }
@@ -58,6 +62,7 @@ func (o Lin) GetPrms(example bool) fun.Prms {
 		&fun.Prm{N: "lam", V: 0.5},
 		&fun.Prm{N: "pcae", V: 0.2},
 		&fun.Prm{N: "slmin", V: 0.1},
+		&fun.Prm{N: "slmax", V: 1.0},
 	}
 }
 
@@ -66,15 +71,20 @@ func (o Lin) SlMin() float64 {
 	return o.slmin
 }
 
+// SlMax returns sl_max
+func (o Lin) SlMax() float64 {
+	return o.slmax
+}
+
 // Sl computes sl directly from pc
 func (o Lin) Sl(pc float64) float64 {
 	if pc <= o.pcae {
-		return 1
+		return o.slmax
 	}
 	if pc >= o.pcres {
 		return o.slmin
 	}
-	return 1 - o.λ*(pc-o.pcae)
+	return o.slmax - o.λ*(pc-o.pcae)
 }
 
 // Cc computes Cc(pc) := dsl/dpc

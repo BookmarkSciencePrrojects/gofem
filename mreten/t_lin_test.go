@@ -13,20 +13,22 @@ import (
 
 func Test_lin01(tst *testing.T) {
 
-	doplot := false
-	//doplot := true
+	//verbose()
 	chk.PrintTitle("lin01")
 
 	mdl := GetModel("testsim", "mat1", "lin", false)
-	mdl.Init(mdl.GetPrms(true))
+	prm := mdl.GetPrms(true)
+	slmax := prm.Find("slmax")
+	slmax.V = 0.95
+	mdl.Init(prm)
 
 	pc0 := -1.0
-	sl0 := 1.0
+	sl0 := mdl.SlMax()
 	pcf := 3.0
 	nptsA := 11
 	nptsB := 11
 
-	if doplot {
+	if chk.Verbose {
 		plt.Reset()
 		Plot(mdl, pc0, sl0, pcf, nptsA, "'b.-'", "'r+-'", "lin")
 	}
@@ -34,9 +36,9 @@ func Test_lin01(tst *testing.T) {
 	tolCc := 1e-13
 	tolD1a, tolD1b := 1e-13, 1e-17
 	tolD2a, tolD2b := 1e-13, 1e-17
-	Check(tst, mdl, pc0, sl0, pcf, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0.2}, 1e-7, doplot)
+	Check(tst, mdl, pc0, sl0, pcf, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0.2}, 1e-7, chk.Verbose)
 
-	if doplot {
+	if chk.Verbose {
 		PlotEnd(true)
 	}
 }
