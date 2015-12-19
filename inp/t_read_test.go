@@ -8,6 +8,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/cpmech/gofem/mporous"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
@@ -99,6 +100,49 @@ func Test_msh03(tst *testing.T) {
 	chk.Scalar(tst, "MaxElev", 1e-17, msh.MaxElev, 1)
 }
 
+func Test_mat01(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("mat01")
+
+	mdb1, err := ReadMat("data", "bh.mat", 2, false, true)
+	if err != nil {
+		tst.Errorf("cannot read bh.mat\n:%v", err)
+		return
+	}
+	io.Pforan("bh.mat just read:\n%v\n", mdb1)
+
+	fn := "test_bh.mat"
+	io.WriteFileSD("/tmp/gofem/inp", fn, mdb1.String())
+
+	mdb2, err := ReadMat("/tmp/gofem/inp/", fn, 2, false, true)
+	if err != nil {
+		tst.Errorf("cannot read test_bh.mat\n:%v", err)
+		return
+	}
+	io.Pfblue2("\n%v\n", mdb2)
+}
+
+func Test_mat02(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("mat02")
+
+	mdb, err := ReadMat("data", "porous.mat", 2, false, true)
+	if err != nil {
+		tst.Errorf("cannot read porous.mat\n:%v", err)
+		return
+	}
+	io.Pfblue2("porous.mat just read:\n%v\n", mdb)
+
+	mat := mdb.Get("porous1")
+	io.Pforan("Porous = %v\n", mat.Porous)
+	if chk.Verbose {
+		plt.SetForEps(1.2, 400)
+		mporous.PlotSimple(mat.Porous, "/tmp/gofem", "fig_mat02_lrm.eps", 20, 101, true, true, true)
+	}
+}
+
 func Test_sim01(tst *testing.T) {
 
 	//verbose()
@@ -117,11 +161,11 @@ func Test_sim01(tst *testing.T) {
 	io.Pfyel("ndim    = %v\n", sim.Ndim)
 	io.Pfyel("maxElev = %v\n", sim.MaxElev)
 	io.Pfyel("grav    = %v\n", sim.Gravity.F(0, nil))
-	io.Pfyel("Wrho0   = %v\n", sim.WaterRho0)
-	io.Pfyel("Wbulk   = %v\n", sim.WaterBulk)
-	io.Pfyel("Wlevel  = %v\n", sim.WaterLevel)
 
 	io.Pfcyan("\nLinSol.Name = %v\n", sim.LinSol.Name)
+
+	chk.IntAssert(sim.Ndim, 2)
+	chk.Scalar(tst, "maxElev", 1e-15, sim.MaxElev, 1)
 }
 
 func Test_sim02(tst *testing.T) {
@@ -142,52 +186,7 @@ func Test_sim02(tst *testing.T) {
 	io.Pfyel("ndim    = %v\n", sim.Ndim)
 	io.Pfyel("maxElev = %v\n", sim.MaxElev)
 	io.Pfyel("grav    = %v\n", sim.Gravity.F(0, nil))
-	io.Pfyel("Wrho0   = %v\n", sim.WaterRho0)
-	io.Pfyel("Wbulk   = %v\n", sim.WaterBulk)
-	io.Pfyel("Wlevel  = %v\n", sim.WaterLevel)
-}
 
-func Test_mat01(tst *testing.T) {
-
-	chk.PrintTitle("mat01")
-
-	mdb1 := ReadMat("data", "bh.mat")
-	if mdb1 == nil {
-		tst.Errorf("test failed\n")
-		return
-	}
-	io.Pforan("bh.mat just read:\n%v\n", mdb1)
-
-	fn := "test_bh.mat"
-	io.WriteFileSD("/tmp/gofem/inp", fn, mdb1.String())
-
-	mdb2 := ReadMat("/tmp/gofem/inp/", fn)
-	if mdb2 == nil {
-		tst.Errorf("test failed\n")
-		return
-	}
-	io.Pfblue2("\n%v\n", mdb2)
-}
-
-func Test_mat02(tst *testing.T) {
-
-	chk.PrintTitle("mat02 (conversion)")
-
-	convertsymbols := true
-	MatfileOld2New("/tmp/gofem/inp", "new_layers.mat", "data/old_layers.mat", convertsymbols)
-
-	mdb := ReadMat("/tmp/gofem/inp/", "new_layers.mat")
-	if mdb == nil {
-		tst.Errorf("test failed\n")
-		return
-	}
-	io.Pfblue2("%v\n", mdb)
-}
-
-func Test_mat03(tst *testing.T) {
-
-	chk.PrintTitle("mat03 (inverse conversion)")
-
-	convertsymbols := true
-	MatfileNew2Old("/tmp/gofem/inp", "converted_porous.mat", "data/porous.mat", convertsymbols)
+	chk.IntAssert(sim.Ndim, 2)
+	chk.Scalar(tst, "maxElev", 1e-15, sim.MaxElev, 10)
 }

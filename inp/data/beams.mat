@@ -1,6 +1,7 @@
 [
   {
     "name"  : "beam1-M1",
+    "type"  : "solid",
     "model" : "beam-elast",
     "prms"  : [
       {"name":"E",   "value":1e+3,    "unit":"kPa"},

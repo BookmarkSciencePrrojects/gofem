@@ -7,7 +7,12 @@ package inp
 import (
 	"encoding/json"
 	"path/filepath"
+	"strings"
 
+	"github.com/cpmech/gofem/mconduct"
+	"github.com/cpmech/gofem/mporous"
+	"github.com/cpmech/gofem/mreten"
+	"github.com/cpmech/gofem/msolid"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
@@ -15,11 +20,19 @@ import (
 
 // Material holds material data
 type Material struct {
+
+	// input
 	Name  string   `json:"name"`  // name of material
-	Desc  string   `json:"desc"`  // description of material
-	Model string   `json:"model"` // name of model ex: 'dp', 'vm', 'elast', etc.
+	Type  string   `json:"type"`  // type of material; e.g. "solid", "conduct", "reten", "porous"
+	Model string   `json:"model"` // name of model; e.g. "dp", "vm", "elast", etc.
 	Extra string   `json:"extra"` // extra information about this material
 	Prms  fun.Prms `json:"prms"`  // prms holds all model parameters for this material
+
+	// derived
+	Solid   msolid.Model   // pointer to actual solid model
+	Conduct mconduct.Model // pointer to actual conductivity model
+	Reten   mreten.Model   // pointer to actual retention model
+	Porous  *mporous.Model // pointer to actual porous model
 }
 
 // Mats holds materials
@@ -27,31 +40,154 @@ type MatsData []*Material
 
 // MatDb implements a database of materials
 type MatDb struct {
+
+	// input
 	Functions FuncsData `json:"functions"` // all functions
 	Materials MatsData  `json:"materials"` // all materials
+
+	// derived
+	Solids   map[string]*Material // subset with materials/models: solids
+	Conducts map[string]*Material // subset with materials/models: coductivities
+	Retens   map[string]*Material // subset with materials/models: retention models
+	Porous   map[string]*Material // subset with materials/models: porous materials
+	Groups   map[string]*Material // subset with materials/models: groups
 }
 
 // ReadMat reads all materials data from a .mat JSON file
-//  Note: returns nil on errors
-func ReadMat(dir, fn string) *MatDb {
+func ReadMat(dir, fn string, ndim int, pstress, initModels bool) (mdb *MatDb, err error) {
 
-	// new mat
-	var o MatDb
+	// new database
+	mdb = new(MatDb)
 
 	// read file
 	b, err := io.ReadFile(filepath.Join(dir, fn))
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	// decode
-	err = json.Unmarshal(b, &o)
+	err = json.Unmarshal(b, mdb)
 	if err != nil {
-		return nil
+		return
 	}
 
-	// results
-	return &o
+	// subsets
+	mdb.Solids = make(map[string]*Material)
+	mdb.Conducts = make(map[string]*Material)
+	mdb.Retens = make(map[string]*Material)
+	mdb.Porous = make(map[string]*Material)
+	mdb.Groups = make(map[string]*Material)
+	for _, m := range mdb.Materials {
+		switch m.Type {
+		case "solid":
+			mdb.Solids[m.Name] = m
+			continue
+		case "conduct":
+			mdb.Conducts[m.Name] = m
+			continue
+		case "reten":
+			mdb.Retens[m.Name] = m
+			continue
+		case "porous":
+			mdb.Porous[m.Name] = m
+			continue
+		case "group":
+			mdb.Groups[m.Name] = m
+			continue
+		default:
+			err = chk.Err("material type %q is incorrect; options are \"solid\", \"conduct\", \"reten\", and \"porous\"", m.Type)
+			return
+		}
+	}
+
+	// skip allocation
+	if !initModels {
+		return
+	}
+
+	// alloc/init: solids
+	for _, m := range mdb.Solids {
+		m.Solid, err = msolid.New(m.Model)
+		if err != nil {
+			return
+		}
+		err = m.Solid.Init(ndim, pstress, m.Prms)
+		if err != nil {
+			return
+		}
+	}
+
+	// alloc/init: conducts
+	for _, m := range mdb.Conducts {
+		m.Conduct, err = mconduct.New(m.Model)
+		if err != nil {
+			return
+		}
+		err = m.Conduct.Init(m.Prms)
+		if err != nil {
+			return
+		}
+	}
+
+	// alloc/init: retens
+	for _, m := range mdb.Retens {
+		m.Reten, err = mreten.New(m.Model)
+		if err != nil {
+			return
+		}
+		err = m.Reten.Init(m.Prms)
+		if err != nil {
+			return
+		}
+	}
+
+	// alloc: porous
+	for _, m := range mdb.Porous {
+		m.Porous = new(mporous.Model)
+	}
+
+	// handle groups
+	porous2group := make(map[string]*Material)
+	for _, m := range mdb.Groups {
+		matnames := strings.Fields(m.Extra)
+		for _, name := range matnames {
+			if mm, ok := mdb.Solids[name]; ok {
+				m.Solid = mm.Solid
+			}
+			if mm, ok := mdb.Conducts[name]; ok {
+				m.Conduct = mm.Conduct
+			}
+			if mm, ok := mdb.Retens[name]; ok {
+				m.Reten = mm.Reten
+			}
+			if mm, ok := mdb.Porous[name]; ok {
+				m.Porous = mm.Porous
+				porous2group[name] = m
+			}
+		}
+	}
+
+	// init: porous
+	for _, m := range mdb.Porous {
+		g := porous2group[m.Name]
+		if g == nil {
+			err = chk.Err("cannot initialise porous model (%q) because it does not belong to any group", m.Name)
+			return
+		}
+		if g.Conduct == nil {
+			err = chk.Err("porous material (%q) in group (%q) must have conductivity model", m.Name, g.Name)
+			return
+		}
+		if g.Reten == nil {
+			err = chk.Err("porous material (%q) in group (%q) must have liquid retention model", m.Name, g.Name)
+			return
+		}
+		err = m.Porous.Init(m.Prms, g.Conduct, g.Reten)
+		if err != nil {
+			return
+		}
+	}
+	return
 }
 
 // Get returns a material
@@ -65,67 +201,11 @@ func (o MatDb) Get(name string) *Material {
 	return nil
 }
 
-// GroupGet parses group data
-//  Note: returns nil on failure
-func (o MatDb) GroupGet(matname, key string) *Material {
-	mat := o.Get(matname)
-	if mat == nil {
-		return nil
-	}
-	if submatname, found := io.Keycode(mat.Extra, key); found {
-		return o.Get(submatname)
-	}
-	return nil
-}
-
-// GroupGet3 parses group data
-func (o MatDb) GroupGet3(matname, key1, key2, key3 string) (m1, m2, m3 *Material, err error) {
-	mat := o.Get(matname)
-	if mat == nil {
-		err = chk.Err("cannot find material named %q", matname)
-		return
-	}
-	var submat1, submat2, submat3 string
-	var found bool
-	if submat1, found = io.Keycode(mat.Extra, key1); found {
-		m1 = o.Get(submat1)
-	} else {
-		err = chk.Err("cannot find key %q in grouped material data %q", key1, mat.Extra)
-		return
-	}
-	if submat2, found = io.Keycode(mat.Extra, key2); found {
-		m2 = o.Get(submat2)
-	} else {
-		err = chk.Err("cannot find key %q in grouped material data %q", key2, mat.Extra)
-		return
-	}
-	if submat3, found = io.Keycode(mat.Extra, key3); found {
-		m3 = o.Get(submat3)
-	} else {
-		err = chk.Err("cannot find key %q in grouped material data %q", key3, mat.Extra)
-		return
-	}
-	errmsg := ""
-	if m1 == nil {
-		errmsg += io.Sf("material data in grouped materials (!%s:%s) cannot be found\n", key1, submat1)
-	}
-	if m2 == nil {
-		errmsg += io.Sf("material data in grouped materials (!%s:%s) cannot be found\n", key2, submat2)
-	}
-	if m3 == nil {
-		errmsg += io.Sf("material data in grouped materials (!%s:%s) cannot be found\n", key3, submat3)
-	}
-	if errmsg != "" {
-		err = chk.Err(errmsg)
-	}
-	return
-}
-
 // String prints one function
 func (o *Material) String() string {
 	fun.G_extraindent = "  "
 	fun.G_openbrackets = false
-	return io.Sf("    {\n      \"name\"  : %q,\n      \"desc\"  : %q,\n      \"model\" : %q,\n      \"prms\"  : [\n%v\n    }", o.Name, o.Desc, o.Model, o.Prms)
+	return io.Sf("    {\n      \"name\"  : %q,\n      \"type\"  : %q,\n      \"model\" : %q,\n      \"extra\" : %q,\n      \"prms\"  : [\n%v\n    }", o.Name, o.Type, o.Model, o.Extra, o.Prms)
 }
 
 // String prints materials
@@ -144,195 +224,4 @@ func (o MatsData) String() string {
 // String outputs all materials
 func (o MatDb) String() string {
 	return io.Sf("{\n%v,\n%v\n}", o.Functions, o.Materials)
-}
-
-// MatfileOld2New converts an old mat file to new mat file format
-//  convertsymbols -- convert symbols with Greek characters to ANSI
-func MatfileOld2New(dirout string, fnnew, fnold string, convertsymbols bool) {
-
-	// oldmatdata implements the old data format
-	type oldmatdata struct {
-		Name  string
-		Desc  string
-		Model string
-		Prms  []string
-		Vals  []float64
-		Units []string
-		Extra string
-	}
-
-	// data holder
-	var mats_old []oldmatdata
-
-	// read file
-	b, err := io.ReadFile(fnold)
-	if err != nil {
-		chk.Panic("cannot open file: %v", err.Error())
-	}
-
-	// decode
-	err = json.Unmarshal(b, &mats_old)
-	if err != nil {
-		chk.Panic("cannot unmarshal file: %v", err.Error())
-	}
-
-	// new data holder
-	var mats_new MatDb
-	for _, m := range mats_old {
-		prms := []*fun.Prm{}
-		has_units := len(m.Units) == len(m.Prms)
-		for i, prm := range m.Prms {
-			name := prm
-			if convertsymbols {
-				if n, ok := conversiontable[prm]; ok {
-					name = n
-				}
-			}
-			if has_units {
-				prms = append(prms, &fun.Prm{N: name, V: m.Vals[i], U: m.Units[i]})
-			} else {
-				prms = append(prms, &fun.Prm{N: name, V: m.Vals[i]})
-			}
-		}
-		mat_new := Material{
-			Name:  m.Name,
-			Desc:  m.Desc,
-			Model: m.Model,
-			Extra: m.Extra,
-			Prms:  prms,
-		}
-		mats_new.Materials = append(mats_new.Materials, &mat_new)
-	}
-
-	// save file
-	if dirout == "" {
-		io.WriteFileS(fnnew, mats_new.String())
-		return
-	}
-	io.WriteFileSD(dirout, fnnew, mats_new.String())
-}
-
-// MatfileNew2Old converts a new mat file to the old mat file format
-//  convertsymbols -- convert back symbols with Greek characters to UTF-8
-func MatfileNew2Old(dirout string, fnold, fnnew string, convertsymbols bool) {
-
-	// read file
-	b, err := io.ReadFile(fnnew)
-	if err != nil {
-		io.PfRed("cannot open file: %v", err.Error())
-		return
-	}
-
-	// decode
-	var mats_new MatDb
-	err = json.Unmarshal(b, &mats_new)
-	if err != nil {
-		io.PfRed("cannot unmarshal file: %v", err.Error())
-		return
-	}
-
-	// oldmatdata implements the old data format
-	type oldmatdata struct {
-		Name  string
-		Desc  string
-		Model string
-		Prms  []string
-		Vals  []float64
-		Units []string
-		Extra string
-	}
-
-	// convert
-	var mats_old []oldmatdata
-	for _, m := range mats_new.Materials {
-		var oldmat oldmatdata
-		oldmat.Name = m.Name
-		oldmat.Desc = m.Desc
-		oldmat.Model = m.Model
-		oldmat.Extra = m.Extra
-		for _, prm := range m.Prms {
-			name := prm.N
-			if convertsymbols {
-				if n, ok := invertedconversiontable[prm.N]; ok {
-					name = n
-				}
-			}
-			oldmat.Prms = append(oldmat.Prms, name)
-			oldmat.Vals = append(oldmat.Vals, prm.V)
-			if len(prm.U) > 0 {
-				oldmat.Units = append(oldmat.Units, prm.U)
-			}
-		}
-		mats_old = append(mats_old, oldmat)
-	}
-
-	// encode
-	buf, err := json.MarshalIndent(mats_old, "", "  ")
-	if err != nil {
-		return
-	}
-
-	// save file
-	if dirout == "" {
-		io.WriteFileS(fnold, string(buf))
-		return
-	}
-	io.WriteFileSD(dirout, fnold, string(buf))
-}
-
-// convert greek to ansi
-var conversiontable = map[string]string{
-	"α":   "alp",
-	"αl":  "alpl",
-	"β":   "bet",
-	"βl":  "betl",
-	"βg":  "betg",
-	"βd":  "betd",
-	"βw":  "betw",
-	"β1":  "bet1",
-	"β2":  "bet2",
-	"μ":   "mu",
-	"ν":   "nu",
-	"φ":   "phi",
-	"κ":   "kap",
-	"λ":   "lam",
-	"λd":  "lamd",
-	"λw":  "lamw",
-	"λ0l": "lam0l",
-	"λ1l": "lam1l",
-	"λ0g": "lam0g",
-	"λ1g": "lam1g",
-	"ρL":  "RhoL",
-	"ρG":  "RhoG",
-	"ρ":   "rho",
-	"ρS":  "rho",
-	"RΘg": "RthG",
-	"τy0": "tauy0",
-}
-
-var invertedconversiontable = map[string]string{
-	"alp":   "α",
-	"alpL":  "αl",
-	"bet":   "β",
-	"betaL": "βl",
-	"betaG": "βg",
-	"betD":  "βd",
-	"betW":  "βw",
-	"bet1":  "β1",
-	"bet2":  "β2",
-	"nu":    "ν",
-	"phi":   "φ",
-	"kap":   "κ",
-	"lam":   "λ",
-	"lamD":  "λd",
-	"lamW":  "λw",
-	"lam0L": "λ0l",
-	"lam1L": "λ1l",
-	"lam0G": "λ0g",
-	"lam1G": "λ1g",
-	"Rho":   "ρ",
-	"RhoL":  "ρL",
-	"RhoG":  "ρG",
-	"RhoS":  "ρS",
-	"RthG":  "RΘg",
 }

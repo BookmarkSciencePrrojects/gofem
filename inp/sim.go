@@ -169,15 +169,6 @@ type TimeControl struct {
 	DtoFunc fun.Func // output time step function
 }
 
-// GeoStData holds data for setting initial geostatic state (hydrostatic as well)
-type GeoStData struct {
-	Nu     []float64 `json:"nu"`     // [nlayers] Poisson's coefficient to compute effective horizontal state for each layer
-	K0     []float64 `json:"K0"`     // [nlayers] Earth pressure coefficient at rest to compute effective horizontal stresses
-	UseK0  []bool    `json:"useK0"`  // [nlayers] use K0 to compute effective horizontal stresses instead of "nu"
-	Layers [][]int   `json:"layers"` // [nlayers][ntagsInLayer]; e.g. [[-1,-2], [-3,-4]] => 2 layers
-	Total  bool      `json:"total"`  // total stress analysis
-}
-
 // IniStressData holds data for setting initial stresses
 type IniStressData struct {
 	Hom bool    `json:"hom"` // homogeneous stress distribution
@@ -189,18 +180,27 @@ type IniStressData struct {
 	Nu  float64 `json:"nu"`  // Psa => Poisson's coefficient for plane-strain state
 }
 
-// InitialData holds data for setting initial solution values such as Y, dYdt and d2Ydt2
-type InitialData struct {
+// IniFileFuncData holds data for setting initial solution values such as Y, dYdt and d2Ydt2
+type IniFileFuncData struct {
 	File string   `json:"file"` // file with values at each node is given; filename with path is provided
 	Fcns []string `json:"fcns"` // functions F(t, x) are given; from functions database
 	Dofs []string `json:"dofs"` // degrees of freedom corresponding to "fcns"
 }
 
-// ImportRes holds definitions for importing results from a previous simulation
-type ImportRes struct {
+// IniImportRes holds definitions for importing results from a previous simulation
+type IniImportRes struct {
 	Dir    string `json:"dir"`    // output directory with previous simulation files
 	Fnk    string `json:"fnk"`    // previous simulation file name key (without .sim)
 	ResetU bool   `json:"resetu"` // reset/zero u (displacements)
+}
+
+// IniPorousData  holds data for setting initial porous media state (e.g. geostatic, hydrostatic)
+type IniPorousData struct {
+	Nu          []float64 `json:"nu"`          // [nlayers] Poisson's coefficient to compute effective horizontal state for each layer
+	K0          []float64 `json:"K0"`          // [nlayers] Earth pressure coefficient at rest to compute effective horizontal stresses
+	UseK0       []bool    `json:"useK0"`       // [nlayers] use K0 to compute effective horizontal stresses instead of "nu"
+	Layers      [][]int   `json:"layers"`      // [nlayers][ntagsInLayer]; e.g. [[-1,-2], [-3,-4]] => 2 layers
+	TotalStress bool      `json:"totalstress"` // total stress analysis
 }
 
 // Stage holds stage data
@@ -215,12 +215,11 @@ type Stage struct {
 	Skip       bool   `json:"skip"`       // do not run stage
 
 	// specific problems data
-	HydroSt   bool           `json:"hydrost"`   // hydrostatic initial condition
-	SeepFaces []int          `json:"seepfaces"` // face tags corresponding to seepage faces
-	IniStress *IniStressData `json:"inistress"` // initial stress data
-	GeoSt     *GeoStData     `json:"geost"`     // initial geostatic state data (hydrostatic as well)
-	Import    *ImportRes     `json:"import"`    // import results from another previous simulation
-	Initial   *InitialData   `json:"initial"`   // set initial solution values such as Y, dYdt and d2Ydt2
+	SeepFaces   []int            `json:"seepfaces"` // face tags corresponding to seepage faces
+	IniStress   *IniStressData   `json:"inistress"` // initial stress data
+	IniFileFunc *IniFileFuncData `json:"filefunc"`  // set initial solution values such as Y, dYdt and d2Ydt2
+	IniImport   *IniImportRes    `json:"import"`    // import results from another previous simulation
+	IniPorous   *IniPorousData   `json:"porous"`    // initial porous media state (geostatic and hydrostatic included)
 
 	// conditions
 	EleConds []*EleCond `json:"eleconds"` // element conditions. ex: gravity or beam distributed loads
@@ -249,13 +248,10 @@ type Simulation struct {
 	DirOut      string   // directory to save results
 	Key         string   // simulation key; e.g. mysim01.sim => mysim01 or mysim01-alias
 	EncType     string   // encoder type
-	MatParams   *MatDb   // materials' parameters
 	Ndim        int      // space dimension
 	MaxElev     float64  // maximum elevation
 	Gravity     fun.Func // first stage: gravity constant function
-	WaterRho0   float64  // first stage: intrinsic density of water corresponding to pressure pl=0
-	WaterBulk   float64  // first stage: bulk modulus of water
-	WaterLevel  float64  // first stage: water level == max(Wlevel, MaxElev)
+	MatModels   *MatDb   // materials and models
 }
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
@@ -317,12 +313,6 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 	// set solver constants
 	o.Solver.PostProcess()
 
-	// read materials database
-	o.MatParams = ReadMat(dir, o.Data.Matfile)
-	if o.MatParams == nil {
-		chk.Panic("ReadSim: cannot read materials database\n")
-	}
-
 	// for all regions
 	for i, reg := range o.Regions {
 
@@ -352,22 +342,14 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 			}
 			o.MaxElev = utl.Max(o.MaxElev, reg.Msh.MaxElev)
 		}
-
-		// get water data
-		for _, mat := range o.MatParams.Materials {
-			if mat.Model == "porous" {
-				if prm := mat.Prms.Find("RhoL0"); prm != nil {
-					o.WaterRho0 = prm.V
-				}
-				if prm := mat.Prms.Find("BulkL"); prm != nil {
-					o.WaterBulk = prm.V
-				}
-			}
-		}
 	}
 
-	// water level
-	o.WaterLevel = utl.Max(o.Data.Wlevel, o.MaxElev)
+	// read materials database and initialise models
+	initModels := true
+	o.MatModels, err = ReadMat(dir, o.Data.Matfile, o.Ndim, o.Data.Pstress, initModels)
+	if err != nil {
+		chk.Panic("ReadSim: loading materials and initialising models failed\n:%v", err)
+	}
 
 	// for all stages
 	var t float64
