@@ -20,6 +20,7 @@ type VanGen struct {
 	slmin   float64 // minimum sl
 	slmax   float64 // maximum sl
 	pcmin   float64 // pc limit to consider zero slope
+	pclim   float64 // pc limit corresponding to slmin
 }
 
 // add model to factory
@@ -47,6 +48,12 @@ func (o *VanGen) Init(prms fun.Prms) (err error) {
 		default:
 			return chk.Err("vg: parameter named %q is incorrect\n", p.N)
 		}
+	}
+	if o.slmin > 0 {
+		k := (o.slmax - o.slmin) / o.slmin
+		o.pclim = math.Pow((math.Pow(k, 1.0/o.m)-1.0)/math.Pow(o.α, o.n), 1.0/o.n)
+	} else {
+		o.pclim = 1e+30
 	}
 	return
 }
@@ -78,6 +85,9 @@ func (o VanGen) Sl(pc float64) float64 {
 	if pc <= o.pcmin {
 		return o.slmax
 	}
+	if pc >= o.pclim {
+		return o.slmin
+	}
 	c := math.Pow(o.α*pc, o.n)
 	fac := o.slmax - o.slmin
 	return fac * math.Pow(1+c, -o.m)
@@ -85,7 +95,7 @@ func (o VanGen) Sl(pc float64) float64 {
 
 // Cc computes Cc(pc) := dsl/dpc
 func (o VanGen) Cc(pc, sl float64, wet bool) (float64, error) {
-	if pc <= o.pcmin {
+	if pc <= o.pcmin || pc >= o.pclim {
 		return 0, nil
 	}
 	c := math.Pow(o.α*pc, o.n)
@@ -95,7 +105,7 @@ func (o VanGen) Cc(pc, sl float64, wet bool) (float64, error) {
 
 // L computes L = ∂Cc/∂pc
 func (o VanGen) L(pc, sl float64, wet bool) (float64, error) {
-	if pc <= o.pcmin {
+	if pc <= o.pcmin || pc >= o.pclim {
 		return 0, nil
 	}
 	c := math.Pow(o.α*pc, o.n)
@@ -111,7 +121,7 @@ func (o VanGen) J(pc, sl float64, wet bool) (float64, error) {
 
 // Derivs compute ∂Cc/∂pc and ∂²Cc/∂pc²
 func (o VanGen) Derivs(pc, sl float64, wet bool) (L, Lx, J, Jx, Jy float64, err error) {
-	if pc <= o.pcmin {
+	if pc <= o.pcmin || pc >= o.pclim {
 		return
 	}
 	c := math.Pow(o.α*pc, o.n)
