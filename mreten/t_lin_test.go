@@ -16,7 +16,7 @@ func Test_lin01(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("lin01")
 
-	mdl := GetModel("testsim", "mat1", "lin", false)
+	mdl := new(Lin)
 	prm := mdl.GetPrms(true)
 	slmax := prm.Find("slmax")
 	slmax.V = 0.95

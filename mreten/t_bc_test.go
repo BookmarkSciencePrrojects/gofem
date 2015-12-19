@@ -16,7 +16,7 @@ func Test_bc01(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("bc01")
 
-	mdl := GetModel("testsim", "mat1", "bc", false)
+	mdl := new(BrooksCorey)
 	prm := mdl.GetPrms(true)
 	slmax := prm.Find("slmax")
 	slmax.V = 0.95

@@ -16,7 +16,7 @@ func Test_vg01(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("vg01")
 
-	mdl := GetModel("testsim", "mat1", "vg", false)
+	mdl := new(VanGen)
 	prm := mdl.GetPrms(true)
 	slmax := prm.Find("slmax")
 	slmax.V = 0.95
@@ -26,7 +26,7 @@ func Test_vg01(tst *testing.T) {
 		return
 	}
 
-	ref := GetModel("testsim", "mat1", "ref-m1", false)
+	ref := new(RefM1)
 	err = ref.Init(ref.GetPrms(true))
 	if err != nil {
 		tst.Errorf("test failed: %v\n", err)

@@ -16,7 +16,7 @@ func Test_refm1a(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("refm1a")
 
-	mdl := GetModel("testsim", "mat1", "ref-m1", false)
+	mdl := new(RefM1)
 	prm := mdl.GetPrms(true)
 	y0 := prm.Find("y0")
 	y0.V = 0.95
