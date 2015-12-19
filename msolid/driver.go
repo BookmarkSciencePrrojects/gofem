@@ -41,10 +41,9 @@ type Driver struct {
 // Init initialises driver
 func (o *Driver) Init(simfnk, modelname string, ndim int, pstress bool, prms fun.Prms) (err error) {
 	o.nsig = 2 * ndim
-	getnew := false
-	o.model, _ = GetModel(simfnk, "solidmat", modelname, getnew)
-	if o.model == nil {
-		return chk.Err("cannot get model named %q\n", modelname)
+	o.model, err = New(modelname)
+	if err != nil {
+		return
 	}
 	err = o.model.Init(ndim, pstress, prms)
 	if err != nil {
@@ -98,7 +97,11 @@ func (o *Driver) Run(pth *Path) (err error) {
 	o.Res = make([]*State, nr)
 	o.Eps = la.MatAlloc(nr, o.nsig)
 	for i := 0; i < nr; i++ {
-		o.Res[i], err = o.model.InitIntVars(σ0)
+		if eup != nil {
+			o.Res[i], err = eup.InitIntVars(σ0)
+		} else {
+			o.Res[i], err = sml.InitIntVars(σ0)
+		}
 		if err != nil {
 			return
 		}
@@ -120,7 +123,11 @@ func (o *Driver) Run(pth *Path) (err error) {
 		εold = make([]float64, o.nsig)
 		εnew = make([]float64, o.nsig)
 		Δεtmp = make([]float64, o.nsig)
-		stmp, err = o.model.InitIntVars(σ0)
+		if eup != nil {
+			stmp, err = eup.InitIntVars(σ0)
+		} else {
+			stmp, err = sml.InitIntVars(σ0)
+		}
 		if err != nil {
 			return
 		}
