@@ -6,10 +6,8 @@
 package mconduct
 
 import (
-	"log"
-
+	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
-	"github.com/cpmech/gosl/io"
 )
 
 // Model defines liquid-gas conductivity models
@@ -22,55 +20,14 @@ type Model interface {
 	DkgrDsg(sg float64) float64    // DkgrDsl returns ∂kgr/∂sl
 }
 
-// GetModel returns (existent or new) conductivity model
-//  simfnk    -- unique simulation filename key
-//  matname   -- name of material
-//  modelname -- model name
-//  getnew    -- force a new allocation; i.e. do not use any model found in database
-//  Note: returns nil on errors
-func GetModel(simfnk, matname, modelname string, getnew bool) Model {
-
-	// get new model, regardless whether it exists in database or not
-	if getnew {
-		allocator, ok := allocators[modelname]
-		if !ok {
-			return nil
-		}
-		return allocator()
-	}
-
-	// search database
-	key := io.Sf("%s_%s_%s", simfnk, matname, modelname)
-	if model, ok := _models[key]; ok {
-		return model
-	}
-
-	// if not found, get new
-	allocator, ok := allocators[modelname]
+// New conductivity model
+func New(name string) (model Model, err error) {
+	allocator, ok := allocators[name]
 	if !ok {
-		return nil
+		return nil, chk.Err("model %q is not available in mconduct database", name)
 	}
-	model := allocator()
-	_models[key] = model
-	return model
-}
-
-// LogModels prints to log information on existent and allocated Models
-func LogModels() {
-	l := "mconduct: available:"
-	for name, _ := range allocators {
-		l += " " + name
-	}
-	log.Println(l)
-	l = "mconduct: allocated:"
-	for key, _ := range _models {
-		l += " " + io.Sf("%q", key)
-	}
-	log.Println(l)
+	return allocator(), nil
 }
 
 // allocators holds all available models
 var allocators = map[string]func() Model{}
-
-// _models holds pre-allocated models
-var _models = map[string]Model{}
