@@ -25,7 +25,7 @@ func PlotSimple(o *Model, dirout, fname string, pcmax float64, np int, returnTo0
 	if deriv {
 		Z = make([]float64, len(X)) // dsl/dpc
 	}
-	ρL, ρG, pl, pg := o.RhoL0, o.RhoG0, 0.0, 0.0
+	ρL, ρG, pl, pg := o.Liq.R0, o.Gas.R0, 0.0, 0.0
 	sta, err := o.NewState(ρL, ρG, pl, pg)
 	if err != nil {
 		chk.Panic("cannot create new state:\n%v", err)

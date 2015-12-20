@@ -16,6 +16,7 @@ import (
 	"math"
 
 	"github.com/cpmech/gofem/mdl/cnd"
+	"github.com/cpmech/gofem/mdl/fld"
 	"github.com/cpmech/gofem/mdl/lrm"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -45,12 +46,7 @@ type Model struct {
 
 	// parameters
 	Nf0   float64 // nf0: initial volume fraction of all fluids ~ porosity
-	RhoL0 float64 // ρL0: initial liquid real density
-	RhoG0 float64 // ρG0: initial gas real density
 	RhoS0 float64 // real (intrinsic) density of solids
-	Cl    float64 // liquid compresssibility
-	Cg    float64 // gas compressibility
-	Gref  float64 // reference gravity, at time of measuring ksat, kgas
 	Pkl   float64 // isotrpic liquid saturated conductivity
 	Pkg   float64 // isotrpic gas saturated conductivity
 
@@ -58,26 +54,18 @@ type Model struct {
 	Klsat [][]float64 // klsat ÷ Gref
 	Kgsat [][]float64 // kgsat ÷ Gref
 
-	// conductivity and retention models
-	Cnd cnd.Model // liquid-gas conductivity models
-	Lrm lrm.Model // retention model
+	// auxiliary models
+	Cnd cnd.Model  // liquid-gas conductivity models
+	Lrm lrm.Model  // retention model
+	Liq *fld.Model // liquid properties
+	Gas *fld.Model // gas properties
 
 	// auxiliary
 	nonrateLrm lrm.Nonrate // LRM is of non-rate type
 }
 
 // Init initialises this structure
-func (o *Model) Init(prms fun.Prms, Cnd cnd.Model, Lrm lrm.Model) (err error) {
-
-	// conductivity and retention models
-	if Cnd == nil || Lrm == nil {
-		return chk.Err("Init: conductivity and liquid retention models must be non nil. cnd=%v, lrm=%v\n", Cnd, Lrm)
-	}
-	o.Cnd = Cnd
-	o.Lrm = Lrm
-	if m, ok := o.Lrm.(lrm.Nonrate); ok {
-		o.nonrateLrm = m
-	}
+func (o *Model) Init(prms fun.Prms, Cnd cnd.Model, Lrm lrm.Model, Liq *fld.Model, Gas *fld.Model, grav float64) (err error) {
 
 	// constants
 	o.NmaxIt = 20
@@ -114,18 +102,8 @@ func (o *Model) Init(prms fun.Prms, Cnd cnd.Model, Lrm lrm.Model) (err error) {
 		// parameters
 		case "nf0":
 			o.Nf0 = p.V
-		case "RhoL0":
-			o.RhoL0 = p.V
-		case "RhoG0":
-			o.RhoG0 = p.V
 		case "RhoS0":
 			o.RhoS0 = p.V
-		case "Cl":
-			o.Cl = p.V
-		case "Cg":
-			o.Cg = p.V
-		case "gref":
-			o.Gref = p.V
 		case "kl":
 			o.Pkl = p.V
 			klx, kly, klz = p.V, p.V, p.V
@@ -139,14 +117,23 @@ func (o *Model) Init(prms fun.Prms, Cnd cnd.Model, Lrm lrm.Model) (err error) {
 
 	// derived
 	o.Klsat = [][]float64{
-		{klx / o.Gref, 0, 0},
-		{0, kly / o.Gref, 0},
-		{0, 0, klz / o.Gref},
+		{klx / grav, 0, 0},
+		{0, kly / grav, 0},
+		{0, 0, klz / grav},
 	}
 	o.Kgsat = [][]float64{
-		{kgx / o.Gref, 0, 0},
-		{0, kgy / o.Gref, 0},
-		{0, 0, kgz / o.Gref},
+		{kgx / grav, 0, 0},
+		{0, kgy / grav, 0},
+		{0, 0, kgz / grav},
+	}
+
+	// auxiliary models
+	o.Cnd = Cnd
+	o.Lrm = Lrm
+	o.Liq = Liq
+	o.Gas = Gas
+	if m, ok := o.Lrm.(lrm.Nonrate); ok {
+		o.nonrateLrm = m
 	}
 	return
 }
@@ -155,25 +142,15 @@ func (o *Model) Init(prms fun.Prms, Cnd cnd.Model, Lrm lrm.Model) (err error) {
 func (o Model) GetPrms(example bool) fun.Prms {
 	if example {
 		return fun.Prms{
-			&fun.Prm{N: "nf0", V: 0.3},
-			&fun.Prm{N: "RhoL0", V: 1.0},    // [Mg/m³]
-			&fun.Prm{N: "RhoG0", V: 0.0012}, // [Mg/m³]
-			&fun.Prm{N: "RhoS0", V: 2.7},    // [Mg/m³]
-			&fun.Prm{N: "Cl", V: 4.53e-7},   // [Mg/(m³・kPa)]
-			&fun.Prm{N: "Cg", V: 1.17e-5},   // [Mg/(m³・kPa)]
-			&fun.Prm{N: "gref", V: 10.0},    // [m/s²]
-			&fun.Prm{N: "kl", V: 1e-3},      // [m/s]
-			&fun.Prm{N: "kg", V: 1e-2},      // [m/s]
+			&fun.Prm{N: "nf0", V: 0.3},   // [-]
+			&fun.Prm{N: "RhoS0", V: 2.7}, // [Mg/m³]
+			&fun.Prm{N: "kl", V: 1e-3},   // [m/s]
+			&fun.Prm{N: "kg", V: 1e-2},   // [m/s]
 		}
 	}
 	return fun.Prms{
 		&fun.Prm{N: "nf0", V: o.Nf0},
-		&fun.Prm{N: "RhoL0", V: o.RhoL0},
-		&fun.Prm{N: "RhoG0", V: o.RhoG0},
 		&fun.Prm{N: "RhoS0", V: o.RhoS0},
-		&fun.Prm{N: "Cl", V: o.Cl},
-		&fun.Prm{N: "Cg", V: o.Cg},
-		&fun.Prm{N: "gref", V: o.Gref},
 		&fun.Prm{N: "kl", V: o.Pkl},
 		&fun.Prm{N: "kg", V: o.Pkg},
 	}
@@ -297,11 +274,11 @@ func (o Model) Update(s *State, Δpl, Δpg, pl, pg float64) (err error) {
 	}
 
 	// set state
-	s.A_sl = sl          // 2
-	s.A_ρL += o.Cl * Δpl // 3
-	s.A_ρG += o.Cg * Δpg // 4
-	s.A_Δpc = Δpc        // 5
-	s.A_wet = wet        // 6
+	s.A_sl = sl             // 2
+	s.A_ρL += o.Liq.C * Δpl // 3
+	s.A_ρG += o.Gas.C * Δpg // 4
+	s.A_Δpc = Δpc           // 5
+	s.A_wet = wet           // 6
 	return
 }
 

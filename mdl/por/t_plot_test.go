@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/cpmech/gofem/mdl/cnd"
+	"github.com/cpmech/gofem/mdl/fld"
 	"github.com/cpmech/gofem/mdl/lrm"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -52,9 +53,19 @@ func Test_plot01(tst *testing.T) {
 		return
 	}
 
+	// constants
+	H := 10.0
+	grav := 10.0
+
+	// fluids
+	Liq := new(fld.Model)
+	Liq.Init(Liq.GetPrms(true, false), H, grav)
+	Gas := new(fld.Model)
+	Gas.Init(Gas.GetPrms(true, true), H, grav)
+
 	// porous model
 	mdl := new(Model)
-	err = mdl.Init(mdl.GetPrms(example), Cnd, Lrm)
+	err = mdl.Init(mdl.GetPrms(example), Cnd, Lrm, Liq, Gas, grav)
 	if err != nil {
 		tst.Errorf("Init failed: %v\n", err)
 		return

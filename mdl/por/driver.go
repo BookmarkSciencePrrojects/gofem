@@ -46,7 +46,7 @@ func (o *Driver) Run(Pc []float64) (err error) {
 	o.Res = make([]*State, np)
 
 	// initialise first state
-	o.Res[0], err = o.Mdl.NewState(o.Mdl.RhoL0, o.Mdl.RhoG0, -Pc[0], 0)
+	o.Res[0], err = o.Mdl.NewState(o.Mdl.Liq.R0, o.Mdl.Gas.R0, -Pc[0], 0)
 	if err != nil {
 		return
 	}

@@ -78,7 +78,7 @@ func (o Model) CalcLs(res *LsVars, sta *State, pl, divus float64, derivs bool) (
 	ns0 := sta.A_ns0
 	sl := sta.A_sl
 	ρL := sta.A_ρL
-	Cl := o.Cl
+	Cl := o.Liq.C
 	ρS := o.RhoS0
 
 	// n variables; Eqs (13) and (28) of [1]
@@ -136,8 +136,8 @@ func (o Model) CalcLgs(res *LgsVars, sta *State, pl, pg, divus float64, derivs b
 	sg := 1.0 - sl
 	ρL := sta.A_ρL
 	ρG := sta.A_ρG
-	Cl := o.Cl
-	Cg := o.Cg
+	Cl := o.Liq.C
+	Cg := o.Gas.C
 	ρS := o.RhoS0
 
 	// n variables
