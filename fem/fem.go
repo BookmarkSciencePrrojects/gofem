@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/msolid"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
@@ -33,7 +32,6 @@ type FEM struct {
 	Sim     *inp.Simulation // simulation data
 	Summary *Summary        // summary structure
 	DynCfs  *DynCoefs       // coefficients for dynamics/transient simulations
-	HydSta  *HydroStatic    // function to compute hydrostatic state
 	Domains []*Domain       // all domains
 	Solver  FEsolver        // finite element method solver; e.g. implicit, Richardson extrapolation, etc.
 	DebugKb DebugKb_t       // debug Kb callback function
@@ -93,11 +91,9 @@ func NewFEM(simfilepath, alias string, erasePrev, saveSummary, readSummary, allo
 	// auxiliary structures
 	o.DynCfs = new(DynCoefs)
 	o.DynCfs.Init(&o.Sim.Solver)
-	o.HydSta = new(HydroStatic)
-	o.HydSta.Init(o.Sim.WaterLevel, o.Sim.WaterRho0, o.Sim.WaterBulk, o.Sim.Gravity.F(0, nil))
 
 	// allocate domains
-	o.Domains = NewDomains(o.Sim, o.DynCfs, o.HydSta, o.Proc, o.Nproc, distr)
+	o.Domains = NewDomains(o.Sim, o.DynCfs, o.Proc, o.Nproc, distr)
 
 	// allocate solver
 	if alloc, ok := solverallocators[o.Sim.Solver.Type]; ok {
@@ -212,10 +208,8 @@ func (o *FEM) SolveOneStage(stgidx int, zerostage bool) (err error) {
 // onexit clean domains, prints final message with simulation and cpu times and save summary
 func (o FEM) onexit(cputime time.Time, prevErr error) (err error) {
 
-	// clean solid models
-	msolid.CleanModels()
-
-	// clear domains
+	// clean resources
+	o.Sim.Clean()
 	for _, d := range o.Domains {
 		d.Clean()
 	}

@@ -156,11 +156,12 @@ func init() {
 		}
 		nip := len(o.IpsElem)
 
-		// models
-		o.Mdl, err = GetAndInitPorousModel(sim.MatParams, edat.Mat, sim.Key)
-		if err != nil {
+		// model
+		mat := sim.MatModels.Get(edat.Mat)
+		if mat == nil {
 			chk.Panic("cannot get model for p-element {tag=%d id=%d material=%q}:\n%v", cell.Tag, cell.Id, edat.Mat, err)
 		}
+		o.Mdl = mat.Porous
 
 		// local starred variables
 		o.ψl = make([]float64, nip)
@@ -348,6 +349,11 @@ func (o *ElemPP) AddToRhs(fb []float64, sol *Solution) (err error) {
 				o.wgb[i] += kgr * o.Mdl.Kgsat[i][j] * (ρG*o.g[j] - o.gpg[j])
 			}
 		}
+
+		x := o.Cell.Shp.IpRealCoords(o.X, ip)
+		io.Pf("z=%9.6f ρL=%v ρG=%v\n", x[1], ρL, ρG)
+		io.Pfyel("wlb = %23.15e\n", o.wlb)
+		io.Pfgreen("wgb = %23.15e\n", o.wgb)
 
 		// add negative of residual term to fb
 		for m := 0; m < nverts; m++ {
@@ -567,6 +573,8 @@ func (o *ElemPP) Ipoints() (coords [][]float64) {
 }
 
 // SetIniIvs sets initial ivs for given values in sol and ivs map
+//  Note: this function assumes a hydrostatic fully saturated initial condition, thus:
+//        sl=1, krl=1, wlb=0  sg=0, krg=krgMin, wgb=0
 func (o *ElemPP) SetIniIvs(sol *Solution, ignored map[string][]float64) (err error) {
 
 	// auxiliary
@@ -611,8 +619,10 @@ func (o *ElemPP) SetIniIvs(sol *Solution, ignored map[string][]float64) (err err
 		o.compute_gvec(sol.T)
 		if math.Abs(o.g[o.Ndim-1]) > 0 {
 			ρL = o.gpl[o.Ndim-1] / o.g[o.Ndim-1]
-			ρG = o.gpg[o.Ndim-1] / o.g[o.Ndim-1]
+			//ρG = o.gpg[o.Ndim-1] / o.g[o.Ndim-1]
 		}
+		x := o.Cell.Shp.IpRealCoords(o.X, ip)
+		io.Pforan("z=%9.6f ρL=%v ρG=%v\n", x[1], ρL, ρG)
 
 		// state initialisation
 		o.States[idx], err = o.Mdl.NewState(ρL, ρG, pl, pg)

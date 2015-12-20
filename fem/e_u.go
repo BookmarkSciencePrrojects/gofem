@@ -26,8 +26,7 @@ type ElemU struct {
 	Ndim int         // space dimension
 
 	// variables for dynamics
-	Rho  float64  // density of solids
-	Cdam float64  // coefficient for damping
+	Cdam float64  // coefficient for damping // TODO: read this value
 	Gfcn fun.Func // gravity function
 
 	// optional data
@@ -40,7 +39,7 @@ type ElemU struct {
 	IpsFace []shp.Ipoint // integration points corresponding to faces
 
 	// material model and internal variables
-	Model    msolid.Model // material model
+	Mdl      msolid.Model // material model
 	MdlSmall msolid.Small // model specialisation for small strains
 	MdlLarge msolid.Large // model specialisation for large deformations
 
@@ -166,30 +165,20 @@ func init() {
 		nip := len(o.IpsElem)
 
 		// model
-		var prms fun.Prms
-		o.Model, prms, err = GetAndInitSolidModel(sim.MatParams, edat.Mat, sim.Key, sim.Ndim, sim.Data.Pstress)
-		if err != nil {
-			chk.Panic("cannot get model for solid element {tag=%d id=%d material=%q}", cell.Tag, cell.Id, edat.Mat)
+		mat := sim.MatModels.Get(edat.Mat)
+		if mat == nil {
+			chk.Panic("cannot find material %q for solid element {tag=%d, id=%d}\n", edat.Mat, cell.Tag, cell.Id)
 		}
+		o.Mdl = mat.Solid
 
 		// model specialisations
-		switch m := o.Model.(type) {
+		switch m := o.Mdl.(type) {
 		case msolid.Small:
 			o.MdlSmall = m
 		case msolid.Large:
 			o.MdlLarge = m
 		default:
 			chk.Panic("__internal_error__: 'u' element cannot determine the type of the material model")
-		}
-
-		// parameters
-		for _, p := range prms {
-			switch p.N {
-			case "rho":
-				o.Rho = p.V
-			case "Cdam":
-				o.Cdam = p.V
-			}
 		}
 
 		// local starred variables
@@ -327,6 +316,7 @@ func (o *ElemU) AddToRhs(fb []float64, sol *Solution) (err error) {
 	}
 
 	// for each integration point
+	ρ := o.Mdl.GetRho()
 	nverts := o.Cell.Shp.Nverts
 	for idx, ip := range o.IpsElem {
 
@@ -367,7 +357,7 @@ func (o *ElemU) AddToRhs(fb []float64, sol *Solution) (err error) {
 				for m := 0; m < nverts; m++ {
 					i := o.Ndim - 1
 					r := o.Umap[i+m*o.Ndim]
-					fb[r] += coef * S[m] * o.Rho * o.grav[i] // +fx
+					fb[r] += coef * S[m] * ρ * o.grav[i] // +fx
 				}
 			}
 		} else {
@@ -376,7 +366,7 @@ func (o *ElemU) AddToRhs(fb []float64, sol *Solution) (err error) {
 			for m := 0; m < nverts; m++ {
 				for i := 0; i < o.Ndim; i++ {
 					r := o.Umap[i+m*o.Ndim]
-					fb[r] -= coef * S[m] * (o.Rho*(α1*o.us[i]-o.ζs[idx][i]-o.grav[i]) + o.Cdam*(α4*o.us[i]-o.χs[idx][i])) // -RuBar
+					fb[r] -= coef * S[m] * (ρ*(α1*o.us[i]-o.ζs[idx][i]-o.grav[i]) + o.Cdam*(α4*o.us[i]-o.χs[idx][i])) // -RuBar
 				}
 			}
 		}
@@ -410,6 +400,7 @@ func (o *ElemU) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)
 	la.MatFill(o.K, 0)
 
 	// for each integration point
+	ρ := o.Mdl.GetRho()
 	nverts := o.Cell.Shp.Nverts
 	for idx, ip := range o.IpsElem {
 
@@ -457,7 +448,7 @@ func (o *ElemU) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)
 					r := i + m*o.Ndim
 					for n := 0; n < nverts; n++ {
 						c := i + n*o.Ndim
-						o.K[r][c] += coef * S[m] * S[n] * (o.Rho*α1 + o.Cdam*α4)
+						o.K[r][c] += coef * S[m] * S[n] * (ρ*α1 + o.Cdam*α4)
 					}
 				}
 			}
@@ -548,7 +539,7 @@ func (o *ElemU) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
 		if has_sig {
 			Ivs2sigmas(σ, i, ivs)
 		}
-		o.States[i], err = o.Model.InitIntVars(σ)
+		o.States[i], err = o.Mdl.InitIntVars(σ)
 		if err != nil {
 			return
 		}

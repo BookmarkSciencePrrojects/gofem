@@ -9,6 +9,7 @@ import (
 	"math"
 	"sort"
 
+	"github.com/cpmech/gofem/ana"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
@@ -40,22 +41,22 @@ type EssentialBc struct {
 // EssentialBcs implements a structure to record the definition of essential bcs / constraints.
 // Each constraint will have a unique Lagrange multiplier index.
 type EssentialBcs struct {
-	HydFcn *HydroStatic   // for computing hydrostatic conditions
-	Eq2idx map[int][]int  // maps eq number to indices in BcsTmp
-	Bcs    []*EssentialBc // active essential bcs / constraints
-	A      la.Triplet     // matrix of coefficients 'A'
-	Am     *la.CCMatrix   // compressed form of A matrix
+	ColLiq *ana.ColumnFluidPressure // for computing hydrostatic conditions
+	Eq2idx map[int][]int            // maps eq number to indices in BcsTmp
+	Bcs    []*EssentialBc           // active essential bcs / constraints
+	A      la.Triplet               // matrix of coefficients 'A'
+	Am     *la.CCMatrix             // compressed form of A matrix
 
 	// temporary
 	BcsTmp eqbcpairs // temporary essential bcs / constraints, including inactive ones. maps the first equation number to bcs
 }
 
 // Reset initialises this structure. It also performs a reset of internal structures.
-func (o *EssentialBcs) Init(hydfcn *HydroStatic) {
+func (o *EssentialBcs) Init(colliq *ana.ColumnFluidPressure) {
 	o.BcsTmp = make([]eqbcpair, 0)
 	o.Eq2idx = make(map[int][]int)
 	o.Bcs = make([]*EssentialBc, 0)
-	o.HydFcn = hydfcn
+	o.ColLiq = colliq
 }
 
 // Build builds this structure and its iternal data
@@ -225,10 +226,7 @@ func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.Func, extra string
 			if ndim == 3 {
 				z = nod.Vert.C[2] // 3D
 			}
-			plVal, _, err := o.HydFcn.Calc(z)
-			if err != nil {
-				return chk.Err("cannot set hst (hydrostatic) essential boundary condition")
-			}
+			plVal, _ := o.ColLiq.Calc(z)
 			pl := fun.Add{
 				B: 1, Fb: &fun.Cte{C: plVal},
 				A: -1, Fa: fcn,

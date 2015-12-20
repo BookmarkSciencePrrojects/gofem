@@ -62,14 +62,9 @@ type Rjoint struct {
 	Ndim int             // space dimension
 
 	// essential
-	Rod *Rod            // rod element
-	Sld *ElemU          // solid element
-	Mdl msolid.RjointM1 // material model
-
-	// parameters
-	h  float64 // perimeter of rod element; Eq (34)
-	k1 float64 // lateral stiffness; Eq (37)
-	k2 float64 // lateral stiffness; Eq (37)
+	Rod *Rod             // rod element
+	Sld *ElemU           // solid element
+	Mdl *msolid.RjointM1 // material model
 
 	// shape functions evaluations and extrapolator matrices
 	Nmat [][]float64 // [sldNn][rodNn] shape functions of solids @ [N]odes of rod element
@@ -162,35 +157,16 @@ func (o *Rjoint) Connect(cid2elem []Elem, c *inp.Cell) (nnzK int, err error) {
 	// total number of dofs
 	o.Ny = o.Rod.Nu + o.Sld.Nu
 
-	// material model name
-	matdata := o.Sim.MatParams.Get(o.Edat.Mat)
-	if matdata == nil {
+	// model
+	mat := o.Sim.MatModels.Get(o.Edat.Mat)
+	if mat == nil {
 		err = chk.Err("materials database failed on getting %q material\n", o.Edat.Mat)
 		return
 	}
+	o.Mdl = mat.Solid.(*msolid.RjointM1)
 
-	// initialise model
-	err = o.Mdl.Init(matdata.Prms)
-	if err != nil {
-		err = chk.Err("model initialisation failed:\n%v", err)
-		return
-	}
-
-	// parameters
-	for _, p := range matdata.Prms {
-		switch p.N {
-		case "h":
-			o.h = p.V
-		case "k1":
-			o.k1 = p.V
-		case "k2":
-			o.k2 = p.V
-		case "mu":
-			if p.V > 0.0 {
-				o.Coulomb = true
-			}
-		}
-	}
+	// flag
+	o.Coulomb = o.Mdl.A_μ > 0
 
 	// auxiliary
 	nsig := 2 * o.Ndim
@@ -376,6 +352,7 @@ func (o *Rjoint) AddToRhs(fb []float64, sol *Solution) (err error) {
 	rodNn := rodH.Nverts
 	sldH := o.Sld.Cell.Shp
 	sldNn := sldH.Nverts
+	h := o.Mdl.A_h
 
 	// internal forces vector
 	la.VecFill(o.fC, 0)
@@ -401,7 +378,7 @@ func (o *Rjoint) AddToRhs(fb []float64, sol *Solution) (err error) {
 
 		// fC vector. Eq. (34)
 		for i := 0; i < o.Ndim; i++ {
-			o.qb[i] = τ*o.h*e0[i] + qn1*e1[i] + qn2*e2[i]
+			o.qb[i] = τ*h*e0[i] + qn1*e1[i] + qn2*e2[i]
 			for m := 0; m < rodNn; m++ {
 				r := i + m*o.Ndim
 				o.fC[r] += coef * rodS[m] * o.qb[i]
@@ -434,6 +411,8 @@ func (o *Rjoint) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 	rodNn := rodH.Nverts
 	sldH := o.Sld.Cell.Shp
 	sldNn := sldH.Nverts
+	h := o.Mdl.A_h
+	kl := o.Mdl.A_kl
 
 	// compute DσNoDu
 	nsig := 2 * o.Ndim
@@ -530,7 +509,7 @@ func (o *Rjoint) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 				for i := 0; i < o.Ndim; i++ {
 
 					// ∂qb/∂ur Eq (A.2)
-					DqbDur_nij = o.h*e0[i]*(DτDω*Dwb0Dur_nj) + o.k1*e1[i]*Dwb1Dur_nj + o.k2*e2[i]*Dwb2Dur_nj
+					DqbDur_nij = h*e0[i]*(DτDω*Dwb0Dur_nj) + kl*e1[i]*Dwb1Dur_nj + kl*e2[i]*Dwb2Dur_nj
 
 					// Krr := ∂fr/∂ur Eq (58)
 					for m := 0; m < rodNn; m++ {
@@ -585,7 +564,7 @@ func (o *Rjoint) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 				for i := 0; i < o.Ndim; i++ {
 
 					// ∂qb/∂us Eq (A.3)
-					DqbDu_nij = o.h*e0[i]*DτDu_nj + o.k1*e1[i]*Dwb1Du_nj + o.k2*e2[i]*Dwb2Du_nj
+					DqbDu_nij = h*e0[i]*DτDu_nj + kl*e1[i]*Dwb1Du_nj + kl*e2[i]*Dwb2Du_nj
 
 					// Krs := ∂fr/∂us Eq (59)
 					for m := 0; m < rodNn; m++ {
@@ -639,6 +618,7 @@ func (o *Rjoint) Update(sol *Solution) (err error) {
 	rodNn := rodH.Nverts
 	sldH := o.Sld.Cell.Shp
 	sldNn := sldH.Nverts
+	kl := o.Mdl.A_kl
 
 	// extrapolate stresses at integration points of solid element to its nodes
 	if o.Coulomb {
@@ -736,8 +716,8 @@ func (o *Rjoint) Update(sol *Solution) (err error) {
 		if err != nil {
 			return
 		}
-		o.States[idx].Phi[0] += o.k1 * Δwb1 // qn1
-		o.States[idx].Phi[1] += o.k2 * Δwb2 // qn2
+		o.States[idx].Phi[0] += kl * Δwb1 // qn1
+		o.States[idx].Phi[1] += kl * Δwb2 // qn2
 
 		// debugging
 		//if true {
@@ -762,7 +742,7 @@ func (o *Rjoint) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) 
 	o.StatesBkp = make([]*msolid.OnedState, nip)
 	o.StatesAux = make([]*msolid.OnedState, nip)
 	for i := 0; i < nip; i++ {
-		o.States[i], _ = o.Mdl.InitIntVars(0, 0, 0)
+		o.States[i], _ = o.Mdl.InitIntVars1D()
 		o.StatesBkp[i] = o.States[i].GetCopy()
 		o.StatesAux[i] = o.States[i].GetCopy()
 	}

@@ -10,8 +10,8 @@ import (
 	"github.com/cpmech/gosl/utl"
 )
 
-// SetIniStress sets the initial state with initial stresses
-func (o *Domain) SetIniStress(stg *inp.Stage) (err error) {
+// IniSetStress sets all elements with homogeneous initial stress
+func (o *Domain) IniSetStress(stg *inp.Stage) (err error) {
 
 	// set elements with homogeneous stress state
 	dat := stg.IniStress

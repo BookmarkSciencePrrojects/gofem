@@ -147,11 +147,12 @@ func init() {
 		}
 		nip := len(o.IpsElem)
 
-		// models
-		o.Mdl, err = GetAndInitPorousModel(sim.MatParams, edat.Mat, sim.Key)
-		if err != nil {
+		// model
+		mat := sim.MatModels.Get(edat.Mat)
+		if mat == nil {
 			chk.Panic("cannot get model for p-element {tag=%d id=%d material=%q}:\n%v", cell.Tag, cell.Id, edat.Mat, err)
 		}
+		o.Mdl = mat.Porous
 
 		// local starred variables
 		o.ψl = make([]float64, nip)

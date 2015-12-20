@@ -53,7 +53,7 @@ func Test_up01a(tst *testing.T) {
 	 *           10                              12 13
 	 */
 
-	//verbose()
+	verbose()
 	chk.PrintTitle("up01a")
 
 	// start simulation
@@ -171,7 +171,7 @@ func Test_up01a(tst *testing.T) {
 			case "uy":
 				chk.Scalar(tst, io.Sf("nod %3d : uy(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
 			case "pl":
-				plC, _, _ := dom.HydSta.Calc(z)
+				plC, _ := dom.Sim.ColLiq.Calc(z)
 				chk.Scalar(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-13, u, plC)
 			}
 		}

@@ -169,7 +169,7 @@ func Test_sim01(tst *testing.T) {
 
 func Test_sim02(tst *testing.T) {
 
-	verbose()
+	//verbose()
 	chk.PrintTitle("sim01")
 
 	sim := ReadSim("data/frees01.sim", "", true, 0)

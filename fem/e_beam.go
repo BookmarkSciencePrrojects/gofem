@@ -8,6 +8,7 @@ import (
 	"math"
 
 	"github.com/cpmech/gofem/inp"
+	"github.com/cpmech/gofem/msolid"
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -54,19 +55,13 @@ type Beam struct {
 	Ndim int         // space dimension
 
 	// parameters and properties
-	E   float64 // Young's modulus
-	G   float64 // shear modulus
-	A   float64 // cross-sectional area
-	I22 float64 // moment of inertia of cross section about y2-axis
-	I11 float64 // moment of inertia of cross section about y1-axis
-	Jtt float64 // torsional constant
-	L   float64 // (derived) length of beam
+	Mdl *msolid.OnedLinElast // material model with: E, G, A, I22, I11, Jtt and Rho
+	L   float64              // (derived) length of beam
 
 	// for output
 	Nstations int // number of points along beam to generate bending moment / shear force diagrams
 
 	// variables for dynamics
-	Rho  float64  // density of solids
 	Gfcn fun.Func // gravity function
 
 	// unit vectors aligned with beam element
@@ -140,35 +135,20 @@ func init() {
 		ndof := 3 * (o.Ndim - 1)
 		o.Nu = 2 * ndof
 
-		// parameters
-		matdata := sim.MatParams.Get(edat.Mat)
-		if matdata == nil {
+		// model
+		mat := sim.MatModels.Get(edat.Mat)
+		if mat == nil {
 			chk.Panic("cannot find material %q for beam {tag=%d, id=%d}\n", edat.Mat, cell.Tag, cell.Id)
 		}
-		for _, p := range matdata.Prms {
-			switch p.N {
-			case "E":
-				o.E = p.V
-			case "G":
-				o.G = p.V
-			case "A":
-				o.A = p.V
-			case "I22":
-				o.I22 = p.V
-			case "I11":
-				o.I11 = p.V
-			case "Jtt":
-				o.Jtt = p.V
-			case "rho":
-				o.Rho = p.V
-			}
-		}
+		o.Mdl = mat.Solid.(*msolid.OnedLinElast)
+
+		// check
 		ϵp := 1e-9
-		if o.E < ϵp || o.A < ϵp || o.I22 < ϵp || o.Rho < ϵp {
+		if o.Mdl.E < ϵp || o.Mdl.A < ϵp || o.Mdl.I22 < ϵp || o.Mdl.GetRho() < ϵp {
 			chk.Panic("E, A, I22 and rho parameters must be all positive")
 		}
 		if o.Ndim == 3 {
-			if o.G < ϵp || o.I11 < ϵp || o.Jtt < ϵp {
+			if o.Mdl.G < ϵp || o.Mdl.I11 < ϵp || o.Mdl.Jtt < ϵp {
 				chk.Panic("G, I11, Jtt parameters must be all positive")
 			}
 		}
@@ -439,7 +419,10 @@ func (o *Beam) Recompute(withM bool) {
 		}
 
 		// constants
-		EIr, EIs, GJ, EA := o.E*o.I22, o.E*o.I11, o.G*o.Jtt, o.E*o.A
+		EIr := o.Mdl.E * o.Mdl.I22
+		EIs := o.Mdl.E * o.Mdl.I11
+		GJ := o.Mdl.G * o.Mdl.Jtt
+		EA := o.Mdl.E * o.Mdl.A
 		l := o.L
 		ll := l * l
 		lll := l * ll
@@ -532,8 +515,8 @@ func (o *Beam) Recompute(withM bool) {
 
 	// aux vars
 	ll := l * l
-	m := o.E * o.A / l
-	n := o.E * o.I22 / (ll * l)
+	m := o.Mdl.E * o.Mdl.A / l
+	n := o.Mdl.E * o.Mdl.I22 / (ll * l)
 
 	// K
 	o.Kl[0][0] = m
@@ -560,7 +543,7 @@ func (o *Beam) Recompute(withM bool) {
 
 	// M
 	if withM {
-		m = o.Rho * o.A * l / 420.0
+		m = o.Mdl.GetRho() * o.Mdl.A * l / 420.0
 		o.Ml[0][0] = 140.0 * m
 		o.Ml[0][3] = 70.0 * m
 		o.Ml[1][1] = 156.0 * m
@@ -695,7 +678,9 @@ func (o *Beam) calc_moment3d_after_ua(time, ξ float64) (M22, M11, T00 float64) 
 	lll := ll * l
 
 	// constants and loads
-	EIr, EIs, GJ := o.E*o.I22, o.E*o.I11, o.G*o.Jtt
+	EIr := o.Mdl.E * o.Mdl.I22
+	EIs := o.Mdl.E * o.Mdl.I11
+	GJ := o.Mdl.G * o.Mdl.Jtt
 	_, _, _, q1, q2 := o.calc_loads(time)
 
 	// displacements and rotations
@@ -729,7 +714,7 @@ func (o *Beam) calc_moment2d_after_ua(time, ξ float64) (M22 float64) {
 	lll := ll * l
 
 	// bending moment
-	M22 = o.E * o.I22 * (o.ua[1]*((12.0*τ)/lll-6.0/ll) + o.ua[2]*((6.0*τ)/ll-4.0/l) + o.ua[4]*(6.0/ll-(12.0*τ)/lll) + o.ua[5]*((6.0*τ)/ll-2.0/l))
+	M22 = o.Mdl.E * o.Mdl.I22 * (o.ua[1]*((12.0*τ)/lll-6.0/ll) + o.ua[2]*((6.0*τ)/ll-4.0/l) + o.ua[4]*(6.0/ll-(12.0*τ)/lll) + o.ua[5]*((6.0*τ)/ll-2.0/l))
 
 	// corrections due to applied loads
 	if o.Hasq {
@@ -754,7 +739,7 @@ func (o *Beam) calc_shearforce2d_after_ua(time, ξ float64) (V1 float64) {
 	lll := ll * l
 
 	// shear force
-	V1 = o.E * o.I22 * ((12.0*o.ua[1])/lll + (6.0*o.ua[2])/ll - (12.0*o.ua[4])/lll + (6.0*o.ua[5])/ll)
+	V1 = o.Mdl.E * o.Mdl.I22 * ((12.0*o.ua[1])/lll + (6.0*o.ua[2])/ll - (12.0*o.ua[4])/lll + (6.0*o.ua[5])/ll)
 
 	// corrections due to applied loads
 	if o.Hasq {

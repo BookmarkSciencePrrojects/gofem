@@ -13,7 +13,7 @@ import (
 	"github.com/cpmech/gosl/utl"
 )
 
-func Test_p01a(tst *testing.T) {
+func Test_0p01a(tst *testing.T) {
 
 	/* this tests simulates seepage flow along a column
 	 * by reducing the initial hydrostatic pressure at
@@ -50,7 +50,7 @@ func Test_p01a(tst *testing.T) {
 	 */
 
 	//verbose()
-	chk.PrintTitle("p01a")
+	chk.PrintTitle("0p01a")
 
 	// start simulation
 	analysis := NewFEM("data/p01.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -128,7 +128,7 @@ func Test_p01a(tst *testing.T) {
 		z := nod.Vert.C[1]
 		eq := nod.Dofs[0].Eq
 		pl := dom.Sol.Y[eq]
-		plC, _, _ := dom.HydSta.Calc(z)
+		plC, _ := dom.Sim.ColLiq.Calc(z)
 		chk.Scalar(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, pl), 1e-17, pl, plC)
 	}
 
@@ -139,17 +139,17 @@ func Test_p01a(tst *testing.T) {
 		for idx, ip := range e.IpsElem {
 			s := e.States[idx]
 			z := e.Cell.Shp.IpRealCoords(e.X, ip)[1]
-			_, ρLC, _ := dom.HydSta.Calc(z)
+			_, ρLC := dom.Sim.ColLiq.Calc(z)
 			chk.Scalar(tst, io.Sf("sl(@ %18g)= %18g", z, s.A_sl), 1e-17, s.A_sl, 1)
-			chk.Scalar(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-13, s.A_ρL, ρLC)
+			chk.Scalar(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-10, s.A_ρL, ρLC)
 		}
 	}
 }
 
-func Test_p01b(tst *testing.T) {
+func Test_0p01b(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("p01b")
+	chk.PrintTitle("0p01b")
 
 	// run simulation
 	analysis := NewFEM("data/p01.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -164,10 +164,10 @@ func Test_p01b(tst *testing.T) {
 	// TODO: add check here
 }
 
-func Test_p02(tst *testing.T) {
+func Test_0p02(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("p02")
+	chk.PrintTitle("0p02")
 
 	// run simulation
 	analysis := NewFEM("data/p02.sim", "", true, false, false, false, chk.Verbose, 0)

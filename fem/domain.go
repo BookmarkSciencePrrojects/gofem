@@ -59,7 +59,6 @@ type Domain struct {
 	Msh    *inp.Mesh       // mesh data
 	LinSol la.LinSol       // linear solver
 	DynCfs *DynCoefs       // [from FEM] coefficients for dynamics/transient simulations
-	HydSta *HydroStatic    // [from FEM] function to compute hydrostatic state
 
 	// stage: nodes (active) and elements (active AND in this processor)
 	Nodes  []*Node // active nodes (for each stage). Note: indices in Nodes do NOT correpond to Ids => use Vid2node to access Nodes using Ids.
@@ -116,7 +115,7 @@ func (o *Domain) Clean() {
 }
 
 // NewDomains returns domains
-func NewDomains(sim *inp.Simulation, dyncfs *DynCoefs, hydsta *HydroStatic, proc, nproc int, distr bool) (doms []*Domain) {
+func NewDomains(sim *inp.Simulation, dyncfs *DynCoefs, proc, nproc int, distr bool) (doms []*Domain) {
 	doms = make([]*Domain, len(sim.Regions))
 	for i, reg := range sim.Regions {
 		doms[i] = new(Domain)
@@ -132,7 +131,6 @@ func NewDomains(sim *inp.Simulation, dyncfs *DynCoefs, hydsta *HydroStatic, proc
 		}
 		doms[i].LinSol = la.GetSolver(sim.LinSol.Name)
 		doms[i].DynCfs = dyncfs
-		doms[i].HydSta = hydsta
 	}
 	return
 }
@@ -281,7 +279,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 	// element conditions, essential and natural boundary conditions --------------------------------
 
 	// (re)set constraints and prescribed forces structures
-	o.EssenBcs.Init(o.HydSta)
+	o.EssenBcs.Init(&o.Sim.ColLiq)
 	o.PtNatBcs.Reset()
 
 	// element conditions
@@ -416,23 +414,18 @@ func (o *Domain) SetIniVals(stgidx int, zeroSol bool) (err error) {
 	}
 
 	// initialise internal variables
-	if stg.HydroSt {
-		err = o.SetHydroSt(stg)
-		if err != nil {
-			return
-		}
-	} else if stg.GeoSt != nil {
-		err = o.SetGeoSt(stg)
+	if stg.IniPorous != nil {
+		err = o.IniSetPorous(stg)
 		if err != nil {
 			return
 		}
 	} else if stg.IniStress != nil {
-		err = o.SetIniStress(stg)
+		err = o.IniSetStress(stg)
 		if err != nil {
 			return
 		}
-	} else if stg.Initial != nil {
-		err = o.SetInitial(stg)
+	} else if stg.IniFcn != nil {
+		err = o.IniSetFileFunc(stg)
 		if err != nil {
 			return
 		}
@@ -443,11 +436,11 @@ func (o *Domain) SetIniVals(stgidx int, zeroSol bool) (err error) {
 	}
 
 	// import results from another set of files
-	if stg.Import != nil {
+	if stg.IniImport != nil {
 		sum := new(Summary)
-		err = sum.Read(stg.Import.Dir, stg.Import.Fnk, o.Sim.EncType)
+		err = sum.Read(stg.IniImport.Dir, stg.IniImport.Fnk, o.Sim.EncType)
 		if err != nil {
-			return chk.Err("cannot import state from %s/%s.sim:\n%v", stg.Import.Dir, stg.Import.Fnk, err)
+			return chk.Err("cannot import state from %s/%s.sim:\n%v", stg.IniImport.Dir, stg.IniImport.Fnk, err)
 		}
 		err = o.Read(sum, len(sum.OutTimes)-1, o.Proc, false)
 		if err != nil {
@@ -456,7 +449,7 @@ func (o *Domain) SetIniVals(stgidx int, zeroSol bool) (err error) {
 		if o.Ny != len(o.Sol.Y) {
 			return chk.Err("length of primary variables vector imported is not equal to the one allocated. make sure the number of DOFs of the imported simulation matches this one. %d != %d", o.Ny, len(o.Sol.Y))
 		}
-		if stg.Import.ResetU {
+		if stg.IniImport.ResetU {
 			for _, ele := range o.ElemIntvars {
 				err = ele.Ureset(o.Sol)
 				if err != nil {

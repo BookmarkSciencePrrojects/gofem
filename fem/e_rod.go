@@ -23,11 +23,7 @@ type Rod struct {
 	Nu   int         // total number of unknowns == 2 * nsn
 	Ndim int         // space dimension
 
-	// parameters
-	A float64 // cross-sectional area
-
 	// variables for dynamics
-	Rho  float64  // density of solids
 	Gfcn fun.Func // gravity function
 
 	// integration points
@@ -41,7 +37,7 @@ type Rod struct {
 	Umap []int // assembly map (location array/element equations)
 
 	// material model and internal variables
-	Model     msolid.OnedSolid
+	Mdl       msolid.OneD
 	States    []*msolid.OnedState
 	StatesBkp []*msolid.OnedState
 	StatesAux []*msolid.OnedState
@@ -93,31 +89,15 @@ func init() {
 		o.Ndim = sim.Ndim
 		o.Nu = o.Ndim * o.Cell.Shp.Nverts
 
-		// parameters
-		matdata := sim.MatParams.Get(edat.Mat)
-		if matdata == nil {
-			chk.Panic("cannot get materials data for rod element {tag=%d id=%d material=%q}", cell.Tag, cell.Id, edat.Mat)
+		// model
+		mat := sim.MatModels.Get(edat.Mat)
+		if mat == nil {
+			chk.Panic("cannot find material %q for Rod {tag=%d, id=%d}\n", edat.Mat, cell.Tag, cell.Id)
 		}
-		o.Model = msolid.GetOnedSolid(sim.Key, edat.Mat, matdata.Model, false)
-		if o.Model == nil {
-			chk.Panic("cannot get model for rod element {tag=%d id=%d material=%q}", cell.Tag, cell.Id, edat.Mat)
-		}
-		err := o.Model.Init(o.Ndim, matdata.Prms)
-		if err != nil {
-			chk.Panic("model initialisation failed:\n%v", err)
-		}
-
-		// parameters
-		for _, p := range matdata.Prms {
-			switch p.N {
-			case "A":
-				o.A = p.V
-			case "rho":
-				o.Rho = p.V
-			}
-		}
+		o.Mdl = mat.Solid.(msolid.OneD)
 
 		// integration points
+		var err error
 		o.IpsElem, _, err = o.Cell.Shp.GetIps(edat.Nip, 0)
 		if err != nil {
 			chk.Panic("cannot get integration points for rod element {tag=%d id=%d material=%q} with nip=%d", cell.Tag, cell.Id, edat.Mat, edat.Nip)
@@ -172,6 +152,7 @@ func (o *Rod) SetEleConds(key string, f fun.Func, extra string) (err error) {
 func (o *Rod) AddToRhs(fb []float64, sol *Solution) (err error) {
 
 	// for each integration point
+	A := o.Mdl.GetA()
 	nverts := o.Cell.Shp.Nverts
 	for idx, ip := range o.IpsElem {
 
@@ -191,7 +172,7 @@ func (o *Rod) AddToRhs(fb []float64, sol *Solution) (err error) {
 		for m := 0; m < nverts; m++ {
 			for i := 0; i < o.Ndim; i++ {
 				r := o.Umap[i+m*o.Ndim]
-				fb[r] -= coef * o.A * σ * G[m] * Jvec[i] // -fi
+				fb[r] -= coef * A * σ * G[m] * Jvec[i] // -fi
 			}
 		}
 	}
@@ -206,6 +187,7 @@ func (o *Rod) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error) {
 	la.MatFill(o.M, 0) // TODO: implement mass matrix
 
 	// for each integration point
+	A := o.Mdl.GetA()
 	var E float64
 	nverts := o.Cell.Shp.Nverts
 	for idx, ip := range o.IpsElem {
@@ -229,11 +211,11 @@ func (o *Rod) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error) {
 					for j := 0; j < o.Ndim; j++ {
 						r := i + m*o.Ndim
 						c := j + n*o.Ndim
-						E, err = o.Model.CalcD(o.States[idx], firstIt)
+						E, _, err = o.Mdl.CalcD(o.States[idx], firstIt)
 						if err != nil {
 							return
 						}
-						o.K[r][c] += coef * o.A * E * G[m] * G[n] * Jvec[i] * Jvec[j] / J
+						o.K[r][c] += coef * A * E * G[m] * G[n] * Jvec[i] * Jvec[j] / J
 					}
 				}
 			}
@@ -277,7 +259,7 @@ func (o *Rod) Update(sol *Solution) (err error) {
 		}
 
 		// call model update => update stresses
-		err = o.Model.Update(o.States[idx], 0.0, Δε)
+		err = o.Mdl.Update(o.States[idx], 0.0, Δε, 0)
 		if err != nil {
 			return
 		}
@@ -307,7 +289,7 @@ func (o *Rod) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
 
 	// for each integration point
 	for i := 0; i < nip; i++ {
-		o.States[i], _ = o.Model.InitIntVars()
+		o.States[i], _ = o.Mdl.InitIntVars1D()
 		o.StatesBkp[i] = o.States[i].GetCopy()
 		o.StatesAux[i] = o.States[i].GetCopy()
 	}

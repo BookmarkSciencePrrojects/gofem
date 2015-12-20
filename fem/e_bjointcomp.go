@@ -29,9 +29,9 @@ type BjointComp struct {
 	TolNod float64         // tolerance to find beam/solid compatible nodes
 
 	// essential
-	Lin *Beam           // beam (line) element
-	Sld *ElemU          // solid element
-	Mdl msolid.RjointM1 // material model
+	Lin *Beam            // beam (line) element
+	Sld *ElemU           // solid element
+	Mdl *msolid.RjointM1 // material model
 
 	// asembly maps
 	LinUmap []int // beam umap with displacement DOFs equations only
@@ -40,11 +40,6 @@ type BjointComp struct {
 	// shape and integration points
 	LinShp *shp.Shape   // lin2 shape
 	LinIps []shp.Ipoint // integration points along line of beam / joint
-
-	// parameters
-	h  float64 // perimeter of beam element
-	k1 float64 // lateral stiffness
-	k2 float64 // lateral stiffness
 
 	// variables for Coulomb model (scratchpad)
 	t1 []float64 // [3] traction vectors for σc
@@ -159,31 +154,13 @@ func (o *BjointComp) Connect(cid2elem []Elem, cell *inp.Cell) (nnzK int, err err
 		}
 	}
 
-	// material model name
-	matdata := o.Sim.MatParams.Get(o.Edat.Mat)
-	if matdata == nil {
+	// model
+	mat := o.Sim.MatModels.Get(o.Edat.Mat)
+	if mat == nil {
 		err = chk.Err("materials database failed on getting %q material\n", o.Edat.Mat)
 		return
 	}
-
-	// initialise model
-	err = o.Mdl.Init(matdata.Prms)
-	if err != nil {
-		err = chk.Err("model initialisation failed:\n%v", err)
-		return
-	}
-
-	// parameters
-	for _, p := range matdata.Prms {
-		switch p.N {
-		case "h":
-			o.h = p.V
-		case "k1":
-			o.k1 = p.V
-		case "k2":
-			o.k2 = p.V
-		}
-	}
+	o.Mdl = mat.Solid.(*msolid.RjointM1)
 
 	// variables for Coulomb model (scratchpad)
 	nsig := 2 * o.Ndim
@@ -231,6 +208,7 @@ func (o *BjointComp) AddToRhs(fb []float64, sol *Solution) (err error) {
 
 	// auxiliary
 	linNn := 2
+	h := o.Mdl.A_h
 	e0, e1, e2 := o.Lin.e0, o.Lin.e1, o.Lin.e2
 
 	// loop over integration points along line
@@ -252,7 +230,7 @@ func (o *BjointComp) AddToRhs(fb []float64, sol *Solution) (err error) {
 
 		// fC vector
 		for i := 0; i < o.Ndim; i++ {
-			o.q[i] = τ*o.h*e0[i] + q1*e1[i] + q2*e2[i]
+			o.q[i] = τ*h*e0[i] + q1*e1[i] + q2*e2[i]
 			for m := 0; m < linNn; m++ {
 				r := i + m*o.Ndim
 				o.fC[r] += coef * S[m] * o.q[i]
@@ -276,6 +254,8 @@ func (o *BjointComp) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err e
 	// auxiliary
 	linNn := 2
 	linNu := linNn * o.Ndim
+	h := o.Mdl.A_h
+	kl := o.Mdl.A_kl
 	e0, e1, e2 := o.Lin.e0, o.Lin.e1, o.Lin.e2
 
 	// zero K matrices
@@ -337,8 +317,8 @@ func (o *BjointComp) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err e
 				for i := 0; i < o.Ndim; i++ {
 
 					// ∂q/∂ub and ∂q/∂u
-					DqDub_nij = o.h*e0[i]*(DτDω*Dwb0Dub_nj) + o.k1*e1[i]*Dwb1Dub_nj + o.k2*e2[i]*Dwb2Dub_nj
-					DqDu_nij = o.h*e0[i]*DτDu_nj + o.k1*e1[i]*Dwb1Du_nj + o.k2*e2[i]*Dwb2Du_nj
+					DqDub_nij = h*e0[i]*(DτDω*Dwb0Dub_nj) + kl*e1[i]*Dwb1Dub_nj + kl*e2[i]*Dwb2Dub_nj
+					DqDu_nij = h*e0[i]*DτDu_nj + kl*e1[i]*Dwb1Du_nj + kl*e2[i]*Dwb2Du_nj
 
 					// K matrices
 					for m := 0; m < linNn; m++ {
@@ -376,6 +356,7 @@ func (o *BjointComp) Update(sol *Solution) (err error) {
 
 	// auxiliary
 	linNn := 2
+	kl := o.Mdl.A_kl
 	e0, e1, e2 := o.Lin.e0, o.Lin.e1, o.Lin.e2
 
 	// for each integration point
@@ -416,8 +397,8 @@ func (o *BjointComp) Update(sol *Solution) (err error) {
 		if err != nil {
 			return
 		}
-		o.States[idx].Phi[0] += o.k1 * Δwb1 // q1
-		o.States[idx].Phi[1] += o.k2 * Δwb2 // q2
+		o.States[idx].Phi[0] += kl * Δwb1 // q1
+		o.States[idx].Phi[1] += kl * Δwb2 // q2
 	}
 	return
 }
@@ -440,7 +421,7 @@ func (o *BjointComp) SetIniIvs(sol *Solution, ivs map[string][]float64) (err err
 	o.StatesBkp = make([]*msolid.OnedState, nip)
 	o.StatesAux = make([]*msolid.OnedState, nip)
 	for i := 0; i < nip; i++ {
-		o.States[i], _ = o.Mdl.InitIntVars(0, 0, 0)
+		o.States[i], _ = o.Mdl.InitIntVars1D()
 		o.StatesBkp[i] = o.States[i].GetCopy()
 		o.StatesAux[i] = o.States[i].GetCopy()
 	}

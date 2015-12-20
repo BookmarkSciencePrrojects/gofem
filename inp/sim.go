@@ -172,11 +172,9 @@ type TimeControl struct {
 
 // IniPorousData  holds data for setting initial porous media state (e.g. geostatic, hydrostatic)
 type IniPorousData struct {
-	Nu          []float64 `json:"nu"`          // [nlayers] Poisson's coefficient to compute effective horizontal state for each layer
-	K0          []float64 `json:"K0"`          // [nlayers] Earth pressure coefficient at rest to compute effective horizontal stresses
-	UseK0       []bool    `json:"useK0"`       // [nlayers] use K0 to compute effective horizontal stresses instead of "nu"
-	Layers      [][]int   `json:"layers"`      // [nlayers][ntagsInLayer]; e.g. [[-1,-2], [-3,-4]] => 2 layers
-	TotalStress bool      `json:"totalstress"` // total stress analysis
+	Nu     []float64 `json:"nu"`     // [nlayers] Poisson's coefficient to compute effective horizontal state for each layer
+	K0     []float64 `json:"K0"`     // [nlayers] or Earth pressure coefficient at rest to compute effective horizontal stresses
+	Layers [][]int   `json:"layers"` // [nlayers][ntagsInLayer]; e.g. [[-1,-2], [-3,-4]] => 2 layers
 }
 
 // IniStressData holds data for setting initial stresses
@@ -190,8 +188,8 @@ type IniStressData struct {
 	Nu  float64 `json:"nu"`  // Psa => Poisson's coefficient for plane-strain state
 }
 
-// IniFileFuncData holds data for setting initial solution values such as Y, dYdt and d2Ydt2
-type IniFileFuncData struct {
+// IniFcnData holds data for setting initial solution values such as Y, dYdt and d2Ydt2
+type IniFcnData struct {
 	File string   `json:"file"` // file with values at each node is given; filename with path is provided
 	Fcns []string `json:"fcns"` // functions F(t, x) are given; from functions database
 	Dofs []string `json:"dofs"` // degrees of freedom corresponding to "fcns"
@@ -216,11 +214,11 @@ type Stage struct {
 	Skip       bool   `json:"skip"`       // do not run stage
 
 	// specific problems data
-	SeepFaces   []int            `json:"seepfaces"` // face tags corresponding to seepage faces
-	IniPorous   *IniPorousData   `json:"porous"`    // initial porous media state (geostatic and hydrostatic included)
-	IniStress   *IniStressData   `json:"inistress"` // initial stress data
-	IniFileFunc *IniFileFuncData `json:"filefunc"`  // set initial solution values such as Y, dYdt and d2Ydt2
-	IniImport   *IniImportRes    `json:"import"`    // import results from another previous simulation
+	SeepFaces []int          `json:"seepfaces"` // face tags corresponding to seepage faces
+	IniPorous *IniPorousData `json:"iniporous"` // initial porous media state (geostatic and hydrostatic included)
+	IniStress *IniStressData `json:"inistress"` // initial stress data
+	IniFcn    *IniFcnData    `json:"inifcn"`    // set initial solution values such as Y, dYdt and d2Ydt2
+	IniImport *IniImportRes  `json:"import"`    // import results from another previous simulation
 
 	// conditions
 	EleConds []*EleCond `json:"eleconds"` // element conditions. ex: gravity or beam distributed loads
@@ -251,6 +249,7 @@ type Simulation struct {
 	EncType     string  // encoder type
 	Ndim        int     // space dimension
 	MaxElev     float64 // maximum elevation
+	Grav0       float64 // gravity constant from stage # 0
 	MatModels   *MatDb  // materials and models
 
 	// derived: for initial and boundary conditions with fluids
@@ -356,7 +355,7 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 	}
 
 	// for all stages
-	var t, grav0 float64
+	var t float64
 	for i, stg := range o.Stages {
 
 		// fix Tf
@@ -409,7 +408,7 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 						if gfcn == nil {
 							chk.Panic("ReadSim: cannot find function named %q corresponding to gravity constant @ stage 0", econd.Funcs[j])
 						}
-						grav0 = gfcn.F(0, nil)
+						o.Grav0 = gfcn.F(0, nil)
 						found = true
 						break
 					}
@@ -433,8 +432,8 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 	// derived: for initial and boundary conditions with fluids
 	RhoL0, RhoG0, pl0, pg0, Cl, Cg := o.MatModels.FluidData()
 	H := utl.Max(o.Data.Wlevel, o.MaxElev)
-	o.ColLiq.Init(RhoL0, pl0, Cl, grav0, H, false)
-	o.ColGas.Init(RhoG0, pg0, Cg, grav0, H, false)
+	o.ColLiq.Init(RhoL0, pl0, Cl, o.Grav0, H, false)
+	o.ColGas.Init(RhoG0, pg0, Cg, o.Grav0, H, false)
 
 	// results
 	return &o

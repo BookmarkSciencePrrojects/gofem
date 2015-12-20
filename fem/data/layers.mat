@@ -3,7 +3,7 @@
   "materials" : [
     {
       "name"  : "elast01",
-      "desc"  : "Linear elastic for Hostun Sand",
+      "type"  : "solid",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E"  , "v":3000 , "u":"kPa"},
@@ -13,7 +13,7 @@
     },
     {
       "name"  : "dp01",
-      "desc"  : "Drucker-Prager for Hostun Sand",
+      "type"  : "solid",
       "model" : "dp",
       "prms"  : [
         {"n":"E"  , "v":3000 , "u":"kPa"},
@@ -27,31 +27,32 @@
     },
     {
       "name"  : "lrm01",
-      "desc"  : "Water retention curve model for Hostun Sand",
-      "model" : "lrm-m1",
+      "type"  : "reten",
+      "model" : "ref-m1",
       "prms"  : [
-        {"n":"lamD", "v":3.42 },
+        {"n":"lamd", "v":3.42 },
         {"n":"xrd" , "v":0.94 },
         {"n":"yr"  , "v":0.057},
         {"n":"xrw" , "v":0.58 },
-        {"n":"betD", "v":2.41 },
-        {"n":"betW", "v":3.44 },
+        {"n":"betd", "v":2.41 },
+        {"n":"betw", "v":3.44 },
         {"n":"bet1", "v":1.14 }
       ]
     },
     {
       "name"  : "lrm02",
-      "desc"  : "Water retention curve model for Hostun Sand",
-      "model" : "brooks-corey",
+      "type"  : "reten",
+      "model" : "bc",
       "prms"  : [
-        {"n":"lam" , "v":0.051},
-        {"n":"pcae", "v":1.8  },
-        {"n":"smin", "v":0.01 }
+        {"n":"lam" ,  "v":0.051},
+        {"n":"pcae",  "v":1.8  },
+        {"n":"slmin", "v":0.01 }
       ]
     },
     {
       "name"  : "beam01",
-      "model" : "beam-elast",
+      "type"  : "solid",
+      "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":1e+3,    "u":"kPa"},
         {"n":"A",   "v":0.3,     "u":"m2"},

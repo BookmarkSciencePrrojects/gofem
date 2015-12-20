@@ -9,16 +9,21 @@ import (
 	"github.com/cpmech/gosl/chk"
 )
 
-// SetInitial sets the initial state
-func (o *Domain) SetInitial(stg *inp.Stage) (err error) {
+// IniSetFileFunc sets initial state with values given in a file or by a function
+func (o *Domain) IniSetFileFunc(stg *inp.Stage) (err error) {
 
 	// check
-	if len(stg.Initial.Fcns) != len(stg.Initial.Dofs) {
-		return chk.Err("number of functions (fcns) must be equal to number of dofs for setting initial values. %d != %d", len(stg.Initial.Fcns), len(stg.Initial.Dofs))
+	if len(stg.IniFcn.Fcns) != len(stg.IniFcn.Dofs) {
+		return chk.Err("number of functions (fcns) must be equal to number of dofs for setting initial values. %d != %d", len(stg.IniFcn.Fcns), len(stg.IniFcn.Dofs))
+	}
+
+	// using file
+	if stg.IniFcn.File != "" {
+		chk.Panic("initialisation using a file is not implemented yet")
 	}
 
 	// loop over functions
-	for i, fname := range stg.Initial.Fcns {
+	for i, fname := range stg.IniFcn.Fcns {
 
 		// get function
 		fcn := o.Sim.Functions.Get(fname)
@@ -27,7 +32,7 @@ func (o *Domain) SetInitial(stg *inp.Stage) (err error) {
 		}
 
 		// set nodes
-		key := stg.Initial.Dofs[i]
+		key := stg.IniFcn.Dofs[i]
 		for _, nod := range o.Nodes {
 			eq := nod.GetEq(key)
 			if eq < 0 {

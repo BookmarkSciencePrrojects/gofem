@@ -8,6 +8,7 @@ import (
 	"math"
 
 	"github.com/cpmech/gofem/inp"
+	"github.com/cpmech/gofem/msolid"
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -25,9 +26,8 @@ type ElastRod struct {
 	Ndim int         // space dimension
 
 	// parameters and properties
-	E float64 // Young's modulus
-	A float64 // cross-sectional area
-	L float64 // length of rod
+	Mdl *msolid.OnedLinElast // material model with: E, G, A, I22, I11, Jtt and Rho
+	L   float64              // length of rod
 
 	// variables for dynamics
 	Rho  float64  // density of solids
@@ -89,22 +89,11 @@ func init() {
 		o.Nu = o.Ndim * 2
 
 		// parameters
-		matdata := sim.MatParams.Get(edat.Mat)
-		if matdata == nil {
+		mat := sim.MatModels.Get(edat.Mat)
+		if mat == nil {
 			chk.Panic("cannot get materials data for elastic rod element {tag=%d id=%d material=%q}", cell.Tag, cell.Id, edat.Mat)
 		}
-
-		// parameters
-		for _, p := range matdata.Prms {
-			switch p.N {
-			case "E":
-				o.E = p.V
-			case "A":
-				o.A = p.V
-			case "rho":
-				o.Rho = p.V
-			}
-		}
+		o.Mdl = mat.Solid.(*msolid.OnedLinElast)
 
 		// vectors and matrices
 		o.K = la.MatAlloc(o.Nu, o.Nu)
@@ -129,8 +118,8 @@ func init() {
 		}
 
 		// K and M matrices
-		α := o.E * o.A / o.L
-		β := o.Rho * o.A * o.L / 6.0
+		α := o.Mdl.E * o.Mdl.A / o.L
+		β := o.Mdl.GetRho() * o.Mdl.A * o.L / 6.0
 		o.K = [][]float64{
 			{+α * c * c, +α * c * s, -α * c * c, -α * c * s},
 			{+α * c * s, +α * s * s, -α * c * s, -α * s * s},
@@ -238,7 +227,7 @@ func (o *ElastRod) CalcSig(sol *Solution) float64 {
 		}
 	}
 	εa := (o.ua[1] - o.ua[0]) / o.L // axial strain
-	return o.E * εa                 // axial stress
+	return o.Mdl.E * εa             // axial stress
 }
 
 // auxiliary ////////////////////////////////////////////////////////////////////////////////////////
@@ -264,8 +253,8 @@ func (o *ElastRod) Recompute(withM bool) {
 	o.T[1][3] = s
 
 	// K matrix
-	α := o.E * o.A / o.L
-	β := o.Rho * o.A * o.L / 6.0
+	α := o.Mdl.E * o.Mdl.A / o.L
+	β := o.Mdl.GetRho() * o.Mdl.A * o.L / 6.0
 	o.K[0][0] = +α * c * c
 	o.K[0][1] = +α * c * s
 	o.K[0][2] = -α * c * c

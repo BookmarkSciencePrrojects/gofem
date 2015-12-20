@@ -8,8 +8,11 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/cpmech/gofem/mconduct"
+	"github.com/cpmech/gofem/mporous"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
+	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -142,7 +145,7 @@ func Test_pp01a(tst *testing.T) {
 		z := nod.Vert.C[1]
 		eq := nod.Dofs[0].Eq
 		pl := dom.Sol.Y[eq]
-		plC, _, _ := dom.HydSta.Calc(z)
+		plC, _ := dom.Sim.ColLiq.Calc(z)
 		chk.Scalar(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, pl), 1e-17, pl, plC)
 	}
 
@@ -153,7 +156,7 @@ func Test_pp01a(tst *testing.T) {
 		for idx, ip := range e.IpsElem {
 			s := e.States[idx]
 			z := e.Cell.Shp.IpRealCoords(e.X, ip)[1]
-			_, ρLC, _ := dom.HydSta.Calc(z)
+			_, ρLC := dom.Sim.ColLiq.Calc(z)
 			chk.Scalar(tst, io.Sf("sl(@ %18g)= %18g", z, s.A_sl), 1e-17, s.A_sl, 1)
 			chk.Scalar(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-13, s.A_ρL, ρLC)
 		}
@@ -162,7 +165,7 @@ func Test_pp01a(tst *testing.T) {
 
 func Test_pp01b(tst *testing.T) {
 
-	//verbose()
+	verbose()
 	chk.PrintTitle("pp01b")
 
 	// run simulation
@@ -172,7 +175,7 @@ func Test_pp01b(tst *testing.T) {
 	if true {
 		pp_DebugKb(analysis, &testKb{
 			tst: tst, eid: 3, tol: 1e-6, verb: chk.Verbose,
-			ni: 1, nj: 1, itmin: -1, itmax: -1, tmin: 0, tmax: 1000,
+			ni: 1, nj: 1, itmin: 1, itmax: -1, tmin: 0, tmax: 2000,
 		})
 	}
 
@@ -181,6 +184,22 @@ func Test_pp01b(tst *testing.T) {
 	if err != nil {
 		tst.Errorf("Run failed:\n%v", err)
 		return
+	}
+
+	// plot
+	if true {
+		dom := analysis.Domains[0]
+		ele := dom.Elems[0].(*ElemPP)
+		mdl := ele.Mdl
+		cnd := ele.Mdl.Cnd
+		if false {
+			plt.SetForEps(1.2, 350)
+			mporous.PlotSimple(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true)
+			plt.SetForEps(1.2, 350)
+			mconduct.Plot(cnd, "/tmp/gofem", "fig_pp01b_liq.eps", 101, false, true, true)
+		}
+		plt.SetForEps(1.2, 350)
+		mconduct.Plot(cnd, "/tmp/gofem", "fig_pp01b_gas.eps", 101, true, true, true)
 	}
 
 	// TODO: add check here

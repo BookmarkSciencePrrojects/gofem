@@ -2,18 +2,19 @@
   "functions" : [],
   "materials" : [
     {
-      "name"  : "pm1",
-      "model" : "porous",
-      "prms"  : [
-        {"n":"nf0",   "v":0.3,     "u":"-"},
-        {"n":"RhoL0", "v":1,       "u":"Mg/m3"},
-        {"n":"BulkL", "v":2.2e+06, "u":"kPa"},
-        {"n":"gref",  "v":10,      "u":"m/s2"},
-        {"n":"kl",    "v":1,       "u":"m/s"}
+      "name" : "pm1",
+      "type" : "porous",
+      "prms" : [
+        {"n":"nf0",   "v":0.3     , "u":"-"            },
+        {"n":"RhoL0", "v":1.0     , "u":"Mg/m³"        },
+        {"n":"Cl",    "v":4.53e-7 , "u":"Mg/(m³・kPa)" },
+        {"n":"gref",  "v":10.0    , "u":"m/s²"         },
+        {"n":"kl",    "v":1.0     , "u":"m/s"          }
       ]
     },
     {
       "name"  : "cnd1",
+      "type"  : "conduct",
       "model" : "m1",
       "prms"  : [
         {"n":"lam0l", "v":0.001, "u":"-"},
@@ -24,6 +25,7 @@
     },
     {
       "name"  : "lrm1",
+      "type"  : "reten",
       "model" : "ref-m1",
       "prms"  : [
         {"n":"lamd",  "v":3    },
@@ -36,8 +38,8 @@
     },
     {
       "name"  : "porous1",
-      "model" : "group",
-      "extra" : "!l:lrm1 !c:cnd1 !p:pm1"
+      "type"  : "group",
+      "extra" : "lrm1 cnd1 pm1"
     }
   ]
 }

@@ -20,7 +20,7 @@ func Test_fileio01(tst *testing.T) {
 	analysis := NewFEM("data/bh16.sim", "", true, false, false, false, chk.Verbose, 0)
 
 	// domain A
-	domsA := NewDomains(analysis.Sim, analysis.DynCfs, analysis.HydSta, 0, 1, false)
+	domsA := NewDomains(analysis.Sim, analysis.DynCfs, 0, 1, false)
 	if len(domsA) == 0 {
 		tst.Errorf("NewDomains failed\n")
 		return
@@ -45,7 +45,7 @@ func Test_fileio01(tst *testing.T) {
 	}
 
 	// domain B
-	domsB := NewDomains(analysis.Sim, analysis.DynCfs, analysis.HydSta, 0, 1, false)
+	domsB := NewDomains(analysis.Sim, analysis.DynCfs, 0, 1, false)
 	if len(domsB) == 0 {
 		tst.Errorf("NewDomains failed\n")
 		return

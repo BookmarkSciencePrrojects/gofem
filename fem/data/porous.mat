@@ -2,37 +2,38 @@
   "functions" : [],
   "materials" : [
     {
-      "name"  : "pm1",
-      "model" : "porous",
-      "prms"  : [
-        {"n":"nf0",   "v":0.3    },
-        {"n":"RhoL0", "v":1      },
-        {"n":"RhoG0", "v":0.01   },
-        {"n":"RhoS0", "v":3.0    },
-        {"n":"BulkL", "v":2.2e+06},
-        {"n":"RTg",   "v":0.02   },
-        {"n":"gref",  "v":10     },
-        {"n":"kl",    "v":0.01   },
-        {"n":"kg",    "v":0.01   }
+      "name" : "pm1",
+      "type" : "porous",
+      "prms" : [
+        {"n":"nf0",   "v":0.3     , "u":"-"            },
+        {"n":"RhoL0", "v":1.0     , "u":"Mg/m³"        },
+        {"n":"RhoG0", "v":0.0012  , "u":"Mg/m³"        },
+        {"n":"RhoS0", "v":2.7     , "u":"Mg/m³"        },
+        {"n":"Cl",    "v":4.53e-7 , "u":"Mg/(m³・kPa)" },
+        {"n":"Cg",    "v":1.17e-5 , "u":"Mg/(m³・kPa)" },
+        {"n":"gref",  "v":10.0    , "u":"m/s²"         },
+        {"n":"kl",    "v":0.01    , "u":"m/s"          },
+        {"n":"kg",    "v":0.01    , "u":"m/s"          }
       ]
     },
     {
-      "name"  : "pm2",
-      "model" : "porous",
-      "prms"  : [
-        {"n":"nf0",   "v":0.3    },
-        {"n":"RhoL0", "v":1      },
-        {"n":"RhoG0", "v":0.01   },
-        {"n":"RhoS0", "v":2.0    },
-        {"n":"BulkL", "v":2.2e+06},
-        {"n":"RTg",   "v":0.02   },
-        {"n":"gref",  "v":10     },
-        {"n":"kl",    "v":0.001  },
-        {"n":"kg",    "v":0.01   }
+      "name" : "pm2",
+      "type" : "porous",
+      "prms" : [
+        {"n":"nf0",   "v":0.3     , "u":"-"            },
+        {"n":"RhoL0", "v":1.0     , "u":"Mg/m³"        },
+        {"n":"RhoG0", "v":0.0012  , "u":"Mg/m³"        },
+        {"n":"RhoS0", "v":2.7     , "u":"Mg/m³"        },
+        {"n":"Cl",    "v":4.53e-7 , "u":"Mg/(m³・kPa)" },
+        {"n":"Cg",    "v":1.17e-5 , "u":"Mg/(m³・kPa)" },
+        {"n":"gref",  "v":10.0    , "u":"m/s²"         },
+        {"n":"kl",    "v":0.001   , "u":"m/s"          },
+        {"n":"kg",    "v":0.01    , "u":"m/s"          }
       ]
     },
     {
       "name"  : "cnd1",
+      "type"  : "conduct",
       "model" : "m1",
       "prms"  : [
         {"n":"lam0l", "v":0.001},
@@ -47,6 +48,7 @@
     },
     {
       "name"  : "lrm1",
+      "type"  : "reten",
       "model" : "ref-m1",
       "prms"  : [
         {"n":"lamd",  "v":3    },
@@ -63,9 +65,10 @@
       ]
     },
     {
-      "name" : "lrm2",
+      "name"  : "lrm2",
+      "type"  : "reten",
       "model" : "vg",
-      "prms" : [
+      "prms"  : [
         {"n":"alp",   "v":0.08},
         {"n":"m",     "v":4   },
         {"n":"n",     "v":4   },
@@ -75,6 +78,7 @@
     },
     {
       "name"  : "sld1",
+      "type"  : "solid",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":10000},
@@ -84,13 +88,13 @@
     },
     {
       "name"  : "porous1",
-      "model" : "group",
-      "extra" : "!l:lrm1 !c:cnd1 !p:pm1 !s:sld1"
+      "type"  : "group",
+      "extra" : "lrm1 cnd1 pm1 sld1"
     },
     {
       "name"  : "porous2",
-      "model" : "group",
-      "extra" : "!l:lrm2 !c:cnd1 !p:pm2 !s:sld1"
+      "type"  : "group",
+      "extra" : "lrm2 cnd1 pm2 sld1"
     }
   ]
 }
