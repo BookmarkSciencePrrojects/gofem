@@ -49,20 +49,16 @@ func main() {
 	}
 
 	// get material data
-	mat := sim.MatParams.Get(matname)
+	mat := sim.MatModels.Get(matname)
 	if mat == nil {
 		io.PfRed("cannot get material\n")
 		return
 	}
-	io.Pforan("mat = %v\n", mat)
-
-	// get and initialise model
-	mdl := mreten.GetModel(simfn, matname, mat.Model, false)
+	mdl := mat.Reten
 	if mdl == nil {
-		io.PfRed("cannot allocate model\n")
+		io.PfRed("cannot get retention model\n")
 		return
 	}
-	mdl.Init(mat.Prms)
 
 	// plot drying path
 	d_Pc := utl.LinSpace(0, pcmax, npts)

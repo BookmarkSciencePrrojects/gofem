@@ -95,23 +95,19 @@ func main() {
 	}
 
 	// get material data
-	mat := sim.MatParams.Get(in.MatName)
+	mat := sim.MatModels.Get(in.MatName)
 	if mat == nil {
 		io.PfRed("cannot get material\n")
 		return
 	}
-	//io.Pfcyan("mat = %v\n", mat)
-
-	// get and initialise model
-	mdl, _ := msolid.GetModel(in.SimFn, in.MatName, mat.Model, false)
+	mdl := mat.Solid
 	if mdl == nil {
-		io.PfRed("cannot allocate model\n")
+		io.PfRed("cannot get solid model\n")
 		return
 	}
+
+	// constants
 	ndim := 3
-	pstress := false
-	mdl.Init(ndim, pstress, mat.Prms)
-	//io.Pforan("mdl = %v\n", mdl)
 
 	// load path
 	var pth msolid.Path

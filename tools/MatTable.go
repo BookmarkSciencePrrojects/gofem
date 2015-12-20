@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/cpmech/gofem/inp"
+	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
 )
 
@@ -39,7 +40,10 @@ func main() {
 	}
 
 	// Read
-	mdb := inp.ReadMat("", matfn)
+	mdb, err := inp.ReadMat("", matfn, 2, false)
+	if err != nil {
+		chk.Panic("ReadMat failed:\n%v", err)
+	}
 
 	// Get max number of parameters
 	nmaxprms := 0
