@@ -9,6 +9,8 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/ode"
+	"github.com/cpmech/gosl/plt"
+	"github.com/cpmech/gosl/utl"
 )
 
 // ColumnFluidPressure computes pressure (p) and intrinsic density (R) of a fluid
@@ -74,4 +76,31 @@ func (o ColumnFluidPressure) CalcNum(z float64) (p, R float64) {
 		chk.Panic("ColumnFluidPressure failed when calculating pressure using ODE solver: %v", err)
 	}
 	return ξ[0], ξ[1]
+}
+
+// Plot plots pressure and density along height of column
+func (o ColumnFluidPressure) Plot(dirout, fnkey, subscript string, np int) {
+
+	Z := utl.LinSpace(0, o.H, np)
+	P := make([]float64, np)
+	R := make([]float64, np)
+	for i, z := range Z {
+		P[i], R[i] = o.Calc(z)
+	}
+
+	pMaxLin := o.R0 * o.Grav * o.H
+
+	plt.SetForEps(1.2, 400)
+	plt.Subplot(2, 1, 1)
+	plt.Plot(P, Z, "'b-', clip_on=0")
+	plt.Plot([]float64{o.P0, pMaxLin}, []float64{o.H, 0}, "'k--', color='gray'")
+	plt.Gll("$p_{"+subscript+"}$", "$z$", "")
+
+	plt.Subplot(2, 1, 2)
+	plt.Plot(R, Z, "'r-', clip_on=0")
+	plt.Plot([]float64{o.R0, o.R0 + o.C*pMaxLin}, []float64{o.H, 0}, "'k--', color='gray'")
+	plt.Gll("$\\rho_{"+subscript+"}$", "$z$", "")
+	plt.TicksNoOffset()
+
+	plt.SaveD(dirout, fnkey+".eps")
 }
