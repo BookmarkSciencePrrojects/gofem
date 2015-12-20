@@ -15,6 +15,7 @@ type VonMises struct {
 	SmallElasticity
 	qy0 float64   // initial qy
 	H   float64   // hardening variable
+	rho float64   // density
 	ten []float64 // auxiliary tensor
 }
 
@@ -25,6 +26,11 @@ func init() {
 
 // Clean clean resources
 func (o *VonMises) Clean() {
+}
+
+// GetRho returns density
+func (o *VonMises) GetRho() float64 {
+	return o.rho
 }
 
 // Init initialises model
@@ -41,7 +47,9 @@ func (o *VonMises) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 			o.qy0 = p.V
 		case "H":
 			o.H = p.V
-		case "E", "nu", "l", "G", "K", "rho":
+		case "rho":
+			o.rho = p.V
+		case "E", "nu", "l", "G", "K":
 		default:
 			return chk.Err("vm: parameter named %q is incorrect\n", p.N)
 		}

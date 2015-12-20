@@ -25,6 +25,7 @@ type CamClayMod struct {
 	// parameters
 	λ   float64 // slope of isotropic compression model
 	ocr float64 // initial over-consolidation ratio
+	rho float64 // density
 
 	// auxiliary
 	ch float64     // 1/(κ-λ)
@@ -41,6 +42,11 @@ func init() {
 // Clean clean resources
 func (o *CamClayMod) Clean() {
 	o.PU.Clean()
+}
+
+// GetRho returns density
+func (o *CamClayMod) GetRho() float64 {
+	return o.rho
 }
 
 // Init initialises model
@@ -72,6 +78,8 @@ func (o *CamClayMod) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 			o.λ = p.V
 		case "ocr":
 			o.ocr = p.V
+		case "rho":
+			o.rho = p.V
 		}
 	}
 

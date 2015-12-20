@@ -22,6 +22,7 @@ type Ogden struct {
 	Alp []float64 // α parameters
 	Mu  []float64 // μ parameters
 	K   float64   // Bulk modulus
+	rho float64   // density
 
 	// auxiliary
 	Fi   [][]float64 // inverse of F [3][3]
@@ -41,6 +42,11 @@ func init() {
 
 // Clean clean resources
 func (o *Ogden) Clean() {
+}
+
+// GetRho returns density
+func (o *Ogden) GetRho() float64 {
+	return o.rho
 }
 
 // Init initialises model

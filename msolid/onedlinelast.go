@@ -14,7 +14,7 @@ type OnedLinElast struct {
 	I22 float64 // moment of inertia of cross section about y2-axis
 	I11 float64 // moment of inertia of cross section about y1-axis
 	Jtt float64 // torsional constant
-	Rho float64 // density
+	rho float64 // density
 }
 
 // add model to factory
@@ -24,6 +24,11 @@ func init() {
 
 // Clean clean resources
 func (o *OnedLinElast) Clean() {
+}
+
+// GetRho returns density
+func (o *OnedLinElast) GetRho() float64 {
+	return o.rho
 }
 
 // Init initialises model
@@ -43,7 +48,7 @@ func (o *OnedLinElast) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 		case "Jtt":
 			o.Jtt = p.V
 		case "rho":
-			o.Rho = p.V
+			o.rho = p.V
 		}
 	}
 	return

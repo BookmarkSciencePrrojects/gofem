@@ -42,8 +42,14 @@ type SmallElasticity struct {
 	E, Nu float64      // Young modulus and Poisson coefficient
 	L, G  float64      // Lame's coefficients. L == λ, G == μ
 	K     float64      // Bulk modulus
+	rho   float64      // density
 	Pse   bool         // is plane-stress?
 	Kgc   KGcalculator // K and G calculator for non-linear models
+}
+
+// GetRho returns density
+func (o *SmallElasticity) GetRho() float64 {
+	return o.rho
 }
 
 // Init initialises this structure
@@ -63,6 +69,8 @@ func (o *SmallElasticity) Init(ndim int, pstress bool, prms fun.Prms) (err error
 			o.G, has_G = p.V, true
 		case "K":
 			o.K, has_K = p.V, true
+		case "rho":
+			o.rho = p.V
 		}
 		if skgc, found := io.Keycode(p.Extra, "kgc"); found {
 			o.Kgc = GetKgc(skgc, prms)

@@ -17,6 +17,7 @@ type DruckerPrager struct {
 	Mb  float64   // slope of fc line of plastic potential
 	qy0 float64   // initial qy
 	H   float64   // hardening variable
+	rho float64   // density
 	ten []float64 // auxiliary tensor
 }
 
@@ -27,6 +28,11 @@ func init() {
 
 // Clean clean resources
 func (o *DruckerPrager) Clean() {
+}
+
+// GetRho returns density
+func (o *DruckerPrager) GetRho() float64 {
+	return o.rho
 }
 
 // Init initialises model
@@ -55,7 +61,9 @@ func (o *DruckerPrager) Init(ndim int, pstress bool, prms fun.Prms) (err error) 
 			φ = p.V
 		case "typ":
 			typ = int(p.V)
-		case "E", "nu", "l", "G", "K", "rho":
+		case "rho":
+			o.rho = p.V
+		case "E", "nu", "l", "G", "K":
 		default:
 			return chk.Err("dp: parameter named %q is incorrect\n", p.N)
 		}

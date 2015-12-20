@@ -31,6 +31,7 @@ import (
 type Model interface {
 	Init(ndim int, pstress bool, prms fun.Prms) error // initialises model
 	GetPrms() fun.Prms                                // gets (an example) of parameters
+	GetRho() float64                                  // returns density
 	Clean()                                           // clean resources as when calling C code
 }
 
@@ -60,6 +61,7 @@ type OneD interface {
 	InitIntVars1D() (*OnedState, error)                         // initialises AND allocates internal (secondary) variables
 	Update(s *OnedState, ε, Δε, aux float64) error              // update state
 	CalcD(s *OnedState, firstIt bool) (float64, float64, error) // computes D = dσ_new/dε_new consistent with StressUpdate
+	GetA() float64                                              // returns cross-sectional area
 }
 
 // New returns new solid model

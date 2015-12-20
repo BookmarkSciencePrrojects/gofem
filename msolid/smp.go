@@ -26,8 +26,9 @@ type SmpInvs struct {
 	Isof tsr.IsoFun     // isotropic function structure
 	RM   fun.RefDecSp1  // reference model for smoothing
 
-	// auxiliary parameters
-	c, φ, b, eps1, eps2, βrm, shift float64 // parameters
+	// parameters
+	c, φ, rho                 float64 // cohesion, friction angle and density
+	b, eps1, eps2, βrm, shift float64 // parameters
 
 	// parameters
 	rtyp int     // rounding type
@@ -50,6 +51,11 @@ func (o *SmpInvs) Clean() {
 	o.PU.Clean()
 }
 
+// GetRho returns density
+func (o *SmpInvs) GetRho() float64 {
+	return o.rho
+}
+
 // Init initialises model
 func (o *SmpInvs) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 
@@ -66,11 +72,13 @@ func (o *SmpInvs) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 	for _, p := range prms {
 		switch p.N {
 
-		// cohesion and friction angle
+		// cohesion, friction angle and density
 		case "c":
 			o.c = p.V
 		case "phi":
 			o.φ = p.V
+		case "rho":
+			o.rho = p.V
 
 		// SMP invariants
 		case "b":

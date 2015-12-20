@@ -21,13 +21,14 @@ type HyperElast1 struct {
 	EnoMin float64 // minimum value of ||dev(ε)||
 
 	// parameters
-	κ  float64 // κ
-	κb float64 // \bar{κ}
-	G0 float64 // G0
-	pr float64 // pr
-	pt float64 // pt
-	le bool    // use linear elastic model
-	K0 float64 // K0 (for linear model)
+	κ   float64 // κ
+	κb  float64 // \bar{κ}
+	G0  float64 // G0
+	pr  float64 // pr
+	pt  float64 // pt
+	le  bool    // use linear elastic model
+	K0  float64 // K0 (for linear model)
+	rho float64 // density
 
 	// derived
 	pa float64 // pa = pr + pt
@@ -44,6 +45,11 @@ func init() {
 
 // Clean clean resources
 func (o *HyperElast1) Clean() {
+}
+
+// GetRho returns density
+func (o *HyperElast1) GetRho() float64 {
+	return o.rho
 }
 
 // Init initialises model
@@ -70,6 +76,8 @@ func (o *HyperElast1) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 			o.le = p.V > 0
 		case "K0":
 			o.K0 = p.V
+		case "rho":
+			o.rho = p.V
 		}
 	}
 

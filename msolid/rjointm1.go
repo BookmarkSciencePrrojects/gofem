@@ -35,6 +35,11 @@ func (o *RjointM1) Set_mu(mu float64) {
 func (o *RjointM1) Clean() {
 }
 
+// GetRho returns density
+func (o *RjointM1) GetRho() float64 {
+	return 0
+}
+
 // Init initialises model
 func (o *RjointM1) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 	for _, p := range prms {
