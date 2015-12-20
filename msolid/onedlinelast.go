@@ -31,6 +31,11 @@ func (o *OnedLinElast) GetRho() float64 {
 	return o.rho
 }
 
+// GetA returns cross-sectional area
+func (o *OnedLinElast) GetA() float64 {
+	return o.A
+}
+
 // Init initialises model
 func (o *OnedLinElast) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 	for _, p := range prms {
@@ -51,6 +56,11 @@ func (o *OnedLinElast) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 			o.rho = p.V
 		}
 	}
+	return
+}
+
+// InitIntVars: unused
+func (o *OnedLinElast) InitIntVars(σ []float64) (s *State, err error) {
 	return
 }
 

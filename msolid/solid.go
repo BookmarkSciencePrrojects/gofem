@@ -30,6 +30,7 @@ import (
 // Model defines the interface for solid models
 type Model interface {
 	Init(ndim int, pstress bool, prms fun.Prms) error // initialises model
+	InitIntVars(σ []float64) (*State, error)          // initialises AND allocates internal (secondary) variables
 	GetPrms() fun.Prms                                // gets (an example) of parameters
 	GetRho() float64                                  // returns density
 	Clean()                                           // clean resources as when calling C code
@@ -37,7 +38,6 @@ type Model interface {
 
 // Small defines rate type solid models for small strain analyses
 type Small interface {
-	InitIntVars(σ []float64) (*State, error)                             // initialises AND allocates internal (secondary) variables
 	Update(s *State, ε, Δε []float64, eid, ipid int, time float64) error // updates stresses for given strains
 	CalcD(D [][]float64, s *State, firstIt bool) error                   // computes D = dσ_new/dε_new consistent with StressUpdate
 	ContD(D [][]float64, s *State) error                                 // computes D = dσ_new/dε_new continuous
@@ -45,13 +45,11 @@ type Small interface {
 
 // SmallStrainUpdater define small-strain models that can update strains for given stresses
 type SmallStrainUpdater interface {
-	InitIntVars(σ []float64) (*State, error)   // initialises AND allocates internal (secondary) variables
 	StrainUpdate(s *State, Δσ []float64) error // updates strains for given stresses (small strains formulation)
 }
 
 // Large defines rate type solid models for large deformation analyses
 type Large interface {
-	InitIntVars(σ []float64) (*State, error)               // initialises AND allocates internal (secondary) variables
 	Update(s *State, F, FΔ [][]float64) error              // updates stresses for new deformation F and FΔ
 	CalcA(A [][][][]float64, s *State, firstIt bool) error // computes tangent modulus A = (2/J) * ∂τ/∂b . b - σ palm I
 }

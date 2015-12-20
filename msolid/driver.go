@@ -97,11 +97,7 @@ func (o *Driver) Run(pth *Path) (err error) {
 	o.Res = make([]*State, nr)
 	o.Eps = la.MatAlloc(nr, o.nsig)
 	for i := 0; i < nr; i++ {
-		if eup != nil {
-			o.Res[i], err = eup.InitIntVars(σ0)
-		} else {
-			o.Res[i], err = sml.InitIntVars(σ0)
-		}
+		o.Res[i], err = o.model.InitIntVars(σ0)
 		if err != nil {
 			return
 		}
@@ -123,11 +119,7 @@ func (o *Driver) Run(pth *Path) (err error) {
 		εold = make([]float64, o.nsig)
 		εnew = make([]float64, o.nsig)
 		Δεtmp = make([]float64, o.nsig)
-		if eup != nil {
-			stmp, err = eup.InitIntVars(σ0)
-		} else {
-			stmp, err = sml.InitIntVars(σ0)
-		}
+		stmp, err = o.model.InitIntVars(σ0)
 		if err != nil {
 			return
 		}

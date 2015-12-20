@@ -73,6 +73,11 @@ func (o RjointM1) GetPrms() fun.Prms {
 	}
 }
 
+// InitIntVars: unused
+func (o *RjointM1) InitIntVars(σ []float64) (s *State, err error) {
+	return
+}
+
 // InitIntVars initialises internal (secondary) variables
 func (o RjointM1) InitIntVars1D() (s *OnedState, err error) {
 	s = NewOnedState(1, 2) // 1:{ωpb}  2:{q1,q2}
