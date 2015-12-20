@@ -57,9 +57,9 @@ type Large interface {
 
 // OneD specialises Model to 1D
 type OneD interface {
-	InitIntVars1D() (*OnedState, error)                // initialises AND allocates internal (secondary) variables
-	Update(s *OnedState, ε, Δε float64) error          // update state
-	CalcD(s *OnedState, firstIt bool) (float64, error) // computes D = dσ_new/dε_new consistent with StressUpdate
+	InitIntVars1D() (*OnedState, error)                         // initialises AND allocates internal (secondary) variables
+	Update(s *OnedState, ε, Δε, aux float64) error              // update state
+	CalcD(s *OnedState, firstIt bool) (float64, float64, error) // computes D = dσ_new/dε_new consistent with StressUpdate
 }
 
 // New returns new solid model

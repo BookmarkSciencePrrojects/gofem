@@ -69,12 +69,12 @@ func (o OnedLinElast) InitIntVars1D() (s *OnedState, err error) {
 }
 
 // Update updates stresses for given strains
-func (o OnedLinElast) Update(s *OnedState, ε, Δε float64) (err error) {
+func (o OnedLinElast) Update(s *OnedState, ε, Δε, aux float64) (err error) {
 	s.Sig += o.E * Δε
 	return
 }
 
 // CalcD computes D = dσ_new/dε_new consistent with StressUpdate
-func (o OnedLinElast) CalcD(s *OnedState, firstIt bool) (float64, error) {
-	return o.E, nil
+func (o OnedLinElast) CalcD(s *OnedState, firstIt bool) (float64, float64, error) {
+	return o.E, 0, nil
 }
