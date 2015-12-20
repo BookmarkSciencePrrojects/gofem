@@ -18,3 +18,13 @@ http://cpmech.github.io/gofem
 
 ## Acknowledgements
 Funding from the Australian Research Council is gratefully acknowledged.
+
+## Subpackages are
+1. ana -- analytical solutions
+2. fem -- finite element method implementation; elements, solver, ...
+3. inp -- input data structures; .sim (simulation), .msh (mesh), .mat (materials)
+4. mdl -- material models: cnd (conductivity), fld (fluid), lrm (liquid retention), por (porous medium), sld (solids)
+5. out -- output routines
+5. shp -- shape (interpolation) functions; geometric elements
+
+Additionally, 'tools' contains some auxiliary tools.
