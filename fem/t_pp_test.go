@@ -165,7 +165,7 @@ func Test_pp01a(tst *testing.T) {
 
 func Test_pp01b(tst *testing.T) {
 
-	verbose()
+	//verbose()
 	chk.PrintTitle("pp01b")
 
 	// run simulation

@@ -53,7 +53,7 @@ func Test_up01a(tst *testing.T) {
 	 *           10                              12 13
 	 */
 
-	verbose()
+	//verbose()
 	chk.PrintTitle("up01a")
 
 	// start simulation

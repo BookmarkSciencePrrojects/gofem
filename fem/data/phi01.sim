@@ -21,7 +21,7 @@
   "stages" : [
     {
       "desc" : "do nothing",
-      "initial" : { "fcns":["circle"], "dofs":["h"] }
+      "inifcn" : { "fcns":["circle"], "dofs":["h"] }
     }
   ]
 }
