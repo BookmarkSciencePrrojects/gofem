@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/cpmech/gofem/ana"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
@@ -169,6 +170,15 @@ type TimeControl struct {
 	DtoFunc fun.Func // output time step function
 }
 
+// IniPorousData  holds data for setting initial porous media state (e.g. geostatic, hydrostatic)
+type IniPorousData struct {
+	Nu          []float64 `json:"nu"`          // [nlayers] Poisson's coefficient to compute effective horizontal state for each layer
+	K0          []float64 `json:"K0"`          // [nlayers] Earth pressure coefficient at rest to compute effective horizontal stresses
+	UseK0       []bool    `json:"useK0"`       // [nlayers] use K0 to compute effective horizontal stresses instead of "nu"
+	Layers      [][]int   `json:"layers"`      // [nlayers][ntagsInLayer]; e.g. [[-1,-2], [-3,-4]] => 2 layers
+	TotalStress bool      `json:"totalstress"` // total stress analysis
+}
+
 // IniStressData holds data for setting initial stresses
 type IniStressData struct {
 	Hom bool    `json:"hom"` // homogeneous stress distribution
@@ -194,15 +204,6 @@ type IniImportRes struct {
 	ResetU bool   `json:"resetu"` // reset/zero u (displacements)
 }
 
-// IniPorousData  holds data for setting initial porous media state (e.g. geostatic, hydrostatic)
-type IniPorousData struct {
-	Nu          []float64 `json:"nu"`          // [nlayers] Poisson's coefficient to compute effective horizontal state for each layer
-	K0          []float64 `json:"K0"`          // [nlayers] Earth pressure coefficient at rest to compute effective horizontal stresses
-	UseK0       []bool    `json:"useK0"`       // [nlayers] use K0 to compute effective horizontal stresses instead of "nu"
-	Layers      [][]int   `json:"layers"`      // [nlayers][ntagsInLayer]; e.g. [[-1,-2], [-3,-4]] => 2 layers
-	TotalStress bool      `json:"totalstress"` // total stress analysis
-}
-
 // Stage holds stage data
 type Stage struct {
 
@@ -216,10 +217,10 @@ type Stage struct {
 
 	// specific problems data
 	SeepFaces   []int            `json:"seepfaces"` // face tags corresponding to seepage faces
+	IniPorous   *IniPorousData   `json:"porous"`    // initial porous media state (geostatic and hydrostatic included)
 	IniStress   *IniStressData   `json:"inistress"` // initial stress data
 	IniFileFunc *IniFileFuncData `json:"filefunc"`  // set initial solution values such as Y, dYdt and d2Ydt2
 	IniImport   *IniImportRes    `json:"import"`    // import results from another previous simulation
-	IniPorous   *IniPorousData   `json:"porous"`    // initial porous media state (geostatic and hydrostatic included)
 
 	// conditions
 	EleConds []*EleCond `json:"eleconds"` // element conditions. ex: gravity or beam distributed loads
@@ -244,17 +245,27 @@ type Simulation struct {
 	Stages    []*Stage   `json:"stages"`    // stores all stages
 
 	// derived
-	GoroutineId int      // id of goroutine to avoid race problems
-	DirOut      string   // directory to save results
-	Key         string   // simulation key; e.g. mysim01.sim => mysim01 or mysim01-alias
-	EncType     string   // encoder type
-	Ndim        int      // space dimension
-	MaxElev     float64  // maximum elevation
-	Gravity     fun.Func // first stage: gravity constant function
-	MatModels   *MatDb   // materials and models
+	GoroutineId int     // id of goroutine to avoid race problems
+	DirOut      string  // directory to save results
+	Key         string  // simulation key; e.g. mysim01.sim => mysim01 or mysim01-alias
+	EncType     string  // encoder type
+	Ndim        int     // space dimension
+	MaxElev     float64 // maximum elevation
+	MatModels   *MatDb  // materials and models
+
+	// derived: for initial and boundary conditions with fluids
+	ColLiq ana.ColumnFluidPressure // column liquid pressure and density
+	ColGas ana.ColumnFluidPressure // column gas pressure and density
 }
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
+
+// Clean cleans resources
+func (o *Simulation) Clean() {
+	if o.MatModels != nil {
+		o.MatModels.Clean()
+	}
+}
 
 // ReadSim reads all simulation data from a .sim JSON file
 func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simulation {
@@ -344,15 +355,8 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 		}
 	}
 
-	// read materials database and initialise models
-	initModels := true
-	o.MatModels, err = ReadMat(dir, o.Data.Matfile, o.Ndim, o.Data.Pstress, initModels)
-	if err != nil {
-		chk.Panic("ReadSim: loading materials and initialising models failed\n:%v", err)
-	}
-
 	// for all stages
-	var t float64
+	var t, grav0 float64
 	for i, stg := range o.Stages {
 
 		// fix Tf
@@ -397,27 +401,40 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 		if i == 0 {
 
 			// gravity
+			found := false
 			for _, econd := range stg.EleConds {
 				for j, key := range econd.Keys {
 					if key == "g" {
-						if o.Gravity == nil {
-							o.Gravity = o.Functions.Get(econd.Funcs[j])
-							if o.Gravity == nil {
-								chk.Panic("ReadSim: cannot find function named %q", econd.Funcs[j])
-							}
-							break
+						gfcn := o.Functions.Get(econd.Funcs[j])
+						if gfcn == nil {
+							chk.Panic("ReadSim: cannot find function named %q corresponding to gravity constant @ stage 0", econd.Funcs[j])
 						}
+						grav0 = gfcn.F(0, nil)
+						found = true
+						break
 					}
 				}
-			}
-			if o.Gravity == nil {
-				o.Gravity = &fun.Cte{C: 10}
+				if found {
+					break
+				}
 			}
 		}
 
 		// update time
 		t += stg.Control.Tf
 	}
+
+	// read materials database and initialise models
+	o.MatModels, err = ReadMat(dir, o.Data.Matfile, o.Ndim, o.Data.Pstress)
+	if err != nil {
+		chk.Panic("ReadSim: loading materials and initialising models failed\n:%v", err)
+	}
+
+	// derived: for initial and boundary conditions with fluids
+	RhoL0, RhoG0, pl0, pg0, Cl, Cg := o.MatModels.FluidData()
+	H := utl.Max(o.Data.Wlevel, o.MaxElev)
+	o.ColLiq.Init(RhoL0, pl0, Cl, grav0, H, false)
+	o.ColGas.Init(RhoG0, pg0, Cg, grav0, H, false)
 
 	// results
 	return &o

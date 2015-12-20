@@ -105,7 +105,7 @@ func Test_mat01(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("mat01")
 
-	mdb1, err := ReadMat("data", "bh.mat", 2, false, true)
+	mdb1, err := ReadMat("data", "bh.mat", 2, false)
 	if err != nil {
 		tst.Errorf("cannot read bh.mat\n:%v", err)
 		return
@@ -115,7 +115,7 @@ func Test_mat01(tst *testing.T) {
 	fn := "test_bh.mat"
 	io.WriteFileSD("/tmp/gofem/inp", fn, mdb1.String())
 
-	mdb2, err := ReadMat("/tmp/gofem/inp/", fn, 2, false, true)
+	mdb2, err := ReadMat("/tmp/gofem/inp/", fn, 2, false)
 	if err != nil {
 		tst.Errorf("cannot read test_bh.mat\n:%v", err)
 		return
@@ -128,7 +128,7 @@ func Test_mat02(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("mat02")
 
-	mdb, err := ReadMat("data", "porous.mat", 2, false, true)
+	mdb, err := ReadMat("data", "porous.mat", 2, false)
 	if err != nil {
 		tst.Errorf("cannot read porous.mat\n:%v", err)
 		return
@@ -158,9 +158,8 @@ func Test_sim01(tst *testing.T) {
 		io.Pf("\n")
 	}
 
-	io.Pfyel("ndim    = %v\n", sim.Ndim)
-	io.Pfyel("maxElev = %v\n", sim.MaxElev)
-	io.Pfyel("grav    = %v\n", sim.Gravity.F(0, nil))
+	io.Pfyel("Ndim    = %v\n", sim.Ndim)
+	io.Pfyel("MaxElev = %v\n", sim.MaxElev)
 
 	io.Pfcyan("\nLinSol.Name = %v\n", sim.LinSol.Name)
 
@@ -170,7 +169,7 @@ func Test_sim01(tst *testing.T) {
 
 func Test_sim02(tst *testing.T) {
 
-	//verbose()
+	verbose()
 	chk.PrintTitle("sim01")
 
 	sim := ReadSim("data/frees01.sim", "", true, 0)
@@ -183,10 +182,41 @@ func Test_sim02(tst *testing.T) {
 		io.Pf("\n")
 	}
 
-	io.Pfyel("ndim    = %v\n", sim.Ndim)
-	io.Pfyel("maxElev = %v\n", sim.MaxElev)
-	io.Pfyel("grav    = %v\n", sim.Gravity.F(0, nil))
+	io.Pfyel("Ndim    = %v\n", sim.Ndim)
+	io.Pfyel("MaxElev = %v\n", sim.MaxElev)
 
+	io.Pf("\n")
+	io.Pfyel("liquid: RhoL0 = %v\n", sim.ColLiq.R0)
+	io.Pfyel("liquid: pl0   = %v\n", sim.ColLiq.P0)
+	io.Pfyel("liquid: Cl    = %v\n", sim.ColLiq.C)
+	io.Pfyel("liquid: g     = %v\n", sim.ColLiq.Grav)
+	io.Pfyel("liquid: H     = %v\n", sim.ColLiq.H)
+
+	io.Pf("\n")
+	io.Pf("gas: RhoG0 = %v\n", sim.ColGas.R0)
+	io.Pf("gas: pg0   = %v\n", sim.ColGas.P0)
+	io.Pf("gas: Cg    = %v\n", sim.ColGas.C)
+	io.Pf("gas: g     = %v\n", sim.ColGas.Grav)
+	io.Pf("gas: H     = %v\n", sim.ColGas.H)
+
+	io.Pf("\n")
 	chk.IntAssert(sim.Ndim, 2)
-	chk.Scalar(tst, "maxElev", 1e-15, sim.MaxElev, 10)
+	chk.Scalar(tst, "MaxElev", 1e-15, sim.MaxElev, 10.0)
+	io.Pf("\n")
+	chk.Scalar(tst, "liq: RhoL0", 1e-15, sim.ColLiq.R0, 1.0)
+	chk.Scalar(tst, "liq: Pl0  ", 1e-15, sim.ColLiq.P0, 0.0)
+	chk.Scalar(tst, "liq: Cl   ", 1e-15, sim.ColLiq.C, 4.53e-07)
+	chk.Scalar(tst, "liq: Grav ", 1e-15, sim.ColLiq.Grav, 10.0)
+	chk.Scalar(tst, "liq: H    ", 1e-15, sim.ColLiq.H, 10.0)
+	io.Pf("\n")
+	chk.Scalar(tst, "gas: RhoG0", 1e-15, sim.ColGas.R0, 0.0012)
+	chk.Scalar(tst, "gas: Pg0  ", 1e-15, sim.ColGas.P0, 0.0)
+	chk.Scalar(tst, "gas: Cg   ", 1e-15, sim.ColGas.C, 1.17e-5)
+	chk.Scalar(tst, "gas: Grav ", 1e-15, sim.ColGas.Grav, 10.0)
+	chk.Scalar(tst, "gas: H    ", 1e-15, sim.ColGas.H, 10.0)
+
+	if chk.Verbose {
+		sim.ColLiq.Plot("/tmp/gofem", "fig_sim02_liq", "\\ell", 21)
+		sim.ColGas.Plot("/tmp/gofem", "fig_sim02_gas", "g", 21)
+	}
 }

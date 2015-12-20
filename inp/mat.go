@@ -6,6 +6,7 @@ package inp
 
 import (
 	"encoding/json"
+	"math"
 	"path/filepath"
 	"strings"
 
@@ -53,8 +54,17 @@ type MatDb struct {
 	Groups   map[string]*Material // subset with materials/models: groups
 }
 
+// Clean cleans resources
+func (o *MatDb) Clean() {
+	for _, mat := range o.Materials {
+		if mat.Solid != nil {
+			mat.Solid.Clean()
+		}
+	}
+}
+
 // ReadMat reads all materials data from a .mat JSON file
-func ReadMat(dir, fn string, ndim int, pstress, initModels bool) (mdb *MatDb, err error) {
+func ReadMat(dir, fn string, ndim int, pstress bool) (mdb *MatDb, err error) {
 
 	// new database
 	mdb = new(MatDb)
@@ -98,11 +108,6 @@ func ReadMat(dir, fn string, ndim int, pstress, initModels bool) (mdb *MatDb, er
 			err = chk.Err("material type %q is incorrect; options are \"solid\", \"conduct\", \"reten\", and \"porous\"", m.Type)
 			return
 		}
-	}
-
-	// skip allocation
-	if !initModels {
-		return
 	}
 
 	// alloc/init: solids
@@ -199,6 +204,40 @@ func (o MatDb) Get(name string) *Material {
 		}
 	}
 	return nil
+}
+
+// FluidData finds liquid/gas data in any porous material;
+// otherwise returns default values of water and dry air
+//  TODO: read pl0 and pg0; default is 0
+func (o MatDb) FluidData() (RhoL0, RhoG0, pl0, pg0, Cl, Cg float64) {
+	RhoL0 = 1.0    // [Mg/m³]
+	RhoG0 = 0.0012 // [Mg/m³]
+	Cl = 4.53e-7   // [Mg/(m³・kPa)]
+	Cg = 1.17e-5   // [Mg/(m³・kPa)]
+	found := false
+	for _, m := range o.Porous {
+		if found == false {
+			RhoL0 = m.Porous.RhoL0
+			RhoG0 = m.Porous.RhoG0
+			Cl = m.Porous.Cl
+			Cg = m.Porous.Cg
+			found = true
+		} else {
+			if math.Abs(RhoL0-m.Porous.RhoL0) > 1e-15 {
+				chk.Panic("properties of fluids must be the same in all porous materials")
+			}
+			if math.Abs(RhoG0-m.Porous.RhoG0) > 1e-15 {
+				chk.Panic("properties of fluids must be the same in all porous materials")
+			}
+			if math.Abs(Cl-m.Porous.Cl) > 1e-15 {
+				chk.Panic("properties of fluids must be the same in all porous materials")
+			}
+			if math.Abs(Cg-m.Porous.Cg) > 1e-15 {
+				chk.Panic("properties of fluids must be the same in all porous materials")
+			}
+		}
+	}
+	return
 }
 
 // String prints one function
