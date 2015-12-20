@@ -18,8 +18,7 @@ type RjointM1 struct {
 	A_kh  float64 // hardening modulus
 	A_μ   float64 // friction coefficient
 	A_h   float64 // perimeter of beam element
-	A_k1  float64 // lateral stiffness
-	A_k2  float64 // lateral stiffness
+	A_kl  float64 // lateral stiffness
 }
 
 // add model to factory
@@ -50,10 +49,8 @@ func (o *RjointM1) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 			o.A_μ = p.V
 		case "h":
 			o.A_h = p.V
-		case "k1":
-			o.A_k1 = p.V
-		case "k2":
-			o.A_k2 = p.V
+		case "kl":
+			o.A_kl = p.V
 		}
 	}
 	return
@@ -67,8 +64,7 @@ func (o RjointM1) GetPrms() fun.Prms {
 		&fun.Prm{N: "kh", V: 0},
 		&fun.Prm{N: "mu", V: 0.5},
 		&fun.Prm{N: "h", V: 0.1},
-		&fun.Prm{N: "k1", V: 1e4},
-		&fun.Prm{N: "k2", V: 1e4},
+		&fun.Prm{N: "kl", V: 1e4},
 	}
 }
 
