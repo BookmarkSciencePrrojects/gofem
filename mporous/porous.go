@@ -48,15 +48,13 @@ type Model struct {
 	RhoL0 float64 // ρL0: initial liquid real density
 	RhoG0 float64 // ρG0: initial gas real density
 	RhoS0 float64 // real (intrinsic) density of solids
-	BulkL float64 // liquid bulk moduli at temperature θini
-	RTg   float64 // R*Θ*g: initial gas constant
+	Cl    float64 // liquid compresssibility
+	Cg    float64 // gas compressibility
 	Gref  float64 // reference gravity, at time of measuring ksat, kgas
 	Pkl   float64 // isotrpic liquid saturated conductivity
 	Pkg   float64 // isotrpic gas saturated conductivity
 
 	// derived
-	Cl    float64     // liquid compresssibility
-	Cg    float64     // gas compressibility
 	Klsat [][]float64 // klsat ÷ Gref
 	Kgsat [][]float64 // kgsat ÷ Gref
 
@@ -92,9 +90,10 @@ func (o *Model) Init(prms fun.Prms, cnd mconduct.Model, lrm mreten.Model) (err e
 	var kgx, kgy, kgz float64
 
 	// read paramaters in
-	o.RTg = 1.0
 	for _, p := range prms {
 		switch p.N {
+
+		// constants
 		case "NmaxIt":
 			o.NmaxIt = int(p.V)
 		case "Itol":
@@ -111,6 +110,8 @@ func (o *Model) Init(prms fun.Prms, cnd mconduct.Model, lrm mreten.Model) (err e
 			o.Ncns = p.V > 0
 		case "Ncns2":
 			o.Ncns2 = p.V > 0
+
+		// parameters
 		case "nf0":
 			o.Nf0 = p.V
 		case "RhoL0":
@@ -119,10 +120,10 @@ func (o *Model) Init(prms fun.Prms, cnd mconduct.Model, lrm mreten.Model) (err e
 			o.RhoG0 = p.V
 		case "RhoS0":
 			o.RhoS0 = p.V
-		case "BulkL":
-			o.BulkL = p.V
-		case "RTg":
-			o.RTg = p.V
+		case "Cl":
+			o.Cl = p.V
+		case "Cg":
+			o.Cg = p.V
 		case "gref":
 			o.Gref = p.V
 		case "kl":
@@ -137,8 +138,6 @@ func (o *Model) Init(prms fun.Prms, cnd mconduct.Model, lrm mreten.Model) (err e
 	}
 
 	// derived
-	o.Cl = o.RhoL0 / o.BulkL
-	o.Cg = 1.0 / o.RTg
 	o.Klsat = [][]float64{
 		{klx / o.Gref, 0, 0},
 		{0, kly / o.Gref, 0},
@@ -157,14 +156,14 @@ func (o Model) GetPrms(example bool) fun.Prms {
 	if example {
 		return fun.Prms{
 			&fun.Prm{N: "nf0", V: 0.3},
-			&fun.Prm{N: "RhoL0", V: 1},
-			&fun.Prm{N: "RhoG0", V: 0.01},
-			&fun.Prm{N: "RhoS0", V: 2.7},
-			&fun.Prm{N: "BulkL", V: 2.2e6},
-			&fun.Prm{N: "RTg", V: 0.02},
-			&fun.Prm{N: "gref", V: 10},
-			&fun.Prm{N: "kl", V: 1e-3},
-			&fun.Prm{N: "kg", V: 1e-2},
+			&fun.Prm{N: "RhoL0", V: 1.0},    // [Mg/m³]
+			&fun.Prm{N: "RhoG0", V: 0.0012}, // [Mg/m³]
+			&fun.Prm{N: "RhoS0", V: 2.7},    // [Mg/m³]
+			&fun.Prm{N: "Cl", V: 4.53e-7},   // [Mg/(m³・kPa)]
+			&fun.Prm{N: "Cg", V: 1.17e-5},   // [Mg/(m³・kPa)]
+			&fun.Prm{N: "gref", V: 10.0},    // [m/s²]
+			&fun.Prm{N: "kl", V: 1e-3},      // [m/s]
+			&fun.Prm{N: "kg", V: 1e-2},      // [m/s]
 		}
 	}
 	return fun.Prms{
@@ -172,8 +171,8 @@ func (o Model) GetPrms(example bool) fun.Prms {
 		&fun.Prm{N: "RhoL0", V: o.RhoL0},
 		&fun.Prm{N: "RhoG0", V: o.RhoG0},
 		&fun.Prm{N: "RhoS0", V: o.RhoS0},
-		&fun.Prm{N: "BulkL", V: o.BulkL},
-		&fun.Prm{N: "RTg", V: o.RTg},
+		&fun.Prm{N: "Cl", V: o.Cl},
+		&fun.Prm{N: "Cg", V: o.Cg},
 		&fun.Prm{N: "gref", V: o.Gref},
 		&fun.Prm{N: "kl", V: o.Pkl},
 		&fun.Prm{N: "kg", V: o.Pkg},
