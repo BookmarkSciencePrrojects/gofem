@@ -200,12 +200,12 @@ func Test_0pp01b(tst *testing.T) {
 	}
 
 	// plot
-	if true {
+	if false {
 		dom := analysis.Domains[0]
 		ele := dom.Elems[0].(*ElemPP)
 		mdl := ele.Mdl
 		Cnd := ele.Mdl.Cnd
-		if false {
+		if true {
 			plt.SetForEps(1.2, 350)
 			por.PlotSimple(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true)
 			plt.SetForEps(1.2, 350)

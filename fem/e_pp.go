@@ -350,11 +350,6 @@ func (o *ElemPP) AddToRhs(fb []float64, sol *Solution) (err error) {
 			}
 		}
 
-		x := o.Cell.Shp.IpRealCoords(o.X, ip)
-		io.Pf("z=%9.6f ρL=%v ρG=%v\n", x[1], ρL, ρG)
-		io.Pfyel("wlb = %23.15e\n", o.wlb)
-		io.Pfgreen("wgb = %23.15e\n", o.wgb)
-
 		// add negative of residual term to fb
 		for m := 0; m < nverts; m++ {
 			rl := o.Plmap[m]
