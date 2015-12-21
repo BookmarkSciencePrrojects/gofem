@@ -29,7 +29,7 @@
   "stages" : [
     {
       "desc" : "horizontal flow",
-      "hydrost" : true,
+      "iniporous" : { "layers":[[-1]], "nu":[0.2], "liq":"water" },
       "facebcs" : [
         { "tag":-10, "keys":["hst"], "funcs":["left"] },
         { "tag":-11, "keys":["hst"], "funcs":["right"] }

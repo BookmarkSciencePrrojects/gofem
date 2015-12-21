@@ -32,7 +32,7 @@
   },
   "stages" : [
     {
-      "geost" : { "nu":[0.3], "layers":[[-1,-2]] },
+      "iniporous" : { "nu":[0.3], "layers":[[-1,-2]], "liq":"water" },
       "facebcs" : [
         { "tag":-10, "keys":["uy","pl"], "funcs":["zero","pbot"] },
         { "tag":-11, "keys":["ux"],      "funcs":["zero"] },

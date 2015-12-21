@@ -35,7 +35,7 @@
   "stages" : [
     {
       "desc"  : "lower pressure @ bottom",
-      "geost" : { "nu":[0.3], "layers":[[-1,-2,-3]] },
+      "iniporous" : { "nu":[0.3], "layers":[[-1,-2,-3]], "liq":"water" },
       "facebcs" : [
         { "tag":-10, "keys":["uy"], "funcs":["zero"] },
         { "tag":-11, "keys":["ux"], "funcs":["zero"] },

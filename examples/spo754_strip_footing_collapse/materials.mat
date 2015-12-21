@@ -3,7 +3,7 @@
   "materials" : [
     {
       "name"  : "M.7.5.4-mises",
-      "desc"  : "De Souza Neto, Peric, Owen: Example 7.5.4 p252",
+      "type"  : "sld",
       "model" : "vm",
       "prms"  : [
         {"n":"E",   "v":1e+07, "u":"kPa"},
