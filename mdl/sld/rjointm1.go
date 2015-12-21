@@ -7,6 +7,7 @@ package sld
 import (
 	"math"
 
+	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 )
 
@@ -57,6 +58,10 @@ func (o *RjointM1) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 		case "kl":
 			o.A_kl = p.V
 		}
+	}
+	ZERO := 1e-7
+	if o.A_ks < ZERO || o.A_τy0 < ZERO || o.A_μ < ZERO || o.A_h < ZERO || o.A_kl < ZERO {
+		return chk.Err("invalid parameters: {ks=%g, tauy0=%g, mu=%g, h=%g, kl=%g} must be all > 0", o.A_ks, o.A_τy0, o.A_μ, o.A_h, o.A_kl)
 	}
 	return
 }

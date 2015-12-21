@@ -129,7 +129,6 @@ func init() {
 		if s_ncns, found := io.Keycode(edat.Extra, "ncns"); found {
 			o.Ncns = io.Atob(s_ncns)
 		}
-		io.Pforan("ncns = %v\n", o.Ncns)
 		return &o
 	}
 }
