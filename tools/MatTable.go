@@ -39,8 +39,12 @@ func main() {
 		skipp[key] = true
 	}
 
+	// constants
+	H := 10.0
+	grav := 10.0
+
 	// Read
-	mdb, err := inp.ReadMat("", matfn, 2, false)
+	mdb, err := inp.ReadMat("", matfn, 2, false, H, grav)
 	if err != nil {
 		chk.Panic("ReadMat failed:\n%v", err)
 	}

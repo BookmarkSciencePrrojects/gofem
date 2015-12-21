@@ -12,7 +12,7 @@ import (
 	"path"
 
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mreten"
+	"github.com/cpmech/gofem/mdl/lrm"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
@@ -54,7 +54,7 @@ func main() {
 		io.PfRed("cannot get material\n")
 		return
 	}
-	mdl := mat.Reten
+	mdl := mat.Lrm
 	if mdl == nil {
 		io.PfRed("cannot get retention model\n")
 		return
@@ -66,7 +66,7 @@ func main() {
 	d_Sl[0] = 1
 	var err error
 	for i := 1; i < npts; i++ {
-		d_Sl[i], err = mreten.Update(mdl, d_Pc[i-1], d_Sl[i-1], d_Pc[i]-d_Pc[i-1])
+		d_Sl[i], err = lrm.Update(mdl, d_Pc[i-1], d_Sl[i-1], d_Pc[i]-d_Pc[i-1])
 		if err != nil {
 			io.PfRed("drying: cannot updated model\n%v\n", err)
 			return
@@ -79,7 +79,7 @@ func main() {
 	w_Sl := make([]float64, npts)
 	w_Sl[0] = d_Sl[npts-1]
 	for i := 1; i < npts; i++ {
-		w_Sl[i], err = mreten.Update(mdl, w_Pc[i-1], w_Sl[i-1], w_Pc[i]-w_Pc[i-1])
+		w_Sl[i], err = lrm.Update(mdl, w_Pc[i-1], w_Sl[i-1], w_Pc[i]-w_Pc[i-1])
 		if err != nil {
 			io.PfRed("wetting: cannot updated model\n%v\n", err)
 			return
