@@ -2,7 +2,7 @@
   "materials" : [
     {
       "name"  : "M1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":2.1e8 },
@@ -12,7 +12,7 @@
     },
     {
       "name"  : "M2",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":2.1e8 },
@@ -22,7 +22,7 @@
     },
     {
       "name"  : "M3",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":2.1e8 },
@@ -32,7 +32,7 @@
     },
     {
       "name"  : "M4",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":2.1e8 },

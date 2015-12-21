@@ -22,7 +22,7 @@
   "stages" : [
     {
       "desc" : "decrease pressure @ bottom",
-      "iniporous" : { "layers":[[-1]], "nu":[0.2] },
+      "iniporous" : { "layers":[[-1]], "nu":[0.2], "liq":"water" },
       "facebcs" : [
         { "tag":-10, "keys":["pl"], "funcs":["pbot"] }
       ],

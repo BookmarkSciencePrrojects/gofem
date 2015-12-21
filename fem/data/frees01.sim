@@ -1,7 +1,6 @@
 {
   "data" : {
-    "matfile" : "frees.mat",
-    "showR"   : false
+    "matfile" : "porous.mat"
   },
   "functions" : [
     { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] },
@@ -27,7 +26,7 @@
   "stages" : [
     {
       "desc" : "decrease water level @ right face",
-      "iniporous" : { "layers":[[-1]], "nu":[0.2] },
+      "iniporous" : { "layers":[[-1]], "nu":[0.2], "liq":"water" },
       "hydrost" : true,
       "seepfaces" : [-11],
       "facebcs" : [

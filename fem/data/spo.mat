@@ -3,7 +3,7 @@
   "materials" : [
     {
       "name"  : "M.7.5.1-elast",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":210,    "u":"GPa"},
@@ -13,7 +13,7 @@
     },
     {
       "name"  : "M.7.5.1-mises",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "vm",
       "prms"  : [
         {"n":"E",   "v":210,    "u":"GPa"},
@@ -25,7 +25,7 @@
     },
     {
       "name"  : "M.7.5.4-mises",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "vm",
       "prms"  : [
         {"n":"E",   "v":1e+07, "u":"kPa"},
@@ -37,7 +37,7 @@
     },
     {
       "name"  : "M.8.4.3-dp-outer",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "dp",
       "prms"  : [
         {"n":"E",   "v":1e+07, "u":"kPa"},
@@ -51,7 +51,7 @@
     },
     {
       "name"  : "M.8.4.3-dp-inner",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "dp",
       "prms"  : [
         {"n":"E",     "v":1e+07, "u":"kPa"},
@@ -65,7 +65,7 @@
     },
     {
       "name"  : "M.8.4.3-dp-pstrain",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "dp",
       "prms"  : [
         {"n":"E",   "v":1e+07, "u":"kPa"},
@@ -79,7 +79,7 @@
     },
     {
       "name"  : "M.8.4.5-dp",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "dp",
       "prms"  : [
         {"n":"E",   "v":20000,         "u":"kPa"},

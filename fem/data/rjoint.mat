@@ -3,7 +3,7 @@
   "materials" : [
     {
       "name"  : "sld1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":10000},
@@ -13,7 +13,7 @@
     },
     {
       "name"  : "lin1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":1e+06},
@@ -23,7 +23,7 @@
     },
     {
       "name"  : "jnt1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "rjoint-m1",
       "prms"  : [
         {"n":"ks",    "v":2000},
@@ -37,7 +37,7 @@
     },
     {
       "name"  : "sld2",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",    "v":100000},
@@ -47,7 +47,7 @@
     },
     {
       "name"  : "lin2",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":2.1e+06            },
@@ -57,7 +57,7 @@
     },
     {
       "name"  : "jnt2",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"ks",    "v":100000},
@@ -71,7 +71,7 @@
     },
     {
       "name"  : "jnt3",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "rjoint-m1",
       "prms"  : [
         {"n":"ks",    "v":2000},

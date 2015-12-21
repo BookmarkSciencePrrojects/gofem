@@ -1,8 +1,7 @@
 {
   "data" : {
     "matfile": "bridge01.mat",
-    "steady": true,
-    "showR": false
+    "steady": true
   },
   "linsol" : {
     "symmetric" : true

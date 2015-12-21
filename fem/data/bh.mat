@@ -16,7 +16,7 @@
   "materials" : [
     {
       "name"  : "B-1.4-M1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E", "v":200000},
@@ -25,7 +25,7 @@
     },
     {
       "name"  : "B-1.4-M2",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E", "v":200000},
@@ -34,7 +34,7 @@
     },
     {
       "name"  : "B-1.4-M3",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E", "v":70000},
@@ -43,7 +43,7 @@
     },
     {
       "name"  : "B-1.6-M1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":10000},

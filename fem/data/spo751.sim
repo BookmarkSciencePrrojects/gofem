@@ -25,7 +25,6 @@
     "desc"    : "de Souza Neto, Peric, Owen: Example 7.5.1 p244",
     "matfile" : "spo.mat",
     "steady"  : true,
-    "showR"   : true,
     "stat"    : true
   },
   "functions" : [

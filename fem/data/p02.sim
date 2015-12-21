@@ -1,8 +1,7 @@
 {
   "data" : {
     "desc"    : "flow along column",
-    "matfile" : "porous.mat",
-    "showr"   : false
+    "matfile" : "porous.mat"
   },
   "functions" : [
     { "name":"pbot", "type":"rmp", "prms":[
@@ -27,7 +26,7 @@
   "stages" : [
     {
       "desc" : "decrease pressure @ bottom",
-      "iniporous" : { "layers":[[-1]], "nu":[0.2] },
+      "iniporous" : { "layers":[[-1]], "nu":[0.2], "liq":"water" },
       "facebcs" : [
         { "tag":-10, "keys":["pl"], "funcs":["pbot"] }
       ],

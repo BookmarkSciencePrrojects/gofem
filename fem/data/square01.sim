@@ -2,8 +2,7 @@
   "data" : {
     "desc"    : "one qua4",
     "matfile" : "simple.mat",
-    "steady"  : true,
-    "showR"   : true
+    "steady"  : true
   },
   "functions" : [
     { "name":"qnH", "type":"cte", "prms":[{"n":"c", "v":-50 }] },

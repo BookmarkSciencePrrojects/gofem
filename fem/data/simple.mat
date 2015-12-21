@@ -3,7 +3,7 @@
   "materials" : [
     {
       "name"  : "elast",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":1000},
@@ -13,7 +13,7 @@
     },
     {
       "name"  : "plast",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "vm",
       "prms"  : [
         {"n":"E",   "v":1000},

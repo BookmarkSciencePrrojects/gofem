@@ -3,7 +3,7 @@
   "materials" : [
     {
       "name"  : "elast01",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E"  , "v":3000 , "u":"kPa"},
@@ -13,7 +13,7 @@
     },
     {
       "name"  : "dp01",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "dp",
       "prms"  : [
         {"n":"E"  , "v":3000 , "u":"kPa"},
@@ -26,32 +26,8 @@
       ]
     },
     {
-      "name"  : "lrm01",
-      "type"  : "reten",
-      "model" : "ref-m1",
-      "prms"  : [
-        {"n":"lamd", "v":3.42 },
-        {"n":"xrd" , "v":0.94 },
-        {"n":"yr"  , "v":0.057},
-        {"n":"xrw" , "v":0.58 },
-        {"n":"betd", "v":2.41 },
-        {"n":"betw", "v":3.44 },
-        {"n":"bet1", "v":1.14 }
-      ]
-    },
-    {
-      "name"  : "lrm02",
-      "type"  : "reten",
-      "model" : "bc",
-      "prms"  : [
-        {"n":"lam" ,  "v":0.051},
-        {"n":"pcae",  "v":1.8  },
-        {"n":"slmin", "v":0.01 }
-      ]
-    },
-    {
       "name"  : "beam01",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":1e+3,    "u":"kPa"},

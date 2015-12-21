@@ -1,8 +1,7 @@
 {
   "data" : {
     "desc"    : "flow along column -- liquid-gas version",
-    "matfile" : "porous.mat",
-    "showr"   : false
+    "matfile" : "porous.mat"
   },
   "functions" : [
     { "name":"pbot", "type":"rmp", "prms":[
@@ -24,7 +23,7 @@
   "stages" : [
     {
       "desc" : "decrease liquid pressure @ bottom",
-      "iniporous" : { "layers":[[-1]], "nu":[0.2] },
+      "iniporous" : { "layers":[[-1]], "nu":[0.2], "liq":"water", "gas":"dryair" },
       "facebcs" : [
         { "tag":-10, "keys":["pg","pl"], "funcs":["zero","pbot"] },
         { "tag":-12, "keys":["pg"],      "funcs":["zero"] }

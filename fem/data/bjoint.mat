@@ -3,7 +3,7 @@
   "materials" : [
     {
       "name"  : "solid",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":10000},
@@ -13,7 +13,7 @@
     },
     {
       "name"  : "beam",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":1000},
@@ -27,7 +27,7 @@
     },
     {
       "name"  : "joint",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "rjoint-m1",
       "prms"  : [
         {"n":"ks",    "v":1000},

@@ -3,7 +3,7 @@
   "materials" : [
     {
       "name"  : "SG-5.2-M1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":1e+06},
@@ -13,7 +13,7 @@
     },
     {
       "name"  : "SG-5.7-M1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":100000},
@@ -23,7 +23,7 @@
     },
     {
       "name"  : "SG-5.11-M1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":1e+06},
@@ -33,7 +33,7 @@
     },
     {
       "name"  : "SG-5.15-M1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":1e+06},
@@ -43,7 +43,7 @@
     },
     {
       "name"  : "SG-5.17-M1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":100},
@@ -53,7 +53,7 @@
     },
     {
       "name"  : "SG-5.17-M2",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":1000},
@@ -63,7 +63,7 @@
     },
     {
       "name"  : "SG-5.24-M1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":100},
@@ -73,7 +73,7 @@
     },
     {
       "name"  : "SG-5.24-M2",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":50 },
@@ -83,7 +83,7 @@
     },
     {
       "name"  : "SG-5.30-M1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":100},
@@ -93,7 +93,7 @@
     },
     {
       "name"  : "SG-11.1",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":3.194},
@@ -104,7 +104,7 @@
     },
     {
       "name"  : "SG-11.4",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",    "v":1    },
@@ -115,7 +115,7 @@
     },
     {
       "name"  : "SG-11.4_mises",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "vm",
       "prms"  : [
         {"n":"E",   "v":1  },
@@ -127,7 +127,7 @@
     },
     {
       "name"  : "SG-11.21",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "vm",
       "prms"  : [
         {"n":"E",   "v":3e+07   },
@@ -139,7 +139,7 @@
     },
     {
       "name"  : "SG-4.22",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":1e6,  "u":"kPa"},

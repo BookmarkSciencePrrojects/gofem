@@ -3,7 +3,7 @@
   "materials" : [
     {
       "name"  : "beam01",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":100   },
@@ -14,7 +14,7 @@
     },
     {
       "name"  : "beam03",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":518400},
@@ -25,7 +25,7 @@
     },
     {
       "name"  : "beam04beam",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":29000, "u":"kip/in2"},
@@ -39,7 +39,7 @@
     },
     {
       "name"  : "beam04column",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":29000, "u":"kip/in2"},
@@ -53,7 +53,7 @@
     },
     {
       "name"  : "frame01beam",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":1000},
@@ -67,7 +67,7 @@
     },
     {
       "name"  : "frame01column",
-      "type"  : "solid",
+      "type"  : "sld",
       "model" : "oned-elast",
       "prms"  : [
         {"n":"E",   "v":2000},
