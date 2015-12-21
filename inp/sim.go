@@ -455,6 +455,21 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 		}
 	}
 
+	// fix BC: liquid pressure @ bottom of column
+	for _, fcn := range o.Functions {
+		for _, prm := range fcn.Prms {
+			if res, found := io.Keycode(prm.Extra, "fix"); found {
+				switch res {
+				case "plbot":
+					if o.LiqMdl == nil {
+						chk.Panic("cannot fix plbot (liquid pressure at bottom of column) in %q because liquid model is not available", fcn.Name)
+					}
+					prm.V, _ = o.LiqMdl.Calc(0)
+				}
+			}
+		}
+	}
+
 	// results
 	return &o
 }
