@@ -11,7 +11,6 @@ import (
 	"github.com/cpmech/gofem/inp"
 	"github.com/cpmech/gofem/mdl/fld"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -156,7 +155,6 @@ func (o *Domain) IniSetPorous(stg *inp.Stage) (err error) {
 				// parameters: porous medium
 				if itag == 0 {
 					L[i].SlMax = mat.Por.Lrm.SlMax()
-					io.Pforan("slmax = %v  %v\n", L[i].SlMax, mat.Name)
 					L[i].RhoS0 = mat.Por.RhoS0
 					L[i].Nf0 = mat.Por.Nf0
 				} else {

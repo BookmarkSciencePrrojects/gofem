@@ -25,7 +25,7 @@
   "stages" : [
     {
       "desc" : "decrease water level @ right face",
-      "hydrost" : true,
+      "iniporous" : { "layers":[[-1,-2]], "nu":[0.2], "liq":"water" },
       "seepfaces" : [-11],
       "facebcs" : [
         { "tag":-13, "keys":["hst"],  "funcs":["zero"] },

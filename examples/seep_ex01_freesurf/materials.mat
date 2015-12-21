@@ -2,19 +2,36 @@
   "functions" : [],
   "materials" : [
     {
-      "name" : "pm_all",
-      "type" : "porous",
+      "name" : "water",
+      "type" : "fld",
       "prms" : [
-        {"n":"nf0",   "v":0.3     , "u":"-"            },
-        {"n":"RhoL0", "v":1.0     , "u":"Mg/m³"        },
-        {"n":"Cl",    "v":4.53e-7 , "u":"Mg/(m³・kPa)" },
-        {"n":"gref",  "v":10.0    , "u":"m/s²"         },
-        {"n":"kl",    "v":1.0     , "u":"m/s"          }
+        {"n":"R0", "v":1.0     , "u":"Mg/m³"        },
+        {"n":"P0", "v":0.0     , "u":"kPa"          },
+        {"n":"C",  "v":4.53e-7 , "u":"Mg/(m³・kPa)" }
+      ]
+    },
+    {
+      "name" : "dryair",
+      "type" : "fld",
+      "prms" : [
+        {"n":"R0",  "v":0.0012  , "u":"Mg/m³"        },
+        {"n":"P0",  "v":0.0     , "u":"kPa"          },
+        {"n":"C",   "v":1.17e-5 , "u":"Mg/(m³・kPa)" },
+        {"n":"gas", "v":1 }
+      ]
+    },
+    {
+      "name" : "ex 1 and 2",
+      "type" : "por",
+      "deps" : ["water", "dryair", "cond1", "lrm_1_2"],
+      "prms" : [
+        {"n":"nf0", "v":0.3, "u":"-"   },
+        {"n":"kl",  "v":1.0, "u":"m/s" }
       ]
     },
     {
       "name"  : "cond1",
-      "type"  : "conduct",
+      "type"  : "cnd",
       "model" : "m1",
       "prms" : [
         {"n":"lam0l", "v":0.001},
@@ -25,7 +42,7 @@
     },
     {
       "name"  : "lrm_1_2",
-      "type"  : "reten",
+      "type"  : "lrm",
       "model" : "ref-m1",
       "prms"  : [
         {"n":"lamd",  "v":3    },
@@ -36,11 +53,6 @@
         {"n":"alp",   "v":0.5  },
         {"n":"nowet", "v":1    }
       ]
-    },
-    {
-      "name"  : "ex 1 and 2",
-      "type"  : "group",
-      "extra" : "lrm_1_2 cond1 pm_all"
     }
   ]
 }

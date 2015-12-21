@@ -213,6 +213,11 @@ func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.Func, extra string
 	// hydraulic head
 	if key == "hst" {
 
+		// check
+		if o.LiqMdl == nil {
+			return chk.Err("cannot apply hydrostatic (hst) boundary condition because liquid model is not available\n")
+		}
+
 		// set for all nodes
 		for _, nod := range nodes {
 
