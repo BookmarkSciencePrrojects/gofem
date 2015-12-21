@@ -6,14 +6,13 @@ package inp
 
 import (
 	"encoding/json"
-	"math"
 	"path/filepath"
-	"strings"
 
-	"github.com/cpmech/gofem/mconduct"
-	"github.com/cpmech/gofem/mporous"
-	"github.com/cpmech/gofem/mreten"
-	"github.com/cpmech/gofem/msolid"
+	"github.com/cpmech/gofem/mdl/cnd"
+	"github.com/cpmech/gofem/mdl/fld"
+	"github.com/cpmech/gofem/mdl/lrm"
+	"github.com/cpmech/gofem/mdl/por"
+	"github.com/cpmech/gofem/mdl/sld"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
@@ -24,16 +23,18 @@ type Material struct {
 
 	// input
 	Name  string   `json:"name"`  // name of material
-	Type  string   `json:"type"`  // type of material; e.g. "solid", "conduct", "reten", "porous"
+	Type  string   `json:"type"`  // type of material; e.g. "sld", "cnd", "lrm", "fld", "por"
 	Model string   `json:"model"` // name of model; e.g. "dp", "vm", "elast", etc.
-	Extra string   `json:"extra"` // extra information about this material
+	Deps  []string `json:"deps"`  // dependencies; other material names. e.g. ["water", "dryair", "solid1", "conduct1", "lreten1"]
 	Prms  fun.Prms `json:"prms"`  // prms holds all model parameters for this material
 
 	// derived
-	Solid   msolid.Model   // pointer to actual solid model
-	Conduct mconduct.Model // pointer to actual conductivity model
-	Reten   mreten.Model   // pointer to actual retention model
-	Porous  *mporous.Model // pointer to actual porous model
+	Sld sld.Model  // pointer to solid model
+	Cnd cnd.Model  // pointer to conductivity model
+	Lrm lrm.Model  // pointer to retention model
+	Liq *fld.Model // pointer to liquid model
+	Gas *fld.Model // pointer to gas model
+	Por *por.Model // pointer to porous model
 }
 
 // Mats holds materials
@@ -47,24 +48,25 @@ type MatDb struct {
 	Materials MatsData  `json:"materials"` // all materials
 
 	// derived
-	Solids   map[string]*Material // subset with materials/models: solids
-	Conducts map[string]*Material // subset with materials/models: coductivities
-	Retens   map[string]*Material // subset with materials/models: retention models
-	Porous   map[string]*Material // subset with materials/models: porous materials
-	Groups   map[string]*Material // subset with materials/models: groups
+	SLD map[string]*Material // subset with materials/models: solids
+	CND map[string]*Material // subset with materials/models: coductivities
+	LRM map[string]*Material // subset with materials/models: retention models
+	LIQ map[string]*Material // subset with materials/models: liquids
+	GAS map[string]*Material // subset with materials/models: gases
+	POR map[string]*Material // subset with materials/models: porous materials
 }
 
 // Clean cleans resources
 func (o *MatDb) Clean() {
 	for _, mat := range o.Materials {
-		if mat.Solid != nil {
-			mat.Solid.Clean()
+		if mat.Sld != nil {
+			mat.Sld.Clean()
 		}
 	}
 }
 
 // ReadMat reads all materials data from a .mat JSON file
-func ReadMat(dir, fn string, ndim int, pstress bool) (mdb *MatDb, err error) {
+func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatDb, err error) {
 
 	// new database
 	mdb = new(MatDb)
@@ -82,113 +84,123 @@ func ReadMat(dir, fn string, ndim int, pstress bool) (mdb *MatDb, err error) {
 	}
 
 	// subsets
-	mdb.Solids = make(map[string]*Material)
-	mdb.Conducts = make(map[string]*Material)
-	mdb.Retens = make(map[string]*Material)
-	mdb.Porous = make(map[string]*Material)
-	mdb.Groups = make(map[string]*Material)
+	mdb.SLD = make(map[string]*Material)
+	mdb.CND = make(map[string]*Material)
+	mdb.LRM = make(map[string]*Material)
+	mdb.LIQ = make(map[string]*Material)
+	mdb.GAS = make(map[string]*Material)
+	mdb.POR = make(map[string]*Material)
 	for _, m := range mdb.Materials {
 		switch m.Type {
-		case "solid":
-			mdb.Solids[m.Name] = m
+		case "sld":
+			mdb.SLD[m.Name] = m
 			continue
-		case "conduct":
-			mdb.Conducts[m.Name] = m
+		case "cnd":
+			mdb.CND[m.Name] = m
 			continue
-		case "reten":
-			mdb.Retens[m.Name] = m
+		case "lrm":
+			mdb.LRM[m.Name] = m
 			continue
-		case "porous":
-			mdb.Porous[m.Name] = m
+		case "fld":
+			gas := false
+			res := m.Prms.Find("gas")
+			if res != nil {
+				if res.V > 0 {
+					gas = true
+				}
+			}
+			if gas {
+				mdb.GAS[m.Name] = m
+			} else {
+				mdb.LIQ[m.Name] = m
+			}
 			continue
-		case "group":
-			mdb.Groups[m.Name] = m
+		case "por":
+			mdb.POR[m.Name] = m
 			continue
 		default:
-			err = chk.Err("material type %q is incorrect; options are \"solid\", \"conduct\", \"reten\", and \"porous\"", m.Type)
+			err = chk.Err("material type %q is incorrect; options are \"sld\", \"cnd\", \"lrm\", \"fld\" and \"por\"", m.Type)
 			return
 		}
 	}
 
 	// alloc/init: solids
-	for _, m := range mdb.Solids {
-		m.Solid, err = msolid.New(m.Model)
+	for _, m := range mdb.SLD {
+		m.Sld, err = sld.New(m.Model)
 		if err != nil {
+			err = chk.Err("cannot allocate solid model %q / material %q\n%v", m.Model, m.Name, err)
 			return
 		}
-		err = m.Solid.Init(ndim, pstress, m.Prms)
+		err = m.Sld.Init(ndim, pstress, m.Prms)
 		if err != nil {
-			return
-		}
-	}
-
-	// alloc/init: conducts
-	for _, m := range mdb.Conducts {
-		m.Conduct, err = mconduct.New(m.Model)
-		if err != nil {
-			return
-		}
-		err = m.Conduct.Init(m.Prms)
-		if err != nil {
+			err = chk.Err("cannot initialise solid model %q / material %q\n%v", m.Model, m.Name, err)
 			return
 		}
 	}
 
-	// alloc/init: retens
-	for _, m := range mdb.Retens {
-		m.Reten, err = mreten.New(m.Model)
+	// alloc/init: conductivities
+	for _, m := range mdb.CND {
+		m.Cnd, err = cnd.New(m.Model)
 		if err != nil {
+			err = chk.Err("cannot allocate conductivity model %q / material %q\n%v", m.Model, m.Name, err)
 			return
 		}
-		err = m.Reten.Init(m.Prms)
+		err = m.Cnd.Init(m.Prms)
 		if err != nil {
+			err = chk.Err("cannot initialise conductivity model %q / material %q\n%v", m.Model, m.Name, err)
 			return
 		}
 	}
 
-	// alloc: porous
-	for _, m := range mdb.Porous {
-		m.Porous = new(mporous.Model)
+	// alloc/init: liquid retention models
+	for _, m := range mdb.LRM {
+		m.Lrm, err = lrm.New(m.Model)
+		if err != nil {
+			err = chk.Err("cannot allocate liquid retention model %q / material %q\n%v", m.Model, m.Name, err)
+			return
+		}
+		err = m.Lrm.Init(m.Prms)
+		if err != nil {
+			err = chk.Err("cannot initialise liquid retention model %q / material %q\n%v", m.Model, m.Name, err)
+			return
+		}
 	}
 
-	// handle groups
-	porous2group := make(map[string]*Material)
-	for _, m := range mdb.Groups {
-		matnames := strings.Fields(m.Extra)
-		for _, name := range matnames {
-			if mm, ok := mdb.Solids[name]; ok {
-				m.Solid = mm.Solid
-			}
-			if mm, ok := mdb.Conducts[name]; ok {
-				m.Conduct = mm.Conduct
-			}
-			if mm, ok := mdb.Retens[name]; ok {
-				m.Reten = mm.Reten
-			}
-			if mm, ok := mdb.Porous[name]; ok {
-				m.Porous = mm.Porous
-				porous2group[name] = m
-			}
-		}
+	// alloc/init: liquids
+	for _, m := range mdb.LIQ {
+		m.Liq = new(fld.Model)
+		m.Liq.Init(m.Prms, H, grav)
+	}
+
+	// alloc/init: gases
+	for _, m := range mdb.GAS {
+		m.Gas = new(fld.Model)
+		m.Gas.Init(m.Prms, H, grav)
 	}
 
 	// init: porous
-	for _, m := range mdb.Porous {
-		g := porous2group[m.Name]
-		if g == nil {
-			err = chk.Err("cannot initialise porous model (%q) because it does not belong to any group", m.Name)
-			return
+	for _, m := range mdb.POR {
+		for _, name := range m.Deps {
+			if mm, ok := mdb.SLD[name]; ok {
+				m.Sld = mm.Sld
+			}
+			if mm, ok := mdb.CND[name]; ok {
+				m.Cnd = mm.Cnd
+			}
+			if mm, ok := mdb.LRM[name]; ok {
+				m.Lrm = mm.Lrm
+			}
+			if mm, ok := mdb.LIQ[name]; ok {
+				m.Liq = mm.Liq
+			}
+			if mm, ok := mdb.GAS[name]; ok {
+				m.Gas = mm.Gas
+			}
 		}
-		if g.Conduct == nil {
-			err = chk.Err("porous material (%q) in group (%q) must have conductivity model", m.Name, g.Name)
-			return
-		}
-		if g.Reten == nil {
-			err = chk.Err("porous material (%q) in group (%q) must have liquid retention model", m.Name, g.Name)
-			return
-		}
-		err = m.Porous.Init(m.Prms, g.Conduct, g.Reten)
+		m.Por = new(por.Model)
+		err = m.Por.Init(m.Prms, m.Cnd, m.Lrm, m.Liq, m.Gas, grav)
 		if err != nil {
+			err = chk.Err("cannot initialise porous model (material %q):\n%v\n", m.Name, err)
 			return
 		}
 	}
@@ -206,45 +218,11 @@ func (o MatDb) Get(name string) *Material {
 	return nil
 }
 
-// FluidData finds liquid/gas data in any porous material;
-// otherwise returns default values of water and dry air
-//  TODO: read pl0 and pg0; default is 0
-func (o MatDb) FluidData() (RhoL0, RhoG0, pl0, pg0, Cl, Cg float64) {
-	RhoL0 = 1.0    // [Mg/m³]
-	RhoG0 = 0.0012 // [Mg/m³]
-	Cl = 4.53e-7   // [Mg/(m³・kPa)]
-	Cg = 1.17e-5   // [Mg/(m³・kPa)]
-	found := false
-	for _, m := range o.Porous {
-		if found == false {
-			RhoL0 = m.Porous.RhoL0
-			RhoG0 = m.Porous.RhoG0
-			Cl = m.Porous.Cl
-			Cg = m.Porous.Cg
-			found = true
-		} else {
-			if math.Abs(RhoL0-m.Porous.RhoL0) > 1e-15 {
-				chk.Panic("properties of fluids must be the same in all porous materials")
-			}
-			if math.Abs(RhoG0-m.Porous.RhoG0) > 1e-15 {
-				chk.Panic("properties of fluids must be the same in all porous materials")
-			}
-			if math.Abs(Cl-m.Porous.Cl) > 1e-15 {
-				chk.Panic("properties of fluids must be the same in all porous materials")
-			}
-			if math.Abs(Cg-m.Porous.Cg) > 1e-15 {
-				chk.Panic("properties of fluids must be the same in all porous materials")
-			}
-		}
-	}
-	return
-}
-
 // String prints one function
 func (o *Material) String() string {
 	fun.G_extraindent = "  "
 	fun.G_openbrackets = false
-	return io.Sf("    {\n      \"name\"  : %q,\n      \"type\"  : %q,\n      \"model\" : %q,\n      \"extra\" : %q,\n      \"prms\"  : [\n%v\n    }", o.Name, o.Type, o.Model, o.Extra, o.Prms)
+	return io.Sf("    {\n      \"name\"  : %q,\n      \"type\"  : %q,\n      \"model\" : %q,\n      \"deps\"  : %q,\n      \"prms\"  : [\n%v\n    }", o.Name, o.Type, o.Model, o.Deps, o.Prms)
 }
 
 // String prints materials

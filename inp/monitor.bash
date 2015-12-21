@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILES="*.go"
+FILES="*.go data/*.sim"
 
 while true; do
     inotifywait -q -e modify $FILES

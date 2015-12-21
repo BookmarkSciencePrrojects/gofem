@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cpmech/gofem/mporous"
+	"github.com/cpmech/gofem/mdl/por"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
@@ -105,7 +105,10 @@ func Test_mat01(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("mat01")
 
-	mdb1, err := ReadMat("data", "bh.mat", 2, false)
+	H := 10.0
+	grav := 10.0
+
+	mdb1, err := ReadMat("data", "bh.mat", 2, false, H, grav)
 	if err != nil {
 		tst.Errorf("cannot read bh.mat\n:%v", err)
 		return
@@ -115,7 +118,7 @@ func Test_mat01(tst *testing.T) {
 	fn := "test_bh.mat"
 	io.WriteFileSD("/tmp/gofem/inp", fn, mdb1.String())
 
-	mdb2, err := ReadMat("/tmp/gofem/inp/", fn, 2, false)
+	mdb2, err := ReadMat("/tmp/gofem/inp/", fn, 2, false, H, grav)
 	if err != nil {
 		tst.Errorf("cannot read test_bh.mat\n:%v", err)
 		return
@@ -128,7 +131,10 @@ func Test_mat02(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("mat02")
 
-	mdb, err := ReadMat("data", "porous.mat", 2, false)
+	H := 10.0
+	grav := 10.0
+
+	mdb, err := ReadMat("data", "porous.mat", 2, false, H, grav)
 	if err != nil {
 		tst.Errorf("cannot read porous.mat\n:%v", err)
 		return
@@ -136,10 +142,10 @@ func Test_mat02(tst *testing.T) {
 	io.Pfblue2("porous.mat just read:\n%v\n", mdb)
 
 	mat := mdb.Get("porous1")
-	io.Pforan("Porous = %v\n", mat.Porous)
+	io.Pforan("Porous = %v\n", mat.Por)
 	if chk.Verbose {
 		plt.SetForEps(1.2, 400)
-		mporous.PlotSimple(mat.Porous, "/tmp/gofem", "fig_mat02_lrm.eps", 20, 101, true, true, true)
+		por.PlotSimple(mat.Por, "/tmp/gofem", "fig_mat02_lrm.eps", 20, 101, true, true, true)
 	}
 }
 
@@ -186,37 +192,37 @@ func Test_sim02(tst *testing.T) {
 	io.Pfyel("MaxElev = %v\n", sim.MaxElev)
 
 	io.Pf("\n")
-	io.Pfyel("liquid: RhoL0 = %v\n", sim.ColLiq.R0)
-	io.Pfyel("liquid: pl0   = %v\n", sim.ColLiq.P0)
-	io.Pfyel("liquid: Cl    = %v\n", sim.ColLiq.C)
-	io.Pfyel("liquid: g     = %v\n", sim.ColLiq.Grav)
-	io.Pfyel("liquid: H     = %v\n", sim.ColLiq.H)
+	io.Pfyel("liquid: RhoL0 = %v\n", sim.LiqMdl.R0)
+	io.Pfyel("liquid: pl0   = %v\n", sim.LiqMdl.P0)
+	io.Pfyel("liquid: Cl    = %v\n", sim.LiqMdl.C)
+	io.Pfyel("liquid: g     = %v\n", sim.LiqMdl.Grav)
+	io.Pfyel("liquid: H     = %v\n", sim.LiqMdl.H)
 
 	io.Pf("\n")
-	io.Pf("gas: RhoG0 = %v\n", sim.ColGas.R0)
-	io.Pf("gas: pg0   = %v\n", sim.ColGas.P0)
-	io.Pf("gas: Cg    = %v\n", sim.ColGas.C)
-	io.Pf("gas: g     = %v\n", sim.ColGas.Grav)
-	io.Pf("gas: H     = %v\n", sim.ColGas.H)
+	io.Pf("gas: RhoG0 = %v\n", sim.GasMdl.R0)
+	io.Pf("gas: pg0   = %v\n", sim.GasMdl.P0)
+	io.Pf("gas: Cg    = %v\n", sim.GasMdl.C)
+	io.Pf("gas: g     = %v\n", sim.GasMdl.Grav)
+	io.Pf("gas: H     = %v\n", sim.GasMdl.H)
 
 	io.Pf("\n")
 	chk.IntAssert(sim.Ndim, 2)
 	chk.Scalar(tst, "MaxElev", 1e-15, sim.MaxElev, 10.0)
 	io.Pf("\n")
-	chk.Scalar(tst, "liq: RhoL0", 1e-15, sim.ColLiq.R0, 1.0)
-	chk.Scalar(tst, "liq: Pl0  ", 1e-15, sim.ColLiq.P0, 0.0)
-	chk.Scalar(tst, "liq: Cl   ", 1e-15, sim.ColLiq.C, 4.53e-07)
-	chk.Scalar(tst, "liq: Grav ", 1e-15, sim.ColLiq.Grav, 10.0)
-	chk.Scalar(tst, "liq: H    ", 1e-15, sim.ColLiq.H, 10.0)
+	chk.Scalar(tst, "liq: RhoL0", 1e-15, sim.LiqMdl.R0, 1.0)
+	chk.Scalar(tst, "liq: Pl0  ", 1e-15, sim.LiqMdl.P0, 0.0)
+	chk.Scalar(tst, "liq: Cl   ", 1e-15, sim.LiqMdl.C, 4.53e-07)
+	chk.Scalar(tst, "liq: Grav ", 1e-15, sim.LiqMdl.Grav, 10.0)
+	chk.Scalar(tst, "liq: H    ", 1e-15, sim.LiqMdl.H, 10.0)
 	io.Pf("\n")
-	chk.Scalar(tst, "gas: RhoG0", 1e-15, sim.ColGas.R0, 0.0012)
-	chk.Scalar(tst, "gas: Pg0  ", 1e-15, sim.ColGas.P0, 0.0)
-	chk.Scalar(tst, "gas: Cg   ", 1e-15, sim.ColGas.C, 1.17e-5)
-	chk.Scalar(tst, "gas: Grav ", 1e-15, sim.ColGas.Grav, 10.0)
-	chk.Scalar(tst, "gas: H    ", 1e-15, sim.ColGas.H, 10.0)
+	chk.Scalar(tst, "gas: RhoG0", 1e-15, sim.GasMdl.R0, 0.0012)
+	chk.Scalar(tst, "gas: Pg0  ", 1e-15, sim.GasMdl.P0, 0.0)
+	chk.Scalar(tst, "gas: Cg   ", 1e-15, sim.GasMdl.C, 1.17e-5)
+	chk.Scalar(tst, "gas: Grav ", 1e-15, sim.GasMdl.Grav, 10.0)
+	chk.Scalar(tst, "gas: H    ", 1e-15, sim.GasMdl.H, 10.0)
 
 	if chk.Verbose {
-		sim.ColLiq.Plot("/tmp/gofem", "fig_sim02_liq", "\\ell", 21)
-		sim.ColGas.Plot("/tmp/gofem", "fig_sim02_gas", "g", 21)
+		sim.LiqMdl.Plot("/tmp/gofem", "fig_sim02_liq", 21)
+		sim.GasMdl.Plot("/tmp/gofem", "fig_sim02_gas", 21)
 	}
 }

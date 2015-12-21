@@ -12,7 +12,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cpmech/gofem/ana"
+	"github.com/cpmech/gofem/mdl/fld"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
@@ -175,6 +175,8 @@ type IniPorousData struct {
 	Nu     []float64 `json:"nu"`     // [nlayers] Poisson's coefficient to compute effective horizontal state for each layer
 	K0     []float64 `json:"K0"`     // [nlayers] or Earth pressure coefficient at rest to compute effective horizontal stresses
 	Layers [][]int   `json:"layers"` // [nlayers][ntagsInLayer]; e.g. [[-1,-2], [-3,-4]] => 2 layers
+	LiqMat string    `json:"liq"`    // name of liquid material
+	GasMat string    `json:"gas"`    // name of gas material
 }
 
 // IniStressData holds data for setting initial stresses
@@ -243,18 +245,16 @@ type Simulation struct {
 	Stages    []*Stage   `json:"stages"`    // stores all stages
 
 	// derived
-	GoroutineId int     // id of goroutine to avoid race problems
-	DirOut      string  // directory to save results
-	Key         string  // simulation key; e.g. mysim01.sim => mysim01 or mysim01-alias
-	EncType     string  // encoder type
-	Ndim        int     // space dimension
-	MaxElev     float64 // maximum elevation
-	Grav0       float64 // gravity constant from stage # 0
-	MatModels   *MatDb  // materials and models
-
-	// derived: for initial and boundary conditions with fluids
-	ColLiq ana.ColumnFluidPressure // column liquid pressure and density
-	ColGas ana.ColumnFluidPressure // column gas pressure and density
+	GoroutineId int        // id of goroutine to avoid race problems
+	DirOut      string     // directory to save results
+	Key         string     // simulation key; e.g. mysim01.sim => mysim01 or mysim01-alias
+	EncType     string     // encoder type
+	Ndim        int        // space dimension
+	MaxElev     float64    // maximum elevation
+	Grav0       float64    // gravity constant from stage #0
+	MatModels   *MatDb     // materials and models
+	LiqMdl      *fld.Model // liquid model to use when computing density and pressure along column; from stage #0
+	GasMdl      *fld.Model // gas model to use when computing density and pressure along column; from stage #0
 }
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
@@ -424,16 +424,36 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 	}
 
 	// read materials database and initialise models
-	o.MatModels, err = ReadMat(dir, o.Data.Matfile, o.Ndim, o.Data.Pstress)
+	o.MatModels, err = ReadMat(dir, o.Data.Matfile, o.Ndim, o.Data.Pstress, o.MaxElev, o.Grav0)
 	if err != nil {
-		chk.Panic("ReadSim: loading materials and initialising models failed\n:%v", err)
+		chk.Panic("loading materials and initialising models failed:\n%v", err)
 	}
 
-	// derived: for initial and boundary conditions with fluids
-	RhoL0, RhoG0, pl0, pg0, Cl, Cg := o.MatModels.FluidData()
-	H := utl.Max(o.Data.Wlevel, o.MaxElev)
-	o.ColLiq.Init(RhoL0, pl0, Cl, o.Grav0, H, false)
-	o.ColGas.Init(RhoG0, pg0, Cg, o.Grav0, H, false)
+	// derived
+	if o.Stages[0].IniPorous != nil {
+
+		// liquid model
+		lmat := o.MatModels.Get(o.Stages[0].IniPorous.LiqMat)
+		if lmat == nil {
+			chk.Panic("cannot find liquid material (%q) in 'iniporous'", o.Stages[0].IniPorous.LiqMat)
+		}
+		if lmat.Liq == nil {
+			chk.Panic("liquid model in material (%q) is not available for 'iniporous'", o.Stages[0].IniPorous.LiqMat)
+		}
+		o.LiqMdl = lmat.Liq
+
+		// gas model
+		if o.Stages[0].IniPorous.GasMat != "" {
+			gmat := o.MatModels.Get(o.Stages[0].IniPorous.GasMat)
+			if gmat == nil {
+				chk.Panic("cannot find gas material (%q) in 'iniporous'", o.Stages[0].IniPorous.GasMat)
+			}
+			if gmat.Gas == nil {
+				chk.Panic("gas model in material (%q) is not available for 'iniporous'", o.Stages[0].IniPorous.GasMat)
+			}
+			o.GasMdl = gmat.Gas
+		}
+	}
 
 	// results
 	return &o
