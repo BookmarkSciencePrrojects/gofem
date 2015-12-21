@@ -58,8 +58,9 @@ type LgsVars struct {
 	Dpl, Dpg, Dvs    float64
 	Dklrdpl, Dklrdpg float64
 	Dkgrdpl, Dkgrdpg float64
+	DρlduM, DρgduM   float64
 	Dρdpl, Dρdpg     float64
-	DρdusM           float64
+	DρduM            float64
 	Dpdpl, Dpdpg     float64
 	DCpldpl, DCpldpg float64
 	DCpgdpl, DCpgdpg float64
@@ -72,7 +73,7 @@ type LgsVars struct {
 }
 
 // CalcLs calculates variables for liquid-solid simulations
-func (o Model) CalcLs(res *LsVars, sta *State, pl, divus float64, derivs bool) (err error) {
+func (o Model) CalcLs(res *LsVars, sta *State, pl, divu float64, derivs bool) (err error) {
 
 	// auxiliary
 	ns0 := sta.A_ns0
@@ -82,7 +83,7 @@ func (o Model) CalcLs(res *LsVars, sta *State, pl, divus float64, derivs bool) (
 	ρS := o.RhoS0
 
 	// n variables; Eqs (13) and (28) of [1]
-	ns := (1.0 - divus) * ns0
+	ns := (1.0 - divu) * ns0
 	nf := 1.0 - ns
 	nl := nf * sl
 
@@ -185,10 +186,14 @@ func (o Model) CalcLgs(res *LgsVars, sta *State, pl, pg, divus float64, derivs b
 		res.Dkgrdpl = dkgrdsg * Cc
 		res.Dkgrdpg = -dkgrdsg * Cc
 
+		// partial densities
+		res.DρlduM = sl * ρL * ns0
+		res.DρgduM = sg * ρG * ns0
+
 		// mixture density
 		res.Dρdpl = nf * (sl*Cl - ρL*Cc + ρG*Cc)
 		res.Dρdpg = nf * (sg*Cg - ρG*Cc + ρL*Cc)
-		res.DρdusM = (sl*ρL + sg*ρG - ρS) * ns0
+		res.DρduM = (sl*ρL + sg*ρG - ρS) * ns0
 
 		// pressure in pores
 		res.Dpdpl = sl + pc*Cc
