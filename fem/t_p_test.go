@@ -49,7 +49,7 @@ func Test_0p01a(tst *testing.T) {
 	 *           10                          4
 	 */
 
-	verbose()
+	//verbose()
 	chk.PrintTitle("0p01a")
 
 	// start simulation

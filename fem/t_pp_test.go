@@ -52,7 +52,7 @@ func Test_0pp01a(tst *testing.T) {
 	 *           10                            8 9
 	 */
 
-	verbose()
+	//verbose()
 	chk.PrintTitle("0pp01a")
 
 	// start simulation
@@ -139,6 +139,12 @@ func Test_0pp01a(tst *testing.T) {
 	chk.Ints(tst, "equations with pl prescribed", ct_pl_eqs, []int{0, 2, 8})
 	chk.Ints(tst, "equations with pg prescribed", ct_pg_eqs, []int{1, 3, 9, 43, 45, 49})
 
+	// fluid models
+	if dom.Sim.LiqMdl == nil || dom.Sim.GasMdl == nil {
+		tst.Errorf("both liquid and gas materials must be specified in 'iniporous'\n")
+		return
+	}
+
 	// initial values @ nodes
 	io.Pforan("initial values @ nodes\n")
 	for _, nod := range dom.Nodes {
@@ -157,14 +163,15 @@ func Test_0pp01a(tst *testing.T) {
 	io.Pforan("initial values @ integration points\n")
 	for _, ele := range dom.Elems {
 		e := ele.(*ElemPP)
+		slmax := e.Mdl.Lrm.SlMax()
 		for idx, ip := range e.IpsElem {
 			s := e.States[idx]
 			z := e.Cell.Shp.IpRealCoords(e.X, ip)[1]
 			_, ρLC := dom.Sim.LiqMdl.Calc(z)
 			_, ρGC := dom.Sim.GasMdl.Calc(z)
-			chk.Scalar(tst, io.Sf("sl(@ %18g)= %18g", z, s.A_sl), 1e-17, s.A_sl, 1)
-			chk.Scalar(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-13, s.A_ρL, ρLC)
-			chk.Scalar(tst, io.Sf("ρG(@ %18g)= %18g", z, s.A_ρG), 1e-13, s.A_ρG, ρGC)
+			chk.Scalar(tst, io.Sf("sl(@ %18g)= %18g", z, s.A_sl), 1e-17, s.A_sl, slmax)
+			chk.Scalar(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-9, s.A_ρL, ρLC)
+			chk.Scalar(tst, io.Sf("ρG(@ %18g)= %18g", z, s.A_ρG), 1e-14, s.A_ρG, ρGC)
 		}
 	}
 }

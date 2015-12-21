@@ -620,10 +620,8 @@ func (o *ElemPP) SetIniIvs(sol *Solution, ignored map[string][]float64) (err err
 		o.compute_gvec(sol.T)
 		if math.Abs(o.g[o.Ndim-1]) > 0 {
 			ρL = o.gpl[o.Ndim-1] / o.g[o.Ndim-1]
-			//ρG = o.gpg[o.Ndim-1] / o.g[o.Ndim-1]
+			ρG = o.gpg[o.Ndim-1] / o.g[o.Ndim-1]
 		}
-		x := o.Cell.Shp.IpRealCoords(o.X, ip)
-		io.Pforan("z=%9.6f ρL=%v ρG=%v\n", x[1], ρL, ρG)
 
 		// state initialisation
 		o.States[idx], err = o.Mdl.NewState(ρL, ρG, pl, pg)

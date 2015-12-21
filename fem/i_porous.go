@@ -8,8 +8,8 @@ import (
 	"math"
 	"sort"
 
-	"github.com/cpmech/gofem/ana"
 	"github.com/cpmech/gofem/inp"
+	"github.com/cpmech/gofem/mdl/fld"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/utl"
@@ -36,20 +36,22 @@ type ColLayer struct {
 	Nodes []*Node // nodes in layer
 
 	// parameters: porous medium
-	SlMax  float64                  // maximum liquid saturation; e.g. 1.0
-	Nf0    float64                  // initial (constant) porosity
-	RhoS0  float64                  // initial density of solids
-	ColLiq *ana.ColumnFluidPressure // liquid pressure and density
-	ColGas *ana.ColumnFluidPressure // liquid pressure and density
+	SlMax float64 // maximum liquid saturation; e.g. 1.0
+	Nf0   float64 // initial (constant) porosity
+	RhoS0 float64 // initial density of solids
 
 	// parameters: total stress analysis
 	TotRho    float64 // density for total stress analyses
 	TotStress bool    // total stress analysis
 
 	// additional data
-	Grav float64 // gravity constant
 	K0   float64 // coefficient to multiply effective vertical stresses and obtain horizontal effective stresses
 	SigV float64 // state @ top of layer
+
+	// auxiliary
+	g   float64    // gravity
+	liq *fld.Model // liquid model
+	gas *fld.Model // gas model
 }
 
 // Calc_ρ computes ρ (mixture density)
@@ -64,15 +66,20 @@ func (o ColLayer) Calc_ρ(ρL, ρG float64) (ρ float64) {
 
 // Calc computes state @ level z
 func (o ColLayer) Calc(z float64) (pl, pg, ρL, ρG, ρ, σV float64) {
-	Δz := o.Zmax - z
 	if o.TotStress {
 		ρ = o.TotRho
 	} else {
-		pl, ρL = o.ColLiq.Calc(z)
-		pg, ρG = o.ColGas.Calc(z)
+		if o.liq == nil {
+			chk.Panic("liquid model must be non-nil in order to compute pressure along column")
+		}
+		pl, ρL = o.liq.Calc(z)
+		if o.gas != nil {
+			pg, ρG = o.gas.Calc(z)
+		}
 		ρ = o.Calc_ρ(ρL, ρG)
 	}
-	σV = o.SigV + ρ*o.Grav*Δz
+	Δz := o.Zmax - z
+	σV = o.SigV + ρ*o.g*Δz
 	return
 }
 
@@ -91,6 +98,10 @@ func (o *Domain) IniSetPorous(stg *inp.Stage) (err error) {
 		}
 	}
 
+	// constants
+	ZLARGE := o.Sim.MaxElev + 1.0
+	ZSMALL := -1.0 // column base is at z=0
+
 	// initialise layers
 	var L ColLayers
 	L = make([]*ColLayer, nlayers)
@@ -102,8 +113,8 @@ func (o *Domain) IniSetPorous(stg *inp.Stage) (err error) {
 		// new layer
 		L[i] = new(ColLayer)
 		L[i].Tags = tags
-		L[i].Zmin = o.Sim.MaxElev
-		L[i].Zmax = 0
+		L[i].Zmin = ZLARGE
+		L[i].Zmax = ZSMALL
 
 		// for each tag of cells in this layer
 		for itag, tag := range tags {
@@ -177,9 +188,6 @@ func (o *Domain) IniSetPorous(stg *inp.Stage) (err error) {
 			}
 		}
 
-		// gravity
-		L[i].Grav = o.Sim.Grav0
-
 		// Nu or K0
 		if len(dat.Nu) == nlayers {
 			L[i].K0 = dat.Nu[i] / (1.0 - dat.Nu[i])
@@ -189,6 +197,11 @@ func (o *Domain) IniSetPorous(stg *inp.Stage) (err error) {
 		if L[i].K0 < 1e-7 {
 			return chk.Err("K0 or Nu is incorect: K0=%g, Nu=%g", L[i].K0, dat.Nu)
 		}
+
+		// auxiliary
+		L[i].g = o.Sim.Grav0
+		L[i].liq = o.Sim.LiqMdl
+		L[i].gas = o.Sim.GasMdl
 	}
 
 	// make sure all elements tags were handled
