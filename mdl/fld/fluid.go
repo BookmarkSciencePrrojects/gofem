@@ -19,13 +19,14 @@ import (
 type Model struct {
 
 	// material data
-	R0 float64 // intrinsic density corresponding to p0
-	P0 float64 // pressure corresponding to R0
-	C  float64 // compressibility coefficient; e.g. R0/Kbulk or M/(R・θ)
+	R0  float64 // intrinsic density corresponding to p0
+	P0  float64 // pressure corresponding to R0
+	C   float64 // compressibility coefficient; e.g. R0/Kbulk or M/(R・θ)
+	Gas bool    // is gas instead of liquid?
 
 	// additional data
-	Grav float64 // gravity acceleration (positive constant)
 	H    float64 // elevation where (R0,p0) is known
+	Grav float64 // gravity acceleration (positive constant)
 }
 
 // Init initialises this structure
@@ -38,36 +39,45 @@ func (o *Model) Init(prms fun.Prms, H, grav float64) {
 			o.P0 = p.V
 		case "C":
 			o.C = p.V
+		case "gas":
+			o.Gas = p.V > 0
 		}
 	}
-	o.Grav = grav
 	o.H = H
+	o.Grav = grav
 }
 
 // GetPrms gets (an example of) parameters
 //  Input:
-//   example -- returns example of parameters
-//   dryair  -- example of dry air parameters is returned;
-//              othewise returns example of water parameters
-func (o Model) GetPrms(example, dryair bool) fun.Prms {
+//   example -- returns example of parameters; othewise returs current parameters
+//  Note:
+//   Gas variable is used to return dry air properties instead of water
+func (o Model) GetPrms(example bool) fun.Prms {
 	if example {
-		if dryair {
+		if o.Gas {
 			return fun.Prms{ // dry air
 				&fun.Prm{N: "R0", V: 0.0012}, // [Mg/m³]
 				&fun.Prm{N: "P0", V: 0.0},    // [kPa]
 				&fun.Prm{N: "C", V: 1.17e-5}, // [Mg/(m³・kPa)]
+				&fun.Prm{N: "Gas", V: 1},     // [-]
 			}
 		}
 		return fun.Prms{ // water
 			&fun.Prm{N: "R0", V: 1.0},    // [Mg/m³]
 			&fun.Prm{N: "P0", V: 0.0},    // [kPa]
 			&fun.Prm{N: "C", V: 4.53e-7}, // [Mg/(m³・kPa)]
+			&fun.Prm{N: "Gas", V: 0},     // [-]
 		}
+	}
+	var gas float64
+	if o.Gas {
+		gas = 1
 	}
 	return fun.Prms{
 		&fun.Prm{N: "R0", V: o.R0},
 		&fun.Prm{N: "P0", V: o.P0},
 		&fun.Prm{N: "C", V: o.C},
+		&fun.Prm{N: "Gas", V: gas},
 	}
 }
 
@@ -79,7 +89,7 @@ func (o Model) Calc(z float64) (p, R float64) {
 }
 
 // Plot plots pressure and density along height of column
-func (o Model) Plot(dirout, fnkey, subscript string, np int) {
+func (o Model) Plot(dirout, fnkey string, np int) {
 
 	Z := utl.LinSpace(0, o.H, np)
 	P := make([]float64, np)
@@ -89,6 +99,10 @@ func (o Model) Plot(dirout, fnkey, subscript string, np int) {
 	}
 
 	pMaxLin := o.R0 * o.Grav * o.H
+	subscript := "\\ell"
+	if o.Gas {
+		subscript = "g"
+	}
 
 	plt.SetForEps(1.2, 400)
 	plt.Subplot(2, 1, 1)

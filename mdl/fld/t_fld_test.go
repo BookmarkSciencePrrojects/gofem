@@ -19,13 +19,14 @@ func Test_fld01(tst *testing.T) {
 	g := 10.0
 
 	var water Model
-	water.Init(water.GetPrms(true, false), H, g)
+	water.Init(water.GetPrms(true), H, g)
 
 	var dryair Model
-	dryair.Init(water.GetPrms(true, true), H, g)
+	dryair.Gas = true
+	dryair.Init(dryair.GetPrms(true), H, g)
 
 	if chk.Verbose {
-		water.Plot("/tmp/gofem", "fig_fld01_water.eps", "\\ell", 21)
-		dryair.Plot("/tmp/gofem", "fig_fld01_dryair.eps", "g", 21)
+		water.Plot("/tmp/gofem", "fig_fld01_water", 21)
+		dryair.Plot("/tmp/gofem", "fig_fld01_dryair", 21)
 	}
 }
