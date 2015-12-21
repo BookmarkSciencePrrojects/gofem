@@ -1,7 +1,8 @@
 {
   "data" : {
     "desc"    : "coupled deformation of column due to pressure decrease",
-    "matfile" : "porous.mat"
+    "matfile" : "porous.mat",
+    "nolbb" : false
   },
   "functions" : [
     { "name":"pbot", "type":"rmp", "prms":[
@@ -14,7 +15,7 @@
   ],
   "regions" : [
     {
-      "mshfile" : "col3m4eQ9.msh",
+      "mshfile" : "col10m4e2lay.msh",
       "elemsdata" : [
         { "tag":-1, "mat":"porous2", "type":"upp", "extra":"!useB:0" },
         { "tag":-2, "mat":"porous1", "type":"upp", "extra":"!useB:0" }
@@ -26,9 +27,10 @@
       "desc" : "decrease pressure @ bottom",
       "iniporous" : { "nu":[0.2, 0.2], "layers":[[-1], [-2]], "liq":"water", "gas":"dryair" },
       "facebcs" : [
-        { "tag":-10, "keys":["uy","pl"], "funcs":["zero","pbot"] },
-        { "tag":-11, "keys":["ux"],      "funcs":["zero"] },
-        { "tag":-13, "keys":["ux"],      "funcs":["zero"] }
+        { "tag":-10, "keys":["uy","pl","pg"], "funcs":["zero","pbot","zero"] },
+        { "tag":-12, "keys":["pg"], "funcs":["zero"] },
+        { "tag":-11, "keys":["ux"], "funcs":["zero"] },
+        { "tag":-13, "keys":["ux"], "funcs":["zero"] }
       ],
       "eleconds" : [
         { "tag":-1, "keys":["g"], "funcs":["grav"] },

@@ -468,16 +468,22 @@ func (o *ElemPP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 		}
 	}
 
-	// add to Kb
+	// contribution from natural boundary conditions
 	if o.HasSeep {
-
-		// contribution from natural boundary conditions
 		err = o.add_natbcs_to_jac(sol)
 		if err != nil {
 			return
 		}
+	}
 
-		// add to sparse matrix Kb
+	// assemble K matrices into Kb
+	o.assembleKs(Kb)
+	return
+}
+
+// assembleKs assemble K matrices into Kb
+func (o *ElemPP) assembleKs(Kb *la.Triplet) {
+	if o.HasSeep {
 		for i, I := range o.Plmap {
 			for j, J := range o.Plmap {
 				Kb.Put(I, J, o.Kll[i][j])
@@ -501,10 +507,7 @@ func (o *ElemPP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 				Kb.Put(I, J, o.Kff[i][j])
 			}
 		}
-
 	} else {
-
-		// add to sparse matrix Kb
 		for i, I := range o.Plmap {
 			for j, J := range o.Plmap {
 				Kb.Put(I, J, o.Kll[i][j])
@@ -520,7 +523,6 @@ func (o *ElemPP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 			}
 		}
 	}
-	return
 }
 
 // Update performs (tangent) update

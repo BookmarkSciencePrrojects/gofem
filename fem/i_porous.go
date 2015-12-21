@@ -48,9 +48,9 @@ type ColLayer struct {
 	SigV float64 // state @ top of layer
 
 	// auxiliary
-	g   float64    // gravity
-	liq *fld.Model // liquid model
-	gas *fld.Model // gas model
+	Grav float64    // gravity
+	Liq  *fld.Model // liquid model
+	Gas  *fld.Model // gas model
 }
 
 // Calc_ρ computes ρ (mixture density)
@@ -68,17 +68,17 @@ func (o ColLayer) Calc(z float64) (pl, pg, ρL, ρG, ρ, σV float64) {
 	if o.TotStress {
 		ρ = o.TotRho
 	} else {
-		if o.liq == nil {
+		if o.Liq == nil {
 			chk.Panic("liquid model must be non-nil in order to compute pressure along column")
 		}
-		pl, ρL = o.liq.Calc(z)
-		if o.gas != nil {
-			pg, ρG = o.gas.Calc(z)
+		pl, ρL = o.Liq.Calc(z)
+		if o.Gas != nil {
+			pg, ρG = o.Gas.Calc(z)
 		}
 		ρ = o.Calc_ρ(ρL, ρG)
 	}
 	Δz := o.Zmax - z
-	σV = o.SigV + ρ*o.g*Δz
+	σV = o.SigV + ρ*o.Grav*Δz
 	return
 }
 
@@ -197,9 +197,9 @@ func (o *Domain) IniSetPorous(stg *inp.Stage) (err error) {
 		}
 
 		// auxiliary
-		L[i].g = o.Sim.Grav0
-		L[i].liq = o.Sim.LiqMdl
-		L[i].gas = o.Sim.GasMdl
+		L[i].Grav = o.Sim.Grav0
+		L[i].Liq = o.Sim.LiqMdl
+		L[i].Gas = o.Sim.GasMdl
 	}
 
 	// make sure all elements tags were handled

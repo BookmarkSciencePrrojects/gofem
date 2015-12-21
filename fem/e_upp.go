@@ -13,14 +13,7 @@ import (
 	"github.com/cpmech/gosl/tsr"
 )
 
-// ElemUPP represents an element for porous media based on the u-p formulation [1]
-//  References:
-//   [1] Pedroso DM. A consistent u-p formulation for porous media with hysteresis.
-//       Int Journal for Numerical Methods in Engineering, 101(8):606-634; 2015
-//       http://dx.doi.org/10.1002/nme.4808
-//   [2] Pedroso DM. A solution to transient seepage in unsaturated porous media.
-//       Computer Methods in Applied Mechanics and Engineering, 285:791-816; 2015
-//       http://dx.doi.org/10.1016/j.cma.2014.12.009
+// ElemUPP implements the u-pl-pg formulation
 type ElemUPP struct {
 
 	// auxiliary
@@ -31,18 +24,22 @@ type ElemUPP struct {
 	Ndim    int             // space dimension
 
 	// underlying elements
-	U *ElemU // u-element
-	P *ElemP // p-element
+	U *ElemU  // u-element
+	P *ElemPP // pp-element
 
 	// scratchpad. computed @ each ip
-	divus float64     // divus
-	bs    []float64   // bs = as - g = α1・u - ζs - g; (Eqs 35b and A.1 [1]) with 'as' being the acceleration of solids and g, gravity
-	hl    []float64   // hl = -ρL・bs - ∇pl; Eq (A.1) of [1]
-	Kup   [][]float64 // [nu][np] Kup := dRus/dpl consistent tangent matrix
-	Kpu   [][]float64 // [np][nu] Kpu := dRpl/dus consistent tangent matrix
+	divus float64     // div(us)
+	b     []float64   // auxiliary:  b  = a - g = α1・u - ζs - g
+	hl    []float64   // auxiliary:  hl = -ρL・b - grad(pl)
+	hg    []float64   // temporary:  hg = -ρG・b - grad(pg)
+	Kul   [][]float64 // [nu][np] dRus/dpl
+	Kug   [][]float64 // [nu][np] dRus/dpl
+	Klu   [][]float64 // [np][nu] dRpl/dus
+	Kgu   [][]float64 // [np][nu] dRpg/dus
 
-	// for seepage face derivatives
-	dρldus_ex [][]float64 // [nverts][nverts*ndim] ∂ρl/∂us extrapolted to nodes => if has qb (flux)
+	// for boundary condition derivatives
+	dρldus_ex [][]float64 // [nverts][nverts*ndim] ∂ρl/∂us extrapolted to nodes => if has qlb (flux)
+	dρgdus_ex [][]float64 // [nverts][nverts*ndim] ∂ρg/∂us extrapolted to nodes => if has qgb (flux)
 }
 
 // initialisation ///////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +58,7 @@ func init() {
 
 		// p-element info
 		edat.Lbb = !sim.Data.NoLBB
-		p_info := infogetters["p"](sim, cell, edat)
+		p_info := infogetters["pp"](sim, cell, edat)
 
 		// solution variables
 		nverts := cell.Shp.Nverts
@@ -110,26 +107,29 @@ func init() {
 
 		// make sure p-element uses the same number of integration points than u-element
 		edat.Nip = len(o.U.IpsElem)
-		//edat.Nipf = len(o.U.IpsFace) // TODO: check if this is necessary
 
 		// allocate p-element
-		p_elem := eallocators["p"](sim, o.LbbCell, edat, x)
+		p_elem := eallocators["pp"](sim, o.LbbCell, edat, x)
 		if p_elem == nil {
 			chk.Panic("cannot allocate underlying p-element")
 		}
-		o.P = p_elem.(*ElemP)
+		o.P = p_elem.(*ElemPP)
 
 		// scratchpad. computed @ each ip
-		o.bs = make([]float64, o.Ndim)
+		o.b = make([]float64, o.Ndim)
 		o.hl = make([]float64, o.Ndim)
-		o.Kup = la.MatAlloc(o.U.Nu, o.P.Np)
-		o.Kpu = la.MatAlloc(o.P.Np, o.U.Nu)
+		o.hg = make([]float64, o.Ndim)
+		o.Kul = la.MatAlloc(o.U.Nu, o.P.Np)
+		o.Kug = la.MatAlloc(o.U.Nu, o.P.Np)
+		o.Klu = la.MatAlloc(o.P.Np, o.U.Nu)
+		o.Kgu = la.MatAlloc(o.P.Np, o.U.Nu)
 
 		// seepage terms
 		if o.P.DoExtrap {
 			p_nverts := o.P.Cell.Shp.Nverts
 			u_nverts := o.U.Cell.Shp.Nverts
 			o.dρldus_ex = la.MatAlloc(p_nverts, u_nverts*o.Ndim)
+			o.dρgdus_ex = la.MatAlloc(p_nverts, u_nverts*o.Ndim)
 		}
 
 		// return new element
@@ -158,7 +158,7 @@ func (o *ElemUPP) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 	}
 
 	// p: equations
-	p_info := infogetters["p"](o.Sim, o.LbbCell, o.Edat)
+	p_info := infogetters["pp"](o.Sim, o.LbbCell, o.Edat)
 	p_nverts := len(p_info.Dofs)
 	p_eqs := make([][]int, p_nverts)
 	for i := 0; i < p_nverts; i++ {
@@ -193,7 +193,6 @@ func (o *ElemUPP) InterpStarVars(sol *Solution) (err error) {
 	// for each integration point
 	u_nverts := o.U.Cell.Shp.Nverts
 	p_nverts := o.P.Cell.Shp.Nverts
-	var r int
 	for idx, ip := range o.U.IpsElem {
 
 		// interpolation functions and gradients
@@ -210,21 +209,23 @@ func (o *ElemUPP) InterpStarVars(sol *Solution) (err error) {
 		Sb := o.P.Cell.Shp.S
 
 		// clear local variables
-		o.P.ψl[idx], o.U.divχs[idx] = 0, 0
+		o.P.ψl[idx], o.P.ψg[idx], o.U.divχs[idx] = 0, 0, 0
 		for i := 0; i < o.Ndim; i++ {
 			o.U.ζs[idx][i], o.U.χs[idx][i] = 0, 0
 		}
 
 		// p-variables
 		for m := 0; m < p_nverts; m++ {
-			r = o.P.Pmap[m]
-			o.P.ψl[idx] += Sb[m] * sol.Psi[r]
+			rl := o.P.Plmap[m]
+			rg := o.P.Pgmap[m]
+			o.P.ψl[idx] += Sb[m] * sol.Psi[rl]
+			o.P.ψg[idx] += Sb[m] * sol.Psi[rg]
 		}
 
 		// u-variables
 		for m := 0; m < u_nverts; m++ {
 			for i := 0; i < o.Ndim; i++ {
-				r = o.U.Umap[i+m*o.Ndim]
+				r := o.U.Umap[i+m*o.Ndim]
 				o.U.ζs[idx][i] += S[m] * sol.Zet[r]
 				o.U.χs[idx][i] += S[m] * sol.Chi[r]
 				o.U.divχs[idx] += G[m][i] * sol.Chi[r]
@@ -240,18 +241,19 @@ func (o *ElemUPP) AddToRhs(fb []float64, sol *Solution) (err error) {
 	// clear variables
 	if o.P.DoExtrap {
 		la.VecFill(o.P.ρl_ex, 0)
+		la.VecFill(o.P.ρg_ex, 0)
 	}
 	if o.U.UseB {
 		la.VecFill(o.U.fi, 0)
 	}
 
 	// for each integration point
+	O := o.P.res
 	α4 := sol.DynCfs.α4
 	β1 := sol.DynCfs.β1
 	u_nverts := o.U.Cell.Shp.Nverts
 	p_nverts := o.P.Cell.Shp.Nverts
-	var coef, plt, klr, ρl, ρ, p, Cpl, Cvs, divvs float64
-	var r int
+	var coef, plt, pgt, klr, kgr, ρl, ρg, ρ, p, divvs float64
 	for idx, ip := range o.U.IpsElem {
 
 		// interpolation functions, gradients and variables @ ip
@@ -272,40 +274,44 @@ func (o *ElemUPP) AddToRhs(fb []float64, sol *Solution) (err error) {
 			coef *= radius
 		}
 
-		// auxiliary
-		σe := o.U.States[idx].Sig
-		divvs = α4*o.divus - o.U.divχs[idx] // divergence of Eq. (35a) [1]
-
 		// tpm variables
-		plt = β1*o.P.pl - o.P.ψl[idx] // Eq. (35c) [1]
+		plt = β1*o.P.pl - o.P.ψl[idx]
+		pgt = β1*o.P.pg - o.P.ψg[idx]
 		klr = o.P.Mdl.Cnd.Klr(o.P.States[idx].A_sl)
-		err = o.P.Mdl.CalcLs(o.P.res, o.P.States[idx], o.P.pl, o.divus, false)
+		kgr = o.P.Mdl.Cnd.Kgr(1.0 - o.P.States[idx].A_sl)
+		err = o.P.Mdl.CalcLgs(o.P.res, o.P.States[idx], o.P.pl, o.P.pg, o.divus, false)
 		if err != nil {
 			return
 		}
 		ρl = o.P.res.A_ρl
+		ρg = o.P.res.A_ρg
 		ρ = o.P.res.A_ρ
 		p = o.P.res.A_p
-		Cpl = o.P.res.Cpl
-		Cvs = o.P.res.Cvs
+		σe := o.U.States[idx].Sig
+		divvs = α4*o.divus - o.U.divχs[idx]
 
-		// compute ρwl. see Eq (34b) and (35) of [1]
+		// compute augmented filter velocities
 		for i := 0; i < o.Ndim; i++ {
-			o.P.ρwl[i] = 0
+			o.P.wlb[i], o.P.wgb[i] = 0, 0
 			for j := 0; j < o.Ndim; j++ {
-				o.P.ρwl[i] += klr * o.P.Mdl.Klsat[i][j] * o.hl[j]
+				o.P.wlb[i] += klr * o.P.Mdl.Klsat[i][j] * o.hl[j]
+				o.P.wgb[i] += kgr * o.P.Mdl.Kgsat[i][j] * o.hg[j]
 			}
 		}
 
-		// p: add negative of residual term to fb; see Eqs. (38a) and (45a) of [1]
+		// p: add negative of residual term to fb
 		for m := 0; m < p_nverts; m++ {
-			r = o.P.Pmap[m]
-			fb[r] -= coef * Sb[m] * (Cpl*plt + Cvs*divvs)
+			rl := o.P.Plmap[m]
+			rg := o.P.Pgmap[m]
+			fb[rl] -= coef * Sb[m] * (O.Cpl*plt + O.Cpg*pgt + O.Cvs*divvs)
+			fb[rg] -= coef * Sb[m] * (O.Dpl*plt + O.Dpg*pgt + O.Dvs*divvs)
 			for i := 0; i < o.Ndim; i++ {
-				fb[r] += coef * Gb[m][i] * o.P.ρwl[i] // += coef * div(ρl*wl)
+				fb[rl] += coef * Gb[m][i] * o.P.wlb[i] // += coef * div(ρl*wl)
+				fb[rg] += coef * Gb[m][i] * o.P.wgb[i] // += coef * div(ρg*wg)
 			}
-			if o.P.DoExtrap { // Eq. (19) of [2]
+			if o.P.DoExtrap {
 				o.P.ρl_ex[m] += o.P.Emat[m][idx] * ρl
+				o.P.ρg_ex[m] += o.P.Emat[m][idx] * ρg
 			}
 		}
 
@@ -315,16 +321,16 @@ func (o *ElemUPP) AddToRhs(fb []float64, sol *Solution) (err error) {
 			la.MatTrVecMulAdd(o.U.fi, coef, o.U.B, σe) // fi += coef * tr(B) * σ
 			for m := 0; m < u_nverts; m++ {
 				for i := 0; i < o.Ndim; i++ {
-					r = o.U.Umap[i+m*o.Ndim]
-					fb[r] -= coef * S[m] * ρ * o.bs[i]
+					r := o.U.Umap[i+m*o.Ndim]
+					fb[r] -= coef * S[m] * ρ * o.b[i]
 					fb[r] += coef * p * G[m][i]
 				}
 			}
 		} else {
 			for m := 0; m < u_nverts; m++ {
 				for i := 0; i < o.Ndim; i++ {
-					r = o.U.Umap[i+m*o.Ndim]
-					fb[r] -= coef * S[m] * ρ * o.bs[i]
+					r := o.U.Umap[i+m*o.Ndim]
+					fb[r] -= coef * S[m] * ρ * o.b[i]
 					for j := 0; j < o.Ndim; j++ {
 						fb[r] -= coef * tsr.M2T(σe, i, j) * G[m][j]
 					}
@@ -362,11 +368,16 @@ func (o *ElemUPP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err erro
 	// clear matrices
 	u_nverts := o.U.Cell.Shp.Nverts
 	p_nverts := o.P.Cell.Shp.Nverts
-	la.MatFill(o.P.Kpp, 0)
+	for i := 0; i < o.P.Np; i++ {
+		for j := 0; j < o.P.Np; j++ {
+			o.P.Kll[i][j], o.P.Klg[i][j] = 0, 0
+			o.P.Kgl[i][j], o.P.Kgg[i][j] = 0, 0
+		}
+	}
 	for i := 0; i < o.U.Nu; i++ {
 		for j := 0; j < o.P.Np; j++ {
-			o.Kup[i][j] = 0
-			o.Kpu[j][i] = 0
+			o.Kul[i][j], o.Kug[i][j] = 0, 0
+			o.Klu[j][i], o.Kgu[j][i] = 0, 0
 		}
 		for j := 0; j < o.U.Nu; j++ {
 			o.U.K[i][j] = 0
@@ -377,20 +388,23 @@ func (o *ElemUPP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err erro
 			o.P.ρl_ex[i] = 0
 			for j := 0; j < p_nverts; j++ {
 				o.P.dρldpl_ex[i][j] = 0
+				o.P.dρgdpg_ex[i][j] = 0
 			}
 			for j := 0; j < o.U.Nu; j++ {
 				o.dρldus_ex[i][j] = 0
+				o.dρgdus_ex[i][j] = 0
 			}
 		}
 	}
 
 	// for each integration point
-	var coef, plt, klr, ρL, Cl, divvs float64
-	var ρl, ρ, Cpl, Cvs, dρdpl, dpdpl, dCpldpl, dCvsdpl, dklrdpl, dCpldusM, dρldusM, dρdusM float64
-	var r, c int
+	O := o.P.res
+	Cl := o.P.Mdl.Liq.C
+	Cg := o.P.Mdl.Gas.C
 	α1 := sol.DynCfs.α1
 	α4 := sol.DynCfs.α4
 	β1 := sol.DynCfs.β1
+	var coef, plt, pgt, klr, kgr, ρL, ρG, ρl, ρg, ρ, divvs, dhldpl_nj, dhgdpg_nj float64
 	for idx, ip := range o.U.IpsElem {
 
 		// interpolation functions, gradients and variables @ ip
@@ -411,93 +425,109 @@ func (o *ElemUPP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err erro
 			coef *= radius
 		}
 
-		// auxiliary
-		divvs = α4*o.divus - o.U.divχs[idx] // divergence of Eq (35a) [1]
-
 		// tpm variables
-		plt = β1*o.P.pl - o.P.ψl[idx] // Eq (35c) [1]
+		plt = β1*o.P.pl - o.P.ψl[idx]
+		pgt = β1*o.P.pg - o.P.ψg[idx]
 		klr = o.P.Mdl.Cnd.Klr(o.P.States[idx].A_sl)
+		kgr = o.P.Mdl.Cnd.Kgr(1.0 - o.P.States[idx].A_sl)
 		ρL = o.P.States[idx].A_ρL
-		Cl = o.P.Mdl.Liq.C
-		err = o.P.Mdl.CalcLs(o.P.res, o.P.States[idx], o.P.pl, o.divus, true)
+		ρG = o.P.States[idx].A_ρG
+		err = o.P.Mdl.CalcLgs(o.P.res, o.P.States[idx], o.P.pl, o.P.pg, o.divus, false)
 		if err != nil {
 			return
 		}
 		ρl = o.P.res.A_ρl
+		ρg = o.P.res.A_ρg
 		ρ = o.P.res.A_ρ
-		Cpl = o.P.res.Cpl
-		Cvs = o.P.res.Cvs
-		dρdpl = o.P.res.Dρdpl
-		dpdpl = o.P.res.Dpdpl
-		dCpldpl = o.P.res.DCpldpl
-		dCvsdpl = o.P.res.DCvsdpl
-		dklrdpl = o.P.res.Dklrdpl
-		dCpldusM = o.P.res.DCpldusM
-		dρldusM = o.P.res.DρldusM
-		dρdusM = o.P.res.DρdusM
+		divvs = α4*o.divus - o.U.divχs[idx]
 
-		// Kpu, Kup and Kpp
+		// Jacobian
 		for n := 0; n < p_nverts; n++ {
+
+			// clear auxiliary variables
+			for i := 0; i < o.Ndim; i++ {
+				o.P.dwlbdpl_n[i], o.P.dwlbdpg_n[i] = 0, 0
+				o.P.dwgbdpl_n[i], o.P.dwgbdpg_n[i] = 0, 0
+			}
+
+			// loop over space dimension
 			for j := 0; j < o.Ndim; j++ {
 
-				// Kpu := ∂Rl^n/∂us^m and Kup := ∂Rus^m/∂pl^n; see Eq (47) of [1]
+				// {pl,pg,us} versus {pl,pg,us}
 				for m := 0; m < u_nverts; m++ {
-					c = j + m*o.Ndim
+					c := j + m*o.Ndim
 
-					// add ∂rlb/∂us^m: Eqs (A.3) and (A.6) of [1]
-					o.Kpu[n][c] += coef * Sb[n] * (dCpldusM*plt + α4*Cvs) * G[m][j]
+					// ∂rβ/∂u^m
+					o.Klu[n][c] += coef * Sb[n] * (O.DCplduM*plt + O.DCpgduM*pgt + α4*O.Cvs) * G[m][j]
+					o.Kgu[n][c] += coef * Sb[n] * (O.DDplduM*plt + O.DDpgduM*pgt + α4*O.Dvs) * G[m][j]
 
-					// add ∂(ρl.wl)/∂us^m: Eq (A.8) of [1]
+					// ∂wβb/∂u^m
 					for i := 0; i < o.Ndim; i++ {
-						o.Kpu[n][c] += coef * Gb[n][i] * S[m] * α1 * ρL * klr * o.P.Mdl.Klsat[i][j]
+						o.Klu[n][c] += coef * Gb[n][i] * S[m] * α1 * ρL * klr * o.P.Mdl.Klsat[i][j]
+						o.Kgu[n][c] += coef * Gb[n][i] * S[m] * α1 * ρG * kgr * o.P.Mdl.Kgsat[i][j]
 					}
 
-					// add ∂rl/∂pl^n and ∂p/∂pl^n: Eqs (A.9) and (A.11) of [1]
-					o.Kup[c][n] += coef * (S[m]*Sb[n]*dρdpl*o.bs[j] - G[m][j]*Sb[n]*dpdpl)
+					// ∂ru/∂pβ^n  and  ∂p/∂pβ^n
+					o.Kul[c][n] += coef * (S[m]*Sb[n]*O.Dρdpl*o.b[j] - G[m][j]*Sb[n]*O.Dpdpl)
+					o.Kug[c][n] += coef * (S[m]*Sb[n]*O.Dρdpg*o.b[j] - G[m][j]*Sb[n]*O.Dpdpg)
 
-					// for seepage face
+					// extrapolation term
 					if o.P.DoExtrap {
-						o.dρldus_ex[n][c] += o.P.Emat[n][idx] * dρldusM * G[m][j]
+						o.dρldus_ex[n][c] += o.P.Emat[n][idx] * O.DρlduM * G[m][j]
+						o.dρgdus_ex[n][c] += o.P.Emat[n][idx] * O.DρgduM * G[m][j]
 					}
 				}
 
-				// term in brackets in Eq (A.7) of [1]
-				o.P.tmp[j] = Sb[n]*dklrdpl*o.hl[j] - klr*(Sb[n]*Cl*o.bs[j]+Gb[n][j])
+				// compute auxiliary derivatives
+				dhldpl_nj = Sb[n]*Cl*o.P.g[j] - Gb[n][j]
+				dhgdpg_nj = Sb[n]*Cg*o.P.g[j] - Gb[n][j]
+				for i := 0; i < o.Ndim; i++ {
+					o.P.dwlbdpl_n[i] += o.P.Mdl.Klsat[i][j] * (Sb[n]*O.Dklrdpl*o.hl[j] + klr*dhldpl_nj)
+					o.P.dwlbdpg_n[i] += o.P.Mdl.Klsat[i][j] * (Sb[n] * O.Dklrdpg * o.hl[j])
+					o.P.dwgbdpl_n[i] += o.P.Mdl.Kgsat[i][j] * (Sb[n] * O.Dkgrdpl * o.hg[j])
+					o.P.dwgbdpg_n[i] += o.P.Mdl.Kgsat[i][j] * (Sb[n]*O.Dkgrdpg*o.hg[j] + kgr*dhgdpg_nj)
+				}
 			}
 
-			// Kpp := ∂Rl^m/∂pl^n; see Eq (47) of [1]
+			// {pl,pg} versus {pl,pg}
 			for m := 0; m < p_nverts; m++ {
 
-				// add ∂rlb/dpl^n: Eq (A.5) of [1]
-				o.P.Kpp[m][n] += coef * Sb[m] * Sb[n] * (dCpldpl*plt + dCvsdpl*divvs + β1*Cpl)
+				// ∂rβ/∂pγ
+				o.P.Kll[m][n] += coef * Sb[m] * Sb[n] * (O.DCpldpl*plt + O.DCpgdpl*pgt + O.DCvsdpl*divvs + β1*O.Cpl)
+				o.P.Klg[m][n] += coef * Sb[m] * Sb[n] * (O.DCpldpg*plt + O.DCpgdpg*pgt + O.DCvsdpg*divvs + β1*O.Cpg)
+				o.P.Kgl[m][n] += coef * Sb[m] * Sb[n] * (O.DDpldpl*plt + O.DDpgdpl*pgt + O.DDvsdpl*divvs + β1*O.Dpl)
+				o.P.Kgg[m][n] += coef * Sb[m] * Sb[n] * (O.DDpldpg*plt + O.DDpgdpg*pgt + O.DDvsdpg*divvs + β1*O.Dpg)
 
-				// add ∂(ρl.wl)/∂us^m: Eq (A.7) of [1]
+				// ∂wβb/∂pγ
 				for i := 0; i < o.Ndim; i++ {
-					for j := 0; j < o.Ndim; j++ {
-						o.P.Kpp[m][n] -= coef * Gb[m][i] * o.P.Mdl.Klsat[i][j] * o.P.tmp[j]
-					}
+					o.P.Kll[m][n] -= coef * Gb[m][i] * o.P.dwlbdpl_n[i]
+					o.P.Klg[m][n] -= coef * Gb[m][i] * o.P.dwlbdpg_n[i]
+					o.P.Kgl[m][n] -= coef * Gb[m][i] * o.P.dwgbdpl_n[i]
+					o.P.Kgg[m][n] -= coef * Gb[m][i] * o.P.dwgbdpg_n[i]
 				}
 
-				// inner summation term in Eq (22) of [2]
+				// extrapolation term
 				if o.P.DoExtrap {
-					o.P.dρldpl_ex[m][n] += o.P.Emat[m][idx] * Cpl * Sb[n]
+					o.P.dρldpl_ex[m][n] += o.P.Emat[m][idx] * O.Cpl * Sb[n]
+					o.P.dρgdpg_ex[m][n] += o.P.Emat[m][idx] * O.Dpg * Sb[n]
 				}
 			}
 
-			// Eq. (19) of [2]
+			// extrapolation terms
 			if o.P.DoExtrap {
 				o.P.ρl_ex[n] += o.P.Emat[n][idx] * ρl
+				o.P.ρg_ex[n] += o.P.Emat[n][idx] * ρg
 			}
 		}
 
-		// Kuu: add ∂rub^m/∂us^n; see Eqs (47) and (A.10) of [1]
+		// {u} versus {u}
 		for m := 0; m < u_nverts; m++ {
 			for i := 0; i < o.Ndim; i++ {
-				r = i + m*o.Ndim
+				r := i + m*o.Ndim
 				for n := 0; n < u_nverts; n++ {
 					for j := 0; j < o.Ndim; j++ {
-						c = j + n*o.Ndim
-						o.U.K[r][c] += coef * S[m] * (S[n]*α1*ρ*tsr.It[i][j] + dρdusM*o.bs[i]*G[n][j])
+						c := j + n*o.Ndim
+						o.U.K[r][c] += coef * S[m] * (S[n]*α1*ρ*tsr.It[i][j] + O.DρduM*o.b[i]*G[n][j])
 					}
 				}
 			}
@@ -530,28 +560,18 @@ func (o *ElemUPP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err erro
 		}
 	}
 
-	// add K to sparse matrix Kb
-	//    _             _
-	//   |  Kuu Kup  0   |
-	//   |  Kpu Kpp Kpf  |
-	//   |_ Kfu Kfp Kff _|
-	//
-	for i, I := range o.P.Pmap {
-		for j, J := range o.P.Pmap {
-			Kb.Put(I, J, o.P.Kpp[i][j])
-		}
-		for j, J := range o.P.Fmap {
-			Kb.Put(I, J, o.P.Kpf[i][j])
-			Kb.Put(J, I, o.P.Kfp[j][i])
-		}
+	// assemble K matrices into Kb
+	o.P.assembleKs(Kb)
+	for i, I := range o.P.Plmap {
 		for j, J := range o.U.Umap {
-			Kb.Put(I, J, o.Kpu[i][j])
-			Kb.Put(J, I, o.Kup[j][i])
+			Kb.Put(I, J, o.Klu[i][j])
+			Kb.Put(J, I, o.Kul[j][i])
 		}
 	}
-	for i, I := range o.P.Fmap {
-		for j, J := range o.P.Fmap {
-			Kb.Put(I, J, o.P.Kff[i][j])
+	for i, I := range o.P.Pgmap {
+		for j, J := range o.U.Umap {
+			Kb.Put(I, J, o.Kgu[i][j])
+			Kb.Put(J, I, o.Kug[j][i])
 		}
 	}
 	for i, I := range o.U.Umap {
@@ -608,18 +628,23 @@ func (o *ElemUPP) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error)
 		sz := make([]float64, nip)
 		for i, ip := range o.U.IpsElem {
 
-			// compute pl @ ip
+			// compute pl and pg @ ip
 			err = o.P.Cell.Shp.CalcAtIp(o.P.X, ip, false)
 			if err != nil {
 				return
 			}
-			pl := 0.0
+			pl, pg := 0.0, 0.0
 			for m := 0; m < o.P.Cell.Shp.Nverts; m++ {
-				pl += o.P.Cell.Shp.S[m] * sol.Y[o.P.Pmap[m]]
+				rl := o.P.Plmap[m]
+				rg := o.P.Pgmap[m]
+				pl += o.P.Cell.Shp.S[m] * sol.Y[rl]
+				pg += o.P.Cell.Shp.S[m] * sol.Y[rg]
 			}
 
 			// compute effective stresses
-			p := pl * o.P.States[i].A_sl
+			sl := o.P.States[i].A_sl
+			sg := 1.0 - sl
+			p := pl*sl + pg*sg
 			svE := svT[i] + p
 			shE := K0 * svE
 			sx[i], sy[i], sz[i] = shE, svE, shE
@@ -700,7 +725,8 @@ func (o *ElemUPP) Decode(dec Decoder) (err error) {
 
 // OutIpsData returns data from all integration points for output
 func (o *ElemUPP) OutIpsData() (data []*OutIpData) {
-	flow := LiqFlowKeys(o.Ndim)
+	flowL := LiqFlowKeys(o.Ndim)
+	flowG := GasFlowKeys(o.Ndim)
 	sigs := StressKeys(o.Ndim)
 	for idx, ip := range o.U.IpsElem {
 		r := o.P.States[idx]
@@ -712,16 +738,24 @@ func (o *ElemUPP) OutIpsData() (data []*OutIpData) {
 				return
 			}
 			ns := (1.0 - o.divus) * o.P.States[idx].A_ns0
+			sl := r.A_sl
+			sg := 1.0 - sl
 			ρL := r.A_ρL
-			klr := o.P.Mdl.Cnd.Klr(r.A_sl)
+			ρG := r.A_ρG
+			klr := o.P.Mdl.Cnd.Klr(sl)
+			kgr := o.P.Mdl.Cnd.Kgr(sg)
 			vals = map[string]float64{
-				"sl": r.A_sl,
+				"sl": sl,
+				"sg": sg,
 				"pl": o.P.pl,
+				"pg": o.P.pg,
+				"pc": o.P.pg - o.P.pl,
 				"nf": 1.0 - ns,
 			}
 			for i := 0; i < o.Ndim; i++ {
 				for j := 0; j < o.Ndim; j++ {
-					vals[flow[i]] += klr * o.P.Mdl.Klsat[i][j] * o.hl[j] / ρL
+					vals[flowL[i]] += klr * o.P.Mdl.Klsat[i][j] * o.hl[j] / ρL
+					vals[flowG[i]] += kgr * o.P.Mdl.Kgsat[i][j] * o.hg[j] / ρG
 				}
 			}
 			for i, _ := range sigs {
@@ -751,13 +785,13 @@ func (o *ElemUPP) ipvars(idx int, sol *Solution) (err error) {
 
 	// auxiliary
 	ρL := o.P.States[idx].A_ρL
+	ρG := o.P.States[idx].A_ρG
 	o.P.compute_gvec(sol.T)
 
 	// clear gpl and recover u-variables @ ip
 	o.divus = 0
 	for i := 0; i < o.Ndim; i++ {
-		o.P.gpl[i] = 0 // clear gpl here
-		o.U.us[i] = 0
+		o.P.gpl[i], o.P.gpg[i], o.U.us[i] = 0, 0, 0
 		for m := 0; m < o.U.Cell.Shp.Nverts; m++ {
 			r := o.U.Umap[i+m*o.Ndim]
 			o.U.us[i] += o.U.Cell.Shp.S[m] * sol.Y[r]
@@ -766,20 +800,24 @@ func (o *ElemUPP) ipvars(idx int, sol *Solution) (err error) {
 	}
 
 	// recover p-variables @ ip
-	o.P.pl = 0
+	o.P.pl, o.P.pg = 0, 0
 	for m := 0; m < o.P.Cell.Shp.Nverts; m++ {
-		r := o.P.Pmap[m]
-		o.P.pl += o.P.Cell.Shp.S[m] * sol.Y[r]
+		rl := o.P.Plmap[m]
+		rg := o.P.Pgmap[m]
+		o.P.pl += o.P.Cell.Shp.S[m] * sol.Y[rl]
+		o.P.pg += o.P.Cell.Shp.S[m] * sol.Y[rg]
 		for i := 0; i < o.Ndim; i++ {
-			o.P.gpl[i] += o.P.Cell.Shp.G[m][i] * sol.Y[r]
+			o.P.gpl[i] += o.P.Cell.Shp.G[m][i] * sol.Y[rl]
+			o.P.gpg[i] += o.P.Cell.Shp.G[m][i] * sol.Y[rg]
 		}
 	}
 
-	// compute bs and hl. see Eqs (A.1) of [1]
+	// compute b, hl and hg
 	α1 := sol.DynCfs.α1
 	for i := 0; i < o.Ndim; i++ {
-		o.bs[i] = α1*o.U.us[i] - o.U.ζs[idx][i] - o.P.g[i]
-		o.hl[i] = -ρL*o.bs[i] - o.P.gpl[i]
+		o.b[i] = α1*o.U.us[i] - o.U.ζs[idx][i] - o.P.g[i]
+		o.hl[i] = -ρL*o.b[i] - o.P.gpl[i]
+		o.hg[i] = -ρG*o.b[i] - o.P.gpg[i]
 	}
 	return
 }
@@ -828,7 +866,7 @@ func (o *ElemUPP) add_natbcs_to_jac(sol *Solution) (err error) {
 						for j := 0; j < o.Ndim; j++ {
 							c := j + n*o.Ndim
 							for l, r := range o.P.Cell.Shp.FaceLocalVerts[iface] {
-								o.Kpu[m][c] += coef * Sf[i] * Sf[l] * o.dρldus_ex[r][c] * rmp
+								o.Klu[m][c] += coef * Sf[i] * Sf[l] * o.dρldus_ex[r][c] * rmp
 							}
 						}
 					}
@@ -837,14 +875,4 @@ func (o *ElemUPP) add_natbcs_to_jac(sol *Solution) (err error) {
 		}
 	}
 	return
-}
-
-func (o *ElemUPP) debug_print_K() {
-	la.PrintMat("Kpp", o.P.Kpp, "%20.10f", false)
-	la.PrintMat("Kpf", o.P.Kpf, "%20.10f", false)
-	la.PrintMat("Kfp", o.P.Kfp, "%20.10f", false)
-	la.PrintMat("Kff", o.P.Kff, "%20.10f", false)
-	la.PrintMat("Kpu", o.Kpu, "%20.10f", false)
-	la.PrintMat("Kup", o.Kup, "%20.10f", false)
-	la.PrintMat("Kuu", o.U.K, "%20.10f", false)
 }

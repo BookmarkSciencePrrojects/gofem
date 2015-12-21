@@ -34,7 +34,7 @@ func Test_up01a(tst *testing.T) {
 	 *     6 o----o----o 7 (-4)     39 40 41  o----o----o  36 37 38
 	 *       |   13    |             .  .  .  |  44 45  |   .  .  .
 	 *       |  (-1)   |             .  .  .  |         |   .  .  .
-	 *    19 |    o    o 20 (-6)    46 47  .  |    o    o  42 43  .
+	 *    19 o    o    o 20 (-6)    46 47  .  o    o    o  42 43  .
 	 *       |   25    |             .  .  .  |  48 49  |   .  .  .
 	 *       |         |             .  .  .  |         |   .  .  .
 	 *     4 o----o----o 5 (-3)     25 26 27  o----o----o  22 23 24
@@ -181,10 +181,13 @@ func Test_up01a(tst *testing.T) {
 	io.Pforan("initial values @ integration points\n")
 	for _, ele := range dom.Elems {
 		e := ele.(*ElemUP)
+		slmax := e.P.Mdl.Lrm.SlMax()
 		for idx, ip := range e.P.IpsElem {
 			s := e.P.States[idx]
 			z := e.P.Cell.Shp.IpRealCoords(e.P.X, ip)[1]
-			chk.AnaNum(tst, io.Sf("sl(z=%11.8f)", z), 1e-17, s.A_sl, 1, chk.Verbose)
+			//_, ρLC := dom.Sim.LiqMdl.Calc(z)
+			chk.AnaNum(tst, io.Sf("sl(@%6.4f)", z), 1e-17, s.A_sl, slmax, chk.Verbose)
+			//chk.AnaNum(tst, io.Sf("ρL(@%6.4f)", z), 1e-10, s.A_ρL, ρLC, chk.Verbose)
 		}
 	}
 
