@@ -3,6 +3,7 @@
   "materials" : [
     {
       "name"  : "elastic",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":100 },

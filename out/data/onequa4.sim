@@ -3,7 +3,6 @@
     "desc"    : "one qua4",
     "matfile" : "simple.mat",
     "steady"  : true,
-    "showR"   : true,
     "encoder" : "json"
   },
   "functions" : [

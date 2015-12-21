@@ -1,18 +1,28 @@
 #!/bin/bash
 
-GOFEM="ana shp inp msolid mconduct mreten mporous fem out"
-
 HERE=`pwd`
-for p in $GOFEM; do
+
+compile() {
     echo
     echo
-    echo "[1;32m>>> compiling $p <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<[0m"
-    cd $p
+    echo "[1;32m>>> compiling $1 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<[0m"
+    cd $1
     touch *.go
     go test
     go install
     cd $HERE
-done
+}
+
+compile ana
+compile shp
+compile mdl/sld
+compile mdl/cnd
+compile mdl/lrm
+compile mdl/fld
+compile mdl/por
+compile inp
+compile fem
+compile out
 
 echo
 echo

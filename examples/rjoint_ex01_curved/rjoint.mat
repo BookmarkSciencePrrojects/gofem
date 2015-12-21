@@ -4,6 +4,7 @@
     {
       "name"  : "sld1",
       "model" : "lin-elast",
+      "type"  : "sld",
       "prms"  : [
         {"n":"E",   "v":10000},
         {"n":"nu",  "v":0.25 },
@@ -13,6 +14,7 @@
     {
       "name"  : "lin1",
       "model" : "oned-elast",
+      "type"  : "sld",
       "prms"  : [
         {"n":"E",   "v":1e+06},
         {"n":"A",   "v":0.1  },
@@ -22,19 +24,20 @@
     {
       "name"  : "jnt1",
       "model" : "rjoint-m1",
+      "type"  : "sld",
       "prms"  : [
         {"n":"ks",    "v":2000},
         {"n":"tauy0", "v":1   },
         {"n":"kh",    "v":0.1 },
         {"n":"mu",    "v":0.1 },
-        {"n":"k1",    "v":3000},
-        {"n":"k2",    "v":3000},
+        {"n":"kl",    "v":3000},
         {"n":"h",     "v":0.4 }
       ]
     },
     {
       "name"  : "sld2",
       "model" : "lin-elast",
+      "type"  : "sld",
       "prms"  : [
         {"n":"E",    "v":100000},
         {"n":"nu",   "v":0.1   },
@@ -44,6 +47,7 @@
     {
       "name"  : "lin2",
       "model" : "oned-elast",
+      "type"  : "sld",
       "prms"  : [
         {"n":"E",   "v":2.1e+06            },
         {"n":"A",   "v":0.01273239544744837},
@@ -52,27 +56,27 @@
     },
     {
       "name"  : "jnt2",
-      "model" : "oned-plast",
+      "model" : "oned-elast",
+      "type"  : "sld",
       "prms"  : [
         {"n":"ks",    "v":100000},
         {"n":"tauy0", "v":10    },
         {"n":"kh",    "v":0.1   },
         {"n":"mu",    "v":0.5   },
-        {"n":"k1",    "v":100000},
-        {"n":"k2",    "v":100000},
+        {"n":"kl",    "v":100000},
         {"n":"h",     "v":0.4   }
       ]
     },
     {
       "name"  : "jnt3",
       "model" : "rjoint-m1",
+      "type"  : "sld",
       "prms"  : [
         {"n":"ks",    "v":2000},
         {"n":"tauy0", "v":13  },
         {"n":"kh",    "v":0.1 },
         {"n":"mu",    "v":0.5 },
-        {"n":"k1",    "v":3000},
-        {"n":"k2",    "v":3000},
+        {"n":"kl",    "v":3000},
         {"n":"h",     "v":0.4 }
       ]
     }
