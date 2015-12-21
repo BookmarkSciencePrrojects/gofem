@@ -18,6 +18,9 @@
       ]
     }
   ],
+  "solver" : {
+    "showR" : false
+  },
   "stages" : [
     {
       "desc" : "apply force to line",

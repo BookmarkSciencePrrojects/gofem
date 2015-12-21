@@ -622,16 +622,14 @@ func (o *Rjoint) Update(sol *Solution) (err error) {
 	// extrapolate stresses at integration points of solid element to its nodes
 	if o.Coulomb {
 		la.MatFill(o.σNo, 0)
-		//for idx, _ := range o.Sld.IpsElem {
-		//σ := o.Sld.States[idx].Sig
-		for i := 0; i < nsig; i++ {
-			for m := 0; m < sldNn; m++ {
-				//o.σNo[m][i] += o.Emat[m][idx] * σ[i]
-				vid := o.Sld.Cell.Verts[m]
-				o.σNo[m][i] = sol.Ext[vid][i]
+		for idx, _ := range o.Sld.IpsElem {
+			σ := o.Sld.States[idx].Sig
+			for i := 0; i < nsig; i++ {
+				for m := 0; m < sldNn; m++ {
+					o.σNo[m][i] += o.Emat[m][idx] * σ[i]
+				}
 			}
 		}
-		//}
 	}
 
 	// interpolate Δu of solid to find ΔuC @ rod node; Eq (30)
