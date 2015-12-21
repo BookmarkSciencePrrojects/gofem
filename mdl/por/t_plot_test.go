@@ -59,9 +59,10 @@ func Test_plot01(tst *testing.T) {
 
 	// fluids
 	Liq := new(fld.Model)
-	Liq.Init(Liq.GetPrms(true, false), H, grav)
+	Liq.Init(Liq.GetPrms(true), H, grav)
 	Gas := new(fld.Model)
-	Gas.Init(Gas.GetPrms(true, true), H, grav)
+	Gas.Gas = true
+	Gas.Init(Gas.GetPrms(true), H, grav)
 
 	// porous model
 	mdl := new(Model)
