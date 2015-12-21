@@ -279,7 +279,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 	// element conditions, essential and natural boundary conditions --------------------------------
 
 	// (re)set constraints and prescribed forces structures
-	o.EssenBcs.Init(&o.Sim.ColLiq)
+	o.EssenBcs.Init(o.Sim.LiqMdl)
 	o.PtNatBcs.Reset()
 
 	// element conditions

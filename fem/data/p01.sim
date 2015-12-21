@@ -1,8 +1,6 @@
 {
   "data" : {
-    "desc"    : "flow along column",
-    "matfile" : "porous.mat",
-    "showr"   : false
+    "matfile" : "porous.mat"
   },
   "functions" : [
     { "name":"pbot", "type":"rmp", "prms":[

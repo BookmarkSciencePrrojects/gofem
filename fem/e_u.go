@@ -6,7 +6,7 @@ package fem
 
 import (
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/msolid"
+	"github.com/cpmech/gofem/mdl/sld"
 	"github.com/cpmech/gofem/shp"
 
 	"github.com/cpmech/gosl/chk"
@@ -39,14 +39,14 @@ type ElemU struct {
 	IpsFace []shp.Ipoint // integration points corresponding to faces
 
 	// material model and internal variables
-	Mdl      msolid.Model // material model
-	MdlSmall msolid.Small // model specialisation for small strains
-	MdlLarge msolid.Large // model specialisation for large deformations
+	Mdl      sld.Model // material model
+	MdlSmall sld.Small // model specialisation for small strains
+	MdlLarge sld.Large // model specialisation for large deformations
 
 	// internal variables
-	States    []*msolid.State // [nip] states
-	StatesBkp []*msolid.State // [nip] backup states
-	StatesAux []*msolid.State // [nip] auxiliary backup states
+	States    []*sld.State // [nip] states
+	StatesBkp []*sld.State // [nip] backup states
+	StatesAux []*sld.State // [nip] auxiliary backup states
 
 	// additional variables
 	Umap   []int        // assembly map (location array/element equations)
@@ -169,13 +169,13 @@ func init() {
 		if mat == nil {
 			chk.Panic("cannot find material %q for solid element {tag=%d, id=%d}\n", edat.Mat, cell.Tag, cell.Id)
 		}
-		o.Mdl = mat.Solid
+		o.Mdl = mat.Sld
 
 		// model specialisations
 		switch m := o.Mdl.(type) {
-		case msolid.Small:
+		case sld.Small:
 			o.MdlSmall = m
-		case msolid.Large:
+		case sld.Large:
 			o.MdlLarge = m
 		default:
 			chk.Panic("__internal_error__: 'u' element cannot determine the type of the material model")
@@ -526,9 +526,9 @@ func (o *ElemU) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
 
 	// allocate slices of states
 	nip := len(o.IpsElem)
-	o.States = make([]*msolid.State, nip)
-	o.StatesBkp = make([]*msolid.State, nip)
-	o.StatesAux = make([]*msolid.State, nip)
+	o.States = make([]*sld.State, nip)
+	o.StatesBkp = make([]*sld.State, nip)
+	o.StatesAux = make([]*sld.State, nip)
 
 	// has specified stresses?
 	_, has_sig := ivs["sx"]

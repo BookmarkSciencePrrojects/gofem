@@ -6,7 +6,7 @@ package fem
 
 import (
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/msolid"
+	"github.com/cpmech/gofem/mdl/sld"
 	"github.com/cpmech/gofem/shp"
 
 	"github.com/cpmech/gosl/chk"
@@ -37,10 +37,10 @@ type Rod struct {
 	Umap []int // assembly map (location array/element equations)
 
 	// material model and internal variables
-	Mdl       msolid.OneD
-	States    []*msolid.OnedState
-	StatesBkp []*msolid.OnedState
-	StatesAux []*msolid.OnedState
+	Mdl       sld.OneD
+	States    []*sld.OnedState
+	StatesBkp []*sld.OnedState
+	StatesAux []*sld.OnedState
 
 	// scratchpad. computed @ each ip
 	grav []float64 // [ndim] gravity vector
@@ -94,7 +94,7 @@ func init() {
 		if mat == nil {
 			chk.Panic("cannot find material %q for Rod {tag=%d, id=%d}\n", edat.Mat, cell.Tag, cell.Id)
 		}
-		o.Mdl = mat.Solid.(msolid.OneD)
+		o.Mdl = mat.Sld.(sld.OneD)
 
 		// integration points
 		var err error
@@ -283,9 +283,9 @@ func (o *Rod) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
 
 	// allocate slices of states
 	nip := len(o.IpsElem)
-	o.States = make([]*msolid.OnedState, nip)
-	o.StatesBkp = make([]*msolid.OnedState, nip)
-	o.StatesAux = make([]*msolid.OnedState, nip)
+	o.States = make([]*sld.OnedState, nip)
+	o.StatesBkp = make([]*sld.OnedState, nip)
+	o.StatesAux = make([]*sld.OnedState, nip)
 
 	// for each integration point
 	for i := 0; i < nip; i++ {

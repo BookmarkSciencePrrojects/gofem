@@ -11,6 +11,7 @@ import (
 	"github.com/cpmech/gofem/ana"
 	"github.com/cpmech/gofem/inp"
 	"github.com/cpmech/gosl/chk"
+	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -139,36 +140,35 @@ func (o *Domain) IniSetPorous(stg *inp.Stage) (err error) {
 			}
 
 			// parameters
-			if mat.Porous != nil {
+			if mat.Por != nil {
 
 				// parameters: porous medium
 				if itag == 0 {
-					L[i].SlMax = mat.Porous.Lrm.SlMax()
-					L[i].RhoS0 = mat.Porous.RhoS0
-					L[i].Nf0 = mat.Porous.Nf0
-					L[i].ColLiq = &o.Sim.ColLiq
-					L[i].ColGas = &o.Sim.ColGas
+					L[i].SlMax = mat.Por.Lrm.SlMax()
+					io.Pforan("slmax = %v  %v\n", L[i].SlMax, mat.Name)
+					L[i].RhoS0 = mat.Por.RhoS0
+					L[i].Nf0 = mat.Por.Nf0
 				} else {
-					if math.Abs(L[i].SlMax-mat.Porous.Lrm.SlMax()) > 1e-15 {
-						return chk.Err("all cells/tags in the same layer must have the same material parameters. SlMax: %g != %g", L[i].SlMax, mat.Porous.Lrm.SlMax())
+					if math.Abs(L[i].SlMax-mat.Por.Lrm.SlMax()) > 1e-15 {
+						return chk.Err("all cells/tags in the same layer must have the same material parameters. SlMax: %g != %g", L[i].SlMax, mat.Por.Lrm.SlMax())
 					}
-					if math.Abs(L[i].RhoS0-mat.Porous.RhoS0) > 1e-15 {
-						return chk.Err("all cells/tags in the same layer must have the same material parameters. RhoS0: %g != %g", L[i].RhoS0, mat.Porous.RhoS0)
+					if math.Abs(L[i].RhoS0-mat.Por.RhoS0) > 1e-15 {
+						return chk.Err("all cells/tags in the same layer must have the same material parameters. RhoS0: %g != %g", L[i].RhoS0, mat.Por.RhoS0)
 					}
-					if math.Abs(L[i].Nf0-mat.Porous.Nf0) > 1e-15 {
-						return chk.Err("all cells/tags in the same layer must have the same material parameters. nf0: %g != %g", L[i].Nf0, mat.Porous.Nf0)
+					if math.Abs(L[i].Nf0-mat.Por.Nf0) > 1e-15 {
+						return chk.Err("all cells/tags in the same layer must have the same material parameters. nf0: %g != %g", L[i].Nf0, mat.Por.Nf0)
 					}
 				}
 			} else {
 
 				// parameters: total stress analysis
-				if mat.Solid != nil {
+				if mat.Sld != nil {
 					if itag == 0 {
-						L[i].TotRho = mat.Solid.GetRho()
+						L[i].TotRho = mat.Sld.GetRho()
 						L[i].TotStress = true
 					} else {
-						if math.Abs(L[i].TotRho-mat.Solid.GetRho()) > 1e-15 {
-							return chk.Err("all cells/tags in the same layer must have the same material parameters. Rho: %g != %g", L[i].TotRho, mat.Solid.GetRho())
+						if math.Abs(L[i].TotRho-mat.Sld.GetRho()) > 1e-15 {
+							return chk.Err("all cells/tags in the same layer must have the same material parameters. Rho: %g != %g", L[i].TotRho, mat.Sld.GetRho())
 						}
 					}
 				} else {

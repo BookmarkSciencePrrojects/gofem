@@ -2,38 +2,8 @@
   "functions" : [],
   "materials" : [
     {
-      "name" : "pm1",
-      "type" : "porous",
-      "prms" : [
-        {"n":"nf0",   "v":0.3     , "u":"-"            },
-        {"n":"RhoL0", "v":1.0     , "u":"Mg/m³"        },
-        {"n":"RhoG0", "v":0.0012  , "u":"Mg/m³"        },
-        {"n":"RhoS0", "v":3.0     , "u":"Mg/m³"        },
-        {"n":"Cl",    "v":4.53e-7 , "u":"Mg/(m³・kPa)" },
-        {"n":"Cg",    "v":1.17e-5 , "u":"Mg/(m³・kPa)" },
-        {"n":"gref",  "v":10.0    , "u":"m/s²"         },
-        {"n":"kl",    "v":0.01    , "u":"m/s"          },
-        {"n":"kg",    "v":0.01    , "u":"m/s"          }
-      ]
-    },
-    {
-      "name" : "pm2",
-      "type" : "porous",
-      "prms" : [
-        {"n":"nf0",   "v":0.3     , "u":"-"            },
-        {"n":"RhoL0", "v":1.0     , "u":"Mg/m³"        },
-        {"n":"RhoG0", "v":0.0012  , "u":"Mg/m³"        },
-        {"n":"RhoS0", "v":2.0     , "u":"Mg/m³"        },
-        {"n":"Cl",    "v":4.53e-7 , "u":"Mg/(m³・kPa)" },
-        {"n":"Cg",    "v":1.17e-5 , "u":"Mg/(m³・kPa)" },
-        {"n":"gref",  "v":10.0    , "u":"m/s²"         },
-        {"n":"kl",    "v":0.001   , "u":"m/s"          },
-        {"n":"kg",    "v":0.01    , "u":"m/s"          }
-      ]
-    },
-    {
-      "name"  : "cnd1",
-      "type"  : "conduct",
+      "name"  : "conduct1",
+      "type"  : "cnd",
       "model" : "m1",
       "prms"  : [
         {"n":"lam0l", "v":0.001},
@@ -47,14 +17,15 @@
       ]
     },
     {
-      "name"  : "lrm1",
-      "type"  : "reten",
+      "name"  : "lreten1",
+      "type"  : "lrm",
       "model" : "ref-m1",
       "prms"  : [
         {"n":"lamd",  "v":3    },
         {"n":"lamw",  "v":3    },
         {"n":"xrd",   "v":2    },
         {"n":"xrw",   "v":2    },
+        {"n":"y0",    "v":1.0  },
         {"n":"yr",    "v":0.005},
         {"n":"betd",  "v":2    },
         {"n":"betw",  "v":2    },
@@ -65,8 +36,8 @@
       ]
     },
     {
-      "name"  : "lrm2",
-      "type"  : "reten",
+      "name"  : "lreten2",
+      "type"  : "lrm",
       "model" : "vg",
       "prms"  : [
         {"n":"alp",   "v":0.08},
@@ -77,8 +48,27 @@
       ]
     },
     {
-      "name"  : "sld1",
-      "type"  : "solid",
+      "name"  : "lreten3",
+      "type"  : "lrm",
+      "model" : "ref-m1",
+      "prms"  : [
+        {"n":"lamd",  "v":3    },
+        {"n":"lamw",  "v":3    },
+        {"n":"xrd",   "v":2    },
+        {"n":"xrw",   "v":2    },
+        {"n":"y0",    "v":0.9  },
+        {"n":"yr",    "v":0.005},
+        {"n":"betd",  "v":2    },
+        {"n":"betw",  "v":2    },
+        {"n":"bet1",  "v":2    },
+        {"n":"bet2",  "v":2    },
+        {"n":"alp",   "v":0.5  },
+        {"n":"nowet", "v":0    , "inact":true}
+      ]
+    },
+    {
+      "name"  : "solid1",
+      "type"  : "sld",
       "model" : "lin-elast",
       "prms"  : [
         {"n":"E",   "v":10000},
@@ -87,14 +77,56 @@
       ]
     },
     {
-      "name"  : "porous1",
-      "type"  : "group",
-      "extra" : "lrm1 cnd1 pm1 sld1"
+      "name" : "water",
+      "type" : "fld",
+      "prms" : [
+        {"n":"R0", "v":1.0     , "u":"Mg/m³"        },
+        {"n":"P0", "v":0.0     , "u":"kPa"          },
+        {"n":"C",  "v":4.53e-7 , "u":"Mg/(m³・kPa)" }
+      ]
     },
     {
-      "name"  : "porous2",
-      "type"  : "group",
-      "extra" : "lrm2 cnd1 pm2 sld1"
+      "name" : "dryair",
+      "type" : "fld",
+      "prms" : [
+        {"n":"R0",  "v":0.0012  , "u":"Mg/m³"        },
+        {"n":"P0",  "v":0.0     , "u":"kPa"          },
+        {"n":"C",   "v":1.17e-5 , "u":"Mg/(m³・kPa)" },
+        {"n":"gas", "v":1 }
+      ]
+    },
+    {
+      "name" : "porous1",
+      "type" : "por",
+      "deps" : ["water", "dryair", "solid1", "conduct1", "lreten1"],
+      "prms" : [
+        {"n":"nf0",   "v":0.3   , "u":"-"     },
+        {"n":"RhoS0", "v":3.0   , "u":"Mg/m³" },
+        {"n":"kl",    "v":0.01  , "u":"m/s"   },
+        {"n":"kg",    "v":0.01  , "u":"m/s"   }
+      ]
+    },
+    {
+      "name" : "porous2",
+      "type" : "por",
+      "deps" : ["water", "dryair", "solid1", "conduct1", "lreten2"],
+      "prms" : [
+        {"n":"nf0",   "v":0.3   , "u":"-"     },
+        {"n":"RhoS0", "v":2.0   , "u":"Mg/m³" },
+        {"n":"kl",    "v":0.001 , "u":"m/s"   },
+        {"n":"kg",    "v":0.01  , "u":"m/s"   }
+      ]
+    },
+    {
+      "name" : "porous3",
+      "type" : "por",
+      "deps" : ["water", "dryair", "solid1", "conduct1", "lreten3"],
+      "prms" : [
+        {"n":"nf0",   "v":0.3   , "u":"-"     },
+        {"n":"RhoS0", "v":2.0   , "u":"Mg/m³" },
+        {"n":"kl",    "v":0.001 , "u":"m/s"   },
+        {"n":"kg",    "v":0.01  , "u":"m/s"   }
+      ]
     }
   ]
 }

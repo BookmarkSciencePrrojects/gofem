@@ -49,7 +49,7 @@ func Test_0p01a(tst *testing.T) {
 	 *           10                          4
 	 */
 
-	//verbose()
+	verbose()
 	chk.PrintTitle("0p01a")
 
 	// start simulation
@@ -128,7 +128,7 @@ func Test_0p01a(tst *testing.T) {
 		z := nod.Vert.C[1]
 		eq := nod.Dofs[0].Eq
 		pl := dom.Sol.Y[eq]
-		plC, _ := dom.Sim.ColLiq.Calc(z)
+		plC, _ := dom.Sim.LiqMdl.Calc(z)
 		chk.Scalar(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, pl), 1e-17, pl, plC)
 	}
 
@@ -139,7 +139,7 @@ func Test_0p01a(tst *testing.T) {
 		for idx, ip := range e.IpsElem {
 			s := e.States[idx]
 			z := e.Cell.Shp.IpRealCoords(e.X, ip)[1]
-			_, ρLC := dom.Sim.ColLiq.Calc(z)
+			_, ρLC := dom.Sim.LiqMdl.Calc(z)
 			chk.Scalar(tst, io.Sf("sl(@ %18g)= %18g", z, s.A_sl), 1e-17, s.A_sl, 1)
 			chk.Scalar(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-10, s.A_ρL, ρLC)
 		}

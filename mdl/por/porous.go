@@ -111,7 +111,7 @@ func (o *Model) Init(prms fun.Prms, Cnd cnd.Model, Lrm lrm.Model, Liq *fld.Model
 			o.Pkg = p.V
 			kgx, kgy, kgz = p.V, p.V, p.V
 		default:
-			return chk.Err("Model: parameter named %q is incorrect\n", p.N)
+			return chk.Err("parameter named %q is incorrect\n", p.N)
 		}
 	}
 
@@ -128,6 +128,9 @@ func (o *Model) Init(prms fun.Prms, Cnd cnd.Model, Lrm lrm.Model, Liq *fld.Model
 	}
 
 	// auxiliary models
+	if Cnd == nil || Lrm == nil || Liq == nil || Gas == nil {
+		return chk.Err("Cnd, Lrm, Liq and Gas models must be all non-nil\n")
+	}
 	o.Cnd = Cnd
 	o.Lrm = Lrm
 	o.Liq = Liq

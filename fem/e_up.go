@@ -418,7 +418,7 @@ func (o *ElemUP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error
 		plt = β1*o.P.pl - o.P.ψl[idx] // Eq (35c) [1]
 		klr = o.P.Mdl.Cnd.Klr(o.P.States[idx].A_sl)
 		ρL = o.P.States[idx].A_ρL
-		Cl = o.P.Mdl.Cl
+		Cl = o.P.Mdl.Liq.C
 		err = o.P.Mdl.CalcLs(o.P.res, o.P.States[idx], o.P.pl, o.divus, true)
 		if err != nil {
 			return

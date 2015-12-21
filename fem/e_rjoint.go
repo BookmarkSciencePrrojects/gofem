@@ -6,7 +6,7 @@ package fem
 
 import (
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/msolid"
+	"github.com/cpmech/gofem/mdl/sld"
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -62,9 +62,9 @@ type Rjoint struct {
 	Ndim int             // space dimension
 
 	// essential
-	Rod *Rod             // rod element
-	Sld *ElemU           // solid element
-	Mdl *msolid.RjointM1 // material model
+	Rod *Rod          // rod element
+	Sld *ElemU        // solid element
+	Mdl *sld.RjointM1 // material model
 
 	// shape functions evaluations and extrapolator matrices
 	Nmat [][]float64 // [sldNn][rodNn] shape functions of solids @ [N]odes of rod element
@@ -97,9 +97,9 @@ type Rjoint struct {
 	Kss [][]float64 // [sldNu][sldNu] Eq. (61)
 
 	// internal values
-	States    []*msolid.OnedState // [nip] internal states
-	StatesBkp []*msolid.OnedState // [nip] backup internal states
-	StatesAux []*msolid.OnedState // [nip] backup internal states
+	States    []*sld.OnedState // [nip] internal states
+	StatesBkp []*sld.OnedState // [nip] backup internal states
+	StatesAux []*sld.OnedState // [nip] backup internal states
 
 	// extra variables for consistent tangent operator
 	Ncns   bool            // use non-consistent model
@@ -163,7 +163,7 @@ func (o *Rjoint) Connect(cid2elem []Elem, c *inp.Cell) (nnzK int, err error) {
 		err = chk.Err("materials database failed on getting %q material\n", o.Edat.Mat)
 		return
 	}
-	o.Mdl = mat.Solid.(*msolid.RjointM1)
+	o.Mdl = mat.Sld.(*sld.RjointM1)
 
 	// flag
 	o.Coulomb = o.Mdl.A_μ > 0
@@ -738,9 +738,9 @@ func (o *Rjoint) Ipoints() (coords [][]float64) {
 // SetIniIvs sets initial ivs for given values in sol and ivs map
 func (o *Rjoint) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
 	nip := len(o.Rod.IpsElem)
-	o.States = make([]*msolid.OnedState, nip)
-	o.StatesBkp = make([]*msolid.OnedState, nip)
-	o.StatesAux = make([]*msolid.OnedState, nip)
+	o.States = make([]*sld.OnedState, nip)
+	o.StatesBkp = make([]*sld.OnedState, nip)
+	o.StatesAux = make([]*sld.OnedState, nip)
 	for i := 0; i < nip; i++ {
 		o.States[i], _ = o.Mdl.InitIntVars1D()
 		o.StatesBkp[i] = o.States[i].GetCopy()

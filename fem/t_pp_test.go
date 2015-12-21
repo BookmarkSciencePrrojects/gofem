@@ -8,15 +8,15 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/cpmech/gofem/mconduct"
-	"github.com/cpmech/gofem/mporous"
+	"github.com/cpmech/gofem/mdl/cnd"
+	"github.com/cpmech/gofem/mdl/por"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
 
-func Test_pp01a(tst *testing.T) {
+func Test_0pp01a(tst *testing.T) {
 
 	/* this tests simulates seepage flow along a column
 	 * by reducing the initial hydrostatic pressure at
@@ -52,8 +52,8 @@ func Test_pp01a(tst *testing.T) {
 	 *           10                            8 9
 	 */
 
-	//verbose()
-	chk.PrintTitle("pp01a")
+	verbose()
+	chk.PrintTitle("0pp01a")
 
 	// start simulation
 	analysis := NewFEM("data/pp01.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -143,10 +143,14 @@ func Test_pp01a(tst *testing.T) {
 	io.Pforan("initial values @ nodes\n")
 	for _, nod := range dom.Nodes {
 		z := nod.Vert.C[1]
-		eq := nod.Dofs[0].Eq
-		pl := dom.Sol.Y[eq]
-		plC, _ := dom.Sim.ColLiq.Calc(z)
+		eql := nod.Dofs[0].Eq
+		eqg := nod.Dofs[1].Eq
+		pl := dom.Sol.Y[eql]
+		pg := dom.Sol.Y[eqg]
+		plC, _ := dom.Sim.LiqMdl.Calc(z)
+		pgC, _ := dom.Sim.GasMdl.Calc(z)
 		chk.Scalar(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, pl), 1e-17, pl, plC)
+		chk.Scalar(tst, io.Sf("nod %3d : pg(@ %4g)= %6g", nod.Vert.Id, z, pg), 1e-17, pg, pgC)
 	}
 
 	// intial values @ integration points
@@ -156,17 +160,19 @@ func Test_pp01a(tst *testing.T) {
 		for idx, ip := range e.IpsElem {
 			s := e.States[idx]
 			z := e.Cell.Shp.IpRealCoords(e.X, ip)[1]
-			_, ρLC := dom.Sim.ColLiq.Calc(z)
+			_, ρLC := dom.Sim.LiqMdl.Calc(z)
+			_, ρGC := dom.Sim.GasMdl.Calc(z)
 			chk.Scalar(tst, io.Sf("sl(@ %18g)= %18g", z, s.A_sl), 1e-17, s.A_sl, 1)
 			chk.Scalar(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-13, s.A_ρL, ρLC)
+			chk.Scalar(tst, io.Sf("ρG(@ %18g)= %18g", z, s.A_ρG), 1e-13, s.A_ρG, ρGC)
 		}
 	}
 }
 
-func Test_pp01b(tst *testing.T) {
+func Test_0pp01b(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("pp01b")
+	chk.PrintTitle("0pp01b")
 
 	// run simulation
 	analysis := NewFEM("data/pp01.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -191,15 +197,15 @@ func Test_pp01b(tst *testing.T) {
 		dom := analysis.Domains[0]
 		ele := dom.Elems[0].(*ElemPP)
 		mdl := ele.Mdl
-		cnd := ele.Mdl.Cnd
+		Cnd := ele.Mdl.Cnd
 		if false {
 			plt.SetForEps(1.2, 350)
-			mporous.PlotSimple(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true)
+			por.PlotSimple(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true)
 			plt.SetForEps(1.2, 350)
-			mconduct.Plot(cnd, "/tmp/gofem", "fig_pp01b_liq.eps", 101, false, true, true)
+			cnd.Plot(Cnd, "/tmp/gofem", "fig_pp01b_liq.eps", 101, false, true, true)
 		}
 		plt.SetForEps(1.2, 350)
-		mconduct.Plot(cnd, "/tmp/gofem", "fig_pp01b_gas.eps", 101, true, true, true)
+		cnd.Plot(Cnd, "/tmp/gofem", "fig_pp01b_gas.eps", 101, true, true, true)
 	}
 
 	// TODO: add check here

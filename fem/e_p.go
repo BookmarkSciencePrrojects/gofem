@@ -8,7 +8,7 @@ import (
 	"math"
 
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mporous"
+	"github.com/cpmech/gofem/mdl/por"
 	"github.com/cpmech/gofem/shp"
 
 	"github.com/cpmech/gosl/chk"
@@ -36,15 +36,15 @@ type ElemP struct {
 	IpsFace []shp.Ipoint // integration points corresponding to faces
 
 	// material model
-	Mdl *mporous.Model // model
+	Mdl *por.Model // model
 
 	// problem variables
 	Pmap []int // assembly map (location array/element equations)
 
 	// internal variables
-	States    []*mporous.State
-	StatesBkp []*mporous.State
-	StatesAux []*mporous.State
+	States    []*por.State
+	StatesBkp []*por.State
+	StatesAux []*por.State
 
 	// gravity
 	Gfcn fun.Func // gravity function
@@ -74,16 +74,16 @@ type ElemP struct {
 	ψl []float64 // [nip] ψl* = β1.p + β2.dpdt
 
 	// scratchpad. computed @ each ip
-	g   []float64       // [ndim] gravity vector
-	pl  float64         // pl: liquid pressure
-	gpl []float64       // [ndim] ∇pl: gradient of liquid pressure
-	ρwl []float64       // [ndim] ρl*wl: weighted liquid relative velocity
-	tmp []float64       // [ndim] temporary (auxiliary) vector
-	Kpp [][]float64     // [np][np] Kpp := dRpl/dpl consistent tangent matrix
-	Kpf [][]float64     // [np][nf] Kpf := dRpl/dfl consistent tangent matrix
-	Kfp [][]float64     // [nf][np] Kfp := dRfl/dpl consistent tangent matrix
-	Kff [][]float64     // [nf][nf] Kff := dRfl/dfl consistent tangent matrix
-	res *mporous.LsVars // variable to hold results from CalcLs
+	g   []float64   // [ndim] gravity vector
+	pl  float64     // pl: liquid pressure
+	gpl []float64   // [ndim] ∇pl: gradient of liquid pressure
+	ρwl []float64   // [ndim] ρl*wl: weighted liquid relative velocity
+	tmp []float64   // [ndim] temporary (auxiliary) vector
+	Kpp [][]float64 // [np][np] Kpp := dRpl/dpl consistent tangent matrix
+	Kpf [][]float64 // [np][nf] Kpf := dRpl/dfl consistent tangent matrix
+	Kfp [][]float64 // [nf][np] Kfp := dRfl/dpl consistent tangent matrix
+	Kff [][]float64 // [nf][nf] Kff := dRfl/dfl consistent tangent matrix
+	res *por.LsVars // variable to hold results from CalcLs
 }
 
 // initialisation ///////////////////////////////////////////////////////////////////////////////////
@@ -152,7 +152,7 @@ func init() {
 		if mat == nil {
 			chk.Panic("cannot get model for p-element {tag=%d id=%d material=%q}:\n%v", cell.Tag, cell.Id, edat.Mat, err)
 		}
-		o.Mdl = mat.Porous
+		o.Mdl = mat.Por
 
 		// local starred variables
 		o.ψl = make([]float64, nip)
@@ -163,7 +163,7 @@ func init() {
 		o.ρwl = make([]float64, o.Ndim)
 		o.tmp = make([]float64, o.Ndim)
 		o.Kpp = la.MatAlloc(o.Np, o.Np)
-		o.res = new(mporous.LsVars)
+		o.res = new(por.LsVars)
 
 		// vertices on seepage faces
 		var seepverts []int
@@ -357,7 +357,7 @@ func (o *ElemP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err error)
 	}
 
 	// for each integration point
-	Cl := o.Mdl.Cl
+	Cl := o.Mdl.Liq.C
 	β1 := sol.DynCfs.β1
 	var coef, plt, klr, ρL, ρl, Cpl, dCpldpl, dklrdpl float64
 	for idx, ip := range o.IpsElem {
@@ -493,9 +493,9 @@ func (o *ElemP) SetIniIvs(sol *Solution, ignored map[string][]float64) (err erro
 	var ρL, ρG, pl, pg float64
 
 	// allocate slices of states
-	o.States = make([]*mporous.State, nip)
-	o.StatesBkp = make([]*mporous.State, nip)
-	o.StatesAux = make([]*mporous.State, nip)
+	o.States = make([]*por.State, nip)
+	o.StatesBkp = make([]*por.State, nip)
+	o.StatesAux = make([]*por.State, nip)
 
 	// for each integration point
 	for idx, ip := range o.IpsElem {
@@ -522,7 +522,7 @@ func (o *ElemP) SetIniIvs(sol *Solution, ignored map[string][]float64) (err erro
 		}
 
 		// compute density from hydrostatic condition => enforce initial ρwl = 0
-		ρL = o.Mdl.RhoL0
+		ρL = o.Mdl.Liq.R0
 		o.compute_gvec(sol.T)
 		if math.Abs(o.g[o.Ndim-1]) > 0 {
 			ρL = o.gpl[o.Ndim-1] / o.g[o.Ndim-1]
