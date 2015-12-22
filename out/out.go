@@ -22,22 +22,30 @@ var (
 // ResultsMap maps aliases to points
 type ResultsMap map[string]Points
 
+// IpData_t is an auxiliary structure holding element id and integration point coordinates
+type IpData_t struct {
+	Cid  int                // id of cell/element holding this integration point
+	X    []float64          // coordinates of integration point
+	Vals map[string]float64 // current (@ time t) values
+}
+
 // Global variables
 var (
 
 	// data set by Start
-	Analysis  *fem.FEM         // the fem structure
-	Sum       *fem.Summary     // [from Analysis] summary
-	Dom       *fem.Domain      // [from Analysis] FE domain
-	Ipoints   []*fem.OutIpData // all integration points. ipid == index in Ipoints
-	Cid2ips   [][]int          // [ncells][nip] maps cell id to index in Ipoints
-	Ipkey2ips map[string][]int // maps ip keys to indices in Ipoints
-	Ipkeys    map[string]bool  // all ip keys
-	NodBins   gm.Bins          // bins for nodes
-	IpsBins   gm.Bins          // bins for integration points
-	IpsMin    []float64        // [ndim] {x,y,z}_min among all ips
-	IpsMax    []float64        // [ndim] {x,y,z}_max among all ips
-	Beams     []*fem.Beam      // beams, if any
+	Analysis   *fem.FEM         // the fem structure
+	Sum        *fem.Summary     // [from Analysis] summary
+	Dom        *fem.Domain      // [from Analysis] FE domain
+	Ipoints    []*IpData_t      // all integration points. ipid == index in Ipoints
+	Cid2ips    [][]int          // [ncells][nip] maps cell id to index in Ipoints
+	Ipkey2ips  map[string][]int // maps ip keys to indices in Ipoints
+	Ipkeys     map[string]bool  // all ip keys
+	NodBins    gm.Bins          // bins for nodes
+	IpsBins    gm.Bins          // bins for integration points
+	IpsMin     []float64        // [ndim] {x,y,z}_min among all ips
+	IpsMax     []float64        // [ndim] {x,y,z}_max among all ips
+	Beams      []*fem.Beam      // beams, if any
+	ElemOutIps []fem.ElemOutIps // subset of element that can output IP values
 
 	// defined entities and results loaded by LoadResults
 	Planes   map[string]*PlaneData // for points defined on planes. maps aliases to data
@@ -75,7 +83,7 @@ func Start(simfnpath string, stageIdx, regionIdx int) {
 	}
 
 	// clear previous data
-	Ipoints = make([]*fem.OutIpData, 0)
+	Ipoints = make([]*IpData_t, 0)
 	Cid2ips = make([][]int, len(Dom.Msh.Cells))
 	Ipkey2ips = make(map[string][]int)
 	Ipkeys = make(map[string]bool)
@@ -84,6 +92,8 @@ func Start(simfnpath string, stageIdx, regionIdx int) {
 	TimeInds = make([]int, 0)
 	Times = make([]float64, 0)
 	Splots = make([]*SplotDat, 0)
+	Beams = make([]*fem.Beam, 0)
+	ElemOutIps = make([]fem.ElemOutIps, 0)
 
 	// bins
 	m := Dom.Msh
@@ -117,49 +127,54 @@ func Start(simfnpath string, stageIdx, regionIdx int) {
 	IpsMax = make([]float64, ndim)
 	first := true
 
-	// add integration points to slice of ips and to bins
+	// for all cells/elements
 	for cid, ele := range Dom.Cid2elem {
 		if ele == nil {
 			continue
 		}
-		dat := ele.OutIpsData()
-		nip := len(dat)
-		ids := make([]int, nip)
-		for i, d := range dat {
 
-			// add to bins
-			ipid := len(Ipoints)
-			ids[i] = ipid
-			Ipoints = append(Ipoints, d)
-			err = IpsBins.Append(d.X, ipid)
-			if err != nil {
-				chk.Panic("cannot append to bins of integration points: %v", err)
-			}
+		// add integration points to slice of ips and to bins
+		if e, ok := ele.(fem.ElemOutIps); ok {
+			coords := e.OutIpCoords()
+			keys := e.OutIpKeys()
+			nip := len(coords)
+			ids := make([]int, nip)
+			for i := 0; i < nip; i++ {
 
-			// set auxiliary map
-			vals := d.Calc(Dom.Sol)
-			for key, _ := range vals {
-				utl.StrIntsMapAppend(&Ipkey2ips, key, ipid)
-				Ipkeys[key] = true
-			}
-
-			// limits
-			if first {
-				for j := 0; j < ndim; j++ {
-					IpsMin[j] = d.X[j]
-					IpsMax[j] = d.X[j]
+				// add to bins
+				ipid := len(Ipoints)
+				ids[i] = ipid
+				Ipoints = append(Ipoints, &IpData_t{cid, coords[i], make(map[string]float64)})
+				err = IpsBins.Append(coords[i], ipid)
+				if err != nil {
+					chk.Panic("cannot append to bins of integration points: %v", err)
 				}
-				first = false
-			} else {
-				for j := 0; j < ndim; j++ {
-					IpsMin[j] = utl.Min(IpsMin[j], d.X[j])
-					IpsMax[j] = utl.Max(IpsMax[j], d.X[j])
+
+				// set auxiliary map
+				for _, key := range keys {
+					utl.StrIntsMapAppend(&Ipkey2ips, key, ipid)
+					Ipkeys[key] = true
+				}
+
+				// limits
+				if first {
+					for j := 0; j < ndim; j++ {
+						IpsMin[j] = coords[i][j]
+						IpsMax[j] = coords[i][j]
+					}
+					first = false
+				} else {
+					for j := 0; j < ndim; j++ {
+						IpsMin[j] = utl.Min(IpsMin[j], coords[i][j])
+						IpsMax[j] = utl.Max(IpsMax[j], coords[i][j])
+					}
 				}
 			}
+			Cid2ips[cid] = ids
+			ElemOutIps = append(ElemOutIps, e)
 		}
-		Cid2ips[cid] = ids
 
-		// beams
+		// find beams
 		if beam, ok := ele.(*fem.Beam); ok {
 			Beams = append(Beams, beam)
 		}

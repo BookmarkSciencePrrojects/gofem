@@ -28,57 +28,58 @@ func ComputeExtrapolatedValues(extrapKeys []string) {
 
 	// loop over elements
 	for _, ele := range Dom.Elems {
+		if e, ok := ele.(fem.ElemOutIps); ok {
 
-		// get shape and integration points from known elements
-		var sha *shp.Shape
-		var ips []shp.Ipoint
-		switch e := ele.(type) {
-		case *fem.ElemP:
-			sha = e.Cell.Shp
-			ips = e.IpsElem
-		case *fem.ElemU:
-			sha = e.Cell.Shp
-			ips = e.IpsElem
-		case *fem.ElemUP:
-			sha = e.U.Cell.Shp
-			ips = e.U.IpsElem
-		}
-		if sha == nil {
-			return // cannot extrapolate; e.g. rjoint, beams
-			//chk.Panic("cannot get shape structure from element")
-		}
+			// get shape and integration points from known elements
+			var sha *shp.Shape
+			var ips []shp.Ipoint
+			switch e := ele.(type) {
+			case *fem.ElemP:
+				sha = e.Cell.Shp
+				ips = e.IpsElem
+			case *fem.ElemU:
+				sha = e.Cell.Shp
+				ips = e.IpsElem
+			case *fem.ElemUP:
+				sha = e.U.Cell.Shp
+				ips = e.U.IpsElem
+			}
+			if sha == nil {
+				return // cannot extrapolate; e.g. rjoint, beams
+				//chk.Panic("cannot get shape structure from element")
+			}
 
-		// compute Extrapolator matrix
-		Emat := la.MatAlloc(sha.Nverts, len(ips))
-		err := sha.Extrapolator(Emat, ips)
-		if err != nil {
-			chk.Panic("cannot compute extrapolator matrix: %v", err)
-		}
+			// compute Extrapolator matrix
+			Emat := la.MatAlloc(sha.Nverts, len(ips))
+			err := sha.Extrapolator(Emat, ips)
+			if err != nil {
+				chk.Panic("cannot compute extrapolator matrix: %v", err)
+			}
 
-		// get ips data
-		dat := ele.OutIpsData()
+			// get ips data
+			allvals := e.OutIpVals(Dom.Sol)
 
-		// perform extrapolation
-		cell := cells[ele.Id()]
-		for j := 0; j < len(ips); j++ {
-			vals := dat[j].Calc(Dom.Sol)
+			// perform extrapolation
+			cell := cells[ele.Id()]
 			for _, key := range extrapKeys {
-				if val, ok := vals[key]; ok {
+				if vals, ok := allvals[key]; ok {
 					for i := 0; i < sha.Nverts; i++ {
 						v := cell.Verts[i]
-						ExVals[v]["ex_"+key] += Emat[i][j] * val
+						for j := 0; j < len(ips); j++ {
+							ExVals[v]["ex_"+key] += Emat[i][j] * vals[j]
+						}
 					}
 				} else {
 					chk.Panic("ip does not have key = %s", key)
 				}
 			}
-		}
 
-		// increment counter
-		for i := 0; i < sha.Nverts; i++ {
-			v := cell.Verts[i]
-			for _, key := range extrapKeys {
-				counts[v][key] += 1
+			// increment counter
+			for i := 0; i < sha.Nverts; i++ {
+				v := cell.Verts[i]
+				for _, key := range extrapKeys {
+					counts[v][key] += 1
+				}
 			}
 		}
 	}

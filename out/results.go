@@ -82,6 +82,17 @@ func LoadResults(times []float64) {
 			ComputeExtrapolatedValues(Extrap)
 		}
 
+		// current values @ ips
+		for _, ele := range ElemOutIps {
+			ipids := Cid2ips[ele.Id()]
+			allvals := ele.OutIpVals(Dom.Sol)
+			for key, vals := range allvals {
+				for i, ipid := range ipids {
+					Ipoints[ipid].Vals[key] = vals[i]
+				}
+			}
+		}
+
 		// for each point
 		for _, pts := range Results {
 			for _, p := range pts {
@@ -112,8 +123,7 @@ func LoadResults(times []float64) {
 				// handle integration point
 				if pid >= 0 {
 					dat := Ipoints[pid]
-					vals := dat.Calc(Dom.Sol)
-					for key, val := range vals {
+					for key, val := range dat.Vals {
 						utl.StrDblsMapAppend(&p.Vals, key, val)
 					}
 				}

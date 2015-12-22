@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILES="out.go results.go beamdiagrams.go t_beamdiagrams_test.go"
+FILES="*.go"
 
 while true; do
     inotifywait -q -e modify $FILES
