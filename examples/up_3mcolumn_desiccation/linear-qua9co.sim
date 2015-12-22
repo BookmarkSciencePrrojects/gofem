@@ -8,12 +8,11 @@
   },
   "functions" : [
     { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] },
-    { "name":"pbo_", "type":"cte", "prms":[{"n":"c", "v":30.00000020454543}] },
     { "name":"pbot", "type":"rmp", "prms":[
-      { "n":"ca", "v":30.00000020454543 },
+      { "n":"ca", "v":0, "extra":"!fix:plbot" },
       { "n":"cb", "v":0 },
       { "n":"ta", "v":0 },
-      { "n":"tb", "v":2e3 }]
+      { "n":"tb", "v":1000 }]
     }
   ],
   "regions" : [
@@ -43,9 +42,9 @@
         { "tag":-2, "keys":["g"], "funcs":["grav"] }
       ],
       "control" : {
-        "tf"    : 4000,
-        "dt"    : 50,
-        "dtout" : 50
+        "tf"    : 1200,
+        "dt"    : 20,
+        "dtout" : 20
       }
     }
   ]

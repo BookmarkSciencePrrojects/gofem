@@ -164,10 +164,12 @@ func main() {
 		}
 
 		// get integration points values @ time t
-		for i, p := range out.Ipoints {
-			vals := p.Calc(out.Dom.Sol)
-			for key, val := range vals {
-				ipvals[i][key] = val
+		for _, ele := range out.ElemOutIps {
+			allvals := ele.OutIpVals(out.Dom.Sol)
+			for key, vals := range allvals {
+				for i, val := range vals {
+					ipvals[i][key] = val
+				}
 			}
 		}
 
@@ -462,7 +464,7 @@ func cdata_write(buf *bytes.Buffer, ips bool) {
 	io.Ff(buf, "<DataArray type=\"Int32\" Name=\"eid\" NumberOfComponents=\"1\" format=\"ascii\">\n")
 	if ips {
 		for _, p := range out.Ipoints {
-			io.Ff(buf, "%d ", p.Eid)
+			io.Ff(buf, "%d ", p.Cid)
 		}
 	} else {
 		for _, e := range elems {
@@ -474,7 +476,7 @@ func cdata_write(buf *bytes.Buffer, ips bool) {
 	io.Ff(buf, "\n</DataArray>\n<DataArray type=\"Int32\" Name=\"tag\" NumberOfComponents=\"1\" format=\"ascii\">\n")
 	if ips {
 		for _, p := range out.Ipoints {
-			ptag := IP_TAG_INI + iabs(cells[p.Eid].Tag)
+			ptag := IP_TAG_INI + iabs(cells[p.Cid].Tag)
 			io.Ff(buf, "%d ", ptag)
 		}
 	} else {
