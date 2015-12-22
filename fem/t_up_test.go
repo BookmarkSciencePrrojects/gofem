@@ -9,8 +9,10 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/cpmech/gofem/mdl/lrm"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
+	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -264,7 +266,7 @@ func Test_up01b(tst *testing.T) {
 	chk.PrintTitle("up01b")
 
 	// start simulation
-	analysis := NewFEM("data/up01.sim", "", true, false, false, false, chk.Verbose, 0)
+	analysis := NewFEM("data/up01.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// for debugging Kb
 	if true {
@@ -278,5 +280,59 @@ func Test_up01b(tst *testing.T) {
 	err := analysis.Run()
 	if err != nil {
 		tst.Errorf("Run failed:\n%v", err)
+	}
+
+	// (low-level) post-processing
+	if false {
+
+		// start prost-processing structure
+		postproc := NewFEM("data/up01.sim", "", false, false, true, false, chk.Verbose, 0)
+
+		// set stage
+		err := postproc.SetStage(0)
+		if err != nil {
+			chk.Panic("cannot set stage:\n%v", err)
+		}
+
+		// initialise solution vectors
+		err = postproc.ZeroStage(0, true)
+		if err != nil {
+			chk.Panic("cannot initialise solution vectors:\n%v", err)
+		}
+
+		// domain and summary
+		dom := postproc.Domains[0]
+		sum := postproc.Summary
+		ele := dom.Elems[3].(*ElemUP)
+
+		// for each output time
+		nip := len(ele.OutIpCoords())
+		ntout := len(sum.OutTimes)
+		Pc, Sl := utl.DblsAlloc(nip, ntout), utl.DblsAlloc(nip, ntout)
+		for tidx, _ := range sum.OutTimes {
+
+			// input results into domain
+			err := dom.Read(sum, tidx, 0, true)
+			if err != nil {
+				chk.Panic("cannot load results into domain:\n%v", err)
+			}
+
+			// results @ ip
+			V := ele.OutIpVals(dom.Sol)
+			for i := 0; i < nip; i++ {
+				Pc[i][tidx], Sl[i][tidx] = -V["pl"][i], V["sl"][i]
+			}
+		}
+
+		// plot
+		plt.SetForEps(0.75, 400)
+		Lrm := ele.P.Mdl.Lrm
+		lrm.Plot(Lrm, 0, Lrm.SlMax(), 30, 101, "'k-^', markerfacecolor='white', ms=5, markevery=10", "", "model")
+		M := []string{".", "+", "x", "1", "2", "3", "4", "|", "_"}
+		for i := 0; i < nip; i++ {
+			plt.Plot(Pc[i], Sl[i], io.Sf("'b.', clip_on=0, markevery=%d, marker='%s'", 3+i, M[i]))
+		}
+		plt.Gll("$p_c$", "$s_{\\ell}$", "")
+		plt.SaveD("/tmp/gofem", "fig_up01.eps")
 	}
 }
