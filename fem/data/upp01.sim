@@ -1,33 +1,34 @@
 {
   "data" : {
-    "desc"    : "coupled deformation of column due to pressure decrease",
+    "desc" : "coupled deformation of column due to liquid pressure decrease",
     "matfile" : "porous.mat",
     "nolbb" : false
   },
   "functions" : [
-    { "name":"pbot", "type":"rmp", "prms":[
-      { "n":"ca", "v":100 },
-      { "n":"cb", "v":100 },
-      { "n":"ta", "v":0   },
-      { "n":"tb", "v":1e3 }]
+    { "name":"plbot", "type":"rmp", "prms":[
+      { "n":"ca", "v":0, "extra":"!fix:plbot", "note":"will be set with column base pressure" },
+      { "n":"cb", "v":0 },
+      { "n":"ta", "v":0 },
+      { "n":"tb", "v":1000 }]
     },
-    { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] }
+    { "name":"pgbot", "type":"cte", "prms":[{"n":"c", "v":0, "extra":"!fix:pgbot"}] },
+    { "name":"grav",  "type":"cte", "prms":[{"n":"c", "v":10}] }
   ],
   "regions" : [
     {
-      "mshfile" : "col10m4e2lay.msh",
+      "mshfile" : "col3m4eQ9lay2.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"porous2", "type":"upp", "extra":"!useB:0" },
-        { "tag":-2, "mat":"porous1", "type":"upp", "extra":"!useB:0" }
+        { "tag":-1, "mat":"porous3", "type":"upp", "extra":"!useB:0" },
+        { "tag":-2, "mat":"porous3", "type":"upp", "extra":"!useB:0" }
       ]
     }
   ],
   "stages" : [
     {
-      "desc" : "decrease pressure @ bottom",
+      "desc" : "decrease liquid pressure @ bottom",
       "iniporous" : { "nu":[0.2, 0.2], "layers":[[-1], [-2]], "liq":"water", "gas":"dryair" },
       "facebcs" : [
-        { "tag":-10, "keys":["uy","pl","pg"], "funcs":["zero","pbot","zero"] },
+        { "tag":-10, "keys":["uy","pl","pg"], "funcs":["zero","plbot","pgbot"] },
         { "tag":-12, "keys":["pg"], "funcs":["zero"] },
         { "tag":-11, "keys":["ux"], "funcs":["zero"] },
         { "tag":-13, "keys":["ux"], "funcs":["zero"] }
@@ -37,9 +38,8 @@
         { "tag":-2, "keys":["g"], "funcs":["grav"] }
       ],
       "control" : {
-        "tf"    : 1000,
-        "dt"    : 100,
-        "dtout" : 100
+        "tf" : 1000,
+        "dt" : 20
       }
     }
   ]

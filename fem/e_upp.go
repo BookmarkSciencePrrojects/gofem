@@ -321,20 +321,20 @@ func (o *ElemUPP) AddToRhs(fb []float64, sol *Solution) (err error) {
 			la.MatTrVecMulAdd(o.U.fi, coef, o.U.B, σe) // fi += coef * tr(B) * σ
 			for m := 0; m < u_nverts; m++ {
 				for i := 0; i < o.Ndim; i++ {
-					r := o.U.Umap[i+m*o.Ndim]
-					fb[r] -= coef * S[m] * ρ * o.b[i]
-					fb[r] += coef * p * G[m][i]
+					ru := o.U.Umap[i+m*o.Ndim]
+					fb[ru] -= coef * S[m] * ρ * o.b[i]
+					fb[ru] += coef * p * G[m][i]
 				}
 			}
 		} else {
 			for m := 0; m < u_nverts; m++ {
 				for i := 0; i < o.Ndim; i++ {
-					r := o.U.Umap[i+m*o.Ndim]
-					fb[r] -= coef * S[m] * ρ * o.b[i]
+					ru := o.U.Umap[i+m*o.Ndim]
+					fb[ru] -= coef * S[m] * ρ * o.b[i]
 					for j := 0; j < o.Ndim; j++ {
-						fb[r] -= coef * tsr.M2T(σe, i, j) * G[m][j]
+						fb[ru] -= coef * tsr.M2T(σe, i, j) * G[m][j]
 					}
-					fb[r] += coef * p * G[m][i]
+					fb[ru] += coef * p * G[m][i]
 				}
 			}
 		}
@@ -432,7 +432,7 @@ func (o *ElemUPP) AddToKb(Kb *la.Triplet, sol *Solution, firstIt bool) (err erro
 		kgr = o.P.Mdl.Cnd.Kgr(1.0 - o.P.States[idx].A_sl)
 		ρL = o.P.States[idx].A_ρL
 		ρG = o.P.States[idx].A_ρG
-		err = o.P.Mdl.CalcLgs(o.P.res, o.P.States[idx], o.P.pl, o.P.pg, o.divus, false)
+		err = o.P.Mdl.CalcLgs(o.P.res, o.P.States[idx], o.P.pl, o.P.pg, o.divus, true)
 		if err != nil {
 			return
 		}

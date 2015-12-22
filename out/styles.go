@@ -57,6 +57,12 @@ func GetTexLabel(key, unit string) string {
 		l += "n_{\\ell}\\cdot w_{\\ell y}"
 	case "ex_nwlz", "nwlz":
 		l += "n_{\\ell}\\cdot w_{\\ell z}"
+	case "ex_nwgx", "nwgx":
+		l += "n_{g}\\cdot w_{g x}"
+	case "ex_nwgy", "nwgy":
+		l += "n_{g}\\cdot w_{g y}"
+	case "ex_nwgz", "nwgz":
+		l += "n_{g}\\cdot w_{g z}"
 	case "ompb":
 		l += "\\bar{\\omega}_p"
 	default:

@@ -397,8 +397,8 @@ func upp_DebugKb(fem *FEM, o *testKb) {
 			o.check("Kff", d, e, e.P.Flmap, e.P.Flmap, e.P.Kff, o.tol)
 
 			// {pl,pg,u} versus {pl,pg,u}
-			o.check("Kul", d, e, e.U.Umap, e.P.Plmap, e.Kul, o.tol)
-			o.check("Kug", d, e, e.U.Umap, e.P.Pgmap, e.Kug, o.tol)
+			o.check("Kul", d, e, e.U.Umap, e.P.Plmap, e.Kul, o.tol2)
+			o.check("Kug", d, e, e.U.Umap, e.P.Pgmap, e.Kug, o.tol2)
 			o.check("Klu", d, e, e.P.Plmap, e.U.Umap, e.Klu, o.tol)
 			o.check("Kgu", d, e, e.P.Pgmap, e.U.Umap, e.Kgu, o.tol)
 

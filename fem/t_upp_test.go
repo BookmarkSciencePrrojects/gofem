@@ -190,17 +190,18 @@ func Test_upp01a(tst *testing.T) {
 	}
 
 	// layers/column data
+	H := dom.Sim.MaxElev
 	ν := 0.2
 	colTop := ColLayer{
-		Zmax: 10.0,
-		Zmin: 5.0,
+		Zmax: H,
+		Zmin: H / 2.0,
 		K0:   ν / (1.0 - ν),
 		Grav: dom.Sim.Grav0,
 		Liq:  dom.Sim.LiqMdl,
 		Gas:  dom.Sim.GasMdl,
 	}
 	colBot := ColLayer{
-		Zmax: 5.0,
+		Zmax: H / 2.0,
 		Zmin: 0.0,
 		K0:   ν / (1.0 - ν),
 		Grav: dom.Sim.Grav0,
@@ -208,11 +209,13 @@ func Test_upp01a(tst *testing.T) {
 		Gas:  dom.Sim.GasMdl,
 	}
 
-	// intial values @ integration points
+	// tolerance for density
 	tolRho := 1e-5
 	if dom.Sim.Data.NoLBB {
 		tolRho = 1e-10
 	}
+
+	// intial values @ integration points
 	io.Pforan("initial values @ integration points\n")
 	for _, ele := range dom.Elems {
 		e := ele.(*ElemUPP)
@@ -226,7 +229,7 @@ func Test_upp01a(tst *testing.T) {
 			colBot.Nf0 = e.P.Mdl.Nf0
 			colBot.RhoS0 = e.P.Mdl.RhoS0
 		}
-		for idx, ip := range e.P.IpsElem {
+		for idx, ip := range e.U.IpsElem {
 			s := e.P.States[idx]
 			z := e.P.Cell.Shp.IpRealCoords(e.P.X, ip)[1]
 			_, ρLC := dom.Sim.LiqMdl.Calc(z)
@@ -269,12 +272,11 @@ func Test_upp01a(tst *testing.T) {
 			chk.AnaNum(tst, io.Sf("sx(z=%11.8f)", z), 1e-4, σe[0], she, chk.Verbose)
 		}
 	}
-	return
 }
 
 func Test_upp01b(tst *testing.T) {
 
-	verbose()
+	//verbose()
 	chk.PrintTitle("upp01b")
 
 	// start simulation
@@ -282,9 +284,9 @@ func Test_upp01b(tst *testing.T) {
 
 	// for debugging Kb
 	if true {
-		up_DebugKb(analysis, &testKb{
-			tst: tst, eid: 3, tol: 1e-8, verb: chk.Verbose,
-			ni: 1, nj: 1, itmin: 1, itmax: -1, tmin: 800, tmax: 1000,
+		upp_DebugKb(analysis, &testKb{
+			tst: tst, eid: 3, tol: 1e-7, tol2: 1e-5, verb: chk.Verbose,
+			ni: 1, nj: 1, itmin: 1, itmax: -1, tmin: -1, tmax: -1,
 		})
 	}
 
