@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/utl"
 )
@@ -177,73 +176,74 @@ func Test_up01a(tst *testing.T) {
 		}
 	}
 
+	// layers/column data
+	H := dom.Sim.MaxElev
+	ν := 0.2
+	colTop := ColLayer{
+		Zmax: H,
+		Zmin: H / 2.0,
+		K0:   ν / (1.0 - ν),
+		Grav: dom.Sim.Grav0,
+		Liq:  dom.Sim.LiqMdl,
+		Gas:  dom.Sim.GasMdl,
+	}
+	colBot := ColLayer{
+		Zmax: H / 2.0,
+		Zmin: 0.0,
+		K0:   ν / (1.0 - ν),
+		Grav: dom.Sim.Grav0,
+		Liq:  dom.Sim.LiqMdl,
+		Gas:  dom.Sim.GasMdl,
+	}
+
+	// tolerance for density
+	tolRho := 1e-5
+	if dom.Sim.Data.NoLBB {
+		tolRho = 1e-10
+	}
+
 	// intial values @ integration points
 	io.Pforan("initial values @ integration points\n")
 	for _, ele := range dom.Elems {
 		e := ele.(*ElemUP)
 		slmax := e.P.Mdl.Lrm.SlMax()
-		for idx, ip := range e.P.IpsElem {
+		if e.Cell.Tag == -1 {
+			colTop.SlMax = slmax
+			colTop.Nf0 = e.P.Mdl.Nf0
+			colTop.RhoS0 = e.P.Mdl.RhoS0
+		} else {
+			colBot.SlMax = slmax
+			colBot.Nf0 = e.P.Mdl.Nf0
+			colBot.RhoS0 = e.P.Mdl.RhoS0
+		}
+		for idx, ip := range e.U.IpsElem {
 			s := e.P.States[idx]
 			z := e.P.Cell.Shp.IpRealCoords(e.P.X, ip)[1]
-			//_, ρLC := dom.Sim.LiqMdl.Calc(z)
+			_, ρLC := dom.Sim.LiqMdl.Calc(z)
 			chk.AnaNum(tst, io.Sf("sl(@%6.4f)", z), 1e-17, s.A_sl, slmax, chk.Verbose)
-			//chk.AnaNum(tst, io.Sf("ρL(@%6.4f)", z), 1e-10, s.A_ρL, ρLC, chk.Verbose)
+			chk.AnaNum(tst, io.Sf("ρL(@%6.4f)", z), tolRho, s.A_ρL, ρLC, chk.Verbose)
 		}
 	}
 
-	// parameters
-	ν := 0.2            // Poisson's coefficient
-	K0 := ν / (1.0 - ν) // earth pressure at rest
-	nf := 0.3           // porosity
-	sl := 1.0           // saturation
-	ρL := 1.0           // intrinsic (real) density of liquid
-	ρS_top := 2.0       // intrinsic (real) density of solids in top layer
-	ρS_bot := 3.0       // intrinsic (real) density of solids in bottom layer
-	h := 5.0            // height of each layer
-	g := 10.0           // gravity
-
-	// densities
-	nl := nf * sl         // volume fraction of luqid
-	ns := 1.0 - nf        // volume fraction of solid
-	ρl := nl * ρL         // partial density of liquid
-	ρs_top := ns * ρS_top // partial density of solids in top layer
-	ρs_bot := ns * ρS_bot // partial density of solids in bottom layer
-	ρ_top := ρl + ρs_top  // density of mixture in top layer
-	ρ_bot := ρl + ρs_bot  // density of mixture in bottom layer
-
-	// absolute values of stresses
-	σV_z5 := ρ_top * g * h     // total vertical stress @ elevation z = 5 m (absolute value)
-	σV_z0 := σV_z5 + ρ_bot*g*h // total vertical stress @ elevation z = 0 m (absolute value)
-	io.Pfyel("ρ_top       = %g\n", ρ_top)
-	io.Pfyel("ρ_bot       = %g\n", ρ_bot)
-	io.Pfyel("|ΔσV_top|   = %g\n", ρ_top*g*h)
-	io.Pfyel("|ΔσV_bot|   = %g\n", ρ_bot*g*h)
-	io.PfYel("|σV|(@ z=0) = %g\n", σV_z0)
-	io.PfYel("|σV|(@ z=5) = %g\n", σV_z5)
-
-	// stress functions
-	var sig fun.Pts
-	var pres fun.Pts
-	sig.Init(fun.Prms{
-		&fun.Prm{N: "t0", V: 0.00}, {N: "y0", V: -σV_z0},
-		&fun.Prm{N: "t1", V: 5.00}, {N: "y1", V: -σV_z5},
-		&fun.Prm{N: "t2", V: 10.00}, {N: "y2", V: 0.0},
-	})
-	pres.Init(fun.Prms{
-		&fun.Prm{N: "t0", V: 0.00}, {N: "y0", V: 100},
-		&fun.Prm{N: "t1", V: 10.00}, {N: "y1", V: 0},
-	})
+	// vertical stress @ zmax of bottom layer
+	_, _, _, _, _, colBot.SigV = colTop.Calc(colTop.Zmin)
 
 	// check stresses
 	io.Pforan("initial stresses @ integration points\n")
 	for _, ele := range dom.Elems {
 		e := ele.(*ElemUP)
+		col := &colTop
+		if e.Cell.Tag == -2 {
+			col = &colBot
+		}
 		for idx, ip := range e.U.IpsElem {
 			z := e.U.Cell.Shp.IpRealCoords(e.U.X, ip)[1]
 			σe := e.U.States[idx].Sig
-			sv := sig.F(z, nil)
-			sve := sv + pres.F(z, nil)
-			she := sve * K0
+			pl, _, _, _, _, σV := col.Calc(z)
+			sl := col.SlMax
+			p := sl * pl
+			sve := -σV + p
+			she := sve * col.K0
 			if math.Abs(σe[2]-σe[0]) > 1e-17 {
 				tst.Errorf("[1;31mσx is not equal to σz: %g != %g[0m\n", σe[2], σe[0])
 				return
@@ -252,11 +252,10 @@ func Test_up01a(tst *testing.T) {
 				tst.Errorf("[1;31mσxy is not equal to zero: %g != 0[0m\n", σe[3])
 				return
 			}
-			chk.AnaNum(tst, io.Sf("sx(z=%11.8f)", z), 0.0003792, σe[0], she, chk.Verbose)
-			chk.AnaNum(tst, io.Sf("sy(z=%11.8f)", z), 0.001517, σe[1], sve, chk.Verbose)
+			chk.AnaNum(tst, io.Sf("sy(z=%11.8f)", z), 1e-4, σe[1], sve, chk.Verbose)
+			chk.AnaNum(tst, io.Sf("sx(z=%11.8f)", z), 1e-4, σe[0], she, chk.Verbose)
 		}
 	}
-	return
 }
 
 func Test_up01b(tst *testing.T) {
@@ -270,8 +269,8 @@ func Test_up01b(tst *testing.T) {
 	// for debugging Kb
 	if true {
 		up_DebugKb(analysis, &testKb{
-			tst: tst, eid: 3, tol: 1e-8, verb: chk.Verbose,
-			ni: 1, nj: 1, itmin: 1, itmax: -1, tmin: 800, tmax: 1000,
+			tst: tst, eid: 3, tol: 1e-8, tol2: 1e-5, verb: chk.Verbose,
+			ni: 1, nj: 1, itmin: 1, itmax: -1, tmin: -1, tmax: -1,
 		})
 	}
 

@@ -235,6 +235,8 @@ type testKb struct {
 	tst          *testing.T // testing structure
 	eid          int        // element id
 	tol          float64    // tolerance to compare K's
+	tol2         float64    // another tolerance to compare K's
+	step         float64    // step for finite differences method
 	verb         bool       // verbose: show results
 	ni, nj       int        // number of i and j components of K to be tested; -1 means all K components
 	itmin, itmax int        // limits to consider test; -1 means all iterations
@@ -268,15 +270,15 @@ func p_DebugKb(fem *FEM, o *testKb) {
 			defer func() { o.aux_restore(d) }()
 
 			// check
-			o.check("Kpp", d, e, e.Pmap, e.Pmap, e.Kpp)
-			o.check("Kpf", d, e, e.Pmap, e.Fmap, e.Kpf)
-			o.check("Kfp", d, e, e.Fmap, e.Pmap, e.Kfp)
-			o.check("Kff", d, e, e.Fmap, e.Fmap, e.Kff)
+			o.check("Kpp", d, e, e.Pmap, e.Pmap, e.Kpp, o.tol)
+			o.check("Kpf", d, e, e.Pmap, e.Fmap, e.Kpf, o.tol)
+			o.check("Kfp", d, e, e.Fmap, e.Pmap, e.Kfp, o.tol)
+			o.check("Kff", d, e, e.Fmap, e.Fmap, e.Kff, o.tol)
 		}
 	}
 }
 
-// pp_DebugKb defines a global function to debug Kb for p-elements
+// pp_DebugKb defines a global function to debug Kb for pp-elements
 func pp_DebugKb(fem *FEM, o *testKb) {
 	fem.DebugKb = func(d *Domain, it int) {
 
@@ -295,13 +297,13 @@ func pp_DebugKb(fem *FEM, o *testKb) {
 			defer func() { o.aux_restore(d) }()
 
 			// check
-			o.check("Kll", d, e, e.Plmap, e.Plmap, e.Kll)
-			o.check("Klg", d, e, e.Plmap, e.Pgmap, e.Klg)
-			o.check("Kgl", d, e, e.Pgmap, e.Plmap, e.Kgl)
-			o.check("Kgg", d, e, e.Pgmap, e.Pgmap, e.Kgg)
-			o.check("Klf", d, e, e.Plmap, e.Flmap, e.Klf)
-			o.check("Kfl", d, e, e.Flmap, e.Plmap, e.Kfl)
-			o.check("Kff", d, e, e.Flmap, e.Flmap, e.Kff)
+			o.check("Kll", d, e, e.Plmap, e.Plmap, e.Kll, o.tol)
+			o.check("Klg", d, e, e.Plmap, e.Pgmap, e.Klg, o.tol)
+			o.check("Kgl", d, e, e.Pgmap, e.Plmap, e.Kgl, o.tol)
+			o.check("Kgg", d, e, e.Pgmap, e.Pgmap, e.Kgg, o.tol)
+			o.check("Klf", d, e, e.Plmap, e.Flmap, e.Klf, o.tol)
+			o.check("Kfl", d, e, e.Flmap, e.Plmap, e.Kfl, o.tol)
+			o.check("Kff", d, e, e.Flmap, e.Flmap, e.Kff, o.tol)
 		}
 	}
 }
@@ -326,11 +328,11 @@ func u_DebugKb(fem *FEM, o *testKb) {
 
 			// check
 			if e.HasContact {
-				o.check("Kqq", d, e, e.Qmap, e.Qmap, e.Kqq)
-				o.check("Kqu", d, e, e.Qmap, e.Umap, e.Kqu)
-				o.check("Kuq", d, e, e.Umap, e.Qmap, e.Kuq)
+				o.check("Kqq", d, e, e.Qmap, e.Qmap, e.Kqq, o.tol)
+				o.check("Kqu", d, e, e.Qmap, e.Umap, e.Kqu, o.tol)
+				o.check("Kuq", d, e, e.Umap, e.Qmap, e.Kuq, o.tol)
 			}
-			o.check("K", d, e, e.Umap, e.Umap, e.K)
+			o.check("K", d, e, e.Umap, e.Umap, e.K, o.tol)
 		}
 	}
 	return
@@ -355,13 +357,53 @@ func up_DebugKb(fem *FEM, o *testKb) {
 			defer func() { o.aux_restore(d) }()
 
 			// check
-			o.check("Kuu", d, e, e.U.Umap, e.U.Umap, e.U.K)
-			o.check("Kup", d, e, e.U.Umap, e.P.Pmap, e.Kup)
-			o.check("Kpu", d, e, e.P.Pmap, e.U.Umap, e.Kpu)
-			o.check("Kpp", d, e, e.P.Pmap, e.P.Pmap, e.P.Kpp)
-			o.check("Kpf", d, e, e.P.Pmap, e.P.Fmap, e.P.Kpf)
-			o.check("Kfp", d, e, e.P.Fmap, e.P.Pmap, e.P.Kfp)
-			o.check("Kff", d, e, e.P.Fmap, e.P.Fmap, e.P.Kff)
+			o.check("Kuu", d, e, e.U.Umap, e.U.Umap, e.U.K, o.tol)
+			o.check("Kup", d, e, e.U.Umap, e.P.Pmap, e.Kup, o.tol2)
+			o.check("Kpu", d, e, e.P.Pmap, e.U.Umap, e.Kpu, o.tol)
+			o.check("Kpp", d, e, e.P.Pmap, e.P.Pmap, e.P.Kpp, o.tol)
+			o.check("Kpf", d, e, e.P.Pmap, e.P.Fmap, e.P.Kpf, o.tol)
+			o.check("Kfp", d, e, e.P.Fmap, e.P.Pmap, e.P.Kfp, o.tol)
+			o.check("Kff", d, e, e.P.Fmap, e.P.Fmap, e.P.Kff, o.tol)
+		}
+	}
+	return
+}
+
+// upp_DebugKb defines a global function to debug Kb for upp-elements
+func upp_DebugKb(fem *FEM, o *testKb) {
+	fem.DebugKb = func(d *Domain, it int) {
+
+		elem := d.Elems[o.eid]
+		if e, ok := elem.(*ElemUPP); ok {
+
+			// skip?
+			o.it = it
+			o.t = d.Sol.T
+			if o.skip() {
+				return
+			}
+
+			// backup and restore upon exit
+			o.aux_backup(d)
+			defer func() { o.aux_restore(d) }()
+
+			// {pl,pg,fl} versus {pl,pg,fl}
+			o.check("Kll", d, e, e.P.Plmap, e.P.Plmap, e.P.Kll, o.tol)
+			o.check("Klg", d, e, e.P.Plmap, e.P.Pgmap, e.P.Klg, o.tol)
+			o.check("Kgl", d, e, e.P.Pgmap, e.P.Plmap, e.P.Kgl, o.tol)
+			o.check("Kgg", d, e, e.P.Pgmap, e.P.Pgmap, e.P.Kgg, o.tol)
+			o.check("Klf", d, e, e.P.Plmap, e.P.Flmap, e.P.Klf, o.tol)
+			o.check("Kfl", d, e, e.P.Flmap, e.P.Plmap, e.P.Kfl, o.tol)
+			o.check("Kff", d, e, e.P.Flmap, e.P.Flmap, e.P.Kff, o.tol)
+
+			// {pl,pg,u} versus {pl,pg,u}
+			o.check("Kul", d, e, e.U.Umap, e.P.Plmap, e.Kul, o.tol)
+			o.check("Kug", d, e, e.U.Umap, e.P.Pgmap, e.Kug, o.tol)
+			o.check("Klu", d, e, e.P.Plmap, e.U.Umap, e.Klu, o.tol)
+			o.check("Kgu", d, e, e.P.Pgmap, e.U.Umap, e.Kgu, o.tol)
+
+			// {u} versus {u}
+			o.check("Kuu", d, e, e.U.Umap, e.U.Umap, e.U.K, o.tol)
 		}
 	}
 	return
@@ -386,10 +428,10 @@ func rjoint_DebugKb(fem *FEM, o *testKb) {
 			defer func() { o.aux_restore(d) }()
 
 			// check
-			o.check("Krr", d, e, e.Rod.Umap, e.Rod.Umap, e.Krr)
-			o.check("Krs", d, e, e.Rod.Umap, e.Sld.Umap, e.Krs)
-			o.check("Ksr", d, e, e.Sld.Umap, e.Rod.Umap, e.Ksr)
-			o.check("Kss", d, e, e.Sld.Umap, e.Sld.Umap, e.Kss)
+			o.check("Krr", d, e, e.Rod.Umap, e.Rod.Umap, e.Krr, o.tol)
+			o.check("Krs", d, e, e.Rod.Umap, e.Sld.Umap, e.Krs, o.tol)
+			o.check("Ksr", d, e, e.Sld.Umap, e.Rod.Umap, e.Ksr, o.tol)
+			o.check("Kss", d, e, e.Sld.Umap, e.Sld.Umap, e.Kss, o.tol)
 		} else {
 			io.Pfred("warning: eid=%d does not correspond to Rjoint element\n", o.eid)
 		}
@@ -416,10 +458,10 @@ func bjointcomp_DebugKb(fem *FEM, o *testKb) {
 			defer func() { o.aux_restore(d) }()
 
 			// check
-			o.check("Kll", d, e, e.LinUmap, e.LinUmap, e.Kll)
-			o.check("Kls", d, e, e.LinUmap, e.SldUmap, e.Kls)
-			o.check("Ksl", d, e, e.SldUmap, e.LinUmap, e.Ksl)
-			o.check("Kss", d, e, e.SldUmap, e.SldUmap, e.Kss)
+			o.check("Kll", d, e, e.LinUmap, e.LinUmap, e.Kll, o.tol)
+			o.check("Kls", d, e, e.LinUmap, e.SldUmap, e.Kls, o.tol)
+			o.check("Ksl", d, e, e.SldUmap, e.LinUmap, e.Ksl, o.tol)
+			o.check("Kss", d, e, e.SldUmap, e.SldUmap, e.Kss, o.tol)
 		} else {
 			io.Pfred("warning: eid=%d does not correspond to BjointComp element\n", o.eid)
 		}
@@ -482,7 +524,7 @@ func (o *testKb) aux_restore(d *Domain) {
 }
 
 // check performs the checking of Kb using numerical derivatives
-func (o *testKb) check(label string, d *Domain, e Elem, Imap, Jmap []int, Kana [][]float64) {
+func (o *testKb) check(label string, d *Domain, e Elem, Imap, Jmap []int, Kana [][]float64, tol float64) {
 	var imap, jmap []int
 	if o.ni < 0 {
 		imap = Imap
@@ -498,7 +540,9 @@ func (o *testKb) check(label string, d *Domain, e Elem, Imap, Jmap []int, Kana [
 			jmap = Jmap[:o.nj]
 		}
 	}
-	step := 1e-6
+	if o.step < 1e-14 {
+		o.step = 1e-6
+	}
 	//derivfcn := num.DerivForward
 	//derivfcn := num.DerivBackward
 	derivfcn := num.DerivCentral
@@ -522,8 +566,8 @@ func (o *testKb) check(label string, d *Domain, e Elem, Imap, Jmap []int, Kana [
 				res = -o.Fbtmp[I]
 				d.Sol.Y[J] = tmp
 				return res
-			}, d.Sol.Y[J], step)
-			chk.AnaNum(o.tst, io.Sf(label+"%3d%3d", i, j), o.tol, Kana[i][j], dnum, o.verb)
+			}, d.Sol.Y[J], o.step)
+			chk.AnaNum(o.tst, io.Sf(label+"%3d%3d", i, j), tol, Kana[i][j], dnum, o.verb)
 		}
 	}
 }
