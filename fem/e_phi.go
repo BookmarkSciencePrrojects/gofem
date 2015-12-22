@@ -221,6 +221,7 @@ func (o *ElemPhi) Decode(dec Decoder) (err error) {
 	return
 }
 
+/*
 // OutIpsData returns data from all integration points for output
 func (o *ElemPhi) OutIpsData() (data []*OutIpData) {
 
@@ -259,3 +260,4 @@ func (o *ElemPhi) OutIpsData() (data []*OutIpData) {
 	}
 	return
 }
+*/

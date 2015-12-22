@@ -194,29 +194,31 @@ func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string,
 					}
 				}
 				if e, ok := dom.Cid2elem[eid].(*ElastRod); ok {
-					dat := e.OutIpsData()
+					res := e.OutIpVals(dom.Sol)
 					for ip, val := range sig {
 						if verbose {
 							io.Pfgrey2("ip = %d\n", ip)
 						}
-						res := dat[ip].Calc(dom.Sol)
-						σ := res["sig"]
+						σ := res["sig"][0]
 						chk.AnaNum(tst, "sig", tols, σ, val[0], verbose)
 					}
 				}
 				if e, ok := dom.Cid2elem[eid].(*Beam); ok {
-					dat := e.OutIpsData()
-					if len(dat) != len(sig) {
-						tst.Errorf("number of stations in cmp file is different than the number of stations in element. %d != %d", len(dat), len(sig))
+					res := e.OutIpVals(dom.Sol)
+					if len(res["M22"]) != len(sig) {
+						tst.Errorf("number of stations in cmp file is different than the number of stations in element. %d != %d", len(res["M22"]), len(sig))
 						return
 					}
-					for station, val := range sig {
+					io.Pforan("res = %v\n", res)
+					for st, val := range sig {
 						if verbose {
-							io.Pfgrey2("station = %d\n", station)
+							io.Pfgrey2("station = %d\n", st)
 						}
-						res := dat[station].Calc(dom.Sol)
-						if e.Ndim == 3 {
-							M22, M11, Mtt := res["M22"], res["M11"], res["Mtt"]
+						if e.Ndim == 2 {
+							M22 := res["M22"][st]
+							chk.AnaNum(tst, "M22", tols, M22, val[0], verbose)
+						} else {
+							M22, M11, Mtt := res["M22"][st], res["M11"][st], res["T00"][st]
 							chk.AnaNum(tst, "M22", tols, M22, val[0], verbose)
 							chk.AnaNum(tst, "M11", tols, M11, val[1], verbose)
 							chk.AnaNum(tst, "Mtt", tols, Mtt, val[2], verbose)

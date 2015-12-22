@@ -325,28 +325,47 @@ func (o *Beam) Decode(dec Decoder) (err error) {
 	return
 }
 
-// OutIpsData returns data from all integration points for output
-func (o *Beam) OutIpsData() (data []*OutIpData) {
+// OutIpCoords returns the coordinates of integration points
+func (o *Beam) OutIpCoords() (C [][]float64) {
+	C = make([][]float64, o.Nstations)
+	dξ := 1.0 / float64(o.Nstations-1)
+	for i := 0; i < o.Nstations; i++ {
+		ξ := float64(i) * dξ
+		C[i] = make([]float64, o.Ndim)
+		for j := 0; j < o.Ndim; j++ {
+			C[i][j] = (1.0-ξ)*o.X[j][0] + ξ*o.X[j][1]
+		}
+	}
+	return
+}
+
+// OutIpKeys returns the integration points' keys
+func (o *Beam) OutIpKeys() []string {
+	if o.Ndim == 3 {
+		return []string{"M22", "M11", "T00"}
+	}
+	return []string{"M22"}
+}
+
+// OutIpVals returns the integration points' values corresponding to keys
+func (o *Beam) OutIpVals(sol *Solution) (V map[string][]float64) {
+	V = make(map[string][]float64)
+	V["M22"] = make([]float64, o.Nstations)
+	if o.Ndim == 3 {
+		V["M11"] = make([]float64, o.Nstations)
+		V["T00"] = make([]float64, o.Nstations)
+	}
 	unused := 0
 	dξ := 1.0 / float64(o.Nstations-1)
 	for i := 0; i < o.Nstations; i++ {
 		ξ := float64(i) * dξ
-		x := make([]float64, o.Ndim)
-		for j := 0; j < o.Ndim; j++ {
-			x[j] = (1.0-ξ)*o.X[j][0] + ξ*o.X[j][1]
+		if o.Ndim == 3 {
+			M22, M11, T00 := o.CalcMoment3d(sol, ξ, unused)
+			V["M22"][i], V["M11"][i], V["T00"][i] = M22[0], M11[0], T00[0]
+		} else {
+			M22 := o.CalcMoment2d(sol, ξ, unused)
+			V["M22"][i] = M22[0]
 		}
-		calc := func(sol *Solution) (vals map[string]float64) {
-			vals = make(map[string]float64)
-			if o.Ndim == 3 {
-				M22, M11, T00 := o.CalcMoment3d(sol, ξ, unused)
-				vals["M22"], vals["M11"], vals["T00"] = M22[0], M11[0], T00[0]
-			} else {
-				M22 := o.CalcMoment2d(sol, ξ, unused)
-				vals["M22"] = M22[0]
-			}
-			return
-		}
-		data = append(data, &OutIpData{o.Id(), x, calc})
 	}
 	return
 }

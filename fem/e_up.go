@@ -698,38 +698,55 @@ func (o *ElemUP) Decode(dec Decoder) (err error) {
 	return o.P.Decode(dec)
 }
 
-// OutIpsData returns data from all integration points for output
-func (o *ElemUP) OutIpsData() (data []*OutIpData) {
+// OutIpCoords returns the coordinates of integration points
+func (o *ElemUP) OutIpCoords() (C [][]float64) {
+	C = make([][]float64, len(o.U.IpsElem))
+	for idx, ip := range o.U.IpsElem {
+		C[idx] = o.U.Cell.Shp.IpRealCoords(o.U.X, ip)
+	}
+	return
+}
+
+// OutIpKeys returns the integration points' keys
+func (o *ElemUP) OutIpKeys() []string {
+	return append([]string{"nf", "pl", "sl"}, LiqFlowKeys(o.Ndim)...)
+}
+
+// OutIpVals returns the integration points' values corresponding to keys
+func (o *ElemUP) OutIpVals(sol *Solution) (V map[string][]float64) {
 	flow := LiqFlowKeys(o.Ndim)
 	sigs := StressKeys(o.Ndim)
-	for idx, ip := range o.U.IpsElem {
-		r := o.P.States[idx]
-		s := o.U.States[idx]
-		x := o.U.Cell.Shp.IpRealCoords(o.U.X, ip)
-		calc := func(sol *Solution) (vals map[string]float64) {
-			err := o.ipvars(idx, sol)
-			if err != nil {
-				return
-			}
-			ns := (1.0 - o.divus) * o.P.States[idx].A_ns0
-			ρL := r.A_ρL
-			klr := o.P.Mdl.Cnd.Klr(r.A_sl)
-			vals = map[string]float64{
-				"sl": r.A_sl,
-				"pl": o.P.pl,
-				"nf": 1.0 - ns,
-			}
-			for i := 0; i < o.Ndim; i++ {
-				for j := 0; j < o.Ndim; j++ {
-					vals[flow[i]] += klr * o.P.Mdl.Klsat[i][j] * o.hl[j] / ρL
-				}
-			}
-			for i, _ := range sigs {
-				vals[sigs[i]] = s.Sig[i]
-			}
+	nip := len(o.U.IpsElem)
+	V = make(map[string][]float64)
+	V["nf"] = make([]float64, nip)
+	V["pl"] = make([]float64, nip)
+	V["sl"] = make([]float64, nip)
+	for _, key := range flow {
+		V[key] = make([]float64, nip)
+	}
+	for _, key := range sigs {
+		V[key] = make([]float64, nip)
+	}
+	for idx, _ := range o.U.IpsElem {
+		err := o.ipvars(idx, sol)
+		if err != nil {
 			return
 		}
-		data = append(data, &OutIpData{o.Id(), x, calc})
+		ns := (1.0 - o.divus) * o.P.States[idx].A_ns0
+		sl := o.P.States[idx].A_sl
+		ρL := o.P.States[idx].A_ρL
+		klr := o.P.Mdl.Cnd.Klr(sl)
+		V["nf"][idx] = 1.0 - ns
+		V["pl"][idx] = o.P.pl
+		V["sl"][idx] = sl
+		for i, key := range flow {
+			for j := 0; j < o.Ndim; j++ {
+				V[key][idx] += klr * o.P.Mdl.Klsat[i][j] * o.hl[j] / ρL
+			}
+		}
+		for i, key := range sigs {
+			V[key][idx] = o.U.States[idx].Sig[i]
+		}
 	}
 	return
 }

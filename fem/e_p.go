@@ -613,6 +613,7 @@ func (o *ElemP) Decode(dec Decoder) (err error) {
 	return o.BackupIvs(false)
 }
 
+/*
 // OutIpsData returns data from all integration points for output
 func (o *ElemP) OutIpsData() (data []*OutIpData) {
 	flow := LiqFlowKeys(o.Ndim)
@@ -642,6 +643,7 @@ func (o *ElemP) OutIpsData() (data []*OutIpData) {
 	}
 	return
 }
+*/
 
 // auxiliary ////////////////////////////////////////////////////////////////////////////////////////
 

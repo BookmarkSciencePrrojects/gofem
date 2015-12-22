@@ -604,23 +604,40 @@ func (o *ElemU) Decode(dec Decoder) (err error) {
 	return o.BackupIvs(false)
 }
 
-// OutIpsData returns data from all integration points for output
-func (o *ElemU) OutIpsData() (data []*OutIpData) {
-	keys := StressKeys(o.Ndim)
+// OutIpCoords returns the coordinates of integration points
+func (o *ElemU) OutIpCoords() (C [][]float64) {
+	C = make([][]float64, len(o.IpsElem))
 	for idx, ip := range o.IpsElem {
-		s := o.States[idx]
-		x := o.Cell.Shp.IpRealCoords(o.X, ip)
-		calc := func(sol *Solution) (vals map[string]float64) {
-			vals = make(map[string]float64)
-			for i, _ := range keys {
-				vals[keys[i]] = s.Sig[i]
-				for j, alp := range s.Alp {
-					vals[io.Sf("alp%d", j)] = alp
-				}
-			}
-			return
+		C[idx] = o.Cell.Shp.IpRealCoords(o.X, ip)
+	}
+	return
+}
+
+// OutIpKeys returns the integration points' keys
+func (o *ElemU) OutIpKeys() []string {
+	keys := StressKeys(o.Ndim)
+	for i := 0; i < len(o.States[0].Alp); i++ {
+		keys = append(keys, io.Sf("alp%d", i))
+	}
+	return keys
+}
+
+// OutIpVals returns the integration points' values corresponding to keys
+func (o *ElemU) OutIpVals(sol *Solution) (V map[string][]float64) {
+	nip := len(o.IpsElem)
+	V = make(map[string][]float64)
+	for i, key := range StressKeys(o.Ndim) {
+		V[key] = make([]float64, nip)
+		for idx, _ := range o.IpsElem {
+			V[key][idx] = o.States[idx].Sig[i]
 		}
-		data = append(data, &OutIpData{o.Id(), x, calc})
+	}
+	for i := 0; i < len(o.States[0].Alp); i++ {
+		key := io.Sf("alp%d", i)
+		V[key] = make([]float64, nip)
+		for idx, _ := range o.IpsElem {
+			V[key][idx] = o.States[idx].Alp[i]
+		}
 	}
 	return
 }

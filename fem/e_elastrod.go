@@ -13,6 +13,7 @@ import (
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/la"
+	"github.com/cpmech/gosl/utl"
 )
 
 // ElastRod represents a structural rod element (for axial loads only) with 2 nodes only and
@@ -203,17 +204,23 @@ func (o *ElastRod) Decode(dec Decoder) (err error) {
 	return nil
 }
 
-// OutIpsData returns data from all integration points for output
-func (o *ElastRod) OutIpsData() (data []*OutIpData) {
-	x := make([]float64, o.Ndim)
+// OutIpCoords returns the coordinates of integration points
+func (o *ElastRod) OutIpCoords() (C [][]float64) {
+	C = utl.DblsAlloc(1, o.Ndim) // centroid only
 	for i := 0; i < o.Ndim; i++ {
-		x[i] = (o.X[i][0] + o.X[i][1]) / 2.0 // centroid
+		C[0][i] = (o.X[i][0] + o.X[i][1]) / 2.0 // centroid
 	}
-	calc := func(sol *Solution) (vals map[string]float64) {
-		return map[string]float64{"sig": o.CalcSig(sol)}
-	}
-	data = append(data, &OutIpData{o.Id(), x, calc})
 	return
+}
+
+// OutIpKeys returns the integration points' keys
+func (o *ElastRod) OutIpKeys() []string {
+	return []string{"sig"}
+}
+
+// OutIpVals returns the integration points' values corresponding to keys
+func (o *ElastRod) OutIpVals(sol *Solution) (V map[string][]float64) {
+	return map[string][]float64{"sig": []float64{o.CalcSig(sol)}}
 }
 
 // specific methods /////////////////////////////////////////////////////////////////////////////////

@@ -125,10 +125,9 @@ func Test_beam01b(tst *testing.T) {
 
 	// check moment using OutIpsData
 	idx_centre := 5 // considering 11 stations
-	dat := ele.OutIpsData()
-	res := dat[idx_centre].Calc(dom.Sol)
-	io.Pfcyan("M22 @ centre (OutIpsData) = %v\n", res["M22"])
-	chk.Scalar(tst, "M22 @ centre (OutIpsData)", 1e-17, res["M22"], Mcentre)
+	vals := ele.OutIpVals(dom.Sol)
+	io.Pfcyan("M22 @ centre (OutIpsData) = %v\n", vals["M22"][idx_centre])
+	chk.Scalar(tst, "M22 @ centre (OutIpsData)", 1e-17, vals["M22"][idx_centre], Mcentre)
 }
 
 func Test_beam02(tst *testing.T) {

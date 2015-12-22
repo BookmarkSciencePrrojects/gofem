@@ -795,6 +795,7 @@ func (o *Rjoint) Decode(dec Decoder) (err error) {
 	return o.BackupIvs(false)
 }
 
+/*
 // OutIpsData returns data from all integration points for output
 func (o *Rjoint) OutIpsData() (data []*OutIpData) {
 	for idx, ip := range o.Rod.IpsElem {
@@ -810,6 +811,7 @@ func (o *Rjoint) OutIpsData() (data []*OutIpData) {
 	}
 	return
 }
+*/
 
 // debugging ////////////////////////////////////////////////////////////////////////////////////////
 

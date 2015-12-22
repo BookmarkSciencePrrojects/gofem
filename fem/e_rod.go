@@ -358,6 +358,7 @@ func (o *Rod) Decode(dec Decoder) (err error) {
 	return o.BackupIvs(false)
 }
 
+/*
 // OutIpsData returns data from all integration points for output
 func (o *Rod) OutIpsData() (data []*OutIpData) {
 	for idx, ip := range o.IpsElem {
@@ -372,6 +373,7 @@ func (o *Rod) OutIpsData() (data []*OutIpData) {
 	}
 	return
 }
+*/
 
 // auxiliary ////////////////////////////////////////////////////////////////////////////////////////
 

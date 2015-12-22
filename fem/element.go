@@ -12,14 +12,7 @@ import (
 	"github.com/cpmech/gosl/la"
 )
 
-// OutIpData is an auxiliary structure to transfer data from integration points (IP) to output routines.
-type OutIpData struct {
-	Eid  int                                    // id of element that owns this ip
-	X    []float64                              // coordinates
-	Calc func(sol *Solution) map[string]float64 // [nkeys] function to calculate secondary values
-}
-
-// Elem defines what elements must calculate
+// Elem defines what all elements must compute
 type Elem interface {
 
 	// information and initialisation
@@ -39,9 +32,6 @@ type Elem interface {
 	// reading and writing of element data
 	Encode(enc Encoder) (err error) // encodes internal variables
 	Decode(dec Decoder) (err error) // decodes internal variables
-
-	// output
-	OutIpsData() (data []*OutIpData) // returns data from all integration points for output
 }
 
 // ElemIntvars defines elements with {z,q} internal variables
@@ -63,6 +53,14 @@ type ElemConnector interface {
 // ElemExtrap defines elements with functions to extrapolate internal values
 type ElemExtrap interface {
 	AddToExt(sol *Solution) (err error) // adds extrapolated values to global array
+}
+
+// ElemOutIps defines elements that can output integration points' values
+type ElemOutIps interface {
+	Id() int                                      // returns the cell Id
+	OutIpCoords() [][]float64                     // coordinates of integration points
+	OutIpKeys() []string                          // integration points' keys; e.g. "pl", "sl"
+	OutIpVals(sol *Solution) map[string][]float64 // integration points' values corresponding to keys
 }
 
 // Info holds all information required to set a simulation stage

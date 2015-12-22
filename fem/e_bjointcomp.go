@@ -513,6 +513,7 @@ func (o *BjointComp) Decode(dec Decoder) (err error) {
 	return o.BackupIvs(false)
 }
 
+/*
 // OutIpsData returns data from all integration points for output
 func (o *BjointComp) OutIpsData() (data []*OutIpData) {
 	for idx, ip := range o.LinIps {
@@ -528,3 +529,4 @@ func (o *BjointComp) OutIpsData() (data []*OutIpData) {
 	}
 	return
 }
+*/
