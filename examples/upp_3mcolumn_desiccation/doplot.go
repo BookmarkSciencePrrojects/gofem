@@ -24,7 +24,7 @@ func main() {
 
 	// define entities
 	out.Define("A(top) B C(mid) D E(bot)", out.N{-5, -4, -3, -2, -1})
-	out.Define("a(top) b c d(bot)", out.P{{3, 1}, {2, 8}, {1, 8}, {0, 8}})
+	out.Define("a(top) b c d(bot)", out.P{{3, 8}, {2, 4}, {1, 4}, {0, 0}})
 	out.Define("left-side", out.Along{{0, 0}, {0, 3}})
 
 	// load results
@@ -33,8 +33,8 @@ func main() {
 	// styles
 	me := 10
 	S := []plt.Fmt{
-		plt.Fmt{C: "b", M: "*", Me: me},
 		plt.Fmt{C: "g", M: "o", Me: me},
+		plt.Fmt{C: "b", M: "*", Me: me},
 		plt.Fmt{C: "m", M: "x", Me: me},
 		plt.Fmt{C: "orange", M: "+", Me: me},
 		plt.Fmt{C: "r", M: "^", Me: me},
@@ -43,7 +43,11 @@ func main() {
 	// time outputs
 	I, _ := utl.GetITout(out.Times, []float64{0, 500, 1000, 1500, 2000}, 0.1)
 
-	if false {
+	// plot LRM only
+	onlyLRM := false
+
+	// all plots
+	if !onlyLRM {
 
 		// pl versus y
 		out.Splot("liquid pressure along column")
@@ -108,17 +112,19 @@ func main() {
 	for i, l := range []string{"a(top)", "b", "c", "d(bot)"} {
 		out.Plot("pc", "sl", l, S[i], -1)
 	}
-	//out.Plot("pc", "sl", "d(bot)", S[0], -1)
 
 	// save
 	sim := out.Dom.Sim
-	//plt.SetForPng(1.8, 800, 150)
-	plt.SetForPng(0.75, 400, 200)
+	if onlyLRM {
+		plt.SetForPng(0.75, 400, 200)
+	} else {
+		plt.SetForPng(1.8, 600, 200)
+	}
 	out.Draw("/tmp/gofem", "fig_"+fnkey+".png", false, func(i, j, n int) {
-		//if i == 5 && j == 2 {
-		mat := sim.MatModels.Get("lreten1")
-		Lrm := mat.Lrm
-		lrm.Plot(Lrm, 0, Lrm.SlMax(), 30, 101, "'k-^', markerfacecolor='white', ms=5, markevery=10", "", "model")
-		//}
+		if i == 5 && j == 2 || onlyLRM {
+			mat := sim.MatModels.Get("lreten1")
+			Lrm := mat.Lrm
+			lrm.Plot(Lrm, 0, Lrm.SlMax(), 30, 101, "'k-^', markerfacecolor='white', ms=5, markevery=10", "", "model")
+		}
 	})
 }

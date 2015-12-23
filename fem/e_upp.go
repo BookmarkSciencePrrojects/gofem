@@ -730,7 +730,7 @@ func (o *ElemUPP) OutIpCoords() (C [][]float64) {
 
 // OutIpKeys returns the integration points' keys
 func (o *ElemUPP) OutIpKeys() []string {
-	keys := append(o.U.OutIpKeys(), "nf", "pl", "pg", "sl")
+	keys := append(o.U.OutIpKeys(), "nf", "pl", "pg", "pc", "sl")
 	keys = append(keys, LiqFlowKeys(o.Ndim)...)
 	return append(keys, GasFlowKeys(o.Ndim)...)
 }
@@ -756,6 +756,7 @@ func (o *ElemUPP) OutIpVals(M *IpsMap, sol *Solution) {
 		M.Set("nf", idx, nip, 1.0-ns)
 		M.Set("pl", idx, nip, o.P.pl)
 		M.Set("pg", idx, nip, o.P.pg)
+		M.Set("pc", idx, nip, o.P.pg-o.P.pl)
 		M.Set("sl", idx, nip, sl)
 		for i := 0; i < o.Ndim; i++ {
 			var nwl_i, nwg_i float64
