@@ -64,6 +64,5 @@ func Test_plot01(tst *testing.T) {
 	Plot("y", "pl", "left", plt.Fmt{C: "b", M: "o", L: io.Sf("t=%g", Times[0])}, 0)
 	Plot("y", "pl", "left", plt.Fmt{C: "m", M: "*", Lw: 2, L: io.Sf("t=%g", Times[last])}, -1)
 
-	//Draw("", "", true, nil)
-	Draw("", "", false, nil)
+	Draw("", "", chk.Verbose, nil)
 }

@@ -57,12 +57,13 @@ func ComputeExtrapolatedValues(extrapKeys []string) {
 			}
 
 			// get ips data
-			allvals := e.OutIpVals(Dom.Sol)
+			allvals := fem.NewIpsMap()
+			e.OutIpVals(allvals, Dom.Sol)
 
 			// perform extrapolation
 			cell := cells[ele.Id()]
 			for _, key := range extrapKeys {
-				if vals, ok := allvals[key]; ok {
+				if vals, ok := (*allvals)[key]; ok {
 					for i := 0; i < sha.Nverts; i++ {
 						v := cell.Verts[i]
 						for j := 0; j < len(ips); j++ {
