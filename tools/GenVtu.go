@@ -165,8 +165,9 @@ func main() {
 
 		// get integration points values @ time t
 		for _, ele := range out.ElemOutIps {
-			allvals := ele.OutIpVals(out.Dom.Sol)
-			for key, vals := range allvals {
+			allvals := fem.NewIpsMap()
+			ele.OutIpVals(allvals, out.Dom.Sol)
+			for key, vals := range *allvals {
 				for i, val := range vals {
 					ipvals[i][key] = val
 				}
