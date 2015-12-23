@@ -7,6 +7,8 @@
 package main
 
 import (
+	"strings"
+
 	"github.com/cpmech/gofem/mdl/lrm"
 	"github.com/cpmech/gofem/out"
 	"github.com/cpmech/gosl/io"
@@ -17,14 +19,27 @@ import (
 func main() {
 
 	// filename
-	filename, fnkey := io.ArgToFilename(0, "upp_3mcol_desic.sim", ".sim", true)
+	filename, fnkey := io.ArgToFilename(0, "upp_3mcol_desic16e.sim", ".sim", true)
+	has16e := strings.HasSuffix(fnkey, "desic16e")
+	upForm := strings.HasPrefix(fnkey, "up_3mcol")
 
 	// start analysis process
 	out.Start(filename, 0, 0)
 
+	// labels
+	labelsN := []string{"A(top)", "B", "C(mid)", "D", "E(bot)"}
+	labelsE := []string{"a(top)", "b", "c", "d(bot)"}
+	if has16e {
+		labelsE = []string{"a(top)", "b", "c(mid)", "d", "e(bot)"}
+	}
+
 	// define entities
 	out.Define("A(top) B C(mid) D E(bot)", out.N{-5, -4, -3, -2, -1})
-	out.Define("a(top) b c d(bot)", out.P{{3, 8}, {2, 4}, {1, 4}, {0, 0}})
+	if has16e {
+		out.Define("a(top) b c(mid) d e(bot)", out.P{{15, 8}, {12, 4}, {8, 4}, {4, 4}, {0, 0}})
+	} else {
+		out.Define("a(top) b c d(bot)", out.P{{3, 8}, {2, 4}, {1, 4}, {0, 0}})
+	}
 	out.Define("left-side", out.Along{{0, 0}, {0, 3}})
 
 	// load results
@@ -41,7 +56,8 @@ func main() {
 	}
 
 	// time outputs
-	I, _ := utl.GetITout(out.Times, []float64{0, 500, 1000, 1500, 2000}, 0.1)
+	//io.Pforan("out.Times = %v\n", out.Times)
+	I, _ := utl.GetITout(out.Times, []float64{0, 340, 700, 1000, 1400}, 0.1)
 
 	// plot LRM only
 	onlyLRM := false
@@ -57,51 +73,63 @@ func main() {
 		}
 
 		// pg versus y
-		out.Splot("gas pressure along column")
-		for _, i := range I {
-			t := out.Times[i]
-			out.Plot("pg", "y", "left-side", plt.Fmt{L: io.Sf("t=%g", t)}, i)
+		if upForm {
+			out.Splot("")
+		} else {
+			out.Splot("gas pressure along column")
+			for _, i := range I {
+				t := out.Times[i]
+				out.Plot("pg", "y", "left-side", plt.Fmt{L: io.Sf("t=%g", t)}, i)
+			}
 		}
 
 		// pl versus t
 		out.Splot("liquid pressure in time")
-		for i, l := range []string{"A(top)", "B", "C(mid)", "D", "E(bot)"} {
+		for i, l := range labelsN {
 			out.Plot("t", "pl", l, S[i], -1)
 		}
 
 		// pg versus t
-		out.Splot("gas pressure in time")
-		for i, l := range []string{"A(top)", "B", "C(mid)", "D", "E(bot)"} {
-			out.Plot("t", "pg", l, S[i], -1)
+		if upForm {
+			out.Splot("")
+		} else {
+			out.Splot("gas pressure in time")
+			for i, l := range labelsN {
+				out.Plot("t", "pg", l, S[i], -1)
+			}
 		}
 
 		// uy versus t
 		out.Splot("displacements in time")
-		for i, l := range []string{"A(top)", "B", "C(mid)", "D", "E(bot)"} {
+		for i, l := range labelsN {
 			out.Plot("t", "uy", l, S[i], -1)
 		}
 
 		// sl versus t
 		out.Splot("liquid saturation in time")
-		for i, l := range []string{"a(top)", "b", "c", "d(bot)"} {
+		for i, l := range labelsE {
 			out.Plot("t", "sl", l, S[i], -1)
 		}
 
 		// nwly versus time
 		out.Splot("liquid filter velocity versus time")
-		for i, l := range []string{"a(top)", "b", "c", "d(bot)"} {
+		for i, l := range labelsE {
 			out.Plot("t", "nwly", l, S[i], -1)
 		}
 
 		// nwgy versus time
-		out.Splot("gas filter velocity versus time")
-		for i, l := range []string{"a(top)", "b", "c", "d(bot)"} {
-			out.Plot("t", "nwgy", l, S[i], -1)
+		if upForm {
+			out.Splot("")
+		} else {
+			out.Splot("gas filter velocity versus time")
+			for i, l := range labelsE {
+				out.Plot("t", "nwgy", l, S[i], -1)
+			}
 		}
 
 		// sy versus t
 		out.Splot("vertical stress in time")
-		for i, l := range []string{"a(top)", "b", "c", "d(bot)"} {
+		for i, l := range labelsE {
 			out.Plot("t", "sy", l, S[i], -1)
 		}
 
@@ -109,7 +137,7 @@ func main() {
 
 	// pc versus sl
 	out.Splot("liquid retention behaviour")
-	for i, l := range []string{"a(top)", "b", "c", "d(bot)"} {
+	for i, l := range labelsE {
 		out.Plot("pc", "sl", l, S[i], -1)
 	}
 
