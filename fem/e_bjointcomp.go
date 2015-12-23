@@ -513,20 +513,25 @@ func (o *BjointComp) Decode(dec Decoder) (err error) {
 	return o.BackupIvs(false)
 }
 
-/*
-// OutIpsData returns data from all integration points for output
-func (o *BjointComp) OutIpsData() (data []*OutIpData) {
+// OutIpCoords returns the coordinates of integration points
+func (o *BjointComp) OutIpCoords() (C [][]float64) {
+	C = make([][]float64, len(o.LinIps))
 	for idx, ip := range o.LinIps {
-		s := o.States[idx]
-		x := o.LinShp.IpRealCoords(o.Lin.X, ip)
-		calc := func(sol *Solution) (vals map[string]float64) {
-			vals = make(map[string]float64)
-			vals["tau"] = s.Sig
-			vals["ompb"] = s.Alp[0]
-			return
-		}
-		data = append(data, &OutIpData{o.Id(), x, calc})
+		C[idx] = o.LinShp.IpRealCoords(o.Lin.X, ip)
 	}
 	return
 }
-*/
+
+// OutIpKeys returns the integration points' keys
+func (o *BjointComp) OutIpKeys() []string {
+	return []string{"tau", "ompb"}
+}
+
+// OutIpVals returns the integration points' values corresponding to keys
+func (o *BjointComp) OutIpVals(M *IpsMap, sol *Solution) {
+	nip := len(o.LinIps)
+	for idx, _ := range o.LinIps {
+		M.Set("tau", idx, nip, o.States[idx].Sig)
+		M.Set("ompb", idx, nip, o.States[idx].Alp[0])
+	}
+}

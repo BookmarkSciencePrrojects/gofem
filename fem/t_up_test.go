@@ -318,9 +318,10 @@ func Test_up01b(tst *testing.T) {
 			}
 
 			// results @ ip
-			V := ele.OutIpVals(dom.Sol)
+			M := NewIpsMap()
+			ele.OutIpVals(M, dom.Sol)
 			for i := 0; i < nip; i++ {
-				Pc[i][tidx], Sl[i][tidx] = -V["pl"][i], V["sl"][i]
+				Pc[i][tidx], Sl[i][tidx] = -M.Get("pl", i), M.Get("sl", i)
 			}
 		}
 

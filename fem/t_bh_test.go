@@ -121,9 +121,9 @@ func Test_bh16a(tst *testing.T) {
 	// check ip data
 	for _, ele := range dom.Elems {
 		e := ele.(*ElemU)
-		vals := e.OutIpVals(dom.Sol)
-		chk.IntAssert(len(vals), 4)
-		for key, val := range vals {
+		res := NewIpsMap()
+		e.OutIpVals(res, dom.Sol)
+		for key, val := range *res {
 			io.Pfyel("key=%v => val=%v\n", key, val)
 		}
 	}

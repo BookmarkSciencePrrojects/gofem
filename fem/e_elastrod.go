@@ -219,8 +219,8 @@ func (o *ElastRod) OutIpKeys() []string {
 }
 
 // OutIpVals returns the integration points' values corresponding to keys
-func (o *ElastRod) OutIpVals(sol *Solution) (V map[string][]float64) {
-	return map[string][]float64{"sig": []float64{o.CalcSig(sol)}}
+func (o *ElastRod) OutIpVals(M *IpsMap, sol *Solution) {
+	M.Set("sig", 0, 1, o.CalcSig(sol))
 }
 
 // specific methods /////////////////////////////////////////////////////////////////////////////////

@@ -700,33 +700,20 @@ func (o *ElemUP) Decode(dec Decoder) (err error) {
 
 // OutIpCoords returns the coordinates of integration points
 func (o *ElemUP) OutIpCoords() (C [][]float64) {
-	C = make([][]float64, len(o.U.IpsElem))
-	for idx, ip := range o.U.IpsElem {
-		C[idx] = o.U.Cell.Shp.IpRealCoords(o.U.X, ip)
-	}
-	return
+	return o.U.OutIpCoords()
 }
 
 // OutIpKeys returns the integration points' keys
 func (o *ElemUP) OutIpKeys() []string {
-	return append([]string{"nf", "pl", "sl"}, LiqFlowKeys(o.Ndim)...)
+	keys := append(o.U.OutIpKeys(), "nf", "pl", "sl")
+	return append(keys, LiqFlowKeys(o.Ndim)...)
 }
 
 // OutIpVals returns the integration points' values corresponding to keys
-func (o *ElemUP) OutIpVals(sol *Solution) (V map[string][]float64) {
+func (o *ElemUP) OutIpVals(M *IpsMap, sol *Solution) {
+	o.U.OutIpVals(M, sol)
 	flow := LiqFlowKeys(o.Ndim)
-	sigs := StressKeys(o.Ndim)
 	nip := len(o.U.IpsElem)
-	V = make(map[string][]float64)
-	V["nf"] = make([]float64, nip)
-	V["pl"] = make([]float64, nip)
-	V["sl"] = make([]float64, nip)
-	for _, key := range flow {
-		V[key] = make([]float64, nip)
-	}
-	for _, key := range sigs {
-		V[key] = make([]float64, nip)
-	}
 	for idx, _ := range o.U.IpsElem {
 		err := o.ipvars(idx, sol)
 		if err != nil {
@@ -736,16 +723,15 @@ func (o *ElemUP) OutIpVals(sol *Solution) (V map[string][]float64) {
 		sl := o.P.States[idx].A_sl
 		ρL := o.P.States[idx].A_ρL
 		klr := o.P.Mdl.Cnd.Klr(sl)
-		V["nf"][idx] = 1.0 - ns
-		V["pl"][idx] = o.P.pl
-		V["sl"][idx] = sl
-		for i, key := range flow {
+		M.Set("nf", idx, nip, 1.0-ns)
+		M.Set("pl", idx, nip, o.P.pl)
+		M.Set("sl", idx, nip, sl)
+		for i := 0; i < o.Ndim; i++ {
+			var nwl_i float64
 			for j := 0; j < o.Ndim; j++ {
-				V[key][idx] += klr * o.P.Mdl.Klsat[i][j] * o.hl[j] / ρL
+				nwl_i += klr * o.P.Mdl.Klsat[i][j] * (o.P.g[j] - o.P.gpl[j]/ρL)
 			}
-		}
-		for i, key := range sigs {
-			V[key][idx] = o.U.States[idx].Sig[i]
+			M.Set(flow[i], idx, nip, nwl_i)
 		}
 	}
 	return

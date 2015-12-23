@@ -795,23 +795,24 @@ func (o *Rjoint) Decode(dec Decoder) (err error) {
 	return o.BackupIvs(false)
 }
 
-/*
-// OutIpsData returns data from all integration points for output
-func (o *Rjoint) OutIpsData() (data []*OutIpData) {
-	for idx, ip := range o.Rod.IpsElem {
-		s := o.States[idx]
-		x := o.Rod.Cell.Shp.IpRealCoords(o.Rod.X, ip)
-		calc := func(sol *Solution) (vals map[string]float64) {
-			vals = make(map[string]float64)
-			vals["tau"] = s.Sig
-			vals["ompb"] = s.Alp[0]
-			return
-		}
-		data = append(data, &OutIpData{o.Id(), x, calc})
-	}
-	return
+// OutIpCoords returns the coordinates of integration points
+func (o *Rjoint) OutIpCoords() (C [][]float64) {
+	return o.Rod.OutIpCoords()
 }
-*/
+
+// OutIpKeys returns the integration points' keys
+func (o *Rjoint) OutIpKeys() []string {
+	return []string{"tau", "ompb"}
+}
+
+// OutIpVals returns the integration points' values corresponding to keys
+func (o *Rjoint) OutIpVals(M *IpsMap, sol *Solution) {
+	nip := len(o.Rod.IpsElem)
+	for idx, _ := range o.Rod.IpsElem {
+		M.Set("tau", idx, nip, o.States[idx].Sig)
+		M.Set("ompb", idx, nip, o.States[idx].Alp[0])
+	}
+}
 
 // debugging ////////////////////////////////////////////////////////////////////////////////////////
 

@@ -348,26 +348,21 @@ func (o *Beam) OutIpKeys() []string {
 }
 
 // OutIpVals returns the integration points' values corresponding to keys
-func (o *Beam) OutIpVals(sol *Solution) (V map[string][]float64) {
-	V = make(map[string][]float64)
-	V["M22"] = make([]float64, o.Nstations)
-	if o.Ndim == 3 {
-		V["M11"] = make([]float64, o.Nstations)
-		V["T00"] = make([]float64, o.Nstations)
-	}
+func (o *Beam) OutIpVals(M *IpsMap, sol *Solution) {
 	unused := 0
 	dξ := 1.0 / float64(o.Nstations-1)
 	for i := 0; i < o.Nstations; i++ {
 		ξ := float64(i) * dξ
 		if o.Ndim == 3 {
 			M22, M11, T00 := o.CalcMoment3d(sol, ξ, unused)
-			V["M22"][i], V["M11"][i], V["T00"][i] = M22[0], M11[0], T00[0]
+			M.Set("M22", i, o.Nstations, M22[0])
+			M.Set("M11", i, o.Nstations, M11[0])
+			M.Set("T00", i, o.Nstations, T00[0])
 		} else {
 			M22 := o.CalcMoment2d(sol, ξ, unused)
-			V["M22"][i] = M22[0]
+			M.Set("M22", i, o.Nstations, M22[0])
 		}
 	}
-	return
 }
 
 // auxiliary ////////////////////////////////////////////////////////////////////////////////////////

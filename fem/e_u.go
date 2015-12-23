@@ -623,23 +623,19 @@ func (o *ElemU) OutIpKeys() []string {
 }
 
 // OutIpVals returns the integration points' values corresponding to keys
-func (o *ElemU) OutIpVals(sol *Solution) (V map[string][]float64) {
+func (o *ElemU) OutIpVals(M *IpsMap, sol *Solution) {
 	nip := len(o.IpsElem)
-	V = make(map[string][]float64)
 	for i, key := range StressKeys(o.Ndim) {
-		V[key] = make([]float64, nip)
 		for idx, _ := range o.IpsElem {
-			V[key][idx] = o.States[idx].Sig[i]
+			M.Set(key, idx, nip, o.States[idx].Sig[i])
 		}
 	}
 	for i := 0; i < len(o.States[0].Alp); i++ {
 		key := io.Sf("alp%d", i)
-		V[key] = make([]float64, nip)
 		for idx, _ := range o.IpsElem {
-			V[key][idx] = o.States[idx].Alp[i]
+			M.Set(key, idx, nip, o.States[idx].Alp[i])
 		}
 	}
-	return
 }
 
 // extra ////////////////////////////////////////////////////////////////////////////////////////////

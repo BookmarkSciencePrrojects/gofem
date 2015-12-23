@@ -358,22 +358,27 @@ func (o *Rod) Decode(dec Decoder) (err error) {
 	return o.BackupIvs(false)
 }
 
-/*
-// OutIpsData returns data from all integration points for output
-func (o *Rod) OutIpsData() (data []*OutIpData) {
+// OutIpCoords returns the coordinates of integration points
+func (o *Rod) OutIpCoords() (C [][]float64) {
+	C = make([][]float64, len(o.IpsElem))
 	for idx, ip := range o.IpsElem {
-		s := o.States[idx]
-		x := o.Cell.Shp.IpRealCoords(o.X, ip)
-		calc := func(sol *Solution) (vals map[string]float64) {
-			vals = make(map[string]float64)
-			vals["sig"] = s.Sig
-			return
-		}
-		data = append(data, &OutIpData{o.Id(), x, calc})
+		C[idx] = o.Cell.Shp.IpRealCoords(o.X, ip)
 	}
 	return
 }
-*/
+
+// OutIpKeys returns the integration points' keys
+func (o *Rod) OutIpKeys() []string {
+	return []string{"sig"}
+}
+
+// OutIpVals returns the integration points' values corresponding to keys
+func (o *Rod) OutIpVals(M *IpsMap, sol *Solution) {
+	nip := len(o.IpsElem)
+	for idx, _ := range o.IpsElem {
+		M.Set("sig", idx, nip, o.States[idx].Sig)
+	}
+}
 
 // auxiliary ////////////////////////////////////////////////////////////////////////////////////////
 

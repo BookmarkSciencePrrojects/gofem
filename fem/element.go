@@ -12,6 +12,40 @@ import (
 	"github.com/cpmech/gosl/la"
 )
 
+// IpsMap defines a map to hold integration points' results
+type IpsMap map[string][]float64
+
+// NewIpsMap returns a new IpsMap
+func NewIpsMap() *IpsMap {
+	var M IpsMap
+	M = make(map[string][]float64)
+	return &M
+}
+
+// Set sets item in map by key and ip-index. The slice is resized with nip in case it's empty
+//  Input:
+//   idx -- index of integration point
+//   nip -- number of integration points (to resize if necessary)
+//   val -- value of 'key' @ integration point 'idx'
+func (o *IpsMap) Set(key string, idx, nip int, val float64) {
+	if slice, ok := (*o)[key]; ok {
+		slice[idx] = val
+		return
+	}
+	slice := make([]float64, nip)
+	slice[idx] = val
+	(*o)[key] = slice
+}
+
+// Get returns item corresponding to 'key' and integration point 'idx'
+//  Note: this function returns 0 if 'key' is not found. It also does not check for out-of-bound errors
+func (o *IpsMap) Get(key string, idx int) float64 {
+	if slice, ok := (*o)[key]; ok {
+		return slice[idx]
+	}
+	return 0
+}
+
 // Elem defines what all elements must compute
 type Elem interface {
 
@@ -57,10 +91,10 @@ type ElemExtrap interface {
 
 // ElemOutIps defines elements that can output integration points' values
 type ElemOutIps interface {
-	Id() int                                      // returns the cell Id
-	OutIpCoords() [][]float64                     // coordinates of integration points
-	OutIpKeys() []string                          // integration points' keys; e.g. "pl", "sl"
-	OutIpVals(sol *Solution) map[string][]float64 // integration points' values corresponding to keys
+	Id() int                            // returns the cell Id
+	OutIpCoords() [][]float64           // coordinates of integration points
+	OutIpKeys() []string                // integration points' keys; e.g. "pl", "sl"
+	OutIpVals(M *IpsMap, sol *Solution) // integration points' values corresponding to keys
 }
 
 // Info holds all information required to set a simulation stage

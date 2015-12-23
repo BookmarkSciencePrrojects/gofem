@@ -705,44 +705,51 @@ func (o *ElemPP) Decode(dec Decoder) (err error) {
 	return o.BackupIvs(false)
 }
 
-/*
-// OutIpsData returns data from all integration points for output
-func (o *ElemPP) OutIpsData() (data []*OutIpData) {
-	flowL := LiqFlowKeys(o.Ndim)
-	flowG := GasFlowKeys(o.Ndim)
+// OutIpCoords returns the coordinates of integration points
+func (o *ElemPP) OutIpCoords() (C [][]float64) {
+	C = make([][]float64, len(o.IpsElem))
 	for idx, ip := range o.IpsElem {
-		s := o.States[idx]
-		x := o.Cell.Shp.IpRealCoords(o.X, ip)
-		calc := func(sol *Solution) (vals map[string]float64) {
-			err := o.ipvars(idx, sol)
-			if err != nil {
-				return
-			}
-			ρL := s.A_ρL
-			ρG := s.A_ρG
-			klr := o.Mdl.Cnd.Klr(s.A_sl)
-			kgr := o.Mdl.Cnd.Kgr(1.0 - s.A_sl)
-			vals = map[string]float64{
-				"sl": s.A_sl,
-				"sg": 1.0 - s.A_sl,
-				"pl": o.pl,
-				"pg": o.pg,
-				"pc": o.pg - o.pl,
-				"nf": 1.0 - s.A_ns0,
-			}
-			for i := 0; i < o.Ndim; i++ {
-				for j := 0; j < o.Ndim; j++ {
-					vals[flowL[i]] += klr * o.Mdl.Klsat[i][j] * (o.g[j] - o.gpl[j]/ρL)
-					vals[flowG[i]] += kgr * o.Mdl.Kgsat[i][j] * (o.g[j] - o.gpg[j]/ρG)
-				}
-			}
-			return
-		}
-		data = append(data, &OutIpData{o.Id(), x, calc})
+		C[idx] = o.Cell.Shp.IpRealCoords(o.X, ip)
 	}
 	return
 }
-*/
+
+// OutIpKeys returns the integration points' keys
+func (o *ElemPP) OutIpKeys() []string {
+	keys := append([]string{"pl", "pg", "sl"}, LiqFlowKeys(o.Ndim)...)
+	return append(keys, GasFlowKeys(o.Ndim)...)
+}
+
+// OutIpVals returns the integration points' values corresponding to keys
+func (o *ElemPP) OutIpVals(M *IpsMap, sol *Solution) {
+	flowL := LiqFlowKeys(o.Ndim)
+	flowG := GasFlowKeys(o.Ndim)
+	nip := len(o.IpsElem)
+	for idx, _ := range o.IpsElem {
+		err := o.ipvars(idx, sol)
+		if err != nil {
+			return
+		}
+		sl := o.States[idx].A_sl
+		sg := 1.0 - sl
+		ρL := o.States[idx].A_ρL
+		ρG := o.States[idx].A_ρG
+		klr := o.Mdl.Cnd.Klr(sl)
+		kgr := o.Mdl.Cnd.Klr(sg)
+		M.Set("pl", idx, nip, o.pl)
+		M.Set("pg", idx, nip, o.pg)
+		M.Set("sl", idx, nip, sl)
+		for i := 0; i < o.Ndim; i++ {
+			var nwl_i, nwg_i float64
+			for j := 0; j < o.Ndim; j++ {
+				nwl_i += klr * o.Mdl.Klsat[i][j] * (o.g[j] - o.gpl[j]/ρL)
+				nwg_i += kgr * o.Mdl.Kgsat[i][j] * (o.g[j] - o.gpg[j]/ρG)
+			}
+			M.Set(flowL[i], idx, nip, nwl_i)
+			M.Set(flowG[i], idx, nip, nwg_i)
+		}
+	}
+}
 
 // auxiliary ////////////////////////////////////////////////////////////////////////////////////////
 

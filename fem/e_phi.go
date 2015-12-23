@@ -221,43 +221,39 @@ func (o *ElemPhi) Decode(dec Decoder) (err error) {
 	return
 }
 
-/*
-// OutIpsData returns data from all integration points for output
-func (o *ElemPhi) OutIpsData() (data []*OutIpData) {
+// OutIpCoords returns the coordinates of integration points
+func (o *ElemPhi) OutIpCoords() (C [][]float64) {
+	C = make([][]float64, len(o.IpsElem))
+	for idx, ip := range o.IpsElem {
+		C[idx] = o.Cell.Shp.IpRealCoords(o.X, ip)
+	}
+	return
+}
 
-	// for each integration point
-	Gphi := make([]float64, o.Ndim)
-	for _, ip := range o.IpsElem {
+// OutIpKeys returns the integration points' keys
+func (o *ElemPhi) OutIpKeys() []string {
+	if o.Ndim == 3 {
+		return []string{"Gphix", "Gphiy", "Gphiz"}
+	}
+	return []string{"Gphix", "Gphiy"}
+}
 
-		// interpolation functions and gradients
+// OutIpVals returns the integration points' values corresponding to keys
+func (o *ElemPhi) OutIpVals(M *IpsMap, sol *Solution) {
+	keys := o.OutIpKeys()
+	nip := len(o.IpsElem)
+	for idx, ip := range o.IpsElem {
 		err := o.Cell.Shp.CalcAtIp(o.X, ip, true)
 		if err != nil {
 			return
 		}
 		G := o.Cell.Shp.G
-
-		// calculate function
-		calc := func(sol *Solution) (vals map[string]float64) {
-			for i := 0; i < o.Ndim; i++ {
-				Gphi[i] = 0
-				for m := 0; m < o.Nu; m++ {
-					Gphi[i] += G[m][i] * sol.Y[o.Umap[m]]
-				}
+		for i := 0; i < o.Ndim; i++ {
+			var Gphi_i float64
+			for m := 0; m < o.Nu; m++ {
+				Gphi_i += G[m][i] * sol.Y[o.Umap[m]]
 			}
-			vals = map[string]float64{
-				"Gphix": Gphi[0],
-				"Gphiy": Gphi[1],
-			}
-			if o.Ndim == 3 {
-				vals["Gphiz"] = Gphi[2]
-			}
-			return
+			M.Set(keys[i], idx, nip, Gphi_i)
 		}
-
-		// results
-		x := o.Cell.Shp.IpRealCoords(o.X, ip)
-		data = append(data, &OutIpData{o.Id(), x, calc})
 	}
-	return
 }
-*/
