@@ -2,8 +2,8 @@
   "data" : {
     "desc"    : "porous: 2D: desiccation of a column (lowering pressure)",
     "matfile" : "nmepaper.mat",
+    "liq"     : "water",
     "debug"   : false,
-    "showR"   : false,
     "logbcs"  : false
   },
   "functions" : [
@@ -31,7 +31,7 @@
   },
   "stages" : [
     {
-      "iniporous" : { "nu":[0.3], "layers":[[-1,-2]], "liq":"water" },
+      "iniporous" : { "nu":[0.3], "layers":[[-1,-2]] },
       "facebcs" : [
         { "tag":-10, "keys":["uy","pl"], "funcs":["zero","pbot"] },
         { "tag":-11, "keys":["ux"],      "funcs":["zero"] },

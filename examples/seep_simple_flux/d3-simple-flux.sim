@@ -1,9 +1,9 @@
 {
   "data" : {
     "matfile" : "materials.mat",
-    "debug"  : false,
-    "showR"  : false,
-    "wlevel" : 4
+    "liq"     : "water",
+    "wlevel"  : 4,
+    "debug"   : false
   },
   "functions" : [
     { "name":"grav",  "type":"cte", "prms":[{"n":"c", "v":10}] },
@@ -29,7 +29,7 @@
   "stages" : [
     {
       "desc" : "horizontal flow",
-      "iniporous" : { "layers":[[-1]], "nu":[0.2], "liq":"water" },
+      "iniporous" : { "layers":[[-1]], "nu":[0.2] },
       "facebcs" : [
         { "tag":-10, "keys":["hst"], "funcs":["left"] },
         { "tag":-11, "keys":["hst"], "funcs":["right"] }

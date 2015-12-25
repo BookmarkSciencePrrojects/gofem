@@ -1,8 +1,9 @@
 {
   "data" : {
-    "desc" : "coupled deformation of column due to liquid pressure decrease",
+    "desc"    : "coupled deformation of column due to liquid pressure decrease",
     "matfile" : "porous.mat",
-    "nolbb" : false
+    "liq"     : "water",
+    "nolbb"   : false
   },
   "functions" : [
     { "name":"plbot", "type":"rmp", "prms":[
@@ -28,7 +29,7 @@
   "stages" : [
     {
       "desc" : "decrease liquid pressure @ bottom",
-      "iniporous" : { "nu":[0.2], "layers":[[-1,-2]], "liq":"water" },
+      "iniporous" : { "nu":[0.2], "layers":[[-1,-2]] },
       "facebcs" : [
         { "tag":-10, "keys":["uy","pl"], "funcs":["zero","plbot"] },
         { "tag":-11, "keys":["ux"], "funcs":["zero"] },

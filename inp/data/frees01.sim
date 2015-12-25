@@ -1,8 +1,7 @@
 {
   "data" : {
     "matfile" : "porous.mat",
-    "liq" : "water",
-    "gas" : "dryair"
+    "liq"     : "water"
   },
   "functions" : [
     { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] },

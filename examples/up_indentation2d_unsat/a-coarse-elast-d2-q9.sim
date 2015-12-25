@@ -2,7 +2,7 @@
   "data" : {
     "desc"    : "porous: 2D: desiccation of square domain (lowering pressure)",
     "matfile" : "nmepaper.mat",
-    "showR"   : false
+    "liq"     : "water"
   },
   "functions" : [
     { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] },
@@ -35,7 +35,7 @@
   "stages" : [
     {
       "desc"  : "lower pressure @ bottom",
-      "iniporous" : { "nu":[0.3], "layers":[[-1,-2,-3]], "liq":"water" },
+      "iniporous" : { "nu":[0.3], "layers":[[-1,-2,-3]] },
       "facebcs" : [
         { "tag":-10, "keys":["uy"], "funcs":["zero"] },
         { "tag":-11, "keys":["ux"], "funcs":["zero"] },

@@ -1,7 +1,8 @@
 {
   "data" : {
     "matfile" : "materials.mat",
-    "debug" : false
+    "liq"     : "water",
+    "debug"   : false
   },
   "functions" : [
     { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] },
@@ -23,7 +24,7 @@
   "stages" : [
     {
       "desc" : "decrease water level @ right face",
-      "iniporous" : { "layers":[[-1]], "nu":[0.2], "liq":"water" },
+      "iniporous" : { "layers":[[-1]], "nu":[0.2] },
       "seepfaces" : [-11],
       "facebcs" : [
         { "tag":-13, "keys":["hst"],  "funcs":["zero"] },
