@@ -424,7 +424,8 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 	}
 
 	// read materials database and initialise models
-	o.MatModels, err = ReadMat(dir, o.Data.Matfile, o.Ndim, o.Data.Pstress, o.MaxElev, o.Grav0)
+	o.Data.Wlevel = utl.Max(o.Data.Wlevel, o.MaxElev)
+	o.MatModels, err = ReadMat(dir, o.Data.Matfile, o.Ndim, o.Data.Pstress, o.Data.Wlevel, o.Grav0)
 	if err != nil {
 		chk.Panic("loading materials and initialising models failed:\n%v", err)
 	}
