@@ -114,7 +114,7 @@ func (o Model) Plot(dirout, fnkey string, np int) {
 	plt.Plot(R, Z, "'r-', clip_on=0")
 	plt.Plot([]float64{o.R0, o.R0 + o.C*pMaxLin}, []float64{o.H, 0}, "'k--', color='gray'")
 	plt.Gll("$\\rho_{"+subscript+"}$", "$z$", "")
-	plt.TicksNoOffset()
+	plt.SetTicksNormal()
 
 	plt.SaveD(dirout, fnkey+".eps")
 }
