@@ -37,6 +37,8 @@ type Data struct {
 	Stat    bool    `json:"stat"`    // activate statistics
 	Wlevel  float64 `json:"wlevel"`  // water level; 0 means use max elevation
 	Surch   float64 `json:"surch"`   // surcharge load at surface == qn0
+	LiqMat  string  `json:"liq"`     // name of liquid material
+	GasMat  string  `json:"gas"`     // name of gas material
 }
 
 // LinSolData holds data for linear solvers
@@ -175,8 +177,6 @@ type IniPorousData struct {
 	Nu     []float64 `json:"nu"`     // [nlayers] Poisson's coefficient to compute effective horizontal state for each layer
 	K0     []float64 `json:"K0"`     // [nlayers] or Earth pressure coefficient at rest to compute effective horizontal stresses
 	Layers [][]int   `json:"layers"` // [nlayers][ntagsInLayer]; e.g. [[-1,-2], [-3,-4]] => 2 layers
-	LiqMat string    `json:"liq"`    // name of liquid material
-	GasMat string    `json:"gas"`    // name of gas material
 }
 
 // IniStressData holds data for setting initial stresses
@@ -429,30 +429,28 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 		chk.Panic("loading materials and initialising models failed:\n%v", err)
 	}
 
-	// derived
-	if o.Stages[0].IniPorous != nil {
-
-		// liquid model
-		lmat := o.MatModels.Get(o.Stages[0].IniPorous.LiqMat)
+	// derived: liquid model
+	if o.Data.LiqMat != "" {
+		lmat := o.MatModels.Get(o.Data.LiqMat)
 		if lmat == nil {
-			chk.Panic("cannot find liquid material (%q) in 'iniporous'", o.Stages[0].IniPorous.LiqMat)
+			chk.Panic("cannot find liquid material named %q", o.Data.LiqMat)
 		}
 		if lmat.Liq == nil {
-			chk.Panic("liquid model in material (%q) is not available for 'iniporous'", o.Stages[0].IniPorous.LiqMat)
+			chk.Panic("liquid model in material (%q) is not available", o.Data.LiqMat)
 		}
 		o.LiqMdl = lmat.Liq
+	}
 
-		// gas model
-		if o.Stages[0].IniPorous.GasMat != "" {
-			gmat := o.MatModels.Get(o.Stages[0].IniPorous.GasMat)
-			if gmat == nil {
-				chk.Panic("cannot find gas material (%q) in 'iniporous'", o.Stages[0].IniPorous.GasMat)
-			}
-			if gmat.Gas == nil {
-				chk.Panic("gas model in material (%q) is not available for 'iniporous'", o.Stages[0].IniPorous.GasMat)
-			}
-			o.GasMdl = gmat.Gas
+	// derived: gas model
+	if o.Data.GasMat != "" {
+		gmat := o.MatModels.Get(o.Data.GasMat)
+		if gmat == nil {
+			chk.Panic("cannot find gas material named %g", o.Data.GasMat)
 		}
+		if gmat.Gas == nil {
+			chk.Panic("gas model in material (%q) is not available", o.Data.GasMat)
+		}
+		o.GasMdl = gmat.Gas
 	}
 
 	// fix function coefficients

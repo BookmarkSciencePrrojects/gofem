@@ -176,7 +176,7 @@ func Test_sim01(tst *testing.T) {
 func Test_sim02(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("sim01")
+	chk.PrintTitle("sim02")
 
 	sim := ReadSim("data/frees01.sim", "", true, 0)
 	if sim == nil {
