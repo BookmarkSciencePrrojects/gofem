@@ -97,13 +97,14 @@ func main() {
 		if isPsel(Psel, P[tidx], tolPsel) {
 			for j, ele := range dom.ElemIntvars {
 				e := ele.(*fem.ElemU)
-				ipsdat := e.OutIpsData()
-				for k, dat := range ipsdat {
-					res := dat.Calc(dom.Sol)
-					x, y := dat.X[0], dat.X[1]
-					sx := res["sx"] * GPa2MPa
-					sy := res["sy"] * GPa2MPa
-					sxy := res["sxy"] * GPa2MPa / math.Sqrt2
+				X := e.OutIpCoords()
+				M := fem.NewIpsMap()
+				e.OutIpVals(M, dom.Sol)
+				for k := 0; k < nips; k++ {
+					x, y := X[k][0], X[k][1]
+					sx := M.Get("sx", k) * GPa2MPa
+					sy := M.Get("sy", k) * GPa2MPa
+					sxy := M.Get("sxy", k) * GPa2MPa / math.Sqrt2
 					R[i][j][k], Sr[i][j][k], St[i][j][k], _ = ana.PolarStresses(x, y, sx, sy, sxy)
 				}
 			}
