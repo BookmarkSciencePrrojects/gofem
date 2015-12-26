@@ -26,8 +26,6 @@ var (
 	nodes []*fem.Node // active/allocated nodes
 	elems []fem.Elem  // active/allocated elements
 
-	ipvals []map[string]float64 // [allNip][nkeys] integration points values
-
 	dirout string // directory for output
 	fnkey  string // filename key
 	steady bool   // steady simulation
@@ -155,21 +153,16 @@ func main() {
 			for label, b := range geo {
 				topology(b, label == "ips", lbb, v3beam)
 			}
-
-			// allocate integration points values
-			ipvals = make([]map[string]float64, len(out.Ipoints))
-			for i, _ := range out.Ipoints {
-				ipvals[i] = make(map[string]float64)
-			}
 		}
 
-		// get integration points values @ time t
+		// current values @ ips
 		for _, ele := range out.ElemOutIps {
+			ipids := out.Cid2ips[ele.Id()]
 			allvals := fem.NewIpsMap()
 			ele.OutIpVals(allvals, out.Dom.Sol)
 			for key, vals := range *allvals {
-				for i, val := range vals {
-					ipvals[i][key] = val
+				for i, ipid := range ipids {
+					out.Ipoints[ipid].Vals[key] = vals[i]
 				}
 			}
 		}
@@ -384,10 +377,10 @@ func pdata_write(buf *bytes.Buffer, label string, keys []string, ips bool) {
 	io.Ff(buf, "<DataArray type=\"Float64\" Name=\"%s\" NumberOfComponents=\"%d\" format=\"ascii\">\n", label, nkeys)
 	if ips {
 		// loop over integration points
-		for i, _ := range out.Ipoints {
+		for _, ip := range out.Ipoints {
 			l := ""
 			for _, key := range keys {
-				if val, ok := ipvals[i][key]; ok {
+				if val, ok := ip.Vals[key]; ok {
 					l += io.Sf("%23.15e ", val)
 				} else {
 					l += "0 "
