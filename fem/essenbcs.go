@@ -8,6 +8,7 @@ import (
 	"log"
 	"math"
 	"sort"
+	"strings"
 
 	"github.com/cpmech/gofem/mdl/fld"
 	"github.com/cpmech/gosl/chk"
@@ -239,6 +240,28 @@ func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.Func, extra string
 
 			// set constraint
 			o.add_single("pl", d.Eq, &pl)
+		}
+		return // success
+	}
+
+	// set with initial value
+	if strings.HasSuffix(key, "_ini") {
+
+		// set for all nodes
+		kkey := key[:len(key)-4]
+		for _, nod := range nodes {
+
+			// create function
+			d := nod.GetDof(kkey)
+			if d == nil {
+				continue // node doesn't have key. ex: pl in qua8/qua4 elements
+			}
+			//val := sol.Y[d.Eq]
+			val := 0.0 // TODO: assign a value here
+			fcn := fun.Cte{C: val}
+
+			// set constraint
+			o.add_single(kkey, d.Eq, &fcn)
 		}
 		return // success
 	}

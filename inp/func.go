@@ -36,7 +36,7 @@ type FuncsData []*FuncData
 // Get returns function by name
 //  Note: returns nil if not found
 func (o FuncsData) Get(name string) fun.Func {
-	if name == "zero" {
+	if name == "zero" || name == "none" {
 		return &fun.Zero
 	}
 	for _, f := range o {

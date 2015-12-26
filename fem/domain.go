@@ -150,6 +150,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 		}
 		err = o.fix_inact_flags(stg.Deactivate, true)
 		if err != nil {
+			return
 		}
 	}
 
@@ -180,7 +181,10 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 	for _, cell := range o.Msh.Cells {
 
 		// set cell's face boundary conditions
-		cell.SetFaceConds(stg, o.Sim.Functions)
+		err = cell.SetFaceConds(stg, o.Sim.Functions)
+		if err != nil {
+			return
+		}
 
 		// get element info
 		info, inactive, err := GetElemInfo(cell, o.Reg, o.Sim)
@@ -202,6 +206,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 			for ykey, fkey := range info.Y2F {
 				o.F2Y[fkey] = ykey
 				o.YandC[ykey] = true
+				o.YandC[ykey+"_ini"] = true
 			}
 
 			// t1 and t2 equations
