@@ -1,13 +1,14 @@
 {
   "data" : {
     "matfile" : "porous.mat",
-    "liq"     : "water"
+    "liq"     : "water",
+    "listbcs" : true
   },
   "functions" : [
     { "name":"pbot", "type":"rmp", "prms":[
-      { "n":"ca", "v":100 },
-      { "n":"cb", "v":100 },
-      { "n":"ta", "v":0   },
+      { "n":"ca", "v":1.0 },
+      { "n":"cb", "v":0.5 },
+      { "n":"ta", "v":0.0 },
       { "n":"tb", "v":1e3 }]
     },
     { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] }
@@ -25,7 +26,7 @@
       "desc" : "decrease pressure @ bottom",
       "iniporous" : { "layers":[[-1]], "nu":[0.2] },
       "facebcs" : [
-        { "tag":-10, "keys":["pl"], "funcs":["pbot"] }
+        { "tag":-10, "keys":["pl_ini"], "funcs":["pbot"] }
       ],
       "eleconds" : [
         { "tag":-1, "keys":["g"], "funcs":["grav"] }

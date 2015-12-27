@@ -31,9 +31,7 @@
       "facebcs" : [
         { "tag":-10, "keys":["uy"], "funcs":["zero"] },
         { "tag":-13, "keys":["ux"], "funcs":["zero"] },
-        { "atag":-12, "keys":["qn"], "funcs":["pres"] },
         { "tag":-12, "keys":["uy"], "funcs":["disp"] },
-        { "atag":-11, "keys":["ux"], "funcs":["zero"] },
         { "tag":-11, "keys":["contact"], "funcs":["zero"] }
       ],
       "control" : {
@@ -41,5 +39,9 @@
         "tf" : 1.0
       }
     }
+  ],
+  "temp" : [
+        { "atag":-12, "keys":["qn"], "funcs":["pres"] },
+        { "atag":-11, "keys":["ux"], "funcs":["zero"] }
   ]
 }

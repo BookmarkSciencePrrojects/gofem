@@ -8,6 +8,7 @@ import (
 	"github.com/cpmech/gofem/inp"
 
 	"github.com/cpmech/gosl/chk"
+	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 )
 
@@ -485,6 +486,11 @@ func (o *Domain) SetIniVals(stgidx int, zeroSol bool) (err error) {
 
 	// set boundary conditions that depend on initial values
 	o.EssenBcs.FixIniVals(o.Sol)
+
+	// list boundary conditions
+	if o.Sim.Data.ListBcs {
+		io.Pf("%v", o.EssenBcs.List(stg.Control.Tf))
+	}
 
 	// make sure time is zero at the beginning of simulation
 	o.Sol.T = 0
