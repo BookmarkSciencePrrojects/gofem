@@ -308,18 +308,25 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 	}
 
 	// face essential boundary conditions
-	for _, cellsAndFaces := range o.Msh.FaceTag2cells {
-		for _, pair := range cellsAndFaces {
+	for _, fc := range stg.FaceBcs {
+		pairs, ok := o.Msh.FaceTag2cells[fc.Tag]
+		if !ok {
+			return chk.Err("cannot find faces with tag = %d to assign face boundary conditions", fc.Tag)
+		}
+		for _, pair := range pairs {
 			cell := pair.C
-			for _, fc := range cell.FaceBcs {
-				var enodes []*Node
-				for _, v := range fc.GlobalVerts {
-					enodes = append(enodes, o.Vid2node[v])
-				}
-				if o.YandC[fc.Cond] {
-					err = o.EssenBcs.Set(fc.Cond, enodes, fc.Func, fc.Extra)
-					if err != nil {
-						return chk.Err("setting of essential boundary conditions failed:\n%v", err)
+			faceId := pair.Fid
+			for _, bc := range cell.FaceBcs {
+				if faceId == bc.FaceId {
+					var nodes []*Node
+					for _, vid := range bc.GlobalVerts {
+						nodes = append(nodes, o.Vid2node[vid])
+					}
+					if o.YandC[bc.Cond] {
+						err = o.EssenBcs.Set(bc.Cond, nodes, bc.Func, bc.Extra)
+						if err != nil {
+							return chk.Err("setting of essential (face) boundary conditions failed:\n%v", err)
+						}
 					}
 				}
 			}
@@ -475,6 +482,9 @@ func (o *Domain) SetIniVals(stgidx int, zeroSol bool) (err error) {
 			}
 		}
 	}
+
+	// set boundary conditions that depend on initial values
+	o.EssenBcs.FixIniVals(o.Sol)
 
 	// make sure time is zero at the beginning of simulation
 	o.Sol.T = 0
