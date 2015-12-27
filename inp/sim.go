@@ -39,6 +39,7 @@ type Data struct {
 	Surch   float64 `json:"surch"`   // surcharge load at surface == qn0
 	LiqMat  string  `json:"liq"`     // name of liquid material
 	GasMat  string  `json:"gas"`     // name of gas material
+	ListBcs bool    `json:"listbcs"` // list boundary conditions
 }
 
 // LinSolData holds data for linear solvers
