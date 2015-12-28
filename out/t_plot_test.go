@@ -16,7 +16,7 @@ import (
 func Test_plot01(tst *testing.T) {
 
 	// test title
-	//verbose()
+	verbose()
 	chk.PrintTitle("plot01")
 
 	// constants

@@ -101,46 +101,42 @@ func Draw(dirout, fname string, nr, nc int, split bool, extra func(id string)) {
 	if nr < 0 || nc < 0 {
 		nr, nc = utl.BestSquare(nplots)
 	}
-	var k int
-	for i := 0; i < nr; i++ {
-		for j := 0; j < nc; j++ {
-			spl := Splots[k]
-			if !split {
-				plt.Subplot(nr, nc, k+1)
+	for k := 0; k < nplots; k++ {
+		spl := Splots[k]
+		if !split {
+			plt.Subplot(nr, nc, k+1)
+		}
+		if extra != nil {
+			extra(spl.Id)
+		}
+		if spl.Title != "" {
+			plt.Title(spl.Title, spl.Topts)
+		}
+		for _, d := range spl.Data {
+			if d.Style.L == "" {
+				d.Style.L = d.Alias
 			}
-			if extra != nil {
-				extra(spl.Id)
+			x, y := d.X, d.Y
+			if math.Abs(spl.Xscale) > 0 {
+				x = make([]float64, len(d.X))
+				la.VecCopy(x, spl.Xscale, d.X)
 			}
-			if spl.Title != "" {
-				plt.Title(spl.Title, spl.Topts)
+			if math.Abs(spl.Yscale) > 0 {
+				y = make([]float64, len(d.Y))
+				la.VecCopy(y, spl.Yscale, d.Y)
 			}
-			for _, d := range spl.Data {
-				if d.Style.L == "" {
-					d.Style.L = d.Alias
-				}
-				x, y := d.X, d.Y
-				if math.Abs(spl.Xscale) > 0 {
-					x = make([]float64, len(d.X))
-					la.VecCopy(x, spl.Xscale, d.X)
-				}
-				if math.Abs(spl.Yscale) > 0 {
-					y = make([]float64, len(d.Y))
-					la.VecCopy(y, spl.Yscale, d.Y)
-				}
-				plt.Plot(x, y, d.Style.GetArgs("clip_on=0"))
-			}
-			plt.Gll(spl.Xlbl, spl.Ylbl, spl.GllArgs)
-			if len(spl.Xrange) == 2 {
-				plt.AxisXrange(spl.Xrange[0], spl.Xrange[1])
-			}
-			if len(spl.Yrange) == 2 {
-				plt.AxisYrange(spl.Yrange[0], spl.Yrange[1])
-			}
-			if split {
-				savefig(dirout, fnk, ext, spl.Id)
-				plt.Clf()
-			}
-			k += 1
+			plt.Plot(x, y, d.Style.GetArgs("clip_on=0"))
+		}
+		plt.Gll(spl.Xlbl, spl.Ylbl, spl.GllArgs)
+		if len(spl.Xrange) == 2 {
+			plt.AxisXrange(spl.Xrange[0], spl.Xrange[1])
+		}
+		if len(spl.Yrange) == 2 {
+			plt.AxisYrange(spl.Yrange[0], spl.Yrange[1])
+		}
+		if split {
+			savefig(dirout, fnk, ext, spl.Id)
+			plt.Clf()
 		}
 	}
 	if !split && fname != "" {
