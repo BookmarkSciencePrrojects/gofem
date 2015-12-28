@@ -67,7 +67,7 @@ func ComputeExtrapolatedValues(extrapKeys []string) {
 					for i := 0; i < sha.Nverts; i++ {
 						v := cell.Verts[i]
 						for j := 0; j < len(ips); j++ {
-							ExVals[v]["ex_"+key] += Emat[i][j] * vals[j]
+							ExVals[v][key] += Emat[i][j] * vals[j]
 						}
 					}
 				} else {
