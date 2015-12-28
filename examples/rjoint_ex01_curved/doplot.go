@@ -40,5 +40,5 @@ func main() {
 
 	// save
 	plt.SetForPng(0.8, 400, 200)
-	out.Draw("/tmp", fnkey+".png", false, nil)
+	out.Draw("/tmp", fnkey+".png", -1, -1, false, nil)
 }

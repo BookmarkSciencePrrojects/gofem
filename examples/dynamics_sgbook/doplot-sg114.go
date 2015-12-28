@@ -51,7 +51,7 @@ func main() {
 
 	// save
 	plt.SetForPng(0.8, 400, 200)
-	out.Draw("/tmp", fnkey+".png", false, func(i, j, n int) {
+	out.Draw("/tmp", fnkey+".png", -1, -1, false, func(id string) {
 		plt.Plot(gofemold.Time, gofemold.Uy17, "'r.-', label='gofemOld'")
 		plt.Plot(res["Time"], res["uy"], "'b+-', label='mechsys'")
 	})

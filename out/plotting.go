@@ -26,6 +26,7 @@ type PltEntity struct {
 
 // SplotDat stores all data for one subplot
 type SplotDat struct {
+	Id      string       // unique identifier
 	Title   string       // title of subplot
 	Topts   string       // title options
 	Xscale  float64      // x-axis scale
@@ -39,8 +40,8 @@ type SplotDat struct {
 }
 
 // Splot activates a new subplot window
-func Splot(splotTitle string) {
-	s := &SplotDat{Title: splotTitle}
+func Splot(id, splotTitle string) {
+	s := &SplotDat{Id: id, Title: splotTitle}
 	Splots = append(Splots, s)
 	Csplot = s
 }
@@ -76,42 +77,39 @@ func Plot(xHandle, yHandle interface{}, alias string, fm plt.Fmt, idxI int) {
 		chk.Panic("lengths of x- and y-series are different. len(x)=%d, len(y)=%d, x=%v, y=%v", len(e.X), len(e.Y), xHandle, yHandle)
 	}
 	if Csplot == nil {
-		Splot("")
+		Splot(io.Sf("%d", len(Splots)), "")
 	}
 	Csplot.Data = append(Csplot.Data, &e)
 	SplotConfig("", "", 1, 1)
 }
 
-// ExtraPlt defines a callback function for extra plt commands
-//  Note: i and j are indices as in Subplot
-type ExtraPlt func(i, j, nplots int)
-
 // Draw draws or save figure with plot
 //  dirout -- directory to save figure
-//  fname  -- file name; e.g. myplot.eps or myplot.png. Use "" to skip saving
-//  show   -- shows figure
+//  fname  -- file name; e.g. myplot.eps or myplot.png. Use "" to show figure instead
+//  nr     -- number of rows. Use -1 to compute best value
+//  nc     -- number of columns. Use -1 to compute best value
+//  split  -- split subplots into separated figures
 //  extra  -- is called just after Subplot command and before any plotting
-//  Note: subplots will be split if using 'eps' files
-func Draw(dirout, fname string, show bool, extra ExtraPlt) {
+func Draw(dirout, fname string, nr, nc int, split bool, extra func(id string)) {
 	var fnk string // filename key
 	var ext string // extension
-	var eps bool   // is eps figure
 	if fname != "" {
 		fnk = io.FnKey(fname)
 		ext = io.FnExt(fname)
-		eps = ext == ".eps"
 	}
 	nplots := len(Splots)
-	nr, nc := utl.BestSquare(nplots)
+	if nr < 0 || nc < 0 {
+		nr, nc = utl.BestSquare(nplots)
+	}
 	var k int
 	for i := 0; i < nr; i++ {
 		for j := 0; j < nc; j++ {
 			spl := Splots[k]
-			if !eps {
+			if !split {
 				plt.Subplot(nr, nc, k+1)
 			}
 			if extra != nil {
-				extra(i+1, j+1, nplots)
+				extra(spl.Id)
 			}
 			if spl.Title != "" {
 				plt.Title(spl.Title, spl.Topts)
@@ -138,27 +136,27 @@ func Draw(dirout, fname string, show bool, extra ExtraPlt) {
 			if len(spl.Yrange) == 2 {
 				plt.AxisYrange(spl.Yrange[0], spl.Yrange[1])
 			}
-			if eps {
-				savefig(dirout, fnk, ext, k)
+			if split {
+				savefig(dirout, fnk, ext, spl.Id)
 				plt.Clf()
 			}
 			k += 1
 		}
 	}
-	if !eps && fname != "" {
-		savefig(dirout, fnk, ext, -1)
+	if !split && fname != "" {
+		savefig(dirout, fnk, ext, "")
 	}
-	if show {
+	if fname == "" {
 		plt.Show()
 	}
 }
 
 // auxiliary /////////////////////////////////////////////////////////////////////////////////////////
 
-func savefig(dirout, fnk, ext string, idx int) {
+func savefig(dirout, fnk, ext, id string) {
 	fn := fnk + ext
-	if idx >= 0 {
-		fn = io.Sf("%s_%d%s", fnk, idx, ext)
+	if id != "" {
+		fn = fnk + "_" + id + ext
 	}
 	if dirout == "" {
 		plt.Save(fn)

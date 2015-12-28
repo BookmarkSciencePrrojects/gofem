@@ -28,7 +28,7 @@ func main() {
 	rcmp_nod := read_pyfem_rod_data("cmp/pyfem_o2_rod_nod.dat")
 
 	// plot uy along y for selected times
-	out.Splot("rod displacements")
+	out.Splot("y-uy", "rod displacements")
 	for i, _ := range out.TimeInds {
 		out.Plot("y", "uy", "rod", plt.Fmt{}, i)
 	}
@@ -37,7 +37,7 @@ func main() {
 	}
 
 	// show
-	out.Draw("/tmp", "rjoint_ex06_pullout_o2elast.png", false, nil)
+	out.Draw("/tmp", "rjoint_ex06_pullout_o2elast.png", -1, -1, false, nil)
 }
 
 // auxiliary /////////////////////////////////////////////////////////////////////////////////////////

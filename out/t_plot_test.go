@@ -47,22 +47,24 @@ func Test_plot01(tst *testing.T) {
 
 	plA := GetRes("pl", "A", 0)
 
-	Splot("liquid pressure")
+	Splot("t-pl", "liquid pressure")
 	Plot("t", "pl", "B", plt.Fmt{C: "b", M: "."}, -1)
 	Plot("t", plA, "A", plt.Fmt{C: "r", M: "."}, -1)
 
-	Splot("")
+	Splot("pl-pl", "")
 	Plot("pl", "pl", "A", plt.Fmt{C: "k", M: "o"}, -1)
 
-	Splot("")
+	Splot("pl-y", "")
 	Plot("pl", "y", "left", plt.Fmt{C: "b", M: "o"}, 0)
 	Plot("pl", "y", "left", plt.Fmt{C: "g", M: "o"}, -1)
 
-	Splot("")
+	Splot("y-pl", "")
 	io.Pforan("T = %v\n", Times)
 	last := len(Times) - 1
 	Plot("y", "pl", "left", plt.Fmt{C: "b", M: "o", L: io.Sf("t=%g", Times[0])}, 0)
 	Plot("y", "pl", "left", plt.Fmt{C: "m", M: "*", Lw: 2, L: io.Sf("t=%g", Times[last])}, -1)
 
-	Draw("", "", chk.Verbose, nil)
+	if chk.Verbose {
+		Draw("", "", -1, -1, false, nil)
+	}
 }

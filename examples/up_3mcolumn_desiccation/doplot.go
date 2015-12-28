@@ -50,45 +50,45 @@ func main() {
 	if !onlyLRM {
 
 		// pl versus y
-		out.Splot("liquid pressure along column")
+		out.Splot("pl-y", "liquid pressure along column")
 		for _, i := range I {
 			t := out.Times[i]
 			out.Plot("pl", "y", "left-side", plt.Fmt{L: io.Sf("t=%g", t)}, i)
 		}
 
 		// pl versus t
-		out.Splot("liquid pressure in time")
+		out.Splot("t-pl", "liquid pressure in time")
 		for i, l := range []string{"A(top)", "B", "C(mid)", "D", "E(bot)"} {
 			out.Plot("t", "pl", l, S[i], -1)
 		}
 
 		// uy versus t
-		out.Splot("displacements in time")
+		out.Splot("t-uy", "displacements in time")
 		for i, l := range []string{"A(top)", "B", "C(mid)", "D", "E(bot)"} {
 			out.Plot("t", "uy", l, S[i], -1)
 		}
 
 		// sl versus t
-		out.Splot("liquid saturation in time")
+		out.Splot("t-sl", "liquid saturation in time")
 		for i, l := range []string{"a(top)", "b", "c", "d(bot)"} {
 			out.Plot("t", "sl", l, S[i], -1)
 		}
 
 		// nwly versus time
-		out.Splot("liquid filter velocity versus time")
+		out.Splot("t-nwly", "liquid filter velocity versus time")
 		for i, l := range []string{"a(top)", "b", "c", "d(bot)"} {
 			out.Plot("t", "nwly", l, S[i], -1)
 		}
 
 		// sy versus t
-		out.Splot("vertical stress in time")
+		out.Splot("t-sy", "vertical stress in time")
 		for i, l := range []string{"a(top)", "b", "c", "d(bot)"} {
 			out.Plot("t", "sy", l, S[i], -1)
 		}
 	}
 
 	// pc versus sl
-	out.Splot("liquid retention behaviour")
+	out.Splot("lrm", "liquid retention behaviour")
 	for i, l := range []string{"a(top)", "b", "c", "d(bot)"} {
 		out.Plot("pl", "sl", l, S[i], -1)
 	}
@@ -96,7 +96,7 @@ func main() {
 
 	// empty plot
 	if !onlyLRM {
-		out.Splot("")
+		out.Splot("empty", "")
 	}
 
 	// save
@@ -106,8 +106,8 @@ func main() {
 	} else {
 		plt.SetForPng(1.8, 600, 200)
 	}
-	out.Draw("/tmp/gofem", "fig_"+fnkey+".png", false, func(i, j, n int) {
-		if i == 4 && j == 1 || onlyLRM {
+	out.Draw("/tmp/gofem", "fig_"+fnkey+".png", -1, -1, false, func(id string) {
+		if id == "lrm" {
 			mat := sim.MatModels.Get("lreten1")
 			Lrm := mat.Lrm
 			lrm.Plot(Lrm, 0, Lrm.SlMax(), 30, 101, "'k-^', markerfacecolor='white', ms=5, markevery=10", "", "model")

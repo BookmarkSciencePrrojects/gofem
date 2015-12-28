@@ -66,16 +66,17 @@ func Test_topo01(tst *testing.T) {
 	LoadResults(nil)
 
 	// displacements
-	Splot("displacements")
+	Splot("t-uz", "displacements")
 	Plot("t", "uz", "A", plt.Fmt{C: "b", M: "o"}, -1)
 
 	// stresses on surface
 	V := IntegOnPlane("ex_sz", "surf")
-	Splot("integral of stresses")
+	Splot("int", "integral of stresses")
 	Plot(Times, V, "surf", plt.Fmt{C: "r", M: "o"}, -1)
 	Csplot.Xlbl = "time"
 	Csplot.Ylbl = "integ(sz)"
 
-	//Draw("", "", true, nil)
-	Draw("", "", false, nil)
+	if chk.Verbose {
+		Draw("", "", -1, -1, false, nil)
+	}
 }

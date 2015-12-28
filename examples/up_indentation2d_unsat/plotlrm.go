@@ -33,18 +33,18 @@ func main() {
 		pc_a[i] = -pl_a[i]
 	}
 
-	out.Splot("LRM")
+	out.Splot("lrm", "LRM")
 	_, d, _ := io.ReadTable("lrm.dat")
 	plt.Plot(d["pc"], d["sl"], "'c-',lw=2")
 
 	out.Plot(pc_a, "sl", "a", plt.Fmt{M: "o"}, -1)
 	out.Csplot.Xlbl = "$p_c$"
 
-	out.Splot("porosity")
+	out.Splot("t-nf", "porosity")
 	out.Plot("t", nf_a, "a", plt.Fmt{M: "+"}, -1)
 	out.Csplot.Ylbl = "$n_f$"
 
 	// show
 	plt.SetForPng(1.2, 500, 200)
-	out.Draw("/tmp", "up_indentation2d_unsat_lrm_"+fnkey+".png", false, nil)
+	out.Draw("/tmp", "up_indentation2d_unsat_lrm_"+fnkey+".png", -1, -1, false, nil)
 }

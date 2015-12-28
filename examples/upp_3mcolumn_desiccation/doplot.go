@@ -66,7 +66,7 @@ func main() {
 	if !onlyLRM {
 
 		// pl versus y
-		out.Splot("liquid pressure along column")
+		out.Splot("pl-y", "liquid pressure along column")
 		for _, i := range I {
 			t := out.Times[i]
 			out.Plot("pl", "y", "left-side", plt.Fmt{L: io.Sf("t=%g", t)}, i)
@@ -74,9 +74,9 @@ func main() {
 
 		// pg versus y
 		if upForm {
-			out.Splot("")
+			out.Splot("empty1", "")
 		} else {
-			out.Splot("gas pressure along column")
+			out.Splot("pg-y", "gas pressure along column")
 			for _, i := range I {
 				t := out.Times[i]
 				out.Plot("pg", "y", "left-side", plt.Fmt{L: io.Sf("t=%g", t)}, i)
@@ -84,51 +84,51 @@ func main() {
 		}
 
 		// pl versus t
-		out.Splot("liquid pressure in time")
+		out.Splot("pl-t", "liquid pressure in time")
 		for i, l := range labelsN {
 			out.Plot("t", "pl", l, S[i], -1)
 		}
 
 		// pg versus t
 		if upForm {
-			out.Splot("")
+			out.Splot("empty2", "")
 		} else {
-			out.Splot("gas pressure in time")
+			out.Splot("t-pg", "gas pressure in time")
 			for i, l := range labelsN {
 				out.Plot("t", "pg", l, S[i], -1)
 			}
 		}
 
 		// uy versus t
-		out.Splot("displacements in time")
+		out.Splot("t-uy", "displacements in time")
 		for i, l := range labelsN {
 			out.Plot("t", "uy", l, S[i], -1)
 		}
 
 		// sl versus t
-		out.Splot("liquid saturation in time")
+		out.Splot("t-sl", "liquid saturation in time")
 		for i, l := range labelsE {
 			out.Plot("t", "sl", l, S[i], -1)
 		}
 
 		// nwly versus time
-		out.Splot("liquid filter velocity versus time")
+		out.Splot("t-nwly", "liquid filter velocity versus time")
 		for i, l := range labelsE {
 			out.Plot("t", "nwly", l, S[i], -1)
 		}
 
 		// nwgy versus time
 		if upForm {
-			out.Splot("")
+			out.Splot("empty3", "")
 		} else {
-			out.Splot("gas filter velocity versus time")
+			out.Splot("t-nwgy", "gas filter velocity versus time")
 			for i, l := range labelsE {
 				out.Plot("t", "nwgy", l, S[i], -1)
 			}
 		}
 
 		// sy versus t
-		out.Splot("vertical stress in time")
+		out.Splot("t-sy", "vertical stress in time")
 		for i, l := range labelsE {
 			out.Plot("t", "sy", l, S[i], -1)
 		}
@@ -136,7 +136,7 @@ func main() {
 	}
 
 	// pc versus sl
-	out.Splot("liquid retention behaviour")
+	out.Splot("lrm", "liquid retention behaviour")
 	for i, l := range labelsE {
 		out.Plot("pc", "sl", l, S[i], -1)
 	}
@@ -148,8 +148,8 @@ func main() {
 	} else {
 		plt.SetForPng(1.8, 600, 200)
 	}
-	out.Draw("/tmp/gofem", "fig_"+fnkey+".png", false, func(i, j, n int) {
-		if i == 5 && j == 2 || onlyLRM {
+	out.Draw("/tmp/gofem", "fig_"+fnkey+".png", -1, -1, false, func(id string) {
+		if id == "lrm" {
 			mat := sim.MatModels.Get("lreten1")
 			Lrm := mat.Lrm
 			lrm.Plot(Lrm, 0, Lrm.SlMax(), 30, 101, "'k-^', markerfacecolor='white', ms=5, markevery=10", "", "model")

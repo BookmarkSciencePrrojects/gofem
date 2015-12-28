@@ -38,28 +38,28 @@ func main() {
 	}
 
 	// pl
-	out.Splot("liquid pressure")
+	out.Splot("t-pl", "liquid pressure")
 	for i, l := range []string{"A", "B", "C", "D", "E"} {
 		out.Plot("t", "pl", l, S[i], -1)
 	}
 
 	// uy
-	out.Splot("displacements")
+	out.Splot("t-uy", "displacements")
 	for i, l := range []string{"A", "B", "C", "D", "E"} {
 		out.Plot("t", "uy", l, S[i], -1)
 	}
 
-	out.Splot("liquid saturation")
+	out.Splot("t-sl", "liquid saturation")
 	for i, l := range []string{"a", "b", "c", "d", "e"} {
 		out.Plot("t", "sl", l, S[i], -1)
 	}
 
-	out.Splot("stresses")
+	out.Splot("t-sy", "stresses")
 	for i, l := range []string{"a", "b", "c", "d", "e"} {
 		out.Plot("t", "sy", l, S[i], -1)
 	}
 
 	// show
 	plt.SetForPng(1, 500, 200)
-	out.Draw("/tmp", "up_indentation2d_unsat_"+fnkey+".png", false, nil)
+	out.Draw("/tmp", "up_indentation2d_unsat_"+fnkey+".png", -1, -1, false, nil)
 }
