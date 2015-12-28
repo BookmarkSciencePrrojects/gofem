@@ -30,6 +30,8 @@ type SplotDat struct {
 	Topts   string       // title options
 	Xscale  float64      // x-axis scale
 	Yscale  float64      // y-axis scale
+	Xrange  []float64    // x range
+	Yrange  []float64    // x range
 	Xlbl    string       // x-axis label (formatted; e.g. "$t$")
 	Ylbl    string       // y-axis label (formatted; e.g. "$p_{\ell}$")
 	GllArgs string       // extra arguments for Gll such as leg_out
@@ -104,32 +106,38 @@ func Draw(dirout, fname string, show bool, extra ExtraPlt) {
 	var k int
 	for i := 0; i < nr; i++ {
 		for j := 0; j < nc; j++ {
+			spl := Splots[k]
 			if !eps {
 				plt.Subplot(nr, nc, k+1)
 			}
 			if extra != nil {
 				extra(i+1, j+1, nplots)
 			}
-			if Splots[k].Title != "" {
-				plt.Title(Splots[k].Title, Splots[k].Topts)
+			if spl.Title != "" {
+				plt.Title(spl.Title, spl.Topts)
 			}
-			data := Splots[k].Data
-			for _, d := range data {
+			for _, d := range spl.Data {
 				if d.Style.L == "" {
 					d.Style.L = d.Alias
 				}
 				x, y := d.X, d.Y
-				if math.Abs(Splots[k].Xscale) > 0 {
+				if math.Abs(spl.Xscale) > 0 {
 					x = make([]float64, len(d.X))
-					la.VecCopy(x, Splots[k].Xscale, d.X)
+					la.VecCopy(x, spl.Xscale, d.X)
 				}
-				if math.Abs(Splots[k].Yscale) > 0 {
+				if math.Abs(spl.Yscale) > 0 {
 					y = make([]float64, len(d.Y))
-					la.VecCopy(y, Splots[k].Yscale, d.Y)
+					la.VecCopy(y, spl.Yscale, d.Y)
 				}
 				plt.Plot(x, y, d.Style.GetArgs("clip_on=0"))
 			}
-			plt.Gll(Splots[k].Xlbl, Splots[k].Ylbl, Splots[k].GllArgs)
+			plt.Gll(spl.Xlbl, spl.Ylbl, spl.GllArgs)
+			if len(spl.Xrange) == 2 {
+				plt.AxisXrange(spl.Xrange[0], spl.Xrange[1])
+			}
+			if len(spl.Yrange) == 2 {
+				plt.AxisYrange(spl.Yrange[0], spl.Yrange[1])
+			}
 			if eps {
 				savefig(dirout, fnk, ext, k)
 				plt.Clf()
