@@ -7,6 +7,7 @@ package fem
 import (
 	"github.com/cpmech/gofem/inp"
 	"github.com/cpmech/gosl/chk"
+	"github.com/cpmech/gosl/fun"
 )
 
 // IniSetFileFunc sets initial state with values given in a file or by a function
@@ -23,12 +24,13 @@ func (o *Domain) IniSetFileFunc(stg *inp.Stage) (err error) {
 	}
 
 	// loop over functions
+	var fcn fun.Func
 	for i, fname := range stg.IniFcn.Fcns {
 
 		// get function
-		fcn := o.Sim.Functions.Get(fname)
-		if fcn == nil {
-			return chk.Err("cannot get function named %q", fname)
+		fcn, err = o.Sim.Functions.Get(fname)
+		if err != nil {
+			return
 		}
 
 		// set nodes

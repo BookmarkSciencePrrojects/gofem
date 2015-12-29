@@ -371,9 +371,9 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 			}
 			stg.Control.DtFunc = &fun.Cte{C: stg.Control.Dt}
 		} else {
-			stg.Control.DtFunc = o.Functions.Get(stg.Control.DtFcn)
-			if stg.Control.DtFunc == nil {
-				chk.Panic("ReadSim: cannot find DtFunc named %q", stg.Control.DtFcn)
+			stg.Control.DtFunc, err = o.Functions.Get(stg.Control.DtFcn)
+			if err != nil {
+				chk.Panic("%v", err)
 			}
 			stg.Control.Dt = stg.Control.DtFunc.F(t, nil)
 		}
@@ -390,9 +390,9 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 				stg.Control.DtoFunc = &fun.Cte{C: stg.Control.DtOut}
 			}
 		} else {
-			stg.Control.DtoFunc = o.Functions.Get(stg.Control.DtoFcn)
-			if stg.Control.DtoFunc == nil {
-				chk.Panic("ReadSim: cannot find DtoFunc named %q", stg.Control.DtoFcn)
+			stg.Control.DtoFunc, err = o.Functions.Get(stg.Control.DtoFcn)
+			if err != nil {
+				chk.Panic("%v", err)
 			}
 			stg.Control.DtOut = stg.Control.DtoFunc.F(t, nil)
 		}
@@ -405,9 +405,9 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 			for _, econd := range stg.EleConds {
 				for j, key := range econd.Keys {
 					if key == "g" {
-						gfcn := o.Functions.Get(econd.Funcs[j])
-						if gfcn == nil {
-							chk.Panic("ReadSim: cannot find function named %q corresponding to gravity constant @ stage 0", econd.Funcs[j])
+						gfcn, err := o.Functions.Get(econd.Funcs[j])
+						if err != nil {
+							chk.Panic("ReadSim: cannot find function named %q corresponding to gravity constant @ stage 0\n%v", econd.Funcs[j], err)
 						}
 						o.Grav0 = gfcn.F(0, nil)
 						found = true

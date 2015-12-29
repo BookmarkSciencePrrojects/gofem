@@ -8,6 +8,7 @@ import (
 	"github.com/cpmech/gofem/inp"
 
 	"github.com/cpmech/gosl/chk"
+	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 )
@@ -289,6 +290,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 	o.PtNatBcs.Reset()
 
 	// element conditions
+	var fcn fun.Func
 	for _, ec := range stg.EleConds {
 		cells, ok := o.Msh.CellTag2cells[ec.Tag]
 		if !ok {
@@ -298,9 +300,9 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 			e := o.Cid2elem[cell.Id]
 			if e != nil { // set conditions only for this processor's / active element
 				for j, key := range ec.Keys {
-					fcn := o.Sim.Functions.Get(ec.Funcs[j])
-					if fcn == nil {
-						return chk.Err("cannot find function named %q\n", ec.Funcs[j])
+					fcn, err = o.Sim.Functions.Get(ec.Funcs[j])
+					if err != nil {
+						return
 					}
 					e.SetEleConds(key, fcn, ec.Extra)
 				}
@@ -344,9 +346,9 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 			if o.Vid2node[v.Id] != nil { // set BCs only for active nodes
 				n := o.Vid2node[v.Id]
 				for j, key := range nc.Keys {
-					fcn := o.Sim.Functions.Get(nc.Funcs[j])
-					if fcn == nil {
-						return chk.Err("cannot find function named %q\n", nc.Funcs[j])
+					fcn, err = o.Sim.Functions.Get(nc.Funcs[j])
+					if err != nil {
+						return
 					}
 					if o.YandC[key] {
 						o.EssenBcs.Set(key, []*Node{n}, fcn, nc.Extra)

@@ -97,9 +97,9 @@ func (o *Cell) SetFaceConds(stg *Stage, functions FuncsData) (err error) {
 
 		// for each boundary key such as "ux", "qn", etc.
 		for j, key := range faceBc.Keys {
-			fcn := functions.Get(faceBc.Funcs[j])
-			if fcn == nil {
-				return chk.Err("cannot find function named %q corresponding to face tag %d (@ cell %d)", faceBc.Funcs[j], faceTag, o.Id)
+			fcn, err := functions.Get(faceBc.Funcs[j])
+			if err != nil {
+				return chk.Err("cannot get function named %q corresponding to face tag %d (@ cell %d)\n%v\n", faceBc.Funcs[j], faceTag, o.Id, err)
 			}
 			o.FaceBcs = append(o.FaceBcs, &FaceCond{faceId, lverts, gverts, key, fcn, faceBc.Extra})
 		}

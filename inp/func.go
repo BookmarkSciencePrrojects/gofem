@@ -5,6 +5,7 @@
 package inp
 
 import (
+	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
@@ -34,21 +35,19 @@ type FuncData struct {
 type FuncsData []*FuncData
 
 // Get returns function by name
-//  Note: returns nil if not found
-func (o FuncsData) Get(name string) fun.Func {
+func (o FuncsData) Get(name string) (fcn fun.Func, err error) {
 	if name == "zero" || name == "none" {
-		return &fun.Zero
+		fcn = &fun.Zero
+		return
 	}
 	for _, f := range o {
 		if f.Name == name {
-			fcn, err := fun.New(f.Type, f.Prms)
-			if err != nil {
-				return nil
-			}
-			return fcn
+			fcn, err = fun.New(f.Type, f.Prms)
+			return
 		}
 	}
-	return nil
+	err = chk.Err("cannot find function named %q\n", name)
+	return
 }
 
 // PlotAll plot all functions
@@ -62,7 +61,10 @@ func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
 			continue
 		}
 		args := io.Sf("label='%s', clip_on=0", f.Name)
-		ff := o.Get(f.Name)
+		ff, err := o.Get(f.Name)
+		if err != nil {
+			chk.Panic("%v", err)
+		}
 		if ff != nil {
 			plt.Reset()
 			if pd.WithTxt {
