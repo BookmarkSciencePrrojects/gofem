@@ -32,21 +32,24 @@ var (
 
 	ukeys   = []string{"ux", "uy", "uz"}                      // displacement keys
 	skeys   = []string{"sx", "sy", "sz", "sxy", "syz", "szx"} // stress keys
-	nwlkeys = []string{"nwlx", "nwly", "nwlz"}                // nl・wl == filter velocity keys
+	nwlkeys = []string{"nwlx", "nwly", "nwlz"}                // nl・wl == liquid filter velocity keys
+	nwgkeys = []string{"nwgx", "nwgy", "nwgz"}                // ng・wg == gas filter velocity keys
 	plkeys  = []string{"pl"}                                  // liquid pressure keys
 	pgkeys  = []string{"pg"}                                  // gas pressure keys
 	flkeys  = []string{"fl"}                                  // constraint/flux/seepage face key
 
 	is_sig     map[string]bool     // is sigma key? "sx" => true
 	is_nwl     map[string]bool     // is nwl key? "nwlx" => true
+	is_nwg     map[string]bool     // is nwg key? "nwgx" => true
 	label2keys map[string][]string // maps, e.g., "u" => ukeys
 )
 
 func init() {
 	is_sig = map[string]bool{"sx": true, "sy": true, "sz": true, "sxy": true, "syz": true, "szx": true}
 	is_nwl = map[string]bool{"nwlx": true, "nwly": true, "nwlz": true}
+	is_nwg = map[string]bool{"nwgx": true, "nwgy": true, "nwgz": true}
 	label2keys = map[string][]string{
-		"u": ukeys, "sig": skeys, "nwl": nwlkeys, "ex_nwl": nwlkeys,
+		"u": ukeys, "sig": skeys, "nwl": nwlkeys, "ex_nwl": nwlkeys, "nwg": nwgkeys, "ex_nwg": nwgkeys,
 	}
 }
 
@@ -62,11 +65,13 @@ func main() {
 	// input data
 	simfn, _ := io.ArgToFilename(0, "data/twoqua4", ".sim", true)
 	exnwl := io.ArgToBool(1, false)
-	stgidx := io.ArgToInt(2, 0)
-	v3beam := io.ArgToBool(3, false)
+	exnwg := io.ArgToBool(2, false)
+	stgidx := io.ArgToInt(3, 0)
+	v3beam := io.ArgToBool(4, false)
 	io.Pf("\n%s\n", io.ArgsTable(
 		"simulation filename", "simfn", simfn,
 		"extrapolate nwl", "exnwl", exnwl,
+		"extrapolate nwg", "exnwg", exnwg,
 		"stage index", "stgidx", stgidx,
 		"show v3 of beams", "v3beam", v3beam,
 	))
@@ -90,6 +95,7 @@ func main() {
 	has_pg := out.Dom.YandC["pg"]
 	has_sig := out.Ipkeys["sx"]
 	has_nwl := out.Ipkeys["nwlx"]
+	has_nwg := out.Ipkeys["nwgx"]
 	has_p := has_pl || has_pg
 	lbb := has_u && has_p
 	if out.Dom.Sim.Data.NoLBB {
@@ -124,11 +130,19 @@ func main() {
 		geo["ex_nwl"] = new(bytes.Buffer)
 		vtu["ex_nwl"] = new(bytes.Buffer)
 	}
+	if exnwg {
+		pvd["ex_nwg"] = new(bytes.Buffer)
+		geo["ex_nwg"] = new(bytes.Buffer)
+		vtu["ex_nwg"] = new(bytes.Buffer)
+	}
 
 	// extrapolated values keys
-	extrap_keys := []string{"nwlx", "nwly"}
-	if ndim == 3 {
-		extrap_keys = []string{"nwlx", "nwly", "nwlz"}
+	var extrap_keys []string
+	if exnwl && has_nwl {
+		extrap_keys = append(extrap_keys, nwlkeys[:ndim]...)
+	}
+	if exnwg && has_nwg {
+		extrap_keys = append(extrap_keys, nwgkeys[:ndim]...)
 	}
 
 	// headers
@@ -168,7 +182,7 @@ func main() {
 		}
 
 		// compute extrapolated values
-		if exnwl {
+		if len(extrap_keys) > 0 {
 			out.ComputeExtrapolatedValues(extrap_keys)
 		}
 
@@ -187,8 +201,11 @@ func main() {
 				if has_nwl {
 					pdata_write(b, "nwl", nwlkeys, true)
 				}
+				if has_nwg {
+					pdata_write(b, "nwg", nwgkeys, true)
+				}
 				for key, _ := range out.Ipkeys {
-					if !is_sig[key] && !is_nwl[key] {
+					if !is_sig[key] && !is_nwl[key] && !is_nwg[key] {
 						pdata_write(b, key, []string{key}, true)
 					}
 				}

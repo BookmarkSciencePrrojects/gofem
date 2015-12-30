@@ -43,6 +43,9 @@ func ComputeExtrapolatedValues(extrapKeys []string) {
 			case *fem.ElemUP:
 				sha = e.U.Cell.Shp
 				ips = e.U.IpsElem
+			case *fem.ElemUPP:
+				sha = e.U.Cell.Shp
+				ips = e.U.IpsElem
 			}
 			if sha == nil {
 				return // cannot extrapolate; e.g. rjoint, beams
@@ -88,7 +91,7 @@ func ComputeExtrapolatedValues(extrapKeys []string) {
 	// compute average
 	for i := 0; i < nverts; i++ {
 		for key, cnt := range counts[i] {
-			ExVals[i]["ex_"+key] /= cnt
+			ExVals[i][key] /= cnt
 		}
 	}
 }
