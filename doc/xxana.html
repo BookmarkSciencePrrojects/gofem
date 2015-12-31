@@ -83,6 +83,23 @@ package ana implements analytical solutions
 			
 			
 				
+				<dd><a href="#ColumnFluidPressure">type ColumnFluidPressure</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ColumnFluidPressure.Calc">func (o ColumnFluidPressure) Calc(z float64) (p, R float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ColumnFluidPressure.CalcNum">func (o ColumnFluidPressure) CalcNum(z float64) (p, R float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ColumnFluidPressure.Init">func (o *ColumnFluidPressure) Init(R0, p0, C, g, H float64, withNum bool)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ColumnFluidPressure.Plot">func (o ColumnFluidPressure) Plot(dirout, fnkey, subscript string, np int)</a></dd>
+				
+			
+				
 				<dd><a href="#ConfinedSelfWeight">type ConfinedSelfWeight</a></dd>
 				
 				
@@ -128,6 +145,14 @@ package ana implements analytical solutions
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#CteStressPstrain.Solution">func (o CteStressPstrain) Solution(t float64) (σx, σy, σz, εx, εy float64)</a></dd>
+				
+			
+				
+				<dd><a href="#DryAir">type DryAir</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DryAir.Init">func (o *DryAir) Init()</a></dd>
 				
 			
 				
@@ -184,6 +209,14 @@ package ana implements analytical solutions
 					<dd>&nbsp; &nbsp; <a href="#PressCylin.Stresses">func (o PressCylin) Stresses(c, r float64) (sr, st float64)</a></dd>
 				
 			
+				
+				<dd><a href="#Water">type Water</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Water.Init">func (o *Water) Init()</a></dd>
+				
+			
 			
 			</dl>
 			</div><!-- #manual-nav -->
@@ -195,9 +228,11 @@ package ana implements analytical solutions
 			<p>
 			<span style="font-size:90%">
 			
-				<a href="/src/github.com/cpmech/gofem/ana/confined-selfweight.go">confined-selfweight.go</a>
+				<a href="/src/github.com/cpmech/gofem/ana/colpresfluid.go">colpresfluid.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/ana/constantstress.go">constantstress.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ana/mat_fluids.go">mat_fluids.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/ana/materials_and_sections.go">materials_and_sections.go</a>
 			
@@ -206,6 +241,8 @@ package ana implements analytical solutions
 				<a href="/src/github.com/cpmech/gofem/ana/polar_stresses.go">polar_stresses.go</a>
 			
 				<a href="/src/github.com/cpmech/gofem/ana/pressurised_cylinder.go">pressurised_cylinder.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ana/selfweight_confined.go">selfweight_confined.go</a>
 			
 			</span>
 			</p>
@@ -269,7 +306,91 @@ Cartesian components
 		
 			
 			
-			<h2 id="ConfinedSelfWeight">type <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=735:1070#L15">ConfinedSelfWeight</a></h2>
+			<h2 id="ColumnFluidPressure">type <a href="https://github.com/cpmech/gofem/blob/master/ana/colpresfluid.go?s=872:1218#L20">ColumnFluidPressure</a></h2>
+			<pre>type ColumnFluidPressure struct {
+    R0   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// intrinsic density corresponding to p0</span>
+    P0   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// pressure corresponding to R0</span>
+    C    <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// compressibility coefficient; e.g. R0/Kbulk or M/(R・θ)</span>
+    Grav <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// gravity acceleration (positive constant)</span>
+    H    <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// elevation where (R0,p0) is known</span>
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+ColumnFluidPressure computes pressure (p) and intrinsic density (R) of a fluid
+along a column with gravity (g). The numerical solution is:
+</p>
+<pre>R    = R0 + C・(p - p0)   thus   dR/dp = C
+Z(z) = zmax + T・(z - zmax)   with 0 ≤ T ≤ 1    T is a pseudo variable
+dZ   = (z - zmax)・dT
+dp   = R(p)・g・(-dZ)
+dp   = R(p)・g・(zmax - z)・dT
+Δz   = zmax - z
+
+        / dp/dT \    / R(p)・g・Δz \
+dY/dT = |        | = |             |
+        \ dR/dT /    \  C・dp/dT   /
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="ColumnFluidPressure.Calc">func (ColumnFluidPressure) <a href="https://github.com/cpmech/gofem/blob/master/ana/colpresfluid.go?s=1872:1931#L54">Calc</a></h3>
+				<pre>func (o <a href="#ColumnFluidPressure">ColumnFluidPressure</a>) Calc(z <a href="/pkg/builtin/#float64">float64</a>) (p, R <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+Calc computes pressure and density
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ColumnFluidPressure.CalcNum">func (ColumnFluidPressure) <a href="https://github.com/cpmech/gofem/blob/master/ana/colpresfluid.go?s=2092:2154#L61">CalcNum</a></h3>
+				<pre>func (o <a href="#ColumnFluidPressure">ColumnFluidPressure</a>) CalcNum(z <a href="/pkg/builtin/#float64">float64</a>) (p, R <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+CalcNum computes pressure and density using numerical method
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ColumnFluidPressure.Init">func (*ColumnFluidPressure) <a href="https://github.com/cpmech/gofem/blob/master/ana/colpresfluid.go?s=1255:1328#L30">Init</a></h3>
+				<pre>func (o *<a href="#ColumnFluidPressure">ColumnFluidPressure</a>) Init(R0, p0, C, g, H <a href="/pkg/builtin/#float64">float64</a>, withNum <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				<p>
+Init initialises this structure
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ColumnFluidPressure.Plot">func (ColumnFluidPressure) <a href="https://github.com/cpmech/gofem/blob/master/ana/colpresfluid.go?s=2443:2517#L72">Plot</a></h3>
+				<pre>func (o <a href="#ColumnFluidPressure">ColumnFluidPressure</a>) Plot(dirout, fnkey, subscript <a href="/pkg/builtin/#string">string</a>, np <a href="/pkg/builtin/#int">int</a>)</pre>
+				<p>
+Plot plots pressure and density along height of column
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ConfinedSelfWeight">type <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=735:1070#L15">ConfinedSelfWeight</a></h2>
 			<pre>type ConfinedSelfWeight struct {
     <span class="comment">// input</span>
     E <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young&#39;s modulus</span>
@@ -303,7 +424,7 @@ h  ▷ |    ν, g   | ◁       g = 10  =&gt;  b = -10 * ρ (body force)
 
 			
 				
-				<h3 id="ConfinedSelfWeight.CheckDispl">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=2855:2949#L104">CheckDispl</a></h3>
+				<h3 id="ConfinedSelfWeight.CheckDispl">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=2855:2949#L104">CheckDispl</a></h3>
 				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) CheckDispl(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, t <a href="/pkg/builtin/#float64">float64</a>, u, x []<a href="/pkg/builtin/#float64">float64</a>, tol <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 CheckDispl checks displacements
@@ -314,7 +435,7 @@ CheckDispl checks displacements
 				
 			
 				
-				<h3 id="ConfinedSelfWeight.CheckStress">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=2654:2750#L98">CheckStress</a></h3>
+				<h3 id="ConfinedSelfWeight.CheckStress">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=2654:2750#L98">CheckStress</a></h3>
 				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) CheckStress(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, t <a href="/pkg/builtin/#float64">float64</a>, σ, x []<a href="/pkg/builtin/#float64">float64</a>, tol <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 CheckStress check stresses
@@ -325,7 +446,7 @@ CheckStress check stresses
 				
 			
 				
-				<h3 id="ConfinedSelfWeight.Displ">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=2181:2252#L82">Displ</a></h3>
+				<h3 id="ConfinedSelfWeight.Displ">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=2181:2252#L82">Displ</a></h3>
 				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) Displ(t <a href="/pkg/builtin/#float64">float64</a>, x []<a href="/pkg/builtin/#float64">float64</a>) (u []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Displ computes displacement components
@@ -336,7 +457,7 @@ Displ computes displacement components
 				
 			
 				
-				<h3 id="ConfinedSelfWeight.Init">func (*ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=1107:1155#L30">Init</a></h3>
+				<h3 id="ConfinedSelfWeight.Init">func (*ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=1107:1155#L30">Init</a></h3>
 				<pre>func (o *<a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>)</pre>
 				<p>
 Init initialises this structure
@@ -347,7 +468,7 @@ Init initialises this structure
 				
 			
 				
-				<h3 id="ConfinedSelfWeight.Stress">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/confined-selfweight.go?s=1689:1762#L66">Stress</a></h3>
+				<h3 id="ConfinedSelfWeight.Stress">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=1689:1762#L66">Stress</a></h3>
 				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) Stress(t <a href="/pkg/builtin/#float64">float64</a>, x []<a href="/pkg/builtin/#float64">float64</a>) (σ []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Stress computes stress components
@@ -528,6 +649,44 @@ Init initialises this structure
 				<pre>func (o <a href="#CteStressPstrain">CteStressPstrain</a>) Solution(t <a href="/pkg/builtin/#float64">float64</a>) (σx, σy, σz, εx, εy <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Solution computes solution
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="DryAir">type <a href="https://github.com/cpmech/gofem/blob/master/ana/mat_fluids.go?s=532:830#L6">DryAir</a></h2>
+			<pre>type DryAir struct {
+    Θ    <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// reference temperature; default = 25°C or 298.15K</span>
+    R    <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// specific ideal gas constant</span>
+    Patm <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// absolute atmospheric pressure</span>
+    Rho  <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// intrinsic density @ reference temperature</span>
+    C    <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// compressibility @ reference temperature</span>
+}</pre>
+			<p>
+DryAir handles the properties of dry air
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="DryAir.Init">func (*DryAir) <a href="https://github.com/cpmech/gofem/blob/master/ana/mat_fluids.go?s=1062:1085#L23">Init</a></h3>
+				<pre>func (o *<a href="#DryAir">DryAir</a>) Init()</pre>
+				<p>
+Init initialises data
 </p>
 
 				
@@ -791,6 +950,43 @@ at the outer surface
 				<pre>func (o <a href="#PressCylin">PressCylin</a>) Stresses(c, r <a href="/pkg/builtin/#float64">float64</a>) (sr, st <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Stresses compute the radial and tangential stresses
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Water">type <a href="https://github.com/cpmech/gofem/blob/master/ana/mat_fluids.go?s=231:486#L1">Water</a></h2>
+			<pre>type Water struct {
+    Θ   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// reference temperature; default = 25°C or 298.15K</span>
+    K   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// bulk modulus @ reference temperature</span>
+    Rho <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// intrinsic density @ reference temperature</span>
+    C   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// compressibility @ reference temperature</span>
+}</pre>
+			<p>
+Water handles the properties of water
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Water.Init">func (*Water) <a href="https://github.com/cpmech/gofem/blob/master/ana/mat_fluids.go?s=857:879#L15">Init</a></h3>
+				<pre>func (o *<a href="#Water">Water</a>) Init()</pre>
+				<p>
+Init initialises data
 </p>
 
 				

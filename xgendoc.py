@@ -20,15 +20,16 @@ def Cmd(command, verbose=False, debug=False):
     return out, err
 
 pkgs = [
-    ("ana",      "analytical solutions for comparisons"),
-    ("shp",      "shape structures and quadrature points"),
-    ("inp",      "input data structures. simulation, materials, meshes"),
-    ("msolid",   "models for solids"),
-    ("mconduct", "models for liquid/gas conductivity in porous media"),
-    ("mreten",   "models for liquid retention in porous media"),
-    ("mporous",  "models for porous media"),
-    ("fem",      "finite element method"),
-    ("out",      "results analyses and plotting"),
+    ("ana",     "analytical solutions for comparisons"),
+    ("shp",     "shape structures and quadrature points"),
+    ("mdl/sld", "models for solids"),
+    ("mdl/cnd", "models for liquid/gas conductivity in porous media"),
+    ("mdl/lrm", "models for liquid retention in porous media"),
+    ("mdl/fld", "models for fluids"),
+    ("mdl/por", "models for porous media"),
+    ("inp",     "input data structures. simulation, materials, meshes"),
+    ("fem",     "finite element method"),
+    ("out",     "results analyses and plotting"),
 ]
 
 odir  = 'doc/'
@@ -62,14 +63,17 @@ def pkgheader(pkg):
     return header('Gofem &ndash; package '+pkg[0]) + '<h1>Gofem &ndash; <b>%s</b> &ndash; %s</h1>' % (pkg[0], pkg[1])
 
 def pkgitem(pkg):
-    return '<dd><a href=\\"xx%s.html\\"><b>%s</b>: %s</a></dd>' % (pkg[0], pkg[0], pkg[1])
+    fnk = pkg[0].replace("/","-")
+    return '<dd><a href=\\"xx%s.html\\"><b>%s</b>: %s</a></dd>' % (fnk, pkg[0], pkg[1])
 
 Cmd('echo "'+header('Gofem &ndash; Documentation')+'" > '+idxfn)
 Cmd('echo "<h1>Gofem &ndash; Documentation</h1>" >> '+idxfn)
 Cmd('echo "<h2 id=\\"pkg-index\\">Index</h2>\n<div id=\\"manual-nav\\">\n<dl>" >> '+idxfn)
 
 for pkg in pkgs:
-    fn = odir+'xx'+pkg[0]+'.html'
+    fnk = pkg[0].replace("/","-")
+    fn = odir+'xx'+fnk+'.html'
+    print fn
     Cmd('echo "'+pkgheader(pkg)+'" > '+fn)
     Cmd('godoc -html github.com/cpmech/gofem/'+pkg[0]+' >> '+fn)
     Cmd('echo "'+footer()+'" >> '+fn)

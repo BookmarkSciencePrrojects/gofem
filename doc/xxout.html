@@ -88,7 +88,7 @@ package out implements FE simulation output handling for analyses and plotting
 				<dd><a href="#DefineBeams">func DefineBeams()</a></dd>
 			
 				
-				<dd><a href="#Draw">func Draw(dirout, fname string, show bool, extra ExtraPlt)</a></dd>
+				<dd><a href="#Draw">func Draw(dirout, fname string, nr, nc int, split bool, extra func(id string))</a></dd>
 			
 				
 				<dd><a href="#GetCoords">func GetCoords(alias string) []float64</a></dd>
@@ -124,7 +124,7 @@ package out implements FE simulation output handling for analyses and plotting
 				<dd><a href="#Plot">func Plot(xHandle, yHandle interface{}, alias string, fm plt.Fmt, idxI int)</a></dd>
 			
 				
-				<dd><a href="#Splot">func Splot(splotTitle string)</a></dd>
+				<dd><a href="#Splot">func Splot(id, splotTitle string)</a></dd>
 			
 				
 				<dd><a href="#SplotConfig">func SplotConfig(xunit, yunit string, xscale, yscale float64)</a></dd>
@@ -182,7 +182,7 @@ package out implements FE simulation output handling for analyses and plotting
 				
 			
 				
-				<dd><a href="#ExtraPlt">type ExtraPlt</a></dd>
+				<dd><a href="#IpData_t">type IpData_t</a></dd>
 				
 				
 			
@@ -386,18 +386,19 @@ constants
 				<pre>var (
 
     <span class="comment">// data set by Start</span>
-    <span id="Analysis">Analysis</span>  *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#FEM">FEM</a>         <span class="comment">// the fem structure</span>
-    <span id="Sum">Sum</span>       *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Summary">Summary</a>     <span class="comment">// [from Analysis] summary</span>
-    <span id="Dom">Dom</span>       *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Domain">Domain</a>      <span class="comment">// [from Analysis] FE domain</span>
-    <span id="Ipoints">Ipoints</span>   []*<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#OutIpData">OutIpData</a> <span class="comment">// all integration points. ipid == index in Ipoints</span>
-    <span id="Cid2ips">Cid2ips</span>   [][]<a href="/pkg/builtin/#int">int</a>          <span class="comment">// [ncells][nip] maps cell id to index in Ipoints</span>
-    <span id="Ipkey2ips">Ipkey2ips</span> map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#int">int</a> <span class="comment">// maps ip keys to indices in Ipoints</span>
-    <span id="Ipkeys">Ipkeys</span>    map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#bool">bool</a>  <span class="comment">// all ip keys</span>
-    <span id="NodBins">NodBins</span>   <a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Bins">Bins</a>          <span class="comment">// bins for nodes</span>
-    <span id="IpsBins">IpsBins</span>   <a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Bins">Bins</a>          <span class="comment">// bins for integration points</span>
-    <span id="IpsMin">IpsMin</span>    []<a href="/pkg/builtin/#float64">float64</a>        <span class="comment">// [ndim] {x,y,z}_min among all ips</span>
-    <span id="IpsMax">IpsMax</span>    []<a href="/pkg/builtin/#float64">float64</a>        <span class="comment">// [ndim] {x,y,z}_max among all ips</span>
-    <span id="Beams">Beams</span>     []*<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Beam">Beam</a>      <span class="comment">// beams, if any</span>
+    <span id="Analysis">Analysis</span>   *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#FEM">FEM</a>         <span class="comment">// the fem structure</span>
+    <span id="Sum">Sum</span>        *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Summary">Summary</a>     <span class="comment">// [from Analysis] summary</span>
+    <span id="Dom">Dom</span>        *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Domain">Domain</a>      <span class="comment">// [from Analysis] FE domain</span>
+    <span id="Ipoints">Ipoints</span>    []*<a href="#IpData_t">IpData_t</a>      <span class="comment">// all integration points. ipid == index in Ipoints</span>
+    <span id="Cid2ips">Cid2ips</span>    [][]<a href="/pkg/builtin/#int">int</a>          <span class="comment">// [ncells][nip] maps cell id to index in Ipoints</span>
+    <span id="Ipkey2ips">Ipkey2ips</span>  map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#int">int</a> <span class="comment">// maps ip keys to indices in Ipoints</span>
+    <span id="Ipkeys">Ipkeys</span>     map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#bool">bool</a>  <span class="comment">// all ip keys</span>
+    <span id="NodBins">NodBins</span>    <a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Bins">Bins</a>          <span class="comment">// bins for nodes</span>
+    <span id="IpsBins">IpsBins</span>    <a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Bins">Bins</a>          <span class="comment">// bins for integration points</span>
+    <span id="IpsMin">IpsMin</span>     []<a href="/pkg/builtin/#float64">float64</a>        <span class="comment">// [ndim] {x,y,z}_min among all ips</span>
+    <span id="IpsMax">IpsMax</span>     []<a href="/pkg/builtin/#float64">float64</a>        <span class="comment">// [ndim] {x,y,z}_max among all ips</span>
+    <span id="Beams">Beams</span>      []*<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Beam">Beam</a>      <span class="comment">// beams, if any</span>
+    <span id="ElemOutIps">ElemOutIps</span> []<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#ElemOutIps">ElemOutIps</a> <span class="comment">// subset of element that can output IP values</span>
 
     <span class="comment">// defined entities and results loaded by LoadResults</span>
     <span id="Planes">Planes</span>   map[<a href="/pkg/builtin/#string">string</a>]*<a href="#PlaneData">PlaneData</a> <span class="comment">// for points defined on planes. maps aliases to data</span>
@@ -465,7 +466,7 @@ CombineEidIps combines eids and ips(ids)
 		
 			
 			
-			<h2 id="Define">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=680:718#L11">Define</a></h2>
+			<h2 id="Define">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=711:749#L12">Define</a></h2>
 			<pre>func Define(alias <a href="/pkg/builtin/#string">string</a>, loc <a href="#Locator">Locator</a>)</pre>
 			<p>
 Define defines aliases
@@ -495,16 +496,17 @@ DefineBeams define aliases for beams; e.g. &#34;beam0&#34;, &#34;beam1&#34;, etc
 		
 			
 			
-			<h2 id="Draw">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=3011:3069#L83">Draw</a></h2>
-			<pre>func Draw(dirout, fname <a href="/pkg/builtin/#string">string</a>, show <a href="/pkg/builtin/#bool">bool</a>, extra <a href="#ExtraPlt">ExtraPlt</a>)</pre>
+			<h2 id="Draw">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=3113:3191#L83">Draw</a></h2>
+			<pre>func Draw(dirout, fname <a href="/pkg/builtin/#string">string</a>, nr, nc <a href="/pkg/builtin/#int">int</a>, split <a href="/pkg/builtin/#bool">bool</a>, extra func(id <a href="/pkg/builtin/#string">string</a>))</pre>
 			<p>
 Draw draws or save figure with plot
 </p>
 <pre>dirout -- directory to save figure
-fname  -- file name; e.g. myplot.eps or myplot.png. Use &#34;&#34; to skip saving
-show   -- shows figure
+fname  -- file name; e.g. myplot.eps or myplot.png. Use &#34;&#34; to show figure instead
+nr     -- number of rows. Use -1 to compute best value
+nc     -- number of columns. Use -1 to compute best value
+split  -- split subplots into separated figures
 extra  -- is called just after Subplot command and before any plotting
-Note: subplots will be split if using &#39;eps&#39; files
 </pre>
 
 			
@@ -513,7 +515,7 @@ Note: subplots will be split if using &#39;eps&#39; files
 		
 			
 			
-			<h2 id="GetCoords">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=4062:4100#L162">GetCoords</a></h2>
+			<h2 id="GetCoords">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=4347:4385#L174">GetCoords</a></h2>
 			<pre>func GetCoords(alias <a href="/pkg/builtin/#string">string</a>) []<a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 GetCoords returns the coordinates of a single point
@@ -525,7 +527,7 @@ GetCoords returns the coordinates of a single point
 		
 			
 			
-			<h2 id="GetDist">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=4532:4580#L175">GetDist</a></h2>
+			<h2 id="GetDist">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=4817:4865#L187">GetDist</a></h2>
 			<pre>func GetDist(key, alias <a href="/pkg/builtin/#string">string</a>) (dist []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 			<p>
 GetDist returns the distance from a reference point on the given line with selected points
@@ -540,7 +542,7 @@ if they contain a given key
 		
 			
 			
-			<h2 id="GetIds">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=3765:3810#L147">GetIds</a></h2>
+			<h2 id="GetIds">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=4050:4095#L159">GetIds</a></h2>
 			<pre>func GetIds(alias <a href="/pkg/builtin/#string">string</a>) (vids, ipids []<a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 GetIds return the ids corresponding to alias
@@ -552,7 +554,7 @@ GetIds return the ids corresponding to alias
 		
 			
 			
-			<h2 id="GetRes">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=3242:3292#L119">GetRes</a></h2>
+			<h2 id="GetRes">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=3527:3577#L131">GetRes</a></h2>
 			<pre>func GetRes(key, alias <a href="/pkg/builtin/#string">string</a>, idxI <a href="/pkg/builtin/#int">int</a>) []<a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 GetRes gets results as a time or space series corresponding to a given alias
@@ -577,7 +579,7 @@ for a single point or set of points.
 		
 			
 			
-			<h2 id="GetXYZ">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=5045:5095#L194">GetXYZ</a></h2>
+			<h2 id="GetXYZ">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=5330:5380#L206">GetXYZ</a></h2>
 			<pre>func GetXYZ(key, alias <a href="/pkg/builtin/#string">string</a>) (x, y, z []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 			<p>
 GetXYZ returns the x-y-z coordinates of selected points that have a specified key
@@ -591,7 +593,7 @@ GetXYZ returns the x-y-z coordinates of selected points that have a specified ke
 		
 			
 			
-			<h2 id="IntegOnPlane">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=6663:6715#L248">IntegOnPlane</a></h2>
+			<h2 id="IntegOnPlane">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=6948:7000#L260">IntegOnPlane</a></h2>
 			<pre>func IntegOnPlane(key, alias <a href="/pkg/builtin/#string">string</a>) (res []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 			<p>
 IntegOnPlane integrates the results of nodes located on a plane perpedicular to either {x,y,z}
@@ -614,7 +616,7 @@ Output:
 		
 			
 			
-			<h2 id="Integrate">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=5740:5798#L218">Integrate</a></h2>
+			<h2 id="Integrate">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=6025:6083#L230">Integrate</a></h2>
 			<pre>func Integrate(key, alias, along <a href="/pkg/builtin/#string">string</a>, idxI <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Integrate integrates key along direction &#34;x&#34;, &#34;y&#34;, or &#34;z&#34;
@@ -629,7 +631,7 @@ Integrate integrates key along direction &#34;x&#34;, &#34;y&#34;, or &#34;z&#34
 		
 			
 			
-			<h2 id="LoadResults">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=1520:1553#L50">LoadResults</a></h2>
+			<h2 id="LoadResults">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=1551:1584#L51">LoadResults</a></h2>
 			<pre>func LoadResults(times []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 			<p>
 LoadResults loads all results after points are defined
@@ -661,7 +663,7 @@ Examples:  &#34;ux&#34;      =&gt; &#34;ux&#34;, 0
 		
 			
 			
-			<h2 id="Plot">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=2034:2109#L57">Plot</a></h2>
+			<h2 id="Plot">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=2155:2230#L60">Plot</a></h2>
 			<pre>func Plot(xHandle, yHandle interface{}, alias <a href="/pkg/builtin/#string">string</a>, fm <a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#Fmt">Fmt</a>, idxI <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Plot plots data
@@ -679,8 +681,8 @@ idxI    -- index of time; use -1 for all times
 		
 			
 			
-			<h2 id="Splot">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=1183:1212#L30">Splot</a></h2>
-			<pre>func Splot(splotTitle <a href="/pkg/builtin/#string">string</a>)</pre>
+			<h2 id="Splot">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=1292:1325#L33">Splot</a></h2>
+			<pre>func Splot(id, splotTitle <a href="/pkg/builtin/#string">string</a>)</pre>
 			<p>
 Splot activates a new subplot window
 </p>
@@ -691,7 +693,7 @@ Splot activates a new subplot window
 		
 			
 			
-			<h2 id="SplotConfig">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=1344:1405#L37">SplotConfig</a></h2>
+			<h2 id="SplotConfig">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=1465:1526#L40">SplotConfig</a></h2>
 			<pre>func SplotConfig(xunit, yunit <a href="/pkg/builtin/#string">string</a>, xscale, yscale <a href="/pkg/builtin/#float64">float64</a>)</pre>
 			<p>
 SplotConfig configures units and scales of axes
@@ -703,7 +705,7 @@ SplotConfig configures units and scales of axes
 		
 			
 			
-			<h2 id="Start">func <a href="https://github.com/cpmech/gofem/blob/master/out/out.go?s=2036:2089#L48">Start</a></h2>
+			<h2 id="Start">func <a href="https://github.com/cpmech/gofem/blob/master/out/out.go?s=2434:2487#L56">Start</a></h2>
 			<pre>func Start(simfnpath <a href="/pkg/builtin/#string">string</a>, stageIdx, regionIdx <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Start starts handling of results given a simulation input file
@@ -912,13 +914,15 @@ Locate finds integration points
 		
 			
 			
-			<h2 id="ExtraPlt">type <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=2661:2697#L75">ExtraPlt</a></h2>
-			<pre>type ExtraPlt func(i, j, nplots <a href="/pkg/builtin/#int">int</a>)</pre>
+			<h2 id="IpData_t">type <a href="https://github.com/cpmech/gofem/blob/master/out/out.go?s=719:936#L16">IpData_t</a></h2>
+			<pre>type IpData_t struct {
+    Cid  <a href="/pkg/builtin/#int">int</a>                <span class="comment">// id of cell/element holding this integration point</span>
+    X    []<a href="/pkg/builtin/#float64">float64</a>          <span class="comment">// coordinates of integration point</span>
+    Vals map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// current (@ time t) values</span>
+}</pre>
 			<p>
-ExtraPlt defines a callback function for extra plt commands
+IpData_t is an auxiliary structure holding element id and integration point coordinates
 </p>
-<pre>Note: i and j are indices as in Subplot
-</pre>
 
 
 			
@@ -1314,12 +1318,15 @@ ResultsMap maps aliases to points
 		
 			
 			
-			<h2 id="SplotDat">type <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=709:1141#L18">SplotDat</a></h2>
+			<h2 id="SplotDat">type <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=709:1250#L18">SplotDat</a></h2>
 			<pre>type SplotDat struct {
+    Id      <a href="/pkg/builtin/#string">string</a>       <span class="comment">// unique identifier</span>
     Title   <a href="/pkg/builtin/#string">string</a>       <span class="comment">// title of subplot</span>
     Topts   <a href="/pkg/builtin/#string">string</a>       <span class="comment">// title options</span>
     Xscale  <a href="/pkg/builtin/#float64">float64</a>      <span class="comment">// x-axis scale</span>
     Yscale  <a href="/pkg/builtin/#float64">float64</a>      <span class="comment">// y-axis scale</span>
+    Xrange  []<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// x range</span>
+    Yrange  []<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// x range</span>
     Xlbl    <a href="/pkg/builtin/#string">string</a>       <span class="comment">// x-axis label (formatted; e.g. &#34;$t$&#34;)</span>
     Ylbl    <a href="/pkg/builtin/#string">string</a>       <span class="comment">// y-axis label (formatted; e.g. &#34;$p_{\ell}$&#34;)</span>
     GllArgs <a href="/pkg/builtin/#string">string</a>       <span class="comment">// extra arguments for Gll such as leg_out</span>
