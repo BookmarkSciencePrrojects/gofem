@@ -48,18 +48,6 @@
 				<p>
 package ana implements analytical solutions
 </p>
-<p>
-package ana implements analytical solutions
-</p>
-<p>
-package ana implements analytical solutions
-</p>
-<p>
-package ana implements analytical solutions
-</p>
-<p>
-package ana implements analytical solutions
-</p>
 
 			</div>
 		</div>
@@ -292,7 +280,7 @@ package ana implements analytical solutions
 		
 			
 			
-			<h2 id="PolarStresses">func <a href="https://github.com/cpmech/gofem/blob/master/ana/polar_stresses.go?s=350:420#L2">PolarStresses</a></h2>
+			<h2 id="PolarStresses">func <a href="https://github.com/cpmech/gofem/blob/master/ana/polar_stresses.go?s=303:373#L1">PolarStresses</a></h2>
 			<pre>func PolarStresses(x, y, sx, sy, sxy <a href="/pkg/builtin/#float64">float64</a>) (r, sr, st, srt <a href="/pkg/builtin/#float64">float64</a>)</pre>
 			<p>
 PolarStresses computes stress components w.r.t polar system from given
@@ -390,7 +378,7 @@ Plot plots pressure and density along height of column
 		
 			
 			
-			<h2 id="ConfinedSelfWeight">type <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=735:1070#L15">ConfinedSelfWeight</a></h2>
+			<h2 id="ConfinedSelfWeight">type <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=688:1023#L14">ConfinedSelfWeight</a></h2>
 			<pre>type ConfinedSelfWeight struct {
     <span class="comment">// input</span>
     E <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young&#39;s modulus</span>
@@ -424,7 +412,7 @@ h  ▷ |    ν, g   | ◁       g = 10  =&gt;  b = -10 * ρ (body force)
 
 			
 				
-				<h3 id="ConfinedSelfWeight.CheckDispl">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=2855:2949#L104">CheckDispl</a></h3>
+				<h3 id="ConfinedSelfWeight.CheckDispl">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=2808:2902#L103">CheckDispl</a></h3>
 				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) CheckDispl(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, t <a href="/pkg/builtin/#float64">float64</a>, u, x []<a href="/pkg/builtin/#float64">float64</a>, tol <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 CheckDispl checks displacements
@@ -435,7 +423,7 @@ CheckDispl checks displacements
 				
 			
 				
-				<h3 id="ConfinedSelfWeight.CheckStress">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=2654:2750#L98">CheckStress</a></h3>
+				<h3 id="ConfinedSelfWeight.CheckStress">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=2607:2703#L97">CheckStress</a></h3>
 				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) CheckStress(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, t <a href="/pkg/builtin/#float64">float64</a>, σ, x []<a href="/pkg/builtin/#float64">float64</a>, tol <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 CheckStress check stresses
@@ -446,7 +434,7 @@ CheckStress check stresses
 				
 			
 				
-				<h3 id="ConfinedSelfWeight.Displ">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=2181:2252#L82">Displ</a></h3>
+				<h3 id="ConfinedSelfWeight.Displ">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=2134:2205#L81">Displ</a></h3>
 				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) Displ(t <a href="/pkg/builtin/#float64">float64</a>, x []<a href="/pkg/builtin/#float64">float64</a>) (u []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Displ computes displacement components
@@ -457,7 +445,7 @@ Displ computes displacement components
 				
 			
 				
-				<h3 id="ConfinedSelfWeight.Init">func (*ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=1107:1155#L30">Init</a></h3>
+				<h3 id="ConfinedSelfWeight.Init">func (*ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=1060:1108#L29">Init</a></h3>
 				<pre>func (o *<a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>)</pre>
 				<p>
 Init initialises this structure
@@ -468,7 +456,7 @@ Init initialises this structure
 				
 			
 				
-				<h3 id="ConfinedSelfWeight.Stress">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=1689:1762#L66">Stress</a></h3>
+				<h3 id="ConfinedSelfWeight.Stress">func (ConfinedSelfWeight) <a href="https://github.com/cpmech/gofem/blob/master/ana/selfweight_confined.go?s=1642:1715#L65">Stress</a></h3>
 				<pre>func (o <a href="#ConfinedSelfWeight">ConfinedSelfWeight</a>) Stress(t <a href="/pkg/builtin/#float64">float64</a>, x []<a href="/pkg/builtin/#float64">float64</a>) (σ []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Stress computes stress components
@@ -754,7 +742,7 @@ Init initialises material paramters
 		
 			
 			
-			<h2 id="PlateHole">type <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=758:1027#L20">PlateHole</a></h2>
+			<h2 id="PlateHole">type <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=711:980#L19">PlateHole</a></h2>
 			<pre>type PlateHole struct {
     E <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young&#39;s modulus</span>
     <span class="comment">// contains filtered or unexported fields</span>
@@ -788,7 +776,7 @@ PlateHole implements Kirsch&#39;s solution to 2D Plate with hole
 
 			
 				
-				<h3 id="PlateHole.CompareStress">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=2298:2400#L98">CompareStress</a></h3>
+				<h3 id="PlateHole.CompareStress">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=2251:2353#L97">CompareStress</a></h3>
 				<pre>func (o *<a href="#PlateHole">PlateHole</a>) CompareStress(t <a href="/pkg/builtin/#float64">float64</a>, x, σ []<a href="/pkg/builtin/#float64">float64</a>, tol <a href="/pkg/builtin/#float64">float64</a>, verbose <a href="/pkg/builtin/#bool">bool</a>) (e []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 CompareStress compares stresses
@@ -802,7 +790,7 @@ CompareStress compares stresses
 				
 			
 				
-				<h3 id="PlateHole.Init">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=1064:1103#L32">Init</a></h3>
+				<h3 id="PlateHole.Init">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=1017:1056#L31">Init</a></h3>
 				<pre>func (o *<a href="#PlateHole">PlateHole</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>)</pre>
 				<p>
 Init initialises this structure
@@ -813,7 +801,7 @@ Init initialises this structure
 				
 			
 				
-				<h3 id="PlateHole.PlotStress">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=2926:2980#L122">PlotStress</a></h3>
+				<h3 id="PlateHole.PlotStress">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=2879:2933#L121">PlotStress</a></h3>
 				<pre>func (o *<a href="#PlateHole">PlateHole</a>) PlotStress(t, L <a href="/pkg/builtin/#float64">float64</a>, npts <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 PlotStress plots stresses along y=0 (horizontal line) and x=0 (vertical line)
@@ -824,7 +812,7 @@ PlotStress plots stresses along y=0 (horizontal line) and x=0 (vertical line)
 				
 			
 				
-				<h3 id="PlateHole.Stress">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=1477:1553#L61">Stress</a></h3>
+				<h3 id="PlateHole.Stress">func (*PlateHole) <a href="https://github.com/cpmech/gofem/blob/master/ana/plate_hole.go?s=1430:1506#L60">Stress</a></h3>
 				<pre>func (o *<a href="#PlateHole">PlateHole</a>) Stress(t <a href="/pkg/builtin/#float64">float64</a>, x []<a href="/pkg/builtin/#float64">float64</a>) (sx, sy, sz, sxy <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Stress computes stresses @ (x,y) and time t
@@ -837,7 +825,7 @@ Stress computes stresses @ (x,y) and time t
 		
 			
 			
-			<h2 id="PressCylin">type <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=855:1299#L21">PressCylin</a></h2>
+			<h2 id="PressCylin">type <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=808:1252#L20">PressCylin</a></h2>
 			<pre>type PressCylin struct {
     E <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young&#39;s modulus</span>
 
@@ -879,7 +867,7 @@ linear elastic plane-strain problem -- Hill&#39;s solution
 
 			
 				
-				<h3 id="PressCylin.CalcPressDisp">func (PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=3345:3404#L117">CalcPressDisp</a></h3>
+				<h3 id="PressCylin.CalcPressDisp">func (PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=3298:3357#L116">CalcPressDisp</a></h3>
 				<pre>func (o <a href="#PressCylin">PressCylin</a>) CalcPressDisp(np <a href="/pkg/builtin/#int">int</a>) (P, Ub []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 CalcLoadDisp returns the internal pressure and outer displacements for
@@ -891,7 +879,7 @@ plotting the load-displacement graph
 				
 			
 				
-				<h3 id="PressCylin.CalcStresses">func (PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=3726:3817#L137">CalcStresses</a></h3>
+				<h3 id="PressCylin.CalcStresses">func (PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=3679:3770#L136">CalcStresses</a></h3>
 				<pre>func (o <a href="#PressCylin">PressCylin</a>) CalcStresses(Pvals []<a href="/pkg/builtin/#float64">float64</a>, nr <a href="/pkg/builtin/#int">int</a>) (R []<a href="/pkg/builtin/#float64">float64</a>, Sr, St [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				
 				
@@ -899,7 +887,7 @@ plotting the load-displacement graph
 				
 			
 				
-				<h3 id="PressCylin.Calc_c">func (*PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=2497:2543#L90">Calc_c</a></h3>
+				<h3 id="PressCylin.Calc_c">func (*PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=2450:2496#L89">Calc_c</a></h3>
 				<pre>func (o *<a href="#PressCylin">PressCylin</a>) Calc_c(P <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Calc_c computes the elastic/plastic transition zone
@@ -911,7 +899,7 @@ TODO: check what&#39;s &#39;c&#39; exactly
 				
 			
 				
-				<h3 id="PressCylin.ElastOuterU">func (PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=2278:2333#L83">ElastOuterU</a></h3>
+				<h3 id="PressCylin.ElastOuterU">func (PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=2231:2286#L82">ElastOuterU</a></h3>
 				<pre>func (o <a href="#PressCylin">PressCylin</a>) ElastOuterU(P <a href="/pkg/builtin/#float64">float64</a>) (ub <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 ElastOuterU computes the elastic solution for the radial displacement
@@ -923,7 +911,7 @@ at the outer surface
 				
 			
 				
-				<h3 id="PressCylin.Init">func (*PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=1336:1376#L41">Init</a></h3>
+				<h3 id="PressCylin.Init">func (*PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=1289:1329#L40">Init</a></h3>
 				<pre>func (o *<a href="#PressCylin">PressCylin</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>)</pre>
 				<p>
 Init initialises this structure
@@ -934,7 +922,7 @@ Init initialises this structure
 				
 			
 				
-				<h3 id="PressCylin.Plastic">func (PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=2006:2060#L75">Plastic</a></h3>
+				<h3 id="PressCylin.Plastic">func (PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=1959:2013#L74">Plastic</a></h3>
 				<pre>func (o <a href="#PressCylin">PressCylin</a>) Plastic(c <a href="/pkg/builtin/#float64">float64</a>) (P, ub <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Plastic computes the pressure corresponding to c and the radial displacment
@@ -946,7 +934,7 @@ at the outer surface
 				
 			
 				
-				<h3 id="PressCylin.Stresses">func (PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=2807:2866#L101">Stresses</a></h3>
+				<h3 id="PressCylin.Stresses">func (PressCylin) <a href="https://github.com/cpmech/gofem/blob/master/ana/pressurised_cylinder.go?s=2760:2819#L100">Stresses</a></h3>
 				<pre>func (o <a href="#PressCylin">PressCylin</a>) Stresses(c, r <a href="/pkg/builtin/#float64">float64</a>) (sr, st <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Stresses compute the radial and tangential stresses
