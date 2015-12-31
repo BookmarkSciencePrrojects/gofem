@@ -75,6 +75,6 @@ func Test_plot01(tst *testing.T) {
 	// plot
 	if chk.Verbose {
 		plt.SetForEps(1.2, 350)
-		PlotSimple(mdl, "/tmp/gofem", "fig_por_plot01.eps", 20, 101, true, true, true)
+		PlotLrm(mdl, "/tmp/gofem", "fig_por_plot01.eps", 20, 101, true, true, true, "", "", "", "", "")
 	}
 }

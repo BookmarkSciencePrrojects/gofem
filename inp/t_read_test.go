@@ -145,7 +145,7 @@ func Test_mat02(tst *testing.T) {
 	io.Pforan("Porous = %v\n", mat.Por)
 	if chk.Verbose {
 		plt.SetForEps(1.2, 400)
-		por.PlotSimple(mat.Por, "/tmp/gofem", "fig_mat02_lrm.eps", 20, 101, true, true, true)
+		por.PlotLrm(mat.Por, "/tmp/gofem", "fig_mat02_lrm.eps", 20, 101, true, true, true, "", "", "", "", "")
 	}
 }
 

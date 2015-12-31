@@ -207,7 +207,7 @@ func Test_0pp01b(tst *testing.T) {
 		Cnd := ele.Mdl.Cnd
 		if true {
 			plt.SetForEps(1.2, 350)
-			por.PlotSimple(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true)
+			por.PlotLrm(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true, "", "", "", "", "")
 			plt.SetForEps(1.2, 350)
 			cnd.Plot(Cnd, "/tmp/gofem", "fig_pp01b_liq.eps", 101, false, true, true)
 		}

@@ -11,9 +11,13 @@ import (
 	"github.com/cpmech/gosl/utl"
 )
 
-func PlotSimple(o *Model, dirout, fname string, pcmax float64, np int, returnTo0, withText, deriv bool) {
-	var X []float64 // pc
-	var Y []float64 // sl
+// PlotLrm plots lrm. If fname!="", figure is saved; otherwise it is not
+//  Output:
+//   X -- pc values
+//   Y -- sl values
+func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
+	returnTo0, withText, deriv bool,
+	argsDry, argsWet, argsTxtMin, argsTxtMax, txtFmt string) (X, Y []float64) {
 	if returnTo0 {
 		X = utl.LinSpace(0, pcmax, np)
 		X = append(X, utl.LinSpace(pcmax, 0, np)...)
@@ -49,16 +53,31 @@ func PlotSimple(o *Model, dirout, fname string, pcmax float64, np int, returnTo0
 	if deriv {
 		plt.Subplot(2, 1, 1)
 	}
+	if argsDry == "" {
+		argsDry = "'b-', clip_on=0"
+	}
+	if argsWet == "" {
+		argsWet = "'b-', clip_on=0, color='#0397dc'"
+	}
 	if returnTo0 {
-		plt.Plot(X[:np], Y[:np], "'b-', clip_on=0, color='#0397dc'")
-		plt.Plot(X[np:], Y[np:], "'b-', clip_on=0")
+		plt.Plot(X[:np], Y[:np], argsWet)
+		plt.Plot(X[np:], Y[np:], argsDry)
 	} else {
-		plt.Plot(X, Y, "'b-', clip_on=0")
+		plt.Plot(X, Y, argsDry)
 	}
 	if withText {
 		l := np - 1
-		plt.Text(X[0], Y[0], io.Sf("(%g, %g)", X[0], Y[0]), "ha='left',  color='red', size=8")
-		plt.Text(X[l], Y[l], io.Sf("(%g, %g)", X[l], Y[l]), "ha='right', color='red', size=8")
+		if argsTxtMin == "" {
+			argsTxtMin = "ha='left',  color='red', size=8"
+		}
+		if argsTxtMax == "" {
+			argsTxtMax = "ha='right', color='red', size=8"
+		}
+		if txtFmt == "" {
+			txtFmt = "%g"
+		}
+		plt.Text(X[0], Y[0], io.Sf("(%g, %g)", X[0], Y[0]), argsTxtMin)
+		plt.Text(X[l], Y[l], io.Sf("(%g, "+txtFmt+")", X[l], Y[l]), argsTxtMax)
 	}
 	plt.Gll("$p_c$", "$s_{\\ell}$", "")
 	if deriv {
@@ -76,5 +95,8 @@ func PlotSimple(o *Model, dirout, fname string, pcmax float64, np int, returnTo0
 		}
 		plt.Gll("$p_c$", "$\\bar{C}_c=\\mathrm{d}s_{\\ell}/\\mathrm{d}p_c$", "")
 	}
-	plt.SaveD(dirout, fname)
+	if fname != "" {
+		plt.SaveD(dirout, fname)
+	}
+	return
 }
