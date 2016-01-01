@@ -62,14 +62,14 @@ func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
 		plt.Subplot(2, 1, 1)
 	}
 	if argsDry == "" {
-		argsDry = "'b-', clip_on=0"
+		argsDry = "'b-', clip_on=0, label='drying'"
 	}
 	if argsWet == "" {
-		argsWet = "'b-', clip_on=0, color='#0397dc'"
+		argsWet = "'b-', clip_on=0, label='wetting', color='#0397dc'"
 	}
 	if returnTo0 {
-		plt.Plot(X[:np], Y[:np], argsWet)
-		plt.Plot(X[np:], Y[np:], argsDry)
+		plt.Plot(X[:np], Y[:np], argsDry)
+		plt.Plot(X[np:], Y[np:], argsWet)
 	} else {
 		plt.Plot(X, Y, argsDry)
 	}
