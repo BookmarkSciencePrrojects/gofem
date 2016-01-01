@@ -27,8 +27,8 @@ func Test_refm1a(tst *testing.T) {
 	pc0 := -5.0
 	sl0 := mdl.SlMax()
 	pcf := 20.0
-	nptsA := 101
-	nptsB := 101
+	nptsA := 21
+	nptsB := 21
 
 	if chk.Verbose {
 		plt.Reset()
@@ -36,8 +36,8 @@ func Test_refm1a(tst *testing.T) {
 	}
 
 	tolCc := 1e-17
-	tolD1a, tolD1b := 1e-11, 1e-11
-	tolD2a, tolD2b := 1e-12, 1e-10
+	tolD1a, tolD1b := 1e-10, 1e-10
+	tolD2a, tolD2b := 1e-10, 1e-8
 	Check(tst, mdl, pc0, sl0, pcf, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0}, 1e-7, false)
 
 	slf, err := Update(mdl, pc0, sl0, pcf-pc0)
@@ -51,7 +51,7 @@ func Test_refm1a(tst *testing.T) {
 	}
 
 	tolD1b = 1e-4
-	tolD2a, tolD2b = 1e-11, 1e-10
+	tolD2a, tolD2b = 1e-10, 1e-8
 	Check(tst, mdl, pcf, slf, pc0, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0}, 1e-7, false)
 
 	if chk.Verbose {
