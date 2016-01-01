@@ -14,7 +14,6 @@ import (
 
 func Test_topo01(tst *testing.T) {
 
-	// test title
 	//verbose()
 	chk.PrintTitle("topo01")
 
@@ -70,7 +69,7 @@ func Test_topo01(tst *testing.T) {
 	Plot("t", "uz", "A", plt.Fmt{C: "b", M: "o"}, -1)
 
 	// stresses on surface
-	V := IntegOnPlane("ex_sz", "surf")
+	V := IntegOnPlane("sz", "surf")
 	Splot("int", "integral of stresses")
 	Plot(Times, V, "surf", plt.Fmt{C: "r", M: "o"}, -1)
 	Csplot.Xlbl = "time"
