@@ -88,7 +88,9 @@ func (o *RefM1) Init(prms fun.Prms) (err error) {
 	}
 
 	if o.nowet {
-		o.λw, o.xrw, o.βw, o.β1 = o.λd, o.xrd, o.β2, o.βd
+		o.λw, o.βw, o.β1 = o.λd, o.β2, o.βd
+		o.xrw = o.xrd + o.y0/o.λd
+		o.α = 0.0
 	}
 
 	o.c1d = o.βd * o.λd
@@ -136,8 +138,11 @@ func (o *RefM1) Cc(pc, sl float64, wet bool) (Ccval float64, err error) {
 	if sl < o.yr {
 		sl = o.yr
 	}
+	if sl > o.y0 {
+		sl = o.y0
+	}
 	x := math.Log(1.0 + pc)
-	if wet && !o.nowet {
+	if wet {
 		o.wetting(x, sl)
 	} else {
 		o.drying(x, sl)
@@ -154,9 +159,12 @@ func (o RefM1) L(pc, sl float64, wet bool) (float64, error) {
 	if sl < o.yr {
 		sl = o.yr
 	}
+	if sl > o.y0 {
+		sl = o.y0
+	}
 	x := math.Log(1.0 + pc)
 	var DλbDx float64
-	if wet && !o.nowet {
+	if wet {
 		o.wetting(x, sl)
 		DywDx := -o.λw - o.c1w*o.c2w*math.Exp(o.c1w*x)/(o.βw*(o.c3w+o.c2w*math.Exp(o.c1w*x)))
 		DλbDx = o.β1 * o.λb * DywDx
@@ -178,9 +186,12 @@ func (o RefM1) J(pc, sl float64, wet bool) (float64, error) {
 	if sl < o.yr {
 		sl = o.yr
 	}
+	if sl > o.y0 {
+		sl = o.y0
+	}
 	x := math.Log(1.0 + pc)
 	var DλbDy float64
-	if wet && !o.nowet {
+	if wet {
 		o.wetting(x, sl)
 		DλbDy = (o.βw*(o.λwb-o.λw) - o.λwb*o.β1) * math.Exp(-o.β1*o.D)
 	} else {
@@ -199,9 +210,12 @@ func (o *RefM1) Derivs(pc, sl float64, wet bool) (L, Lx, J, Jx, Jy float64, err 
 	if sl < o.yr {
 		sl = o.yr
 	}
+	if sl > o.y0 {
+		sl = o.y0
+	}
 	x := math.Log(1.0 + pc)
 	var DλbDx, DλbDy, D2λbDx2, D2λbDyDx, D2λbDy2 float64
-	if wet && !o.nowet {
+	if wet {
 		o.wetting(x, sl)
 		DywDx := -o.λw - o.c1w*o.c2w*math.Exp(o.c1w*x)/(o.βw*(o.c3w+o.c2w*math.Exp(o.c1w*x)))
 		DλbDx = o.β1 * o.λb * DywDx

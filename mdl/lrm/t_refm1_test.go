@@ -20,23 +20,25 @@ func Test_refm1a(tst *testing.T) {
 	prm := mdl.GetPrms(true)
 	y0 := prm.Find("y0")
 	y0.V = 0.95
+	nowet := prm.Find("nowet")
+	nowet.V = 1
 	mdl.Init(prm)
 
 	pc0 := -5.0
 	sl0 := mdl.SlMax()
 	pcf := 20.0
-	nptsA := 41
-	nptsB := 11
+	nptsA := 101
+	nptsB := 101
 
 	if chk.Verbose {
 		plt.Reset()
-		Plot(mdl, pc0, sl0, pcf, nptsA, "'b.-'", "'r+-'", "ref-m1_drying")
+		Plot(mdl, pc0, sl0, pcf, nptsA, "'b.-',markevery=10", "'r+-'", "ref-m1_drying")
 	}
 
 	tolCc := 1e-17
 	tolD1a, tolD1b := 1e-11, 1e-11
 	tolD2a, tolD2b := 1e-12, 1e-10
-	Check(tst, mdl, pc0, sl0, pcf, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0}, 1e-7, chk.Verbose)
+	Check(tst, mdl, pc0, sl0, pcf, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0}, 1e-7, false)
 
 	slf, err := Update(mdl, pc0, sl0, pcf-pc0)
 	if err != nil {
@@ -45,14 +47,15 @@ func Test_refm1a(tst *testing.T) {
 	}
 
 	if chk.Verbose {
-		Plot(mdl, pcf, slf, pc0, nptsA, "'b*-'", "'r+:'", "ref-m1_wetting")
+		Plot(mdl, pcf, slf, pc0, nptsA, "'b*-',markevery=10", "'r+:'", "ref-m1_wetting")
 	}
 
 	tolD1b = 1e-4
 	tolD2a, tolD2b = 1e-11, 1e-10
-	Check(tst, mdl, pcf, slf, pc0, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0}, 1e-7, chk.Verbose)
+	Check(tst, mdl, pcf, slf, pc0, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{0}, 1e-7, false)
 
 	if chk.Verbose {
-		PlotEnd(true)
+		PlotEnd(false)
+		plt.SaveD("/tmp/gofem", "fig_refm1a.eps")
 	}
 }

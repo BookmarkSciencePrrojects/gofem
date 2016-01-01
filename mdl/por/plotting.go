@@ -18,6 +18,8 @@ import (
 func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
 	returnTo0, withText, deriv bool,
 	argsDry, argsWet, argsTxtMin, argsTxtMax, txtFmt string) (X, Y []float64) {
+
+	// generate path
 	if returnTo0 {
 		X = utl.LinSpace(0, pcmax, np)
 		X = append(X, utl.LinSpace(pcmax, 0, np)...)
@@ -29,11 +31,15 @@ func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
 	if deriv {
 		Z = make([]float64, len(X)) // dsl/dpc
 	}
+
+	// allocate auxiliary state variables
 	ρL, ρG, pl, pg := o.Liq.R0, o.Gas.R0, 0.0, 0.0
 	sta, err := o.NewState(ρL, ρG, pl, pg)
 	if err != nil {
 		chk.Panic("cannot create new state:\n%v", err)
 	}
+
+	// compute LRM
 	Y[0] = o.Lrm.SlMax()
 	for i := 1; i < len(X); i++ {
 		Δpc := X[i] - X[i-1]
@@ -50,6 +56,8 @@ func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
 			}
 		}
 	}
+
+	// plot LRM
 	if deriv {
 		plt.Subplot(2, 1, 1)
 	}
@@ -65,6 +73,8 @@ func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
 	} else {
 		plt.Plot(X, Y, argsDry)
 	}
+
+	// add text
 	if withText {
 		l := np - 1
 		if argsTxtMin == "" {
@@ -80,6 +90,8 @@ func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
 		plt.Text(X[l], Y[l], io.Sf("(%g, "+txtFmt+")", X[l], Y[l]), argsTxtMax)
 	}
 	plt.Gll("$p_c$", "$s_{\\ell}$", "")
+
+	// plot deriatives
 	if deriv {
 		plt.Subplot(2, 1, 2)
 		if returnTo0 {
@@ -95,6 +107,8 @@ func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
 		}
 		plt.Gll("$p_c$", "$\\bar{C}_c=\\mathrm{d}s_{\\ell}/\\mathrm{d}p_c$", "")
 	}
+
+	// save figure
 	if fname != "" {
 		plt.SaveD(dirout, fname)
 	}

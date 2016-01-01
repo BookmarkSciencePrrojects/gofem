@@ -275,6 +275,9 @@ func (o Model) Update(s *State, Δpl, Δpg, pl, pg float64) (err error) {
 	if sl < slmin {
 		return chk.Err("inconsistent results: saturation must be greater than minimum saturation. sl = %g < %g is incorrect", sl, slmin)
 	}
+	if sl > slmax {
+		return chk.Err("inconsistent results: saturation must be smaller than maximum saturation. sl = %g > %g is incorrect", sl, slmax)
+	}
 
 	// set state
 	s.A_sl = sl             // 2

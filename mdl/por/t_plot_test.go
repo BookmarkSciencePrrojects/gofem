@@ -41,6 +41,8 @@ func Test_plot01(tst *testing.T) {
 		prm = Lrm.GetPrms(example)
 		y0 := prm.Find("y0")
 		y0.V = sl0
+		nowet := prm.Find("nowet")
+		nowet.V = 1
 	case "vg":
 		Lrm = new(lrm.VanGen)
 		prm = Lrm.GetPrms(example)
@@ -71,10 +73,12 @@ func Test_plot01(tst *testing.T) {
 		tst.Errorf("Init failed: %v\n", err)
 		return
 	}
+	mdl.ShowR = true
 
 	// plot
 	if chk.Verbose {
+		np := 61
 		plt.SetForEps(1.2, 350)
-		PlotLrm(mdl, "/tmp/gofem", "fig_por_plot01.eps", 20, 101, true, true, true, "", "", "", "", "")
+		PlotLrm(mdl, "/tmp/gofem", "fig_por_plot01.eps", 20, np, true, true, true, "", "", "", "", "")
 	}
 }

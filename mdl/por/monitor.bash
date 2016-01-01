@@ -6,5 +6,5 @@ while true; do
     inotifywait -q -e modify $FILES
     echo
     echo
-    go test -test.run="mdl01"
+    go test -test.run="plot01"
 done
