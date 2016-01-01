@@ -49,6 +49,7 @@ func init() {
 // Init initialises model
 func (o *RefM1) Init(prms fun.Prms) (err error) {
 
+	// parameters
 	o.model, o.A, o.pcr, o.y0 = 0, 70.0, 0.02, 1.0
 	for _, p := range prms {
 		switch p.N {
@@ -87,12 +88,14 @@ func (o *RefM1) Init(prms fun.Prms) (err error) {
 		}
 	}
 
+	// fix variables if no-wetting model is selected
 	if o.nowet {
 		o.λw, o.βw, o.β1 = o.λd, o.β2, o.βd
-		o.xrw = o.xrd + o.y0/o.λd
+		o.xrw = o.xrd + 0.78*o.y0/o.λd // TODO: improve this
 		o.α = 0.0
 	}
 
+	// constants
 	o.c1d = o.βd * o.λd
 	o.c2d = math.Exp(o.βd * o.yr)
 	o.c3d = math.Exp(o.βd*(o.y0+o.λd*o.xrd)) - o.c2d*math.Exp(o.c1d*o.xrd)
@@ -132,8 +135,14 @@ func (o RefM1) SlMax() float64 {
 
 // compute Cc(pc,sl) := dsl/dpc
 func (o *RefM1) Cc(pc, sl float64, wet bool) (Ccval float64, err error) {
-	if pc <= 0 || sl < o.yr || sl > o.y0 {
+	if pc <= 0 {
 		return 0, nil
+	}
+	if sl < o.yr {
+		sl = o.yr
+	}
+	if sl > o.y0 {
+		sl = o.y0
 	}
 	x := math.Log(1.0 + pc)
 	if wet {
@@ -147,8 +156,14 @@ func (o *RefM1) Cc(pc, sl float64, wet bool) (Ccval float64, err error) {
 
 // L computes L = ∂Cc/∂pc
 func (o RefM1) L(pc, sl float64, wet bool) (float64, error) {
-	if pc <= 0 || sl < o.yr || sl > o.y0 {
+	if pc <= 0 {
 		return 0, nil
+	}
+	if sl < o.yr {
+		sl = o.yr
+	}
+	if sl > o.y0 {
+		sl = o.y0
 	}
 	x := math.Log(1.0 + pc)
 	var DλbDx float64
@@ -168,8 +183,14 @@ func (o RefM1) L(pc, sl float64, wet bool) (float64, error) {
 
 // J computes J = ∂Cc/∂sl
 func (o RefM1) J(pc, sl float64, wet bool) (float64, error) {
-	if pc <= 0 || sl < o.yr || sl > o.y0 {
+	if pc <= 0 {
 		return 0, nil
+	}
+	if sl < o.yr {
+		sl = o.yr
+	}
+	if sl > o.y0 {
+		sl = o.y0
 	}
 	x := math.Log(1.0 + pc)
 	var DλbDy float64
@@ -186,8 +207,14 @@ func (o RefM1) J(pc, sl float64, wet bool) (float64, error) {
 
 // derivatives
 func (o *RefM1) Derivs(pc, sl float64, wet bool) (L, Lx, J, Jx, Jy float64, err error) {
-	if pc <= 0 || sl < o.yr || sl > o.y0 {
+	if pc <= 0 {
 		return
+	}
+	if sl < o.yr {
+		sl = o.yr
+	}
+	if sl > o.y0 {
+		sl = o.y0
 	}
 	x := math.Log(1.0 + pc)
 	var DλbDx, DλbDy, D2λbDx2, D2λbDyDx, D2λbDy2 float64
