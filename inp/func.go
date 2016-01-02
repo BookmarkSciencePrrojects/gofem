@@ -18,17 +18,18 @@ type PlotFdata struct {
 	Tf      float64  `json:"tf"`      // final time
 	Np      int      `json:"np"`      // number of points
 	Skip    []string `json:"skip"`    // skip functions
-	WithG   bool     `json:"withg"`   // with dF/dt
-	WithH   bool     `json:"withh"`   // with d²F/dt²
-	Eps     bool     `json:"eps"`     // save eps instead of png
 	WithTxt bool     `json:"withtxt"` // show text corresponding to initial and final points
 }
 
 // FuncData holds function definition
 type FuncData struct {
-	Name string   `json:"name"` // name of function. ex: zero, load, myfunction1, etc.
-	Type string   `json:"type"` // type of function. ex: cte, rmp
-	Prms fun.Prms `json:"prms"` // parameters
+	Name     string   `json:"name"`     // name of function. ex: zero, load, myfunction1, etc.
+	Type     string   `json:"type"`     // type of function. ex: cte, rmp
+	Prms     fun.Prms `json:"prms"`     // parameters
+	PltExtra string   `json:"pltextra"` // extra arguments for plotting
+
+	// extra data for plotting
+	LabelT, LabelF, LabelG, LabelH, ArgsF, ArgsG, ArgsH string
 }
 
 // Funcs holds functions
@@ -52,15 +53,10 @@ func (o FuncsData) Get(name string) (fcn fun.Func, err error) {
 
 // PlotAll plot all functions
 func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
-	ext := "png"
-	if pd.Eps {
-		ext = "eps"
-	}
 	for _, f := range o {
 		if utl.StrIndexSmall(pd.Skip, f.Name) >= 0 {
 			continue
 		}
-		args := io.Sf("label='%s', clip_on=0", f.Name)
 		ff, err := o.Get(f.Name)
 		if err != nil {
 			chk.Panic("%v", err)
@@ -75,8 +71,14 @@ func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
 				y = ff.F(x, nil)
 				plt.Text(x, y, io.Sf("%g", y), "fontsize=8, ha='right'")
 			}
-			fn := io.Sf("functions-%s-%s.%s", fnkey, f.Name, ext)
-			fun.PlotT(ff, dirout, fn, pd.Ti, pd.Tf, nil, pd.Np, args, pd.WithG, pd.WithH, true, false, nil)
+			if f.ArgsG != "" || f.ArgsH != "" {
+				plt.SetForEps(1.2, 350)
+			} else {
+				plt.SetForEps(0.75, 280)
+			}
+			fun.PlotT(ff, "", "", pd.Ti, pd.Tf, nil, pd.Np,
+				f.LabelT, f.LabelF, f.LabelG, f.LabelH, f.ArgsF, f.ArgsG, f.ArgsH)
+			plt.SaveD(dirout, io.Sf("functions-%s-%s.eps", fnkey, f.Name))
 		}
 	}
 }
