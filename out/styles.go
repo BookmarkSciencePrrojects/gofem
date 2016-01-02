@@ -39,6 +39,8 @@ func GetTexLabel(key, unit string) string {
 		l += "p_{\\ell}"
 	case "pg":
 		l += "p_g"
+	case "pc":
+		l += "p_c"
 	case "sx":
 		l += "\\sigma_x"
 	case "sy":
