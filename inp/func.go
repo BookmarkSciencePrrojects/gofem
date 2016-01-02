@@ -74,7 +74,7 @@ func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
 			if f.ArgsG != "" || f.ArgsH != "" {
 				plt.SetForEps(1.2, 350)
 			} else {
-				plt.SetForEps(0.75, 280)
+				plt.SetForEps(0.75, 250)
 			}
 			fun.PlotT(ff, "", "", pd.Ti, pd.Tf, nil, pd.Np,
 				f.LabelT, f.LabelF, f.LabelG, f.LabelH, f.ArgsF, f.ArgsG, f.ArgsH)
