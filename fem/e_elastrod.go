@@ -31,7 +31,6 @@ type ElastRod struct {
 	L   float64           // length of rod
 
 	// variables for dynamics
-	Rho  float64  // density of solids
 	Gfcn fun.Func // gravity function
 
 	// vectors and matrices
