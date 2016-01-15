@@ -34,7 +34,7 @@ func main() {
 	npts := io.ArgToInt(3, 101)
 
 	// print input table
-	io.Pf("\n%s\n", io.ArgsTable(
+	io.Pf("\n%s\n", io.ArgsTable("INPUT ARGUMENTS",
 		"simulation filename", "simfn", simfn,
 		"material name", "matname", matname,
 		"max pc", "pcmax", pcmax,

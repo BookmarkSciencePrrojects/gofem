@@ -68,7 +68,7 @@ func main() {
 	exnwg := io.ArgToBool(2, false)
 	stgidx := io.ArgToInt(3, 0)
 	v3beam := io.ArgToBool(4, false)
-	io.Pf("\n%s\n", io.ArgsTable(
+	io.Pf("\n%s\n", io.ArgsTable("INPUT ARGUMENTS",
 		"simulation filename", "simfn", simfn,
 		"extrapolate nwl", "exnwl", exnwl,
 		"extrapolate nwg", "exnwg", exnwg,

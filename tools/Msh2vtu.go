@@ -36,7 +36,7 @@ func main() {
 	var mshfn string
 	mshfn, fnkey = io.ArgToFilename(0, "data/d2-coarse", ".msh", true)
 	v3beam := io.ArgToBool(1, false)
-	io.Pf("\n%s\n", io.ArgsTable(
+	io.Pf("\n%s\n", io.ArgsTable("INPUT ARGUMENTS",
 		"mesh filename", "mshfn", mshfn,
 		"keep 3rd vertices of beams", "v3beam", v3beam,
 	))

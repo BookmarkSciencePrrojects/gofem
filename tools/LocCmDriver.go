@@ -44,7 +44,7 @@ func (o *Input) PostProcess() {
 }
 
 func (o Input) String() (l string) {
-	l = io.ArgsTable(
+	l = io.ArgsTable("INPUT ARGUMENTS",
 		"input filename", "inpfn", o.inpfn,
 		"directory with .sim and .pat files", "Dir", o.Dir,
 		"simulation filename", "SimFn", o.SimFn,

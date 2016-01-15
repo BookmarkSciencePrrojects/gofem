@@ -46,7 +46,7 @@ func main() {
 		io.Pf("Use of this source code is governed by a BSD-style\n")
 		io.Pf("license that can be found in the LICENSE file.\n\n")
 
-		io.Pf("\n%v\n", io.ArgsTable(
+		io.Pf("\n%v\n", io.ArgsTable("INPUT ARGUMENTS",
 			"filename path", "fnamepath", fnamepath,
 			"show messages", "verbose", verbose,
 			"erase previous results", "erasePrev", erasePrev,

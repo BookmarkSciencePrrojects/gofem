@@ -26,7 +26,7 @@ func main() {
 
 	// input data
 	matfn, fnk := io.ArgToFilename(0, "materials", ".mat", true)
-	io.Pf("\n%s\n", io.ArgsTable(
+	io.Pf("\n%s\n", io.ArgsTable("INPUT ARGUMENTS",
 		"material filename", "matfn", matfn,
 	))
 

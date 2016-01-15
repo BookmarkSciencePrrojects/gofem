@@ -52,7 +52,7 @@ func main() {
 	labelB := io.ArgToString(4, "")
 
 	// print input data
-	io.Pf("\n%s\n", io.ArgsTable(
+	io.Pf("\n%s\n", io.ArgsTable("INPUT ARGUMENTS",
 		"simulation filename", "simfnA", simfnA,
 		"number of initial increments to skip", "skip", skip,
 		"simulation filename for comparison", "simfnB", simfnB,

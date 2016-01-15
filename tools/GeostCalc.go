@@ -27,7 +27,7 @@ func main() {
 	zmin := io.ArgToFloat(1, 0.0)
 	zmax := io.ArgToFloat(2, 3.0)
 	npts := io.ArgToInt(3, 11)
-	io.Pf("\n%s\n", io.ArgsTable(
+	io.Pf("\n%s\n", io.ArgsTable("INPUT ARGUMENTS",
 		"simulation filename", "simfile", simfile,
 		"min elevation", "zmin", zmin,
 		"max elevation", "zmax", zmax,
