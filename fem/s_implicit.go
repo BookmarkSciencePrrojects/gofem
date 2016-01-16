@@ -5,6 +5,8 @@
 package fem
 
 import (
+	"math"
+
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
@@ -291,6 +293,10 @@ func run_iterations(t, Δt float64, d *Domain, dc *DynCoefs, sum *Summary, dbgKb
 		for i := 0; i < d.Ny; i++ {
 			d.Sol.Y[i] += d.Wb[i]  // y += δy
 			d.Sol.ΔY[i] += d.Wb[i] // ΔY += δy
+			if math.IsNaN(d.Sol.Y[i]) {
+				err = chk.Err("Solution vector has NaN compoment\n")
+				return
+			}
 		}
 		if !d.Sim.Data.Steady {
 			for _, I := range d.T1eqs {
