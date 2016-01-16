@@ -471,7 +471,8 @@ func (o Mesh) String() string {
 }
 
 // Draw2d draws 2D mesh
-func (o *Mesh) Draw2d(onlyLin bool) {
+//  lwds -- linewidths: maps cid => lwd. Use <nil> for default lwd
+func (o *Mesh) Draw2d(onlyLin bool, lwds map[int]float64) {
 
 	// auxiliary
 	type triple struct{ a, b, c int }   // points on edge
@@ -546,7 +547,11 @@ func (o *Mesh) Draw2d(onlyLin bool) {
 				x[i] = o.Verts[vid].C[0]
 				y[i] = o.Verts[vid].C[1]
 			}
-			plt.Plot(x, y, "'-o', ms=3, clip_on=0, color='#41045a', lw=2")
+			lw := 2.0
+			if lwd, ok := lwds[cell.Id]; ok {
+				lw = lwd
+			}
+			plt.Plot(x, y, io.Sf("'-o', ms=3, clip_on=0, color='#41045a', lw=%g", lw))
 		}
 	}
 
