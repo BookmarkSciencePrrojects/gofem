@@ -472,7 +472,7 @@ func (o Mesh) String() string {
 
 // Draw2d draws 2D mesh
 //  lwds -- linewidths: maps cid => lwd. Use <nil> for default lwd
-func (o *Mesh) Draw2d(onlyLin bool, lwds map[int]float64) {
+func (o *Mesh) Draw2d(onlyLin, setup bool, lwds map[int]float64) {
 
 	// auxiliary
 	type triple struct{ a, b, c int }   // points on edge
@@ -556,9 +556,11 @@ func (o *Mesh) Draw2d(onlyLin bool, lwds map[int]float64) {
 	}
 
 	// set up
-	plt.Equal()
-	plt.AxisRange(o.Xmin, o.Xmax, o.Ymin, o.Ymax)
-	plt.AxisOff()
+	if setup {
+		plt.Equal()
+		plt.AxisRange(o.Xmin, o.Xmax, o.Ymin, o.Ymax)
+		plt.AxisOff()
+	}
 }
 
 // solids_around_beam_joint sets JntConVerts and JntConCells maps

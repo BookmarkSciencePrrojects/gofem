@@ -32,7 +32,7 @@ func Test_msh01(tst *testing.T) {
 	chk.Scalar(tst, "ymax", 1e-17, msh.Ymax, 1)
 
 	if chk.Verbose {
-		msh.Draw2d(false, nil)
+		msh.Draw2d(false, true, nil)
 		plt.SaveD("/tmp/gofem", "test_msh01.png")
 	}
 }
