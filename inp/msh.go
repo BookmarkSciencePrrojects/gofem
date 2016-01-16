@@ -472,7 +472,8 @@ func (o Mesh) String() string {
 
 // Draw2d draws 2D mesh
 //  lwds -- linewidths: maps cid => lwd. Use <nil> for default lwd
-func (o *Mesh) Draw2d(onlyLin, setup bool, lwds map[int]float64) {
+//  ms   -- markersize for nodes
+func (o *Mesh) Draw2d(onlyLin, setup bool, lwds map[int]float64, ms int) {
 
 	// auxiliary
 	type triple struct{ a, b, c int }   // points on edge
@@ -525,7 +526,7 @@ func (o *Mesh) Draw2d(onlyLin, setup bool, lwds map[int]float64) {
 					x[1] = o.Verts[tri.b].C[0]
 					y[1] = o.Verts[tri.b].C[1]
 				}
-				plt.Plot(x, y, "'k-o', ms=3, clip_on=0")
+				plt.Plot(x, y, io.Sf("'k-o', ms=%d, clip_on=0", ms))
 				edgesdrawn[tri] = true
 			}
 		}
@@ -535,7 +536,7 @@ func (o *Mesh) Draw2d(onlyLin, setup bool, lwds map[int]float64) {
 			vid := cell.Verts[8]
 			x := o.Verts[vid].C[0]
 			y := o.Verts[vid].C[1]
-			plt.PlotOne(x, y, "'ko', ms=3, clip_on=0")
+			plt.PlotOne(x, y, io.Sf("'ko', ms=%d, clip_on=0", ms))
 		}
 
 		// linear cells
@@ -551,7 +552,7 @@ func (o *Mesh) Draw2d(onlyLin, setup bool, lwds map[int]float64) {
 			if lwd, ok := lwds[cell.Id]; ok {
 				lw = lwd
 			}
-			plt.Plot(x, y, io.Sf("'-o', ms=3, clip_on=0, color='#41045a', lw=%g", lw))
+			plt.Plot(x, y, io.Sf("'-o', ms=%d, clip_on=0, color='#41045a', lw=%g", ms, lw))
 		}
 	}
 
