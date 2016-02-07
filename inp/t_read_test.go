@@ -100,7 +100,7 @@ func Test_msh03(tst *testing.T) {
 	chk.Scalar(tst, "MaxElev", 1e-17, msh.MaxElev, 1)
 }
 
-func Test_mat01(tst *testing.T) {
+func test_mat01(tst *testing.T) {
 
 	//verbose()
 	chk.PrintTitle("mat01")
