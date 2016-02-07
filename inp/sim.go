@@ -258,7 +258,8 @@ type Simulation struct {
 	GasMdl      *fld.Model // gas model to use when computing density and pressure along column; from stage #0
 
 	// adjustable parameters
-	Adjustable map[string]*fun.Prm // adjustable parameters
+	AdjRndVar map[string]*fun.Prm // adjustable parameters that are also random variable
+	AdjNotRnd map[string]*fun.Prm // adjustable parameters; not random
 }
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
@@ -435,18 +436,27 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 	}
 
 	// find adjustable parameters
-	o.Adjustable = make(map[string]*fun.Prm)
+	o.AdjRndVar = make(map[string]*fun.Prm)
+	o.AdjNotRnd = make(map[string]*fun.Prm)
 	for _, mat := range o.MatModels.Materials {
 		for _, prm := range mat.Prms {
-			if prm.Adj != "" {
-				o.Adjustable[prm.Adj] = prm
+			if prm.Adj != "" { // adjustable
+				if prm.D != "" { // with probability distribution
+					o.AdjRndVar[prm.Adj] = prm
+				} else {
+					o.AdjNotRnd[prm.Adj] = prm
+				}
 			}
 		}
 	}
 	for _, fcn := range o.Functions {
 		for _, prm := range fcn.Prms {
-			if prm.Adj != "" {
-				o.Adjustable[prm.Adj] = prm
+			if prm.Adj != "" { // adjustable
+				if prm.D != "" { // with probability distribution
+					o.AdjRndVar[prm.Adj] = prm
+				} else {
+					o.AdjNotRnd[prm.Adj] = prm
+				}
 			}
 		}
 	}
@@ -522,7 +532,11 @@ func (o *Simulation) GetInfo(w goio.Writer) (err error) {
 }
 
 func (o *Simulation) PrmAdjust(adj string, val float64) {
-	if prm, ok := o.Adjustable[adj]; ok {
+	if prm, ok := o.AdjRndVar[adj]; ok {
+		prm.Set(val)
+		return
+	}
+	if prm, ok := o.AdjNotRnd[adj]; ok {
 		prm.Set(val)
 		return
 	}
