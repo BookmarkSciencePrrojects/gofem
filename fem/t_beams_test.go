@@ -286,7 +286,7 @@ func Test_beam04(tst *testing.T) {
 	tolK := 1e-10
 	tolu := 1e-16
 	tols := 1e-12
-	TestingCompareResultsU(tst, "data/beam04.sim", "cmp/bh414.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	TestingCompareResultsU(tst, "data/beam04.sim", "cmp/bh414.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
 func Test_beam05(tst *testing.T) {

@@ -40,7 +40,7 @@ type T_results struct {
 type T_results_set []*T_results
 
 // testing_compare_results_u compares results with u-formulation
-func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string, tolK, tolu, tols float64, skipK, verbose bool) {
+func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string, tolK, tolu, tols float64, skipK, verbose bool, extraAfterSetStage func(dom *Domain)) {
 
 	// flag
 	do_check_stresses := true
@@ -52,6 +52,11 @@ func TestingCompareResultsU(tst *testing.T, simfilepath, cmpfname, alias string,
 	err := fem.SetStage(0)
 	if err != nil {
 		chk.Panic("cannot set stage:\n%v", err)
+	}
+
+	// extra settings
+	if extraAfterSetStage != nil {
+		extraAfterSetStage(fem.Domains[0])
 	}
 
 	// zero solution

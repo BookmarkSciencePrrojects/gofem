@@ -83,6 +83,7 @@ type Domain struct {
 	ElemIvsNotCon []ElemIntvars   // elements with internal vars that are not connectors
 	ElemConnect   []ElemConnector // connector elements in this processor
 	ElemExtrap    []ElemExtrap    // elements with internal values to be extrapolated
+	ElemFixedKM   []ElemFixedKM   // elements with fixed K,M matrices; to be recomputed if prms are changed
 
 	// stage: coefficients and prescribed forces
 	EssenBcs EssentialBcs // constraints (Lagrange multipliers)
@@ -541,6 +542,13 @@ func (o *Domain) UpdateElems() (err error) {
 	return
 }
 
+// RecomputeKM recompute K and M matrices of elements with static matrices
+func (o *Domain) RecomputeKM() {
+	for _, e := range o.ElemFixedKM {
+		e.Recompute(!o.Sim.Data.Steady)
+	}
+}
+
 // auxiliary functions //////////////////////////////////////////////////////////////////////////////
 
 // Reset clear values
@@ -587,6 +595,11 @@ func (o *Domain) add_element_to_subsets(info *Info, ele Elem) {
 		if e, ok := ele.(ElemExtrap); ok {
 			o.ElemExtrap = append(o.ElemExtrap, e)
 		}
+	}
+
+	// subset of elements with fixed KM
+	if e, ok := ele.(ElemFixedKM); ok {
+		o.ElemFixedKM = append(o.ElemFixedKM, e)
 	}
 }
 

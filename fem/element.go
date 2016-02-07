@@ -97,6 +97,11 @@ type ElemOutIps interface {
 	OutIpVals(M *IpsMap, sol *Solution) // integration points' values corresponding to keys
 }
 
+// ElemFixedKM defines elements with fixed K,M matrices; to be recomputed if prms are changed
+type ElemFixedKM interface {
+	Recompute(withM bool) // recompute K and M
+}
+
 // Info holds all information required to set a simulation stage
 type Info struct {
 

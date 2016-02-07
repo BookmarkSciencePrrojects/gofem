@@ -30,7 +30,7 @@ func Test_bridge01a(tst *testing.T) {
 	tolK := 1e-11
 	tolu := 1e-15
 	tols := 1e-9
-	TestingCompareResultsU(tst, "data/bridge01.sim", "cmp/bridge01.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	TestingCompareResultsU(tst, "data/bridge01.sim", "cmp/bridge01.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
 func Test_bridge01b(tst *testing.T) {
@@ -66,5 +66,5 @@ func Test_bridge01b(tst *testing.T) {
 	tolK := 1e-11
 	tolu := 1e-15
 	tols := 1e-9
-	TestingCompareResultsU(tst, "data/bridge01erod.sim", "cmp/bridge01.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	TestingCompareResultsU(tst, "data/bridge01erod.sim", "cmp/bridge01.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }

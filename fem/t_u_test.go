@@ -200,7 +200,7 @@ func Test_selfweight01(tst *testing.T) {
 		tolK := 1e-17
 		tolu := 1e-11
 		tols := 1e-5
-		TestingCompareResultsU(tst, "data/selfweight01.sim", "cmp/singleq9grav.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+		TestingCompareResultsU(tst, "data/selfweight01.sim", "cmp/singleq9grav.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 	}
 }
 

@@ -149,7 +149,7 @@ func Test_bh16b(tst *testing.T) {
 	tolK := 1e-12
 	tolu := 1e-15
 	tols := 1e-12
-	TestingCompareResultsU(tst, "data/bh16.sim", "cmp/bh16.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	TestingCompareResultsU(tst, "data/bh16.sim", "cmp/bh16.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
 func Test_bh14a(tst *testing.T) {
@@ -172,7 +172,7 @@ func Test_bh14a(tst *testing.T) {
 	tolK := 1e-10
 	tolu := 1e-15
 	tols := 1e-13
-	TestingCompareResultsU(tst, "data/bh14.sim", "cmp/bh14.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	TestingCompareResultsU(tst, "data/bh14.sim", "cmp/bh14.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
 func Test_bh14b(tst *testing.T) {
@@ -202,13 +202,53 @@ func Test_bh14b(tst *testing.T) {
 	tolK := 1e-10
 	tolu := 1e-15
 	tols := 1e-13
-	TestingCompareResultsU(tst, "data/bh14.sim", "cmp/bh14.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	TestingCompareResultsU(tst, "data/bh14.sim", "cmp/bh14.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
 func Test_bh14c(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("bh14c. truss. using go-routines")
+	chk.PrintTitle("bh14c. truss. call to PrmAdjust")
+
+	// start simulation
+	analysis := NewFEM("data/bh14adj.sim", "", true, true, false, false, chk.Verbose, 0)
+
+	// set stage
+	err := analysis.SetStage(0)
+	if err != nil {
+		tst.Errorf("SetStage failed:\n%v", err)
+		return
+	}
+
+	// adjust parameters
+	adj := func(dom *Domain) {
+		dom.Sim.PrmAdjust("M1_A", 4000)
+		dom.Sim.PrmAdjust("M2_E", 200000)
+		dom.Sim.PrmAdjust("M3_A", 2000)
+		dom.Sim.PrmAdjust("load", -150000)
+		dom.RecomputeKM()
+	}
+	adj(analysis.Domains[0])
+
+	// run
+	err = analysis.SolveOneStage(0, true)
+	if err != nil {
+		tst.Error("SolveOneStage failed:\n%v", err)
+		return
+	}
+
+	// check
+	skipK := false
+	tolK := 1e-10
+	tolu := 1e-15
+	tols := 1e-13
+	TestingCompareResultsU(tst, "data/bh14adj.sim", "cmp/bh14.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, adj)
+}
+
+func Test_bh14d(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("bh14d. truss. using go-routines")
 
 	// channels
 	nch := 3
@@ -247,7 +287,7 @@ func Test_bh14c(tst *testing.T) {
 	tolu := 1e-15
 	tols := 1e-13
 	for i := 0; i < nch; i++ {
-		TestingCompareResultsU(tst, "data/bh14.sim", "cmp/bh14.cmp", io.Sf("ch%d", i), tolK, tolu, tols, skipK, chk.Verbose)
+		TestingCompareResultsU(tst, "data/bh14.sim", "cmp/bh14.cmp", io.Sf("ch%d", i), tolK, tolu, tols, skipK, chk.Verbose, nil)
 	}
 }
 
@@ -271,5 +311,5 @@ func Test_bh14erod(tst *testing.T) {
 	tolK := 1e-10
 	tolu := 1e-15
 	tols := 1e-13
-	TestingCompareResultsU(tst, "data/bh14erod.sim", "cmp/bh14.cmp", "", tolK, tolu, tols, skipK, chk.Verbose)
+	TestingCompareResultsU(tst, "data/bh14erod.sim", "cmp/bh14.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
