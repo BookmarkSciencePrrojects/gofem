@@ -38,24 +38,13 @@ func (o *OnedLinElast) GetA() float64 {
 
 // Init initialises model
 func (o *OnedLinElast) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
-	for _, p := range prms {
-		switch p.N {
-		case "E":
-			o.E = p.V
-		case "G":
-			o.G = p.V
-		case "A":
-			o.A = p.V
-		case "I22":
-			o.I22 = p.V
-		case "I11":
-			o.I11 = p.V
-		case "Jtt":
-			o.Jtt = p.V
-		case "rho":
-			o.Rho = p.V
-		}
-	}
+	prms.Connect(&o.E, "E")
+	prms.Connect(&o.G, "G")
+	prms.Connect(&o.A, "A")
+	prms.Connect(&o.I22, "I22")
+	prms.Connect(&o.I11, "I11")
+	prms.Connect(&o.Jtt, "Jtt")
+	prms.Connect(&o.Rho, "rho")
 	return
 }
 
