@@ -256,6 +256,9 @@ type Simulation struct {
 	MatModels   *MatDb     // materials and models
 	LiqMdl      *fld.Model // liquid model to use when computing density and pressure along column; from stage #0
 	GasMdl      *fld.Model // gas model to use when computing density and pressure along column; from stage #0
+
+	// adjustable parameters
+	Adjustable map[string]*fun.Prm // adjustable parameters
 }
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
@@ -431,6 +434,23 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 		chk.Panic("loading materials and initialising models failed:\n%v", err)
 	}
 
+	// find adjustable parameters
+	o.Adjustable = make(map[string]*fun.Prm)
+	for _, mat := range o.MatModels.Materials {
+		for _, prm := range mat.Prms {
+			if prm.Adj != "" {
+				o.Adjustable[prm.Adj] = prm
+			}
+		}
+	}
+	for _, fcn := range o.Functions {
+		for _, prm := range fcn.Prms {
+			if prm.Adj != "" {
+				o.Adjustable[prm.Adj] = prm
+			}
+		}
+	}
+
 	// derived: liquid model
 	if o.Data.LiqMat != "" {
 		lmat := o.MatModels.Get(o.Data.LiqMat)
@@ -499,6 +519,14 @@ func (o *Simulation) GetInfo(w goio.Writer) (err error) {
 	}
 	_, err = w.Write(b)
 	return
+}
+
+func (o *Simulation) PrmAdjust(adj string, val float64) {
+	if prm, ok := o.Adjustable[adj]; ok {
+		prm.Set(val)
+		return
+	}
+	chk.Panic("cannot adjust parameter %q", adj)
 }
 
 // GetEleCond returns element condition structure by giving an elem tag
