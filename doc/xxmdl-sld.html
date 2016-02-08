@@ -2255,7 +2255,7 @@ OneD specialises Model to 1D
     I22 <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// moment of inertia of cross section about y2-axis</span>
     I11 <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// moment of inertia of cross section about y1-axis</span>
     Jtt <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// torsional constant</span>
-    <span class="comment">// contains filtered or unexported fields</span>
+    Rho <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// density</span>
 }</pre>
 			<p>
 OnedLinElast implements a linear elastic model for 1D elements
@@ -2274,7 +2274,7 @@ OnedLinElast implements a linear elastic model for 1D elements
 
 			
 				
-				<h3 id="OnedLinElast.CalcD">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/sld/onedlinelast.go?s=2172:2253#L83">CalcD</a></h3>
+				<h3 id="OnedLinElast.CalcD">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/sld/onedlinelast.go?s=2124:2205#L72">CalcD</a></h3>
 				<pre>func (o <a href="#OnedLinElast">OnedLinElast</a>) CalcD(s *<a href="#OnedState">OnedState</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new consistent with StressUpdate
@@ -2307,7 +2307,7 @@ GetA returns cross-sectional area
 				
 			
 				
-				<h3 id="OnedLinElast.GetPrms">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/sld/onedlinelast.go?s=1467:1507#L58">GetPrms</a></h3>
+				<h3 id="OnedLinElast.GetPrms">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/sld/onedlinelast.go?s=1419:1459#L47">GetPrms</a></h3>
 				<pre>func (o <a href="#OnedLinElast">OnedLinElast</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
@@ -2340,7 +2340,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="OnedLinElast.InitIntVars">func (*OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/sld/onedlinelast.go?s=1340:1410#L53">InitIntVars</a></h3>
+				<h3 id="OnedLinElast.InitIntVars">func (*OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/sld/onedlinelast.go?s=1292:1362#L42">InitIntVars</a></h3>
 				<pre>func (o *<a href="#OnedLinElast">OnedLinElast</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars: unused
@@ -2351,7 +2351,7 @@ InitIntVars: unused
 				
 			
 				
-				<h3 id="OnedLinElast.InitIntVars1D">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/sld/onedlinelast.go?s=1847:1910#L71">InitIntVars1D</a></h3>
+				<h3 id="OnedLinElast.InitIntVars1D">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/sld/onedlinelast.go?s=1799:1862#L60">InitIntVars1D</a></h3>
 				<pre>func (o <a href="#OnedLinElast">OnedLinElast</a>) InitIntVars1D() (s *<a href="#OnedState">OnedState</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -2362,7 +2362,7 @@ InitIntVars initialises internal (secondary) variables
 				
 			
 				
-				<h3 id="OnedLinElast.Update">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/sld/onedlinelast.go?s=1993:2070#L77">Update</a></h3>
+				<h3 id="OnedLinElast.Update">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/sld/onedlinelast.go?s=1945:2022#L66">Update</a></h3>
 				<pre>func (o <a href="#OnedLinElast">OnedLinElast</a>) Update(s *<a href="#OnedState">OnedState</a>, ε, Δε, aux <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
