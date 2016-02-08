@@ -1,0 +1,59 @@
+{
+  "materials" : [
+    {
+      "name"  : "M1",
+      "type"  : "sld",
+      "model" : "oned-elast",
+      "prms"  : [
+        {"n":"E",   "v":2e7    },
+        {"n":"A",   "v":0.25   , "s":0.025, "min":1e-3, "max":1.0, "d":"lognormal", "adj":"M1_A"},
+        {"n":"I22", "v":0.08333, "adj":"M1_I22"},
+        {"n":"rho", "v":7.8    }
+      ]
+    },
+    {
+      "name"  : "M2",
+      "type"  : "sld",
+      "model" : "oned-elast",
+      "prms"  : [
+        {"n":"E",   "v":2e7    },
+        {"n":"A",   "v":0.16   , "s":0.016, "min":1e-3, "max":1.0, "d":"lognormal", "adj":"M2_A"},
+        {"n":"I22", "v":0.08333, "adj":"M2_I22"},
+        {"n":"rho", "v":7.8    }
+      ]
+    },
+    {
+      "name"  : "M3",
+      "type"  : "sld",
+      "model" : "oned-elast",
+      "prms"  : [
+        {"n":"E",   "v":2e7    },
+        {"n":"A",   "v":0.36   ,"s":0.036, "min":1e-3, "max":1.0, "d":"lognormal", "adj":"M3_A"},
+        {"n":"I22", "v":0.08333, "adj":"M3_I22"},
+        {"n":"rho", "v":7.8    }
+      ]
+    },
+    {
+      "name"  : "M4",
+      "type"  : "sld",
+      "model" : "oned-elast",
+      "prms"  : [
+        {"n":"E",   "v":2e7    },
+        {"n":"A",   "v":0.20   ,"s":0.020, "min":1e-3, "max":1.0, "d":"lognormal", "adj":"M4_A"},
+        {"n":"I22", "v":0.26670, "adj":"M4_I22"},
+        {"n":"rho", "v":7.8    }
+      ]
+    },
+    {
+      "name"  : "M5",
+      "type"  : "sld",
+      "model" : "oned-elast",
+      "prms"  : [
+        {"n":"E",   "v":2e7  },
+        {"n":"A",   "v":0.15 ,"s":0.015, "min":1e-3, "max":1.0, "d":"lognormal", "adj":"M5_A"},
+        {"n":"I22", "v":0.2  , "adj":"M5_I22"},
+        {"n":"rho", "v":7.8  }
+      ]
+    }
+  ]
+}

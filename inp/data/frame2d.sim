@@ -1,0 +1,36 @@
+{
+  "data" : {
+    "matfile" : "frame2d.mat",
+    "steady"  : true,
+    "showR"   : false
+  },
+  "linsol" : {
+    "symmetric" : true
+  },
+  "functions" : [
+    { "name":"P", "type":"cte", "prms":[
+      {"n":"c", "v":30, "s":7.5, "min":1, "max":100, "d":"gumbel", "adj":"P_c"}
+    ] }
+  ],
+  "regions" : [
+    {
+      "mshfile": "frame2d.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"M1", "type":"beam" },
+        { "tag":-2, "mat":"M2", "type":"beam" },
+        { "tag":-3, "mat":"M3", "type":"beam" },
+        { "tag":-4, "mat":"M4", "type":"beam" },
+        { "tag":-5, "mat":"M5", "type":"beam" }
+      ]
+    }
+  ],
+  "stages" : [
+    {
+      "desc": "apply load",
+      "nodebcs": [
+        { "tag":-30, "keys":["ux","uy","rz"], "funcs":["zero","zero","zero"] },
+        { "tag":-10, "keys":["fx"], "funcs":["P"] }
+      ]
+    }
+  ]
+}

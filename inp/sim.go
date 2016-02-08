@@ -16,6 +16,7 @@ import (
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
+	"github.com/cpmech/gosl/rnd"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -258,8 +259,9 @@ type Simulation struct {
 	GasMdl      *fld.Model // gas model to use when computing density and pressure along column; from stage #0
 
 	// adjustable parameters
-	AdjRndVar map[string]*fun.Prm // adjustable parameters that are also random variable
-	AdjNotRnd map[string]*fun.Prm // adjustable parameters; not random
+	AdjustableRnd map[string]*fun.Prm // adjustable parameters that are also random variable
+	Adjustable    map[string]*fun.Prm // adjustable parameters; not random
+	RandomVars    rnd.Variables       // random variables (parameters)
 }
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
@@ -436,15 +438,15 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 	}
 
 	// find adjustable parameters
-	o.AdjRndVar = make(map[string]*fun.Prm)
-	o.AdjNotRnd = make(map[string]*fun.Prm)
+	o.AdjustableRnd = make(map[string]*fun.Prm)
+	o.Adjustable = make(map[string]*fun.Prm)
 	for _, mat := range o.MatModels.Materials {
 		for _, prm := range mat.Prms {
 			if prm.Adj != "" { // adjustable
 				if prm.D != "" { // with probability distribution
-					o.AdjRndVar[prm.Adj] = prm
+					o.AdjustableRnd[prm.Adj] = prm
 				} else {
-					o.AdjNotRnd[prm.Adj] = prm
+					o.Adjustable[prm.Adj] = prm
 				}
 			}
 		}
@@ -453,12 +455,25 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 		for _, prm := range fcn.Prms {
 			if prm.Adj != "" { // adjustable
 				if prm.D != "" { // with probability distribution
-					o.AdjRndVar[prm.Adj] = prm
+					o.AdjustableRnd[prm.Adj] = prm
 				} else {
-					o.AdjNotRnd[prm.Adj] = prm
+					o.Adjustable[prm.Adj] = prm
 				}
 			}
 		}
+	}
+
+	// random variables
+	idx := 0
+	o.RandomVars = make([]*rnd.VarData, len(o.AdjustableRnd))
+	for name, prm := range o.AdjustableRnd {
+		distr := rnd.GetDistribution(prm.D)
+		o.RandomVars[idx] = &rnd.VarData{Name: name, D: distr, M: prm.V, S: prm.S, Min: prm.Min, Max: prm.Max}
+		idx++
+	}
+	err = o.RandomVars.Init()
+	if err != nil {
+		chk.Panic("cannot initialise random variables:\n%v", err)
 	}
 
 	// derived: liquid model
@@ -531,12 +546,13 @@ func (o *Simulation) GetInfo(w goio.Writer) (err error) {
 	return
 }
 
+// PrmAdjust adjusts parameter (random variable or not)
 func (o *Simulation) PrmAdjust(adj string, val float64) {
-	if prm, ok := o.AdjRndVar[adj]; ok {
+	if prm, ok := o.AdjustableRnd[adj]; ok {
 		prm.Set(val)
 		return
 	}
-	if prm, ok := o.AdjNotRnd[adj]; ok {
+	if prm, ok := o.Adjustable[adj]; ok {
 		prm.Set(val)
 		return
 	}

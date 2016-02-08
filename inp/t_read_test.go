@@ -226,3 +226,17 @@ func Test_sim02(tst *testing.T) {
 		sim.GasMdl.Plot("/tmp/gofem", "fig_sim02_gas", 21)
 	}
 }
+
+func Test_sim03(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("sim03. frame2d with random vars")
+
+	sim := ReadSim("data/frame2d.sim", "", true, 0)
+	for _, dat := range sim.RandomVars {
+		io.Pforan("dat = %+v\n", dat)
+	}
+	for _, prm := range sim.Adjustable {
+		io.Pf("prm = %+v\n", prm)
+	}
+}
