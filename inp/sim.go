@@ -559,6 +559,18 @@ func (o *Simulation) PrmAdjust(adj string, val float64) {
 	chk.Panic("cannot adjust parameter %q", adj)
 }
 
+// PrmGetAdj gets adjustable parameter (random variable or not)
+func (o *Simulation) PrmGetAdj(adj string) (val float64) {
+	if prm, ok := o.AdjustableRnd[adj]; ok {
+		return prm.V
+	}
+	if prm, ok := o.Adjustable[adj]; ok {
+		return prm.V
+	}
+	chk.Panic("cannot get adjustable parameter %q", adj)
+	return
+}
+
 // GetEleCond returns element condition structure by giving an elem tag
 //  Note: returns nil if not found
 func (o Stage) GetEleCond(elemtag int) *EleCond {
