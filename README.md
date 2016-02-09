@@ -19,12 +19,16 @@ http://cpmech.github.io/gofem
 ## Acknowledgements
 Funding from the Australian Research Council is gratefully acknowledged.
 
-## Subpackages are
-1. ana -- analytical solutions
-2. fem -- finite element method implementation; elements, solver, ...
-3. inp -- input data structures; .sim (simulation), .msh (mesh), .mat (materials)
-4. mdl -- material models: cnd (conductivity), fld (fluid), lrm (liquid retention), por (porous medium), sld (solids)
-5. out -- output routines
-5. shp -- shape (interpolation) functions; geometric elements
+## Subpackages
+1.  ana     -- analytical solutions
+2.  shp     -- shape (interpolation) structures and quadrature points
+3.  inp     -- input data structures. simulation, materials, meshes
+4.  mdl/sld -- models for solids
+5.  mdl/fld -- models for fluids
+6.  mdl/cnd -- models for liquid/gas conductivity in porous media
+7.  mdl/lrm -- models for liquid retention in porous media
+8.  mdl/por -- models for porous media
+9.  fem     -- finite element method (elements, solver, ...)
+10. out     -- output: analyses of results and plotting
 
 Additionally, 'tools' contains some auxiliary tools.
