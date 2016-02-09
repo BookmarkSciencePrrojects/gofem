@@ -273,6 +273,9 @@ package inp implements the input data read from a (.sim) JSON file
 					
 					<dd>&nbsp; &nbsp; <a href="#Simulation.PrmAdjust">func (o *Simulation) PrmAdjust(adj string, val float64)</a></dd>
 				
+					
+					<dd>&nbsp; &nbsp; <a href="#Simulation.PrmGetAdj">func (o *Simulation) PrmGetAdj(adj string) (val float64)</a></dd>
+				
 			
 				
 				<dd><a href="#SolverData">type SolverData</a></dd>
@@ -986,7 +989,7 @@ LinSolData holds data for linear solvers
 
 			
 				
-				<h3 id="LinSolData.SetDefault">func (*LinSolData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20060:20093#L588">SetDefault</a></h3>
+				<h3 id="LinSolData.SetDefault">func (*LinSolData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20365:20398#L600">SetDefault</a></h3>
 				<pre>func (o *<a href="#LinSolData">LinSolData</a>) SetDefault()</pre>
 				<p>
 SetDefault sets defaults values
@@ -1466,6 +1469,17 @@ PrmAdjust adjusts parameter (random variable or not)
 				
 				
 			
+				
+				<h3 id="Simulation.PrmGetAdj">func (*Simulation) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19229:19285#L553">PrmGetAdj</a></h3>
+				<pre>func (o *<a href="#Simulation">Simulation</a>) PrmGetAdj(adj <a href="/pkg/builtin/#string">string</a>) (val <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+PrmGetAdj gets adjustable parameter (random variable or not)
+</p>
+
+				
+				
+				
+			
 		
 			
 			
@@ -1531,7 +1545,7 @@ SolverData holds FEM solver data
 
 			
 				
-				<h3 id="SolverData.PostProcess">func (*SolverData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20714:20748#L628">PostProcess</a></h3>
+				<h3 id="SolverData.PostProcess">func (*SolverData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=21019:21053#L640">PostProcess</a></h3>
 				<pre>func (o *<a href="#SolverData">SolverData</a>) PostProcess()</pre>
 				<p>
 PostProcess performs a post-processing of the just read json file
@@ -1542,7 +1556,7 @@ PostProcess performs a post-processing of the just read json file
 				
 			
 				
-				<h3 id="SolverData.SetDefault">func (*SolverData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20193:20226#L595">SetDefault</a></h3>
+				<h3 id="SolverData.SetDefault">func (*SolverData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20498:20531#L607">SetDefault</a></h3>
 				<pre>func (o *<a href="#SolverData">SolverData</a>) SetDefault()</pre>
 				<p>
 SetDefault set defaults values
@@ -1599,7 +1613,7 @@ Stage holds stage data
 
 			
 				
-				<h3 id="Stage.GetEleCond">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19272:19319#L554">GetEleCond</a></h3>
+				<h3 id="Stage.GetEleCond">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19577:19624#L566">GetEleCond</a></h3>
 				<pre>func (o <a href="#Stage">Stage</a>) GetEleCond(elemtag <a href="/pkg/builtin/#int">int</a>) *<a href="#EleCond">EleCond</a></pre>
 				<p>
 GetEleCond returns element condition structure by giving an elem tag
@@ -1612,7 +1626,7 @@ GetEleCond returns element condition structure by giving an elem tag
 				
 			
 				
-				<h3 id="Stage.GetFaceBc">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19780:19825#L576">GetFaceBc</a></h3>
+				<h3 id="Stage.GetFaceBc">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20085:20130#L588">GetFaceBc</a></h3>
 				<pre>func (o <a href="#Stage">Stage</a>) GetFaceBc(facetag <a href="/pkg/builtin/#int">int</a>) *<a href="#FaceBc">FaceBc</a></pre>
 				<p>
 GetFaceBc returns face boundary condition structure by giving a face tag
@@ -1625,7 +1639,7 @@ GetFaceBc returns face boundary condition structure by giving a face tag
 				
 			
 				
-				<h3 id="Stage.GetNodeBc">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19526:19571#L565">GetNodeBc</a></h3>
+				<h3 id="Stage.GetNodeBc">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19831:19876#L577">GetNodeBc</a></h3>
 				<pre>func (o <a href="#Stage">Stage</a>) GetNodeBc(nodetag <a href="/pkg/builtin/#int">int</a>) *<a href="#NodeBc">NodeBc</a></pre>
 				<p>
 GetNodeBc returns node boundary condition structure by giving a node tag
