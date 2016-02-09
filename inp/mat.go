@@ -220,9 +220,8 @@ func (o MatDb) Get(name string) *Material {
 
 // String prints one function
 func (o *Material) String() string {
-	fun.G_extraindent = "  "
-	fun.G_openbrackets = false
-	return io.Sf("    {\n      \"name\"  : %q,\n      \"type\"  : %q,\n      \"model\" : %q,\n      \"deps\"  : %q,\n      \"prms\"  : [\n%v\n    }", o.Name, o.Type, o.Model, o.Deps, o.Prms)
+	fun.G_extraindent = "        "
+	return io.Sf("    {\n      \"name\"  : %q,\n      \"type\"  : %q,\n      \"model\" : %q,\n      \"deps\"  : %q,\n      \"prms\"  : [\n%v\n      ]\n    }", o.Name, o.Type, o.Model, o.Deps, o.Prms)
 }
 
 // String prints materials

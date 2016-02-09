@@ -259,9 +259,10 @@ type Simulation struct {
 	GasMdl      *fld.Model // gas model to use when computing density and pressure along column; from stage #0
 
 	// adjustable parameters
-	AdjustableRnd map[string]*fun.Prm // adjustable parameters that are also random variable
-	Adjustable    map[string]*fun.Prm // adjustable parameters; not random
-	RandomVars    rnd.Variables       // random variables (parameters)
+	Adjustable   fun.Prms         // adjustable parameters (not dependent)
+	AdjRandom    rnd.Variables    // adjustable parameters that are random variables (not dependent)
+	AdjDependent fun.Prms         // adjustable parameters that depend on other adjustable parameters
+	adjmap       map[int]*fun.Prm // auxiliary map with adjustable (not dependent)
 }
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
@@ -437,43 +438,30 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 		chk.Panic("loading materials and initialising models failed:\n%v", err)
 	}
 
-	// find adjustable parameters
-	o.AdjustableRnd = make(map[string]*fun.Prm)
-	o.Adjustable = make(map[string]*fun.Prm)
+	// adjustable and random parameters
+	o.adjmap = make(map[int]*fun.Prm)
 	for _, mat := range o.MatModels.Materials {
 		for _, prm := range mat.Prms {
-			if prm.Adj != "" { // adjustable
-				if prm.D != "" { // with probability distribution
-					o.AdjustableRnd[prm.Adj] = prm
-				} else {
-					o.Adjustable[prm.Adj] = prm
-				}
-			}
+			o.append_adjustable_parameter(prm)
 		}
 	}
 	for _, fcn := range o.Functions {
 		for _, prm := range fcn.Prms {
-			if prm.Adj != "" { // adjustable
-				if prm.D != "" { // with probability distribution
-					o.AdjustableRnd[prm.Adj] = prm
-				} else {
-					o.Adjustable[prm.Adj] = prm
-				}
-			}
+			o.append_adjustable_parameter(prm)
 		}
 	}
-
-	// random variables
-	idx := 0
-	o.RandomVars = make([]*rnd.VarData, len(o.AdjustableRnd))
-	for name, prm := range o.AdjustableRnd {
-		distr := rnd.GetDistribution(prm.D)
-		o.RandomVars[idx] = &rnd.VarData{Name: name, D: distr, M: prm.V, S: prm.S, Min: prm.Min, Max: prm.Max}
-		idx++
-	}
-	err = o.RandomVars.Init()
+	err = o.AdjRandom.Init()
 	if err != nil {
 		chk.Panic("cannot initialise random variables:\n%v", err)
+	}
+
+	// connect dependent adjustable parameters
+	var ok bool
+	for _, prm := range o.AdjDependent {
+		prm.Other, ok = o.adjmap[prm.Dep]
+		if !ok {
+			chk.Panic("cannot find dependency dep=%d of adjustable parameter", prm.Dep)
+		}
 	}
 
 	// derived: liquid model
@@ -543,31 +531,6 @@ func (o *Simulation) GetInfo(w goio.Writer) (err error) {
 		return err
 	}
 	_, err = w.Write(b)
-	return
-}
-
-// PrmAdjust adjusts parameter (random variable or not)
-func (o *Simulation) PrmAdjust(adj string, val float64) {
-	if prm, ok := o.AdjustableRnd[adj]; ok {
-		prm.Set(val)
-		return
-	}
-	if prm, ok := o.Adjustable[adj]; ok {
-		prm.Set(val)
-		return
-	}
-	chk.Panic("cannot adjust parameter %q", adj)
-}
-
-// PrmGetAdj gets adjustable parameter (random variable or not)
-func (o *Simulation) PrmGetAdj(adj string) (val float64) {
-	if prm, ok := o.AdjustableRnd[adj]; ok {
-		return prm.V
-	}
-	if prm, ok := o.Adjustable[adj]; ok {
-		return prm.V
-	}
-	chk.Panic("cannot get adjustable parameter %q", adj)
 	return
 }
 
@@ -664,4 +627,45 @@ func (o *SolverData) PostProcess() {
 
 	// iterations tolerance
 	o.Itol = utl.Max(10.0*o.Eps/o.Rtol, utl.Min(0.01, math.Sqrt(o.Rtol)))
+}
+
+// adjustable parameters ///////////////////////////////////////////////////////////////////////////
+
+// PrmAdjust adjusts parameter (random variable or not)
+func (o *Simulation) PrmAdjust(adj int, val float64) {
+	if prm, ok := o.adjmap[adj]; ok {
+		prm.Set(val)
+		return
+	}
+	chk.Panic("cannot adjust parameter %q", adj)
+}
+
+// PrmGetAdj gets adjustable parameter (random variable or not)
+func (o *Simulation) PrmGetAdj(adj int) (val float64) {
+	if prm, ok := o.adjmap[adj]; ok {
+		return prm.V
+	}
+	chk.Panic("cannot get adjustable parameter %q", adj)
+	return
+}
+
+// append_adjustable_parameter add prm to lists
+func (o *Simulation) append_adjustable_parameter(prm *fun.Prm) {
+
+	// adjustable parameter
+	if prm.Adj > 0 {
+		o.Adjustable = append(o.Adjustable, prm)
+		o.adjmap[prm.Adj] = prm
+		if prm.D != "" { // with probability distribution => random variable
+			distr := rnd.GetDistribution(prm.D)
+			o.AdjRandom = append(o.AdjRandom, &rnd.VarData{
+				D: distr, M: prm.V, S: prm.S, Min: prm.Min, Max: prm.Max, Prm: prm,
+			})
+		}
+	}
+
+	// adjustable parameter that depend on other adjustable parameters
+	if prm.Dep > 0 {
+		o.AdjDependent = append(o.AdjDependent, prm)
+	}
 }

@@ -87,9 +87,8 @@ func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
 
 // String prints one function
 func (o FuncData) String() string {
-	fun.G_extraindent = "  "
-	fun.G_openbrackets = false
-	return io.Sf("    {\n      \"name\":%q, \"type\":%q, \"prms\" : [\n%v\n    }", o.Name, o.Type, o.Prms)
+	fun.G_extraindent = "        "
+	return io.Sf("    {\n      \"name\":%q, \"type\":%q, \"prms\" : [\n%v\n      ]\n    }", o.Name, o.Type, o.Prms)
 }
 
 // String prints functions

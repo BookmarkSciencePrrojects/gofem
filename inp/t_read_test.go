@@ -100,7 +100,7 @@ func Test_msh03(tst *testing.T) {
 	chk.Scalar(tst, "MaxElev", 1e-17, msh.MaxElev, 1)
 }
 
-func test_mat01(tst *testing.T) {
+func Test_mat01(tst *testing.T) {
 
 	//verbose()
 	chk.PrintTitle("mat01")
@@ -233,10 +233,50 @@ func Test_sim03(tst *testing.T) {
 	chk.PrintTitle("sim03. frame2d with random vars")
 
 	sim := ReadSim("data/frame2d.sim", "", true, 0)
-	for _, dat := range sim.RandomVars {
-		io.Pforan("dat = %+v\n", dat)
+
+	chk.IntAssert(len(sim.Adjustable), 6)
+	values := []float64{0.25, 0.16, 0.36, 0.20, 0.15, 30}
+	stddev := []float64{0.025, 0.016, 0.036, 0.020, 0.015, 7.5}
+	V := make([]float64, len(values))
+	S := make([]float64, len(stddev))
+	for i, prm := range sim.Adjustable {
+		V[i] = prm.V
+		S[i] = prm.S
 	}
-	for _, prm := range sim.Adjustable {
-		io.Pf("prm = %+v\n", prm)
+	io.Pforan("V = %v\n", V)
+	io.Pfpink("S = %v\n", S)
+	chk.Vector(tst, "values", 1e-15, V, values)
+	chk.Vector(tst, "stddev", 1e-15, S, stddev)
+
+	chk.IntAssert(len(sim.AdjRandom), 6)
+	V = make([]float64, len(values))
+	S = make([]float64, len(stddev))
+	for i, dat := range sim.AdjRandom {
+		V[i] = dat.M
+		S[i] = dat.S
 	}
+	io.Pforan("\nV = %v\n", V)
+	io.Pfpink("S = %v\n", S)
+	chk.Vector(tst, "values", 1e-15, V, values)
+	chk.Vector(tst, "stddev", 1e-15, S, stddev)
+
+	chk.IntAssert(len(sim.AdjDependent), 5)
+	values = []float64{0.08333, 0.08333, 0.08333, 0.26670, 0.2}
+	V = make([]float64, len(values))
+	for i, prm := range sim.AdjDependent {
+		V[i] = prm.V
+	}
+	io.Pforan("\nV = %v\n", V)
+	chk.Vector(tst, "values", 1e-15, V, values)
+
+	M1_A := sim.Adjustable[0]
+	M1_I22 := sim.AdjDependent[0]
+	io.Pforan("\nM1: A   = %v\n", M1_A.V)
+	io.Pforan("M1: I22 = %v\n", M1_I22.V)
+	M1_A.Set(0.3)
+	M1_I22.Set(M1_I22.V * M1_I22.Other.V * M1_I22.Other.V)
+	io.Pfpink("M1: A   = %v\n", M1_A.V)
+	io.Pfpink("M1: I22 = %v\n", M1_I22.V)
+	chk.Scalar(tst, "A  ", 1e-15, M1_A.V, 0.3)
+	chk.Scalar(tst, "I22", 1e-15, M1_I22.V, 0.0074997)
 }
