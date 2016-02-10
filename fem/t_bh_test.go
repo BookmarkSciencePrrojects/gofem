@@ -222,10 +222,10 @@ func Test_bh14c(tst *testing.T) {
 
 	// adjust parameters
 	adj := func(dom *Domain) {
-		dom.Sim.PrmAdjust("M1_A", 4000)
-		dom.Sim.PrmAdjust("M2_E", 200000)
-		dom.Sim.PrmAdjust("M3_A", 2000)
-		dom.Sim.PrmAdjust("load", -150000)
+		dom.Sim.PrmAdjust(1, 4000)
+		dom.Sim.PrmAdjust(2, 200000)
+		dom.Sim.PrmAdjust(3, 2000)
+		dom.Sim.PrmAdjust(666, -150000)
 		dom.RecomputeKM()
 	}
 	adj(analysis.Domains[0])
