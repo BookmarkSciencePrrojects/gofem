@@ -37,7 +37,7 @@ type FEM struct {
 	DebugKb DebugKb_t       // debug Kb callback function
 	Nproc   int             // number of processors
 	Proc    int             // processor id
-	Verbose bool            // show messages
+	ShowMsg bool            // show messages
 }
 
 // NewFEM returns a new FEM structure
@@ -86,14 +86,20 @@ func NewFEM(simfilepath, alias string, erasePrev, saveSummary, readSummary, allo
 	} else {
 		o.Sim.LinSol.Name = "umfpack"
 	}
-	o.Verbose = verbose && (o.Proc == 0)
+	o.ShowMsg = verbose && (o.Proc == 0)
+
+	// message
+	if o.ShowMsg {
+		io.Pf("> Initialisation step completed\n")
+		io.Pf("> Simulation (.sim) file read\n")
+	}
 
 	// auxiliary structures
 	o.DynCfs = new(DynCoefs)
 	o.DynCfs.Init(&o.Sim.Solver)
 
 	// allocate domains
-	o.Domains = NewDomains(o.Sim, o.DynCfs, o.Proc, o.Nproc, distr)
+	o.Domains = NewDomains(o.Sim, o.DynCfs, o.Proc, o.Nproc, distr, verbose)
 
 	// allocate solver
 	if alloc, ok := solverallocators[o.Sim.Solver.Type]; ok {
@@ -112,8 +118,8 @@ func (o *FEM) Run() (err error) {
 		if o.Proc == 0 {
 			o.Sim.Functions.PlotAll(o.Sim.PlotF, o.Sim.DirOut, o.Sim.Key)
 		}
-		if o.Verbose {
-			io.Pfyel("\nfunctions plotted\n")
+		if o.ShowMsg {
+			io.Pf("> Functions plotted\n")
 		}
 		return
 	}
@@ -121,6 +127,11 @@ func (o *FEM) Run() (err error) {
 	// exit commands
 	cputime := time.Now()
 	defer func() { err = o.onexit(cputime, err) }()
+
+	// message
+	if o.ShowMsg {
+		io.Pf("> Solving stages\n")
+	}
 
 	// loop over stages
 	for stgidx, stg := range o.Sim.Stages {
@@ -142,8 +153,13 @@ func (o *FEM) Run() (err error) {
 			return
 		}
 
+		// message
+		if o.ShowMsg {
+			io.Pf("> Running FE solver\n")
+		}
+
 		// time loop
-		err = o.Solver.Run(stg.Control.Tf, stg.Control.DtFunc, stg.Control.DtoFunc, o.Verbose, o.DebugKb)
+		err = o.Solver.Run(stg.Control.Tf, stg.Control.DtFunc, stg.Control.DtoFunc, o.ShowMsg, o.DebugKb)
 		if err != nil {
 			return
 		}
@@ -155,6 +171,9 @@ func (o *FEM) Run() (err error) {
 //  Input:
 //   stgidx -- stage index (in o.Sim.Stages)
 func (o *FEM) SetStage(stgidx int) (err error) {
+	if o.ShowMsg {
+		io.Pf("> Setting stage %d\n", stgidx)
+	}
 	for _, d := range o.Domains {
 		err = d.SetStage(stgidx)
 		if err != nil {
@@ -170,6 +189,9 @@ func (o *FEM) SetStage(stgidx int) (err error) {
 //   stgidx  -- stage index (in o.Sim.Stages)
 //   zeroSol -- zero vectors in domains.Sol
 func (o *FEM) ZeroStage(stgidx int, zeroSol bool) (err error) {
+	if o.ShowMsg {
+		io.Pf("> Zeroing stage %d\n", stgidx)
+	}
 	for _, d := range o.Domains {
 		err = d.SetIniVals(stgidx, zeroSol)
 		if err != nil {
@@ -199,7 +221,7 @@ func (o *FEM) SolveOneStage(stgidx int, zerostage bool) (err error) {
 
 	// run
 	stg := o.Sim.Stages[stgidx]
-	err = o.Solver.Run(stg.Control.Tf, stg.Control.DtFunc, stg.Control.DtoFunc, o.Verbose, o.DebugKb)
+	err = o.Solver.Run(stg.Control.Tf, stg.Control.DtFunc, stg.Control.DtoFunc, o.ShowMsg, o.DebugKb)
 	return
 }
 
@@ -215,19 +237,13 @@ func (o FEM) onexit(cputime time.Time, prevErr error) (err error) {
 	}
 
 	// show final message
-	if o.Verbose {
-		io.Pf("\n\n")
-		if len(o.Domains) > 0 {
-			if o.Domains[0].Sol != nil {
-				io.Pf("\nfinal time = %v\n", o.Domains[0].Sol.T)
-			}
-		}
-		io.Pflmag("cpu time   = %v\n", time.Now().Sub(cputime))
+	if o.ShowMsg {
+		io.Pf("> CPU time = %v\n", time.Now().Sub(cputime))
 	}
 
 	// save summary if previous error is not nil
 	if o.Summary != nil {
-		err = o.Summary.Save(o.Sim.DirOut, o.Sim.Key, o.Sim.EncType, o.Nproc, o.Proc, o.Verbose)
+		err = o.Summary.Save(o.Sim.DirOut, o.Sim.Key, o.Sim.EncType, o.Nproc, o.Proc, false)
 		if err != nil {
 			return
 		}

@@ -18,18 +18,17 @@ func main() {
 	defer func() {
 		if err := recover(); err != nil {
 			if mpi.Rank() == 0 {
+				io.PfRed("\nERROR: %v", err)
+				io.Pf("See location of error below:\n")
 				chk.Verbose = true
-				for i := 8; i > 3; i-- {
+				for i := 5; i > 3; i-- {
 					chk.CallerInfo(i)
 				}
-				io.PfRed("ERROR: %v\n", err)
 			}
 		}
 		mpi.Stop(false)
 	}()
 	mpi.Start(false)
-
-	// default input parameters
 
 	// read input parameters
 	fnamepath, _ := io.ArgToFilename(0, "", ".sim", true)
@@ -41,10 +40,10 @@ func main() {
 
 	// message
 	if mpi.Rank() == 0 && verbose {
-		io.PfWhite("\nGofem v3 -- Go Finite Element Method\n\n")
+		io.PfWhite("\nGofem Version 3.1 -- Go Finite Element Method\n")
 		io.Pf("Copyright 2015 Dorival Pedroso and Raul Durand. All rights reserved.\n")
 		io.Pf("Use of this source code is governed by a BSD-style\n")
-		io.Pf("license that can be found in the LICENSE file.\n\n")
+		io.Pf("license that can be found in the LICENSE file.\n")
 
 		io.Pf("\n%v\n", io.ArgsTable("INPUT ARGUMENTS",
 			"filename path", "fnamepath", fnamepath,

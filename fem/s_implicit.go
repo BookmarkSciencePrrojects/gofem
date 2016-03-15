@@ -52,6 +52,11 @@ func (o *SolverImplicit) Run(tf float64, dtFunc, dtoFunc fun.Func, verbose bool,
 		}
 	}
 
+	// message
+	if verbose && !dat.ShowR {
+		defer func() { io.Pf("\n") }()
+	}
+
 	// time loop
 	var Δt float64
 	var lasttimestep bool
@@ -83,10 +88,8 @@ func (o *SolverImplicit) Run(tf float64, dtFunc, dtoFunc fun.Func, verbose bool,
 		}
 
 		// message
-		if verbose {
-			if !dat.ShowR {
-				io.PfWhite("%30.15f\r", t)
-			}
+		if verbose && !dat.ShowR {
+			io.Pf("> Time = %f\r", t)
 		}
 
 		// for all domains

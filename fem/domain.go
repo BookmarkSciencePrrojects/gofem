@@ -54,13 +54,15 @@ type Solution struct {
 type Domain struct {
 
 	// init: auxiliary variables
-	Distr  bool            // distributed/parallel run
-	Proc   int             // this processor number
-	Sim    *inp.Simulation // [from FEM] input data
-	Reg    *inp.Region     // region data
-	Msh    *inp.Mesh       // mesh data
-	LinSol la.LinSol       // linear solver
-	DynCfs *DynCoefs       // [from FEM] coefficients for dynamics/transient simulations
+	Distr   bool            // distributed/parallel run
+	Proc    int             // this processor number
+	Verbose bool            // verbose
+	ShowMsg bool            // show messages: if verbose==true and proc==0
+	Sim     *inp.Simulation // [from FEM] input data
+	Reg     *inp.Region     // region data
+	Msh     *inp.Mesh       // mesh data
+	LinSol  la.LinSol       // linear solver
+	DynCfs  *DynCoefs       // [from FEM] coefficients for dynamics/transient simulations
 
 	// stage: nodes (active) and elements (active AND in this processor)
 	Nodes  []*Node // active nodes (for each stage). Note: indices in Nodes do NOT correpond to Ids => use Vid2node to access Nodes using Ids.
@@ -118,12 +120,14 @@ func (o *Domain) Clean() {
 }
 
 // NewDomains returns domains
-func NewDomains(sim *inp.Simulation, dyncfs *DynCoefs, proc, nproc int, distr bool) (doms []*Domain) {
+func NewDomains(sim *inp.Simulation, dyncfs *DynCoefs, proc, nproc int, distr, verb bool) (doms []*Domain) {
 	doms = make([]*Domain, len(sim.Regions))
 	for i, reg := range sim.Regions {
 		doms[i] = new(Domain)
 		doms[i].Distr = distr
 		doms[i].Proc = proc
+		doms[i].Verbose = verb
+		doms[i].ShowMsg = verb && proc == 0
 		doms[i].Sim = sim
 		doms[i].Reg = reg
 		doms[i].Msh = reg.Msh
@@ -414,6 +418,13 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 	o.Sol.Ext = make(map[int][]float64, 0)
 	o.Sol.Cnt = make(map[int]int, 0)
 
+	// message
+	if o.ShowMsg {
+		io.Pf(">> Steady=%v, Axisym=%v, Pstress=%v\n", o.Sol.Steady, o.Sol.Axisym, o.Sol.Pstress)
+		io.Pf(">> Number of equations = %d\n", o.Ny)
+		io.Pf(">> Number of Lagrange multipliers = %d\n", o.Nlam)
+	}
+
 	// success
 	return
 }
@@ -435,19 +446,31 @@ func (o *Domain) SetIniVals(stgidx int, zeroSol bool) (err error) {
 		if err != nil {
 			return
 		}
+		if o.ShowMsg {
+			io.Pf(">> Initial porous media state set\n")
+		}
 	} else if stg.IniStress != nil {
 		err = o.IniSetStress(stg)
 		if err != nil {
 			return
+		}
+		if o.ShowMsg {
+			io.Pf(">> Initial stress state set\n")
 		}
 	} else if stg.IniFcn != nil {
 		err = o.IniSetFileFunc(stg)
 		if err != nil {
 			return
 		}
+		if o.ShowMsg {
+			io.Pf(">> Initial state set by using function\n")
+		}
 	} else {
 		for _, e := range o.ElemIntvars {
 			e.SetIniIvs(o.Sol, nil)
+		}
+		if o.ShowMsg {
+			io.Pf(">> Initial state set with default values\n")
 		}
 	}
 
@@ -484,6 +507,9 @@ func (o *Domain) SetIniVals(stgidx int, zeroSol bool) (err error) {
 					}
 				}
 			}
+		}
+		if o.ShowMsg {
+			io.Pf(">> Initial state overridden by 'import' file\n")
 		}
 	}
 
