@@ -4,7 +4,11 @@
     "matfile" : "sg.mat"
   },
   "functions" : [
-    { "name":"load", "type":"cos", "prms":[{"n":"a","v":1}, {"n":"b","v":0.3}] }
+    { "name":"load", "type":"cos", "prms":[
+      {"n":"a","v":1.0},
+      {"n":"b","v":0.3},
+      {"n":"c","v":0.0} ]
+    }
   ],
   "regions" : [
     {
