@@ -49,6 +49,11 @@ func (o *SolverLinearImplicit) Run(tf float64, dtFunc, dtoFunc fun.Func, verbose
 		}
 	}
 
+	// message
+	if verbose {
+		defer func() { io.Pf("\n") }()
+	}
+
 	// auxiliary variables
 	Y := o.dom.Sol.Y
 	ψ := o.dom.Sol.Psi
@@ -84,7 +89,7 @@ func (o *SolverLinearImplicit) Run(tf float64, dtFunc, dtoFunc fun.Func, verbose
 
 		// message
 		if verbose {
-			io.PfWhite("%30.15f\r", t)
+			io.Pf("> Time = %f\r", t)
 		}
 
 		// calculate global starred vectors and interpolate starred variables from nodes to integration points

@@ -113,6 +113,10 @@ func NewFEM(simfilepath, alias string, erasePrev, saveSummary, readSummary, allo
 // Run runs FE simulation
 func (o *FEM) Run() (err error) {
 
+	// exit commands
+	cputime := time.Now()
+	defer func() { err = o.onexit(cputime, err) }()
+
 	// plot functions
 	if o.Sim.PlotF != nil {
 		if o.Proc == 0 {
@@ -123,10 +127,6 @@ func (o *FEM) Run() (err error) {
 		}
 		return
 	}
-
-	// exit commands
-	cputime := time.Now()
-	defer func() { err = o.onexit(cputime, err) }()
 
 	// message
 	if o.ShowMsg {
@@ -238,7 +238,12 @@ func (o FEM) onexit(cputime time.Time, prevErr error) (err error) {
 
 	// show final message
 	if o.ShowMsg {
-		io.Pf("> CPU time = %v\n", time.Now().Sub(cputime))
+		if prevErr == nil {
+			io.PfGreen("> Success\n")
+			io.Pf("> CPU time = %v\n", time.Now().Sub(cputime))
+		} else {
+			io.PfRed("> Failed\n")
+		}
 	}
 
 	// save summary if previous error is not nil
