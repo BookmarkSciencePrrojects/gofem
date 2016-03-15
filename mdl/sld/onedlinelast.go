@@ -38,13 +38,13 @@ func (o *OnedLinElast) GetA() float64 {
 
 // Init initialises model
 func (o *OnedLinElast) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
-	prms.Connect(&o.E, "E")
-	prms.Connect(&o.G, "G")
-	prms.Connect(&o.A, "A")
-	prms.Connect(&o.I22, "I22")
-	prms.Connect(&o.I11, "I11")
-	prms.Connect(&o.Jtt, "Jtt")
-	prms.Connect(&o.Rho, "rho")
+	prms.Connect(&o.E, "E", "oned-elast model")
+	prms.Connect(&o.G, "G", "oned-elast model")
+	prms.Connect(&o.A, "A", "oned-elast model")
+	prms.Connect(&o.I22, "I22", "oned-elast model")
+	prms.Connect(&o.I11, "I11", "oned-elast model")
+	prms.Connect(&o.Jtt, "Jtt", "oned-elast model")
+	prms.Connect(&o.Rho, "rho", "oned-elast model")
 	return
 }
 

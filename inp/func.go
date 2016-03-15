@@ -44,10 +44,13 @@ func (o FuncsData) Get(name string) (fcn fun.Func, err error) {
 	for _, f := range o {
 		if f.Name == name {
 			fcn, err = fun.New(f.Type, f.Prms)
+			if err != nil {
+				err = chk.Err("Cannot get function named %q because of the following error:\n%v", name, err)
+			}
 			return
 		}
 	}
-	err = chk.Err("cannot find function named %q\n", name)
+	err = chk.Err("Cannot find function named %q\n", name)
 	return
 }
 
