@@ -7,7 +7,7 @@
   "functions" : [
     { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] },
     { "name":"loa_", "type":"cte", "prms":[{"n":"c", "v":0}] },
-    { "name":"load", "type":"exc1", "prms":[{"n":"A", "v":-500}, {"n":"b", "v":1e-3}] }
+    { "name":"load", "type":"exc1", "prms":[{"n":"a", "v":-500}, {"n":"b", "v":1e-3}] }
   ],
   "regions" : [
     {
