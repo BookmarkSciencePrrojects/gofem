@@ -28,8 +28,8 @@ func main() {
 	out.LoadResults(nil)
 
 	// compute water discharge along section-A
-	nwlx_TM := out.GetRes("ex_nwlx", "top-middle", -1)
-	Q := out.Integrate("ex_nwlx", "section-A", "y", -1)
+	nwlx_TM := out.GetRes("nwlx", "top-middle", -1)
+	Q := out.Integrate("nwlx", "section-A", "y", -1)
 	io.PfYel("Q = %g m³/s [answer: (0.0002999972723204199) 0.0003]\n", Q)
 
 	// plot
