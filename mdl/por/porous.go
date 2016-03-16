@@ -47,8 +47,6 @@ type Model struct {
 	// parameters
 	Nf0   float64 // nf0: initial volume fraction of all fluids ~ porosity
 	RhoS0 float64 // real (intrinsic) density of solids
-	Pkl   float64 // isotrpic liquid saturated conductivity
-	Pkg   float64 // isotrpic gas saturated conductivity
 
 	// derived
 	Klsat [][]float64 // klsat ÷ Gref
@@ -73,15 +71,9 @@ func (o *Model) Init(prms fun.Prms, Cnd cnd.Model, Lrm lrm.Model, Liq *fld.Model
 	o.PcZero = 1e-10
 	o.MEtrial = true
 
-	// saturated conductivities
-	var klx, kly, klz float64
-	var kgx, kgy, kgz float64
-
-	// read paramaters in
+	// read optional constants
 	for _, p := range prms {
 		switch p.N {
-
-		// constants
 		case "NmaxIt":
 			o.NmaxIt = int(p.V)
 		case "Itol":
@@ -98,21 +90,69 @@ func (o *Model) Init(prms fun.Prms, Cnd cnd.Model, Lrm lrm.Model, Liq *fld.Model
 			o.Ncns = p.V > 0
 		case "Ncns2":
 			o.Ncns2 = p.V > 0
-
-		// parameters
-		case "nf0":
-			o.Nf0 = p.V
-		case "RhoS0":
-			o.RhoS0 = p.V
-		case "kl":
-			o.Pkl = p.V
-			klx, kly, klz = p.V, p.V, p.V
-		case "kg":
-			o.Pkg = p.V
-			kgx, kgy, kgz = p.V, p.V, p.V
-		default:
-			return chk.Err("parameter named %q is incorrect\n", p.N)
 		}
+	}
+
+	// liquid conductivity
+	var klx, kly, klz float64
+	kl_values, kl_found := prms.GetValues([]string{"klx", "kly", "klz"})
+	if !utl.BoolAllTrue(kl_found) {
+		p := prms.Find("kl")
+		if p == nil {
+			return chk.Err("porous model: either 'kl' (isotropic) or ['klx', 'kly', 'klz'] must be given in database of material parameters")
+		}
+		klx, kly, klz = p.V, p.V, p.V
+	} else {
+		klx, kly, klz = kl_values[0], kl_values[1], kl_values[2]
+	}
+
+	// gas conductivity
+	var kgx, kgy, kgz float64
+	kg_values, kg_found := prms.GetValues([]string{"kgx", "kgy", "kgz"})
+	if !utl.BoolAllTrue(kg_found) {
+		p := prms.Find("kg")
+		if p == nil {
+			return chk.Err("porous model: either 'kg' (isotropic) or ['kgx', 'kgy', 'kgz'] must be given in database of material parameters")
+		}
+		kgx, kgy, kgz = p.V, p.V, p.V
+	} else {
+		kgx, kgy, kgz = kg_values[0], kg_values[1], kg_values[2]
+	}
+
+	// check conductivities
+	KMIN := 1e-14
+	if klx < KMIN {
+		return chk.Err("porous model: klx (or kl) must be greater than or equal to %g", KMIN)
+	}
+	if kly < KMIN {
+		return chk.Err("porous model: kly (or kl) must be greater than or equal to %g", KMIN)
+	}
+	if klz < KMIN {
+		return chk.Err("porous model: klz (or kl) must be greater than or equal to %g", KMIN)
+	}
+	if kgx < KMIN {
+		return chk.Err("porous modeg: kgx (or kg) must be greater than or equag to %g", KMIN)
+	}
+	if kgy < KMIN {
+		return chk.Err("porous modeg: kgy (or kg) must be greater than or equag to %g", KMIN)
+	}
+	if kgz < KMIN {
+		return chk.Err("porous modeg: kgz (or kg) must be greater than or equag to %g", KMIN)
+	}
+
+	// read other paramaters
+	prms.Connect(&o.Nf0, "nf0", "porous model")
+	prms.Connect(&o.RhoS0, "RhoS0", "porous model")
+
+	// check
+	if o.Nf0 < 1e-3 {
+		return chk.Err("porous model: porosity nf0 = %g is invalid", o.Nf0)
+	}
+	if o.RhoS0 < 1e-3 {
+		return chk.Err("porous model: intrinsic density of solids RhoS0 = %g is invalid", o.Nf0)
+	}
+	if grav < 1e-3 {
+		return chk.Err("porous model: gravity constant of reference grav = %g is invalid", grav)
 	}
 
 	// derived
@@ -154,8 +194,6 @@ func (o Model) GetPrms(example bool) fun.Prms {
 	return fun.Prms{
 		&fun.Prm{N: "nf0", V: o.Nf0},
 		&fun.Prm{N: "RhoS0", V: o.RhoS0},
-		&fun.Prm{N: "kl", V: o.Pkl},
-		&fun.Prm{N: "kg", V: o.Pkg},
 	}
 }
 
