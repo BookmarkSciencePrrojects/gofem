@@ -186,6 +186,12 @@ func solve_linear_problem(t float64, d *Domain, dc *DynCoefs, sum *Summary, firs
 			d.Kb.PutMatAndMatT(&d.EssenBcs.A)
 		}
 
+		// write smat matrix
+		if d.Sim.Data.WriteSmat {
+			la.WriteSmat("/tmp/gofem_Kb", d.Kb.ToMatrix(nil).ToDense(), 1e-14)
+			chk.Panic("file </tmp/gofem_Kb.smat> written. simulation stopped")
+		}
+
 		// initialise linear solver (just once)
 		if d.InitLSol {
 			err = d.LinSol.InitR(d.Kb, d.Sim.LinSol.Symmetric, d.Sim.LinSol.Verbose, d.Sim.LinSol.Timing)
