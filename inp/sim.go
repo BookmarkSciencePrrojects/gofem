@@ -30,17 +30,17 @@ type Data struct {
 	Encoder string `json:"encoder"` // encoder name; e.g. "gob" "json" "xml"
 
 	// problem definition and options
-	Steady  bool    `json:"steady"`  // steady simulation
-	Axisym  bool    `json:"axisym"`  // axisymmetric
-	Pstress bool    `json:"pstress"` // plane-stress
-	NoLBB   bool    `json:"nolbb"`   // do not satisfy Ladyženskaja-Babuška-Brezzi condition; i.e. do not use [qua8,qua4] for u-p formulation
-	Debug   bool    `json:"debug"`   // activate debugging
-	Stat    bool    `json:"stat"`    // activate statistics
-	Wlevel  float64 `json:"wlevel"`  // water level; 0 means use max elevation
-	Surch   float64 `json:"surch"`   // surcharge load at surface == qn0
-	LiqMat  string  `json:"liq"`     // name of liquid material
-	GasMat  string  `json:"gas"`     // name of gas material
-	ListBcs bool    `json:"listbcs"` // list boundary conditions
+	Steady    bool    `json:"steady"`    // steady simulation
+	Axisym    bool    `json:"axisym"`    // axisymmetric
+	Pstress   bool    `json:"pstress"`   // plane-stress
+	NoLBB     bool    `json:"nolbb"`     // do not satisfy Ladyženskaja-Babuška-Brezzi condition; i.e. do not use [qua8,qua4] for u-p formulation
+	Stat      bool    `json:"stat"`      // activate statistics
+	Wlevel    float64 `json:"wlevel"`    // water level; 0 means use max elevation
+	Surch     float64 `json:"surch"`     // surcharge load at surface == qn0
+	LiqMat    string  `json:"liq"`       // name of liquid material
+	GasMat    string  `json:"gas"`       // name of gas material
+	ListBcs   bool    `json:"listbcs"`   // list boundary conditions
+	WriteSmat bool    `json:"writesmat"` // writes /tmp/gofem_Kb.smat file for debugging global Jacobian matrix. The simulation will be stopped.
 }
 
 // LinSolData holds data for linear solvers
