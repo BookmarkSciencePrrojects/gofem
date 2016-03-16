@@ -91,7 +91,7 @@ func (o *RefM1) Init(prms fun.Prms) (err error) {
 	// fix variables if no-wetting model is selected
 	if o.nowet {
 		o.λw, o.βw, o.β1 = o.λd, o.β2, o.βd
-		o.xrw = o.xrd + 0.78*o.y0/o.λd // TODO: improve this
+		o.xrw = o.xrd
 		o.α = 0.0
 	}
 
@@ -145,7 +145,7 @@ func (o *RefM1) Cc(pc, sl float64, wet bool) (Ccval float64, err error) {
 		sl = o.y0
 	}
 	x := math.Log(1.0 + pc)
-	if wet {
+	if wet && !o.nowet {
 		o.wetting(x, sl)
 	} else {
 		o.drying(x, sl)
@@ -167,7 +167,7 @@ func (o RefM1) L(pc, sl float64, wet bool) (float64, error) {
 	}
 	x := math.Log(1.0 + pc)
 	var DλbDx float64
-	if wet {
+	if wet && !o.nowet {
 		o.wetting(x, sl)
 		DywDx := -o.λw - o.c1w*o.c2w*math.Exp(o.c1w*x)/(o.βw*(o.c3w+o.c2w*math.Exp(o.c1w*x)))
 		DλbDx = o.β1 * o.λb * DywDx
@@ -194,7 +194,7 @@ func (o RefM1) J(pc, sl float64, wet bool) (float64, error) {
 	}
 	x := math.Log(1.0 + pc)
 	var DλbDy float64
-	if wet {
+	if wet && !o.nowet {
 		o.wetting(x, sl)
 		DλbDy = (o.βw*(o.λwb-o.λw) - o.λwb*o.β1) * math.Exp(-o.β1*o.D)
 	} else {
@@ -218,7 +218,7 @@ func (o *RefM1) Derivs(pc, sl float64, wet bool) (L, Lx, J, Jx, Jy float64, err 
 	}
 	x := math.Log(1.0 + pc)
 	var DλbDx, DλbDy, D2λbDx2, D2λbDyDx, D2λbDy2 float64
-	if wet {
+	if wet && !o.nowet {
 		o.wetting(x, sl)
 		DywDx := -o.λw - o.c1w*o.c2w*math.Exp(o.c1w*x)/(o.βw*(o.c3w+o.c2w*math.Exp(o.c1w*x)))
 		DλbDx = o.β1 * o.λb * DywDx

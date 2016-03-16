@@ -18,7 +18,7 @@ func main() {
 	defer func() {
 		if err := recover(); err != nil {
 			if mpi.Rank() == 0 {
-				io.PfRed("\nERROR:\n%v", err)
+				io.PfRed("\nERROR:\n%v\n", err)
 				io.Pf("See location of error below:\n")
 				chk.Verbose = true
 				for i := 5; i > 3; i-- {
