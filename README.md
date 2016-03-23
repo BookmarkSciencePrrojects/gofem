@@ -12,7 +12,11 @@ under the BSD-style license found in the LICENSE file.
 
 See examples here: https://github.com/cpmech/gofem/blob/master/examples/README.md
 
-## Installation and documentation
+## News
+
+2016/03/23 -- v3.0 was tagged as stable (new stable-v3.0 branch created)
+
+## Installation and documentation (for developers)
 
 http://cpmech.github.io/gofem
 
