@@ -251,7 +251,7 @@ func (o *Domain) IniSetPorous(stg *inp.Stage) (err error) {
 			if ele, okk := elem.(ElemIntvars); okk {
 
 				// build slices
-				coords := ele.Ipoints()
+				coords := ele.(ElemOutIps).OutIpCoords()
 				nip := len(coords)
 				svT := make([]float64, nip) // total vertical stresses
 				for i := 0; i < nip; i++ {

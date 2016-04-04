@@ -405,15 +405,6 @@ func (o *BjointComp) Update(sol *Solution) (err error) {
 
 // internal variables ///////////////////////////////////////////////////////////////////////////////
 
-// Ipoints returns the real coordinates of integration points [nip][ndim]
-func (o *BjointComp) Ipoints() (coords [][]float64) {
-	coords = la.MatAlloc(len(o.LinIps), o.Ndim)
-	for idx, ip := range o.LinIps {
-		coords[idx] = o.LinShp.IpRealCoords(o.Lin.X, ip)
-	}
-	return
-}
-
 // SetIniIvs sets initial ivs for given values in sol and ivs map
 func (o *BjointComp) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
 	nip := len(o.LinIps)

@@ -560,15 +560,6 @@ func (o *ElemPP) Update(sol *Solution) (err error) {
 
 // internal variables ///////////////////////////////////////////////////////////////////////////////
 
-// Ipoints returns the real coordinates of integration points [nip][ndim]
-func (o *ElemPP) Ipoints() (coords [][]float64) {
-	coords = la.MatAlloc(len(o.IpsElem), o.Ndim)
-	for idx, ip := range o.IpsElem {
-		coords[idx] = o.Cell.Shp.IpRealCoords(o.X, ip)
-	}
-	return
-}
-
 // SetIniIvs sets initial ivs for given values in sol and ivs map
 //  Note: this function assumes a hydrostatic fully saturated initial condition, thus:
 //        sl=1, krl=1, wlb=0  sg=0, krg=krgMin, wgb=0

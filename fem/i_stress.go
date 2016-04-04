@@ -22,7 +22,7 @@ func (o *Domain) IniSetStress(stg *inp.Stage) (err error) {
 			for _, e := range o.ElemIntvars {
 
 				// build map with isotropic and homogeneus state
-				coords := e.Ipoints()
+				coords := e.(ElemOutIps).OutIpCoords()
 				nip := len(coords)
 				v := utl.DblVals(nip, dat.S0)
 				ivs := map[string][]float64{"sx": v, "sy": v, "sz": v}
@@ -42,7 +42,7 @@ func (o *Domain) IniSetStress(stg *inp.Stage) (err error) {
 			for _, e := range o.ElemIntvars {
 
 				// build map with plane-strain and homogeneus state
-				coords := e.Ipoints()
+				coords := e.(ElemOutIps).OutIpCoords()
 				nip := len(coords)
 				vx := utl.DblVals(nip, dat.Sh)
 				vy := utl.DblVals(nip, dat.Sv)

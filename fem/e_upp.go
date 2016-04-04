@@ -593,15 +593,6 @@ func (o *ElemUPP) Update(sol *Solution) (err error) {
 
 // internal variables ///////////////////////////////////////////////////////////////////////////////
 
-// Ipoints returns the real coordinates of integration points [nip][ndim]
-func (o *ElemUPP) Ipoints() (coords [][]float64) {
-	coords = la.MatAlloc(len(o.U.IpsElem), o.Ndim)
-	for idx, ip := range o.U.IpsElem {
-		coords[idx] = o.U.Cell.Shp.IpRealCoords(o.U.X, ip)
-	}
-	return
-}
-
 // SetIniIvs sets initial ivs for given values in sol and ivs map
 func (o *ElemUPP) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
 

@@ -71,7 +71,6 @@ type Elem interface {
 // ElemIntvars defines elements with {z,q} internal variables
 type ElemIntvars interface {
 	Update(sol *Solution) (err error)                              // perform (tangent) update
-	Ipoints() (coords [][]float64)                                 // returns the real coordinates of integration points [nip][ndim]
 	SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) // sets initial ivs for given values in sol and ivs map
 	BackupIvs(aux bool) (err error)                                // create copy of internal variables
 	RestoreIvs(aux bool) (err error)                               // restore internal variables from copies

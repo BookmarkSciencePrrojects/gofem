@@ -727,11 +727,6 @@ func (o *Rjoint) Update(sol *Solution) (err error) {
 
 // internal variables ///////////////////////////////////////////////////////////////////////////////
 
-// Ipoints returns the real coordinates of integration points [nip][ndim]
-func (o *Rjoint) Ipoints() (coords [][]float64) {
-	return o.Rod.Ipoints()
-}
-
 // SetIniIvs sets initial ivs for given values in sol and ivs map
 func (o *Rjoint) SetIniIvs(sol *Solution, ivs map[string][]float64) (err error) {
 	nip := len(o.Rod.IpsElem)
