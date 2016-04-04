@@ -66,9 +66,9 @@ func GetTexLabel(key, unit string) string {
 	case "ex_nwgz", "nwgz":
 		l += "n_{g}\\cdot w_{g z}"
 	case "RhoL":
-		l += "\\rho^L"
+		l += "\\rho^{\\ell}"
 	case "RhoG":
-		l += "\\rho^G"
+		l += "\\rho^g"
 	case "ompb":
 		l += "\\bar{\\omega}_p"
 	default:
