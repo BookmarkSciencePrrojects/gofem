@@ -10,6 +10,7 @@ import (
 
 	"github.com/cpmech/gofem/mdl/cnd"
 	"github.com/cpmech/gofem/mdl/fld"
+	"github.com/cpmech/gofem/mdl/gen"
 	"github.com/cpmech/gofem/mdl/lrm"
 	"github.com/cpmech/gofem/mdl/por"
 	"github.com/cpmech/gofem/mdl/sld"
@@ -23,7 +24,7 @@ type Material struct {
 
 	// input
 	Name  string   `json:"name"`  // name of material
-	Type  string   `json:"type"`  // type of material; e.g. "sld", "cnd", "lrm", "fld", "por"
+	Type  string   `json:"type"`  // type of material; e.g. "sld", "cnd", "lrm", "fld", "por", "gen"
 	Model string   `json:"model"` // name of model; e.g. "dp", "vm", "elast", etc.
 	Deps  []string `json:"deps"`  // dependencies; other material names. e.g. ["water", "dryair", "solid1", "conduct1", "lreten1"]
 	Prms  fun.Prms `json:"prms"`  // prms holds all model parameters for this material
@@ -35,6 +36,7 @@ type Material struct {
 	Liq *fld.Model // pointer to liquid model
 	Gas *fld.Model // pointer to gas model
 	Por *por.Model // pointer to porous model
+	Gen gen.Model  // pointer to generic model
 }
 
 // Mats holds materials
@@ -54,6 +56,7 @@ type MatDb struct {
 	LIQ map[string]*Material // subset with materials/models: liquids
 	GAS map[string]*Material // subset with materials/models: gases
 	POR map[string]*Material // subset with materials/models: porous materials
+	GEN map[string]*Material // subset with materials/models: generic materials
 }
 
 // Clean cleans resources
@@ -90,6 +93,7 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 	mdb.LIQ = make(map[string]*Material)
 	mdb.GAS = make(map[string]*Material)
 	mdb.POR = make(map[string]*Material)
+	mdb.GEN = make(map[string]*Material)
 	for _, m := range mdb.Materials {
 		switch m.Type {
 		case "sld":
@@ -118,8 +122,11 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 		case "por":
 			mdb.POR[m.Name] = m
 			continue
+		case "gen":
+			mdb.GEN[m.Name] = m
+			continue
 		default:
-			err = chk.Err("material type %q is incorrect; options are \"sld\", \"cnd\", \"lrm\", \"fld\" and \"por\"", m.Type)
+			err = chk.Err("material type %q is incorrect; options are \"sld\", \"cnd\", \"lrm\", \"fld\", \"por\" and \"gen\"", m.Type)
 			return
 		}
 	}
@@ -201,6 +208,20 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 		err = m.Por.Init(m.Prms, m.Cnd, m.Lrm, m.Liq, m.Gas, grav)
 		if err != nil {
 			err = chk.Err("cannot initialise porous model (material %q):\n%v\n", m.Name, err)
+			return
+		}
+	}
+
+	// alloc/init: generic
+	for _, m := range mdb.GEN {
+		m.Gen, err = gen.New(m.Model)
+		if err != nil {
+			err = chk.Err("cannot allocate generic model %q / material %q\n%v", m.Model, m.Name, err)
+			return
+		}
+		err = m.Gen.Init(ndim, m.Prms)
+		if err != nil {
+			err = chk.Err("cannot initialise generic model %q / material %q\n%v", m.Model, m.Name, err)
 			return
 		}
 	}
