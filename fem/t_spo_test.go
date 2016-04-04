@@ -50,7 +50,7 @@ func Test_spo751a(tst *testing.T) {
 		return
 	}
 
-	// initialise solution vectros
+	// initialise solution vectors
 	err = analysis.ZeroStage(0, true)
 	if err != nil {
 		tst.Errorf("ZeroStage failed:\n%v", err)
