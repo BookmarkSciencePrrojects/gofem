@@ -5,4 +5,5 @@
 2. fld -- fluid models
 3. lrm -- liquid retention models
 4. por -- porous media model
-5. sld -- solid mdels
+5. sld -- solid models
+6. gen -- generic models; e.g. for diffusion equation
