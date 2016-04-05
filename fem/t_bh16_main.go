@@ -46,5 +46,5 @@ func main() {
 	tolK := 1e-12
 	tolu := 1e-15
 	tols := 1e-12
-	fem.TestingCompareResultsU(&tst, "data/bh16.sim", "cmp/bh16.cmp", "", tolK, tolu, tols, skipK, true)
+	fem.TestingCompareResultsU(&tst, "data/bh16.sim", "cmp/bh16.cmp", "", tolK, tolu, tols, skipK, true, nil)
 }
