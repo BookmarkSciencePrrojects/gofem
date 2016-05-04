@@ -77,7 +77,7 @@ func Update(mdl Model, pc0, sl0, Δpc float64) (slNew float64, err error) {
 	}
 
 	// ode solver
-	var odesol ode.ODE
+	var odesol ode.Solver
 	odesol.Init("Radau5", 1, fcn, jac, nil, nil, true)
 	odesol.SetTol(1e-10, 1e-7)
 	odesol.Distr = false // this is important to avoid problems with MPI runs

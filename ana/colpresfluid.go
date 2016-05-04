@@ -28,12 +28,12 @@ import (
 //            \ dR/dT /    \  C・dp/dT   /
 //
 type ColumnFluidPressure struct {
-	R0   float64 // intrinsic density corresponding to p0
-	P0   float64 // pressure corresponding to R0
-	C    float64 // compressibility coefficient; e.g. R0/Kbulk or M/(R・θ)
-	Grav float64 // gravity acceleration (positive constant)
-	H    float64 // elevation where (R0,p0) is known
-	sol  ode.ODE // ODE solver
+	R0   float64    // intrinsic density corresponding to p0
+	P0   float64    // pressure corresponding to R0
+	C    float64    // compressibility coefficient; e.g. R0/Kbulk or M/(R・θ)
+	Grav float64    // gravity acceleration (positive constant)
+	H    float64    // elevation where (R0,p0) is known
+	sol  ode.Solver // ODE solver
 }
 
 // Init initialises this structure
