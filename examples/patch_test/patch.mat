@@ -1,0 +1,15 @@
+{
+  "functions" : [],
+  "materials" : [
+    {
+      "name"  : "sld",
+      "model" : "lin-elast",
+      "type"  : "sld",
+      "prms"  : [
+        {"n":"E",   "v":1500},
+        {"n":"nu",  "v":0.25 },
+        {"n":"rho", "v":1    }
+      ]
+    }
+  ]
+}
