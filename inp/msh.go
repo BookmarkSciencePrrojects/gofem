@@ -48,9 +48,6 @@ type Cell struct {
 	JlinId int    // joint line id
 	JsldId int    // joint solid id
 
-	// neighbours
-	Neighs []int // neighbours; e.g. [3, 7, -1, 11] => side:cid => 0:3, 1:7, 2:-1(no cell), 3:11
-
 	// derived
 	Shp         *shp.Shape // shape structure
 	FaceBcs     FaceConds  // face boundary condition
@@ -417,9 +414,6 @@ func (o *Cell) GetSimilar(lbb bool) (newcell *Cell) {
 	newcell.STags = o.STags
 	newcell.JlinId = o.JlinId
 	newcell.JsldId = o.JsldId
-
-	// neighbours
-	newcell.Neighs = o.Neighs
 
 	// new cell type
 	ctype := o.Shp.Type
