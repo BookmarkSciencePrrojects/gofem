@@ -19,6 +19,100 @@ func Test_diffu01a(tst *testing.T) {
 
 	/* Diffusion equation
 	 *
+	 *        Nodes                Equations
+	 *
+	 *     0     1     2         3     6     2
+	 *     o-----o-----o         o-----o-----o
+	 *     |           |         |           |
+	 *     |     4     |         |     8     |
+	 *   3 o     o     o 5     7 o     o     o 5
+	 *     |           |         |           |
+	 *     |           |         |           |
+	 *     o-----o-----o         o-----o-----o
+	 *     6     7     8         0     4     1
+	 */
+
+	//verbose()
+	chk.PrintTitle("diffu01a. Diffusion (Poisson) equation 01. Check DOFs")
+
+	// start simulation
+	analysis := NewFEM("data/diffu01.sim", "", true, false, false, false, chk.Verbose, 0)
+
+	// set stage
+	err := analysis.SetStage(0)
+	if err != nil {
+		tst.Errorf("SetStage failed:\n%v", err)
+		return
+	}
+
+	// initialise solution vectors
+	err = analysis.ZeroStage(0, true)
+	if err != nil {
+		tst.Errorf("ZeroStage failed:\n%v", err)
+		return
+	}
+
+	// domain
+	dom := analysis.Domains[0]
+	io.Pforan("dom.elems = %+#v\n", dom.Elems)
+
+	// nodes and elements
+	chk.IntAssert(len(dom.Nodes), 9)
+	chk.IntAssert(len(dom.Elems), 1)
+
+	// check dofs
+	for _, nod := range dom.Nodes {
+		chk.IntAssert(len(nod.Dofs), 1)
+	}
+
+	// check equations
+	nids, eqs := get_nids_eqs(dom)
+	chk.Ints(tst, "nids", nids, []int{6, 8, 2, 0, 7, 5, 1, 3, 4})
+	chk.Ints(tst, "eqs", eqs, []int{0, 1, 2, 3, 4, 5, 6, 7, 8})
+
+	// check solution arrays
+	ny := 9
+	nλ := 5
+	nyb := ny + nλ
+	chk.IntAssert(len(dom.Sol.Y), ny)
+	chk.IntAssert(len(dom.Sol.Dydt), 0)
+	chk.IntAssert(len(dom.Sol.L), nλ)
+	chk.IntAssert(len(dom.Sol.ΔY), ny)
+
+	// check linear solver arrays
+	chk.IntAssert(len(dom.Fb), nyb)
+	chk.IntAssert(len(dom.Wb), nyb)
+
+	// check Tmap
+	Umaps := [][]int{ // for each element
+		{0, 1, 2, 3, 4, 5, 6, 7, 8}, // element # 0
+	}
+	for i, ele := range dom.Elems {
+		e := ele.(*ElemDiffu)
+		io.Pforan("e%d.Umap = %v\n", e.Id(), e.Umap)
+		chk.Ints(tst, "Umap", e.Umap, Umaps[i])
+	}
+
+	// constraints
+	chk.IntAssert(len(dom.EssenBcs.Bcs), nλ)
+	var ct_u_eqs []int // constrained T equations [sorted]
+	for _, c := range dom.EssenBcs.Bcs {
+		io.Pforan("c = %+#v\n", c)
+		chk.IntAssert(len(c.Eqs), 1)
+		chk.IntAssert(len(c.ValsA), 1)
+		chk.String(tst, c.Key, "u")
+		chk.Scalar(tst, "A", 1e-15, c.ValsA[0], 1.0)
+		eq := c.Eqs[0]
+		ct_u_eqs = append(ct_u_eqs, eq)
+	}
+	sort.Ints(ct_u_eqs)
+	chk.Ints(tst, "constrained u equations", ct_u_eqs, []int{0, 2, 3, 6, 7})
+}
+
+func Test_diffu02a(tst *testing.T) {
+
+	/* Diffusion equation
+	 *
 	 *      Nodes / Tags                 Equations
 	 *
 	 *     8 o----o----o 9 (-5)      22 o----o----o 21
@@ -50,10 +144,10 @@ func Test_diffu01a(tst *testing.T) {
 	 */
 
 	//verbose()
-	chk.PrintTitle("diffu01a. Poisson equation 01. Check DOFs")
+	chk.PrintTitle("diffu02a. Diffusion (Poisson) equation 02. Check DOFs")
 
 	// start simulation
-	analysis := NewFEM("data/diffu01.sim", "", true, false, false, false, chk.Verbose, 0)
+	analysis := NewFEM("data/diffu02.sim", "", true, false, false, false, chk.Verbose, 0)
 
 	// set stage
 	err := analysis.SetStage(0)
@@ -123,17 +217,17 @@ func Test_diffu01a(tst *testing.T) {
 	chk.Ints(tst, "equations with u prescribed", ct_u_eqs, []int{0, 1, 4, 21, 22, 24})
 }
 
-func Test_diffu01b(tst *testing.T) {
+func Test_diffu02b(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("diffu01b. Poisson equation 01")
+	chk.PrintTitle("diffu02b. Diffusion (Poisson) equation 02. Run")
 	doplot := true
 	if !chk.Verbose {
 		doplot = false
 	}
 
 	// run simulation
-	analysis := NewFEM("data/diffu01.sim", "", true, false, false, false, chk.Verbose, 0)
+	analysis := NewFEM("data/diffu02.sim", "", true, false, false, false, chk.Verbose, 0)
 
 	// for debugging Kb
 	if true {
@@ -184,5 +278,49 @@ func Test_diffu01b(tst *testing.T) {
 		plt.Plot(Y, Uana, "'r-', label='analytical'")
 		plt.Gll("y", "u", "")
 		plt.SaveD("/tmp/gofem", "test_diffu01b.png")
+	}
+}
+
+func test_diffu03(tst *testing.T) {
+
+	verbose()
+	chk.PrintTitle("diffu03. Diffusion (Poisson) equation 03. Refinement")
+
+	// start simulation
+	analysis := NewFEM("data/diffu03.sim", "", true, false, false, false, chk.Verbose, 0)
+
+	// refine mesh
+	dom := analysis.Domains[0]
+	msh := dom.Msh
+	io.Pforan("msh = %v\n", msh)
+
+	// run simulation
+	err := analysis.Run()
+	if err != nil {
+		tst.Errorf("Run failed:\n%v", err)
+		return
+	}
+
+	// analytical solution
+	w, H, Ttop, Tside := 1.0, 3.0, 60.0, 20.0
+	pi := math.Pi
+	npts := 100
+	calc_u := func(x []float64) float64 {
+		sum := 0.0
+		for i := 1; i < npts; i++ {
+			n := float64(i)
+			sum += ((math.Pow(-1, n+1) + 1) / n) * math.Sin(n*pi*x[0]/w) * math.Sinh(n*pi*x[1]/w) / math.Sinh(n*pi*H/w)
+		}
+		return (Ttop-Tside)*(2.0/pi)*sum + Tside
+	}
+
+	// check
+	for _, nod := range dom.Nodes {
+		x := nod.Vert.C
+		eq := nod.GetEq("u")
+		unum := dom.Sol.Y[eq]
+		uana := calc_u(x)
+		io.Pf("%2d : u(%6.3f) = %23g   %23g\n", nod.Vert.Id, x, unum, uana)
+		//chk.AnaNum(tst, io.Sf("u(%6.3f)", x), 1e-12, unum, uana, chk.Verbose)
 	}
 }

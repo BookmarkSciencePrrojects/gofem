@@ -1,0 +1,32 @@
+{
+  "data" : {
+    "matfile" : "diffu.mat",
+    "steady"  : true
+  },
+  "functions" : [
+    { "name":"top", "type":"cte", "prms":[ {"n":"c", "v":60} ] },
+    { "name":"sid", "type":"cte", "prms":[ {"n":"c", "v":20} ] }
+  ],
+  "regions" : [
+    {
+      "desc"      : "square",
+      "mshfile"   : "singleq9square1x1.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"mat1", "type":"diffu" }
+      ]
+    }
+  ],
+  "stages" : [
+    {
+      "facebcs" : [
+        { "tag":-10, "keys":["u"], "funcs":["sid"] },
+        { "tag":-11, "keys":["u"], "funcs":["sid"] },
+        { "tag":-12, "keys":["u"], "funcs":["top"] },
+        { "tag":-13, "keys":["u"], "funcs":["sid"] }
+      ],
+      "nodebcs" : [
+        { "tag":-1, "keys":["u"], "funcs":["top"] }
+      ]
+    }
+  ]
+}

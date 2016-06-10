@@ -1,0 +1,35 @@
+{
+  "data" : {
+    "matfile" : "diffu.mat",
+    "steady"  : true
+  },
+  "functions" : [
+    { "name":"source", "type":"xpoly1", "prms":[
+      { "n":"a1", "v":1.0 },
+      { "n":"2D", "v":1 }]
+    }
+  ],
+  "regions" : [
+    {
+      "mshfile" : "column10m4e.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"mat1", "type":"diffu" }
+      ]
+    }
+  ],
+  "solver" : {
+    "showR" : true
+  },
+  "stages" : [
+    {
+      "desc" : "top and bottom have fixed u. source = -y",
+      "facebcs" : [
+        { "tag":-10, "keys":["u"], "funcs":["zero"] },
+        { "tag":-12, "keys":["u"], "funcs":["zero"] }
+      ],
+      "eleconds" : [
+        { "tag":-1, "keys":["s"], "funcs":["source"] }
+      ]
+    }
+  ]
+}
