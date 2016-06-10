@@ -125,8 +125,7 @@ type Region struct {
 	AbsPath   bool        `json:"abspath"`   // mesh filename is given in absolute path
 
 	// derived
-	Msh      *Mesh       // the mesh
-	etag2idx map[int]int // maps element tag to element index in ElemsData slice
+	Msh *Mesh // the mesh
 }
 
 // FaceBc holds face boundary condition
@@ -344,12 +343,6 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 			chk.Panic("ReadSim: cannot read mesh file:\n%v", err)
 		}
 
-		// dependent variables
-		reg.etag2idx = make(map[int]int)
-		for j, ed := range reg.ElemsData {
-			reg.etag2idx[ed.Tag] = j
-		}
-
 		// get ndim and max elevation
 		if i == 0 {
 			o.Ndim = reg.Msh.Ndim
@@ -516,12 +509,13 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 
 // Etag2data returns the ElemData corresponding to element tag
 //  Note: returns nil if not found
-func (d *Region) Etag2data(etag int) *ElemData {
-	idx, ok := d.etag2idx[etag]
-	if !ok {
-		return nil
+func (o *Region) Etag2data(etag int) *ElemData {
+	for _, edat := range o.ElemsData {
+		if edat.Tag == etag {
+			return edat
+		}
 	}
-	return d.ElemsData[idx]
+	return nil
 }
 
 // GetInfo returns formatted information
