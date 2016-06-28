@@ -14,7 +14,15 @@ See examples here: https://github.com/cpmech/gofem/blob/master/examples/README.m
 
 ## Installation and documentation
 
-http://cpmech.github.io/gofem
+```
+mkdir -p $GOPATH/src/github.com/cpmech
+cd $GOPATH/src/github.com/cpmech
+git clone https://github.com/cpmech/gofem.git
+cd gofem
+./all.bash
+```
+
+See http://cpmech.github.io/gofem for more details.
 
 ## Acknowledgements
 Funding from the Australian Research Council is gratefully acknowledged.
