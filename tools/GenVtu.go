@@ -9,6 +9,7 @@ package main
 import (
 	"bytes"
 
+	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/fem"
 	"github.com/cpmech/gofem/inp"
 	"github.com/cpmech/gofem/out"
@@ -20,11 +21,11 @@ import (
 const IP_TAG_INI = 70000
 
 var (
-	ndim  int         // space dimension
-	verts []*inp.Vert // all vertices
-	cells []*inp.Cell // all cells
-	nodes []*fem.Node // active/allocated nodes
-	elems []fem.Elem  // active/allocated elements
+	ndim  int           // space dimension
+	verts []*inp.Vert   // all vertices
+	cells []*inp.Cell   // all cells
+	nodes []*fem.Node   // active/allocated nodes
+	elems []ele.Element // active/allocated elements
 
 	dirout string // directory for output
 	fnkey  string // filename key
@@ -170,10 +171,10 @@ func main() {
 		}
 
 		// current values @ ips
-		for _, ele := range out.ElemOutIps {
-			ipids := out.Cid2ips[ele.Id()]
-			allvals := fem.NewIpsMap()
-			ele.OutIpVals(allvals, out.Dom.Sol)
+		for _, element := range out.ElemOutIps {
+			ipids := out.Cid2ips[element.Id()]
+			allvals := ele.NewIpsMap()
+			element.OutIpVals(allvals, out.Dom.Sol)
 			for key, vals := range *allvals {
 				for i, ipid := range ipids {
 					out.Ipoints[ipid].Vals[key] = vals[i]

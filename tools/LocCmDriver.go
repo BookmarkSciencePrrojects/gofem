@@ -11,7 +11,7 @@ import (
 	"path"
 
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mdl/sld"
+	"github.com/cpmech/gofem/mdl/solid"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/tsr"
@@ -33,7 +33,7 @@ type Input struct {
 
 func (o *Input) PostProcess() {
 	if len(o.PlotSet) == 0 {
-		o.PlotSet = sld.PlotSet6
+		o.PlotSet = solid.PlotSet6
 	}
 	if o.FigProp < 0.1 {
 		o.FigProp = 1.0
@@ -110,7 +110,7 @@ func main() {
 	ndim := 3
 
 	// load path
-	var pth sld.Path
+	var pth solid.Path
 	err = pth.ReadJson(ndim, path.Join(in.Dir, in.PathFn))
 	if err != nil {
 		io.PfRed("cannot read path file %v\n", err)
@@ -119,7 +119,7 @@ func main() {
 	//io.PfYel("pth = %v\n", pth)
 
 	// driver
-	var drv sld.Driver
+	var drv solid.Driver
 	drv.InitWithModel(ndim, mdl)
 
 	// run
@@ -131,10 +131,10 @@ func main() {
 	// plot
 	//if false {
 	if true {
-		var plr sld.Plotter
+		var plr solid.Plotter
 		plr.SetFig(false, in.FigEps, in.FigProp, in.FigWid, "/tmp", "cmd_"+in.SimFn)
-		var epm sld.EPmodel
-		if m, ok := mdl.(sld.EPmodel); ok {
+		var epm solid.EPmodel
+		if m, ok := mdl.(solid.EPmodel); ok {
 			plr.SetModel(m)
 			epm = m
 		}
@@ -154,7 +154,7 @@ func main() {
 	if false {
 		//if true {
 		plt.Reset()
-		m := mdl.(*sld.SmpInvs)
+		m := mdl.(*solid.SmpInvs)
 		φ := m.Get_phi()
 		σcCte := 10.0
 		M := tsr.Phi2M(φ, "oct")

@@ -40,7 +40,7 @@ func main() {
 
 	// message
 	if mpi.Rank() == 0 && verbose {
-		io.PfWhite("\nGofem Version 3.1 -- Go Finite Element Method\n")
+		io.PfWhite("\nGofem Version 3.2 -- Go Finite Element Method\n")
 		io.Pf("Copyright 2016 The Gofem Authors. All rights reserved.\n")
 		io.Pf("Use of this source code is governed by a BSD-style\n")
 		io.Pf("license that can be found in the LICENSE file.\n")
@@ -63,10 +63,10 @@ func main() {
 	// analysis data
 	alias := ""
 	readSummary := false
-	analysis := fem.NewFEM(fnamepath, alias, erasePrev, saveSummary, readSummary, allowParallel, verbose, 0)
+	m := fem.NewMain(fnamepath, alias, erasePrev, saveSummary, readSummary, allowParallel, verbose, 0)
 
 	// run simulation
-	err := analysis.Run()
+	err := m.Run()
 	if err != nil {
 		if mpi.Rank() == 0 {
 			io.PfRed("\nERROR:\n%v", err)
