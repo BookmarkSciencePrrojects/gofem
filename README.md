@@ -1,16 +1,52 @@
 # Gofem &ndash; Go Finite Element Method
 
-Gofem is an implementation of the Finite Element Method in Go programming
-language (golang).
+Gofem (Go Finite Element Method) is an implementation of the finite element method (FEM) in Go
+language for applications in solid mechanics. The code aims to be as general as possible and has a
+focus on porous media mechanics. Nonetheless, classical plasticity and the solution of multi-physics
+coupled problems are also targeted by Gofem. Efficiency is a goal as long as the quality of code and
+code maintenance is not penalised. The computational efficiency is achieved by parallel computing
+using message passage interface (MPI). Finally, several unit tests are employed for every detail of
+the code and its usage aims to be comprehensive. Gofem depends on the Go Scientific Library (Gosl)
+and was developed for obtaining the results presented in a number of journal papers, including [1]
+and [2].
 
-## License
 
-Unless otherwise noted, the Gofem source files are distributed
-under the BSD-style license found in the LICENSE file.
+
+## Content
+
+1.  ana              &ndash; analytical solutions
+2.  shp              &ndash; shape (interpolation) structures and quadrature points
+3.  mdl/generic      &ndash; generic models (placeholder for parameters set)
+4.  mdl/solid        &ndash; models for solids
+5.  mdl/fluid        &ndash; models for fluids (liquid / gas)
+6.  mdl/conduct      &ndash; models for liquid conductivity within porous media
+7.  mdl/retention    &ndash; models for liquid retention within porous media
+8.  mdl/diffusion    &ndash; models for diffusion applications
+9.  mdl/thermomech   &ndash; models for thermo-mechanical applications
+10. mdl/porous       &ndash; models for porous media (TPM-based)
+11. inp              &ndash; input data (.sim = simulation, .mat = materials, .msh = meshes)
+12. ele              &ndash; finite elements
+13. ele/solid        &ndash; elements for solid mechanics
+14. ele/seepage      &ndash; elements for seepage problems (with liquid and/or gases)
+15. ele/diffusion    &ndash; elements for diffusion(-like) problems
+16. ele/thermomech   &ndash; elements for thermo-mechanical applications
+17. ele/porous       &ndash; elements for porous media simulations (TPM)
+18. fem              &ndash; finite element method (main, domain, solver, ...)
+19. tests            &ndash; (unit) tests of complete simulations
+20. tests/solid      &ndash; tests of solid mechanics applications
+21. tests/seepage    &ndash; tests of seepage problems
+22. tests/diffusion  &ndash; tests of diffusion problems
+23. tests/thermomech &ndash; tests of thermo-mechanical applications
+24. tests/porous     &ndash; tests of porous media simulations
+25. out              &ndash; output routines (post-processing and plotting)
+
+
 
 ## Examples
 
 See examples here: https://github.com/cpmech/gofem/blob/master/examples/README.md
+
+
 
 ## Installation and documentation
 
@@ -24,19 +60,28 @@ cd gofem
 
 See http://cpmech.github.io/gofem for more details.
 
+
+
 ## Acknowledgements
 Funding from the Australian Research Council is gratefully acknowledged.
 
-## Subpackages
-1.  ana     -- analytical solutions
-2.  shp     -- shape (interpolation) structures and quadrature points
-3.  inp     -- input data structures. simulation, materials, meshes
-4.  mdl/sld -- models for solids
-5.  mdl/fld -- models for fluids
-6.  mdl/cnd -- models for liquid/gas conductivity in porous media
-7.  mdl/lrm -- models for liquid retention in porous media
-8.  mdl/por -- models for porous media
-9.  fem     -- finite element method (elements, solver, ...)
-10. out     -- output: analyses of results and plotting
-
 Additionally, 'tools' contains some auxiliary tools.
+
+
+
+## References
+
+[1] Pedroso DM (2015) A consistent u-p formulation for porous media with hysteresis.
+    Int Journal for Numerical Methods in Engineering, 101(8) 606-634
+    http://dx.doi.org/10.1002/nme.4808
+
+[2] Pedroso DM (2015) A solution to transient seepage in unsaturated porous media.
+    Computer Methods in Applied Mechanics and Engineering, 285 791-816
+    http://dx.doi.org/10.1016/j.cma.2014.12.009
+
+
+
+## License
+
+Unless otherwise noted, the Gofem source files are distributed
+under the BSD-style license found in the LICENSE file.
