@@ -1,0 +1,582 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Gofem &ndash; package tests</title>
+<link type="text/css" rel="stylesheet" href="static/style.css">
+<script type="text/javascript" src="static/godocs.js"></script>
+<style type="text/css"></style>
+</head>
+<body>
+<div id="page"><h1>Gofem &ndash; <b>tests</b> &ndash; (unit) tests of complete simulations</h1>
+use 'godoc cmd/github.com/cpmech/gofem/tests' for documentation on the github.com/cpmech/gofem/tests command 
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = ;
+	document.CALLGRAPH = ;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/cpmech/gofem/tests"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+package tests implements structures and functions to test elements and FE simulations
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Bjointcomp">func Bjointcomp(main *fem.Main, o *Kb)</a></dd>
+			
+				
+				<dd><a href="#CompareResults">func CompareResults(tst *testing.T, simfilepath, cmpfname, alias string, tolK, tolu, tols float64, skipK, verbose bool, extraAfterSetStage func(dom *fem.Domain))</a></dd>
+			
+				
+				<dd><a href="#GetNidsEqs">func GetNidsEqs(dom *fem.Domain) (nids, eqs []int)</a></dd>
+			
+				
+				<dd><a href="#Liquid">func Liquid(main *fem.Main, o *Kb)</a></dd>
+			
+				
+				<dd><a href="#LiquidGas">func LiquidGas(main *fem.Main, o *Kb)</a></dd>
+			
+				
+				<dd><a href="#Rjoint">func Rjoint(main *fem.Main, o *Kb)</a></dd>
+			
+				
+				<dd><a href="#Solid">func Solid(main *fem.Main, o *Kb)</a></dd>
+			
+				
+				<dd><a href="#SolidLiquid">func SolidLiquid(main *fem.Main, o *Kb)</a></dd>
+			
+				
+				<dd><a href="#SolidLiquidGas">func SolidLiquidGas(main *fem.Main, o *Kb)</a></dd>
+			
+				
+				<dd><a href="#Verbose">func Verbose()</a></dd>
+			
+			
+				
+				<dd><a href="#Iteration">type Iteration</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Kb">type Kb</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Results">type Results</a></dd>
+				
+				
+			
+				
+				<dd><a href="#ResultsSet">type ResultsSet</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/github.com/cpmech/gofem/tests/check.go">check.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/tests/debugKb.go">debugKb.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/tests/init.go">init.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+			
+			
+			<h2 id="Bjointcomp">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=6354:6392#L222">Bjointcomp</a>
+				<a class="permalink" href="#Bjointcomp">&#xb6;</a>
+			</h2>
+			<pre>func Bjointcomp(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
+			<p>
+Bjointcomp defines a global function to debug Kb for bjoint-compatible elements
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="CompareResults">func <a href="https://github.com/cpmech/gofem/blob/master/tests/check.go?s=1415:1576#L36">CompareResults</a>
+				<a class="permalink" href="#CompareResults">&#xb6;</a>
+			</h2>
+			<pre>func CompareResults(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, simfilepath, cmpfname, alias <a href="/pkg/builtin/#string">string</a>, tolK, tolu, tols <a href="/pkg/builtin/#float64">float64</a>, skipK, verbose <a href="/pkg/builtin/#bool">bool</a>, extraAfterSetStage func(dom *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Domain">Domain</a>))</pre>
+			<p>
+CompareResults performs comparison of results (gofem versus .cmp files)
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="GetNidsEqs">func <a href="https://github.com/cpmech/gofem/blob/master/tests/init.go?s=376:426#L12">GetNidsEqs</a>
+				<a class="permalink" href="#GetNidsEqs">&#xb6;</a>
+			</h2>
+			<pre>func GetNidsEqs(dom *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Domain">Domain</a>) (nids, eqs []<a href="/pkg/builtin/#int">int</a>)</pre>
+			
+			
+			
+
+		
+			
+			
+			<h2 id="Liquid">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=1396:1430#L34">Liquid</a>
+				<a class="permalink" href="#Liquid">&#xb6;</a>
+			</h2>
+			<pre>func Liquid(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
+			<p>
+Liquid defines a global function to debug Kb for p-elements
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="LiquidGas">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=2024:2061#L61">LiquidGas</a>
+				<a class="permalink" href="#LiquidGas">&#xb6;</a>
+			</h2>
+			<pre>func LiquidGas(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
+			<p>
+LiquidGas defines a global function to debug Kb for pp-elements
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Rjoint">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=5583:5617#L192">Rjoint</a>
+				<a class="permalink" href="#Rjoint">&#xb6;</a>
+			</h2>
+			<pre>func Rjoint(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
+			<p>
+Rjoint defines a global function to debug Kb for rjoint-elements
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Solid">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=2829:2862#L91">Solid</a>
+				<a class="permalink" href="#Solid">&#xb6;</a>
+			</h2>
+			<pre>func Solid(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
+			<p>
+Solid defines a global function to debug Kb for u-elements
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SolidLiquid">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=3488:3527#L121">SolidLiquid</a>
+				<a class="permalink" href="#SolidLiquid">&#xb6;</a>
+			</h2>
+			<pre>func SolidLiquid(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
+			<p>
+SolidLiquid defines a global function to debug Kb for up-elements
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SolidLiquidGas">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=4338:4380#L152">SolidLiquidGas</a>
+				<a class="permalink" href="#SolidLiquidGas">&#xb6;</a>
+			</h2>
+			<pre>func SolidLiquidGas(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
+			<p>
+SolidLiquidGas defines a global function to debug Kb for upp-elements
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Verbose">func <a href="https://github.com/cpmech/gofem/blob/master/tests/init.go?s=317:331#L7">Verbose</a>
+				<a class="permalink" href="#Verbose">&#xb6;</a>
+			</h2>
+			<pre>func Verbose()</pre>
+			
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Iteration">type <a href="https://github.com/cpmech/gofem/blob/master/tests/check.go?s=517:652#L11">Iteration</a>
+				<a class="permalink" href="#Iteration">&#xb6;</a>
+			</h2>
+			<pre>type Iteration struct {
+    It     <a href="/pkg/builtin/#int">int</a>     <span class="comment">// iteration number</span>
+    ResRel <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// relative residual</span>
+    Resid  <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// absolute residual</span>
+}</pre>
+			<p>
+Iteration holds results from iterations
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Kb">type <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=503:1331#L11">Kb</a>
+				<a class="permalink" href="#Kb">&#xb6;</a>
+			</h2>
+			<pre>type Kb struct {
+
+    <span class="comment">// input (must)</span>
+    Tst          *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a> <span class="comment">// testing structure</span>
+    Eid          <a href="/pkg/builtin/#int">int</a>        <span class="comment">// element id</span>
+    Tol          <a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// tolerance to compare K&#39;s</span>
+    Tol2         <a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// another tolerance to compare K&#39;s</span>
+    Step         <a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// step for finite differences method</span>
+    Verb         <a href="/pkg/builtin/#bool">bool</a>       <span class="comment">// verbose: show results</span>
+    Ni, Nj       <a href="/pkg/builtin/#int">int</a>        <span class="comment">// number of i and j components of K to be tested; -1 means all K components</span>
+    ItMin, ItMax <a href="/pkg/builtin/#int">int</a>        <span class="comment">// limits to consider test; -1 means all iterations</span>
+    Tmin, Tmax   <a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// limits to consider test; -1 means all times</span>
+
+    Fbtmp []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// auxiliary array</span>
+    Ybkp  []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// auxiliary array</span>
+    ΔYbkp []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// auxiliary array</span>
+    Yold  []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// auxiliary array</span>
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Kb helps on checking Kb matrices
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Results">type <a href="https://github.com/cpmech/gofem/blob/master/tests/check.go?s=689:1265#L18">Results</a>
+				<a class="permalink" href="#Results">&#xb6;</a>
+			</h2>
+			<pre>type Results struct {
+    Status     <a href="/pkg/builtin/#string">string</a>        <span class="comment">// status message</span>
+    LoadFactor <a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// load factor</span>
+    Iterations []<a href="#Iteration">Iteration</a>   <span class="comment">// iterations data</span>
+    Kmats      [][][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nele][nu][nu] all stiffness matrices</span>
+    Disp       [][]<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// [nnod][ndim] displacements at nodes</span>
+    DispMult   <a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// displacements multiplier</span>
+    Note       <a href="/pkg/builtin/#string">string</a>        <span class="comment">// note about number of integration points</span>
+    Stresses   [][][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nele][nip][nsig] all stresses @ all ips</span>
+
+}</pre>
+			<p>
+Results holds numerical results
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ResultsSet">type <a href="https://github.com/cpmech/gofem/blob/master/tests/check.go?s=1312:1338#L33">ResultsSet</a>
+				<a class="permalink" href="#ResultsSet">&#xb6;</a>
+			</h2>
+			<pre>type ResultsSet []*<a href="#Results">Results</a></pre>
+			<p>
+ResultsSet is a set of comparison results
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	
+
+
+	<div class="pkg-dir">
+		<table>
+			<tr>
+				<th class="pkg-name">Name</th>
+				<th class="pkg-synopsis">Synopsis</th>
+			</tr>
+
+			
+			<tr>
+				<td colspan="2"><a href="..">..</a></td>
+			</tr>
+			
+
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="data/">data</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="diffusion/">diffusion</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="porous/">porous</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="seepage/">seepage</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="solid/">solid</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="thermomech/">thermomech</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+		</table>
+	</div>
+
+
+	
+
+</div><!-- page -->
+<div id="footer">
+<br /><br />
+<hr>
+<pre class="copyright">
+Copyright (c) 2015, The Gofem Authors. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Gofem nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+</pre><!-- copyright -->
+</div><!-- footer -->
+</body>
+</html>

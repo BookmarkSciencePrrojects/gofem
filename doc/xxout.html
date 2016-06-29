@@ -7,7 +7,1553 @@
 <style type="text/css"></style>
 </head>
 <body>
-<div id="page"><h1>Gofem &ndash; <b>out</b> &ndash; results analyses and plotting</h1>
+<div id="page"><h1>Gofem &ndash; <b>out</b> &ndash; output routines (post-processing and plotting)</h1>
+use 'godoc cmd/github.com/cpmech/gofem/out' for documentation on the github.com/cpmech/gofem/out command 
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = ;
+	document.CALLGRAPH = ;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/cpmech/gofem/out"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+package out implements FE simulation output handling for analyses and plotting
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#BeamDiagMoment">func BeamDiagMoment(alias string, idxI int, withtext bool, numfmt string, tolM, coef, sf float64)</a></dd>
+			
+				
+				<dd><a href="#CombineEidIps">func CombineEidIps(eids, ips []int) (eids_ips [][]int)</a></dd>
+			
+				
+				<dd><a href="#ComputeExtrapolatedValues">func ComputeExtrapolatedValues(extrapKeys []string)</a></dd>
+			
+				
+				<dd><a href="#Define">func Define(alias string, loc Locator)</a></dd>
+			
+				
+				<dd><a href="#DefineBeams">func DefineBeams()</a></dd>
+			
+				
+				<dd><a href="#Draw">func Draw(dirout, fname string, nr, nc int, split bool, extra func(id string))</a></dd>
+			
+				
+				<dd><a href="#GetCoords">func GetCoords(alias string) []float64</a></dd>
+			
+				
+				<dd><a href="#GetDist">func GetDist(key, alias string) (dist []float64)</a></dd>
+			
+				
+				<dd><a href="#GetIds">func GetIds(alias string) (vids, ipids []int)</a></dd>
+			
+				
+				<dd><a href="#GetRes">func GetRes(key, alias string, idxI int) []float64</a></dd>
+			
+				
+				<dd><a href="#GetTexLabel">func GetTexLabel(key, unit string) string</a></dd>
+			
+				
+				<dd><a href="#GetXYZ">func GetXYZ(key, alias string) (x, y, z []float64)</a></dd>
+			
+				
+				<dd><a href="#IntegOnPlane">func IntegOnPlane(key, alias string) (res []float64)</a></dd>
+			
+				
+				<dd><a href="#Integrate">func Integrate(key, alias, along string, idxI int) float64</a></dd>
+			
+				
+				<dd><a href="#LoadResults">func LoadResults(times []float64)</a></dd>
+			
+				
+				<dd><a href="#ParseKey">func ParseKey(key string) (string, int)</a></dd>
+			
+				
+				<dd><a href="#Plot">func Plot(xHandle, yHandle interface{}, alias string, fm plt.Fmt, idxI int)</a></dd>
+			
+				
+				<dd><a href="#Splot">func Splot(id, splotTitle string)</a></dd>
+			
+				
+				<dd><a href="#SplotConfig">func SplotConfig(xunit, yunit string, xscale, yscale float64)</a></dd>
+			
+				
+				<dd><a href="#Start">func Start(simfnpath string, stageIdx, regionIdx int)</a></dd>
+			
+			
+				
+				<dd><a href="#Along">type Along</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Along.Locate">func (o Along) Locate() (res Points)</a></dd>
+				
+			
+				
+				<dd><a href="#AlongX">type AlongX</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#AlongX.Locate">func (o AlongX) Locate() (res Points)</a></dd>
+				
+			
+				
+				<dd><a href="#AlongY">type AlongY</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#AlongY.Locate">func (o AlongY) Locate() (res Points)</a></dd>
+				
+			
+				
+				<dd><a href="#AlongZ">type AlongZ</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#AlongZ.Locate">func (o AlongZ) Locate() (res Points)</a></dd>
+				
+			
+				
+				<dd><a href="#At">type At</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#At.Locate">func (o At) Locate() Points</a></dd>
+				
+			
+				
+				<dd><a href="#AtIp">type AtIp</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#AtIp.Locate">func (o AtIp) Locate() Points</a></dd>
+				
+			
+				
+				<dd><a href="#IpData_t">type IpData_t</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Locator">type Locator</a></dd>
+				
+				
+			
+				
+				<dd><a href="#N">type N</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#AllNodes">func AllNodes() N</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#N.Locate">func (o N) Locate() (res Points)</a></dd>
+				
+			
+				
+				<dd><a href="#OnZplane">type OnZplane</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#OnZplane.Locate">func (o OnZplane) Locate() (res Points)</a></dd>
+				
+			
+				
+				<dd><a href="#P">type P</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#AllIps">func AllIps() P</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#P.Locate">func (o P) Locate() (res Points)</a></dd>
+				
+			
+				
+				<dd><a href="#PlaneData">type PlaneData</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NodesOnPlane">func NodesOnPlane(ftag int) *PlaneData</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PlaneData.ConnectResults">func (o *PlaneData) ConnectResults(alias string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PlaneData.Locate">func (o PlaneData) Locate() (res Points)</a></dd>
+				
+			
+				
+				<dd><a href="#PltEntity">type PltEntity</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Point">type Point</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Point.String">func (o Point) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Points">type Points</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Points.Len">func (o Points) Len() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Points.Less">func (o Points) Less(i, j int) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Points.String">func (o Points) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Points.Swap">func (o Points) Swap(i, j int)</a></dd>
+				
+			
+				
+				<dd><a href="#ResultsMap">type ResultsMap</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ResultsMap.String">func (o ResultsMap) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#SplotDat">type SplotDat</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Styles">type Styles</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#GetDefaultStyles">func GetDefaultStyles(qts Points) Styles</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/github.com/cpmech/gofem/out/auxiliary.go">auxiliary.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/out/beamdiagrams.go">beamdiagrams.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/out/extrap.go">extrap.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/out/filtering.go">filtering.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/out/out.go">out.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/out/plotting.go">plotting.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/out/point.go">point.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/out/printing.go">printing.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/out/results.go">results.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/out/styles.go">styles.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/out/topology.go">topology.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const <span id="DIST_TOL">DIST_TOL</span> = 1e-6 <span class="comment">// tolerance to compare distances or proximity between points</span>
+</pre>
+				
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+    <span id="TolC">TolC</span> = 1e-8 <span class="comment">// tolerance to compare x-y-z coordinates</span>
+    <span id="TolT">TolT</span> = 1e-3 <span class="comment">// tolerance to compare times</span>
+    <span id="Ndiv">Ndiv</span> = 20   <span class="comment">// bins n-division</span>
+)</pre>
+				<p>
+constants
+</p>
+
+			
+				<pre>var (
+
+    <span class="comment">// data set by Start</span>
+    <span id="Analysis">Analysis</span>   *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>          <span class="comment">// the fem structure</span>
+    <span id="Sum">Sum</span>        *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Summary">Summary</a>       <span class="comment">// [from Analysis] summary</span>
+    <span id="Dom">Dom</span>        *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Domain">Domain</a>        <span class="comment">// [from Analysis] FE domain</span>
+    <span id="Ipoints">Ipoints</span>    []*<a href="#IpData_t">IpData_t</a>        <span class="comment">// all integration points. ipid == index in Ipoints</span>
+    <span id="Cid2ips">Cid2ips</span>    [][]<a href="/pkg/builtin/#int">int</a>            <span class="comment">// [ncells][nip] maps cell id to index in Ipoints</span>
+    <span id="Ipkey2ips">Ipkey2ips</span>  map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#int">int</a>   <span class="comment">// maps ip keys to indices in Ipoints</span>
+    <span id="Ipkeys">Ipkeys</span>     map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// all ip keys</span>
+    <span id="NodBins">NodBins</span>    <a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Bins">Bins</a>            <span class="comment">// bins for nodes</span>
+    <span id="IpsBins">IpsBins</span>    <a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Bins">Bins</a>            <span class="comment">// bins for integration points</span>
+    <span id="IpsMin">IpsMin</span>     []<a href="/pkg/builtin/#float64">float64</a>          <span class="comment">// [ndim] {x,y,z}_min among all ips</span>
+    <span id="IpsMax">IpsMax</span>     []<a href="/pkg/builtin/#float64">float64</a>          <span class="comment">// [ndim] {x,y,z}_max among all ips</span>
+    <span id="Beams">Beams</span>      []*<a href="/pkg/github.com/cpmech/gofem/ele/solid/">solid</a>.<a href="/pkg/github.com/cpmech/gofem/ele/solid/#Beam">Beam</a>      <span class="comment">// beams, if any</span>
+    <span id="ElemOutIps">ElemOutIps</span> []<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#CanOutputIps">CanOutputIps</a> <span class="comment">// subset of element that can output IP values</span>
+
+    <span class="comment">// defined entities and results loaded by LoadResults</span>
+    <span id="Planes">Planes</span>   map[<a href="/pkg/builtin/#string">string</a>]*<a href="#PlaneData">PlaneData</a> <span class="comment">// for points defined on planes. maps aliases to data</span>
+    <span id="Results">Results</span>  <a href="#ResultsMap">ResultsMap</a>            <span class="comment">// maps labels =&gt; points</span>
+    <span id="TimeInds">TimeInds</span> []<a href="/pkg/builtin/#int">int</a>                 <span class="comment">// selected output indices</span>
+    <span id="Times">Times</span>    []<a href="/pkg/builtin/#float64">float64</a>             <span class="comment">// selected output times</span>
+
+    <span class="comment">// extrapolated values</span>
+    <span id="Extrap">Extrap</span> []<a href="/pkg/builtin/#string">string</a>             <span class="comment">// keys to be extrapolated; e.g. []string{&#34;nwlx&#34;, &#34;nwly&#34;}</span>
+    <span id="ExVals">ExVals</span> []map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nverts][nkeys] extrapolated values</span>
+
+    <span class="comment">// subplots</span>
+    <span id="Splots">Splots</span> []*<a href="#SplotDat">SplotDat</a> <span class="comment">// all subplots</span>
+    <span id="Csplot">Csplot</span> *<a href="#SplotDat">SplotDat</a>   <span class="comment">// current subplot</span>
+)</pre>
+				<p>
+Global variables
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="BeamDiagMoment">func <a href="https://github.com/cpmech/gofem/blob/master/out/beamdiagrams.go?s=1091:1188#L21">BeamDiagMoment</a>
+				<a class="permalink" href="#BeamDiagMoment">&#xb6;</a>
+			</h2>
+			<pre>func BeamDiagMoment(alias <a href="/pkg/builtin/#string">string</a>, idxI <a href="/pkg/builtin/#int">int</a>, withtext <a href="/pkg/builtin/#bool">bool</a>, numfmt <a href="/pkg/builtin/#string">string</a>, tolM, coef, sf <a href="/pkg/builtin/#float64">float64</a>)</pre>
+			<p>
+BeamDiagMoment plots beam&#39;s bending moment diagram
+</p>
+<pre>Input
+ alias -- use &#34;&#34; for all beams
+ idxI  -- index in TimeInds slice corresponding to selected output time; use -1 for the last item.
+         If alias defines a single point, the whole time series is returned and idxI is ignored.
+ withtext  -- show bending moment values
+ numfmt    -- number format for values. use &#34;&#34; for default
+ tolM      -- tolerance to clip absolute values of M
+ coef      -- coefficient to scale max(dimension) divided by max(Y); e.g. 0.1
+ sf        -- scaling factor. use 0 for automatic computation
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="CombineEidIps">func <a href="https://github.com/cpmech/gofem/blob/master/out/auxiliary.go?s=257:311#L1">CombineEidIps</a>
+				<a class="permalink" href="#CombineEidIps">&#xb6;</a>
+			</h2>
+			<pre>func CombineEidIps(eids, ips []<a href="/pkg/builtin/#int">int</a>) (eids_ips [][]<a href="/pkg/builtin/#int">int</a>)</pre>
+			<p>
+CombineEidIps combines eids and ips(ids)
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="ComputeExtrapolatedValues">func <a href="https://github.com/cpmech/gofem/blob/master/out/extrap.go?s=423:474#L7">ComputeExtrapolatedValues</a>
+				<a class="permalink" href="#ComputeExtrapolatedValues">&#xb6;</a>
+			</h2>
+			<pre>func ComputeExtrapolatedValues(extrapKeys []<a href="/pkg/builtin/#string">string</a>)</pre>
+			
+			
+			
+
+		
+			
+			
+			<h2 id="Define">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=697:735#L12">Define</a>
+				<a class="permalink" href="#Define">&#xb6;</a>
+			</h2>
+			<pre>func Define(alias <a href="/pkg/builtin/#string">string</a>, loc <a href="#Locator">Locator</a>)</pre>
+			<p>
+Define defines aliases
+</p>
+<pre>alias -- an alias to a group of points, an individual point, or to a set of points.
+         Example: &#34;A&#34;, &#34;left-column&#34; or &#34;a b c&#34;. If the number of points found is different
+         than the number of aliases, a group is created.
+Note:
+  To use spaces in aliases, prefix the alias with an exclamation mark; e.g &#34;!right column&#34;
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="DefineBeams">func <a href="https://github.com/cpmech/gofem/blob/master/out/beamdiagrams.go?s=344:362#L4">DefineBeams</a>
+				<a class="permalink" href="#DefineBeams">&#xb6;</a>
+			</h2>
+			<pre>func DefineBeams()</pre>
+			<p>
+DefineBeams define aliases for beams; e.g. &#34;beam0&#34;, &#34;beam1&#34;, etc.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Draw">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=3100:3178#L83">Draw</a>
+				<a class="permalink" href="#Draw">&#xb6;</a>
+			</h2>
+			<pre>func Draw(dirout, fname <a href="/pkg/builtin/#string">string</a>, nr, nc <a href="/pkg/builtin/#int">int</a>, split <a href="/pkg/builtin/#bool">bool</a>, extra func(id <a href="/pkg/builtin/#string">string</a>))</pre>
+			<p>
+Draw draws or save figure with plot
+</p>
+<pre>dirout -- directory to save figure
+fname  -- file name; e.g. myplot.eps or myplot.png. Use &#34;&#34; to show figure instead
+nr     -- number of rows. Use -1 to compute best value
+nc     -- number of columns. Use -1 to compute best value
+split  -- split subplots into separated figures
+extra  -- is called just after Subplot command and before any plotting
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="GetCoords">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=4345:4383#L174">GetCoords</a>
+				<a class="permalink" href="#GetCoords">&#xb6;</a>
+			</h2>
+			<pre>func GetCoords(alias <a href="/pkg/builtin/#string">string</a>) []<a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+GetCoords returns the coordinates of a single point
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="GetDist">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=4815:4863#L187">GetDist</a>
+				<a class="permalink" href="#GetDist">&#xb6;</a>
+			</h2>
+			<pre>func GetDist(key, alias <a href="/pkg/builtin/#string">string</a>) (dist []<a href="/pkg/builtin/#float64">float64</a>)</pre>
+			<p>
+GetDist returns the distance from a reference point on the given line with selected points
+if they contain a given key
+</p>
+<pre>key -- use any to get coordinates of points with any key such as &#34;ux&#34;, &#34;pl&#34;, etc.
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="GetIds">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=4048:4093#L159">GetIds</a>
+				<a class="permalink" href="#GetIds">&#xb6;</a>
+			</h2>
+			<pre>func GetIds(alias <a href="/pkg/builtin/#string">string</a>) (vids, ipids []<a href="/pkg/builtin/#int">int</a>)</pre>
+			<p>
+GetIds return the ids corresponding to alias
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="GetRes">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=3525:3575#L131">GetRes</a>
+				<a class="permalink" href="#GetRes">&#xb6;</a>
+			</h2>
+			<pre>func GetRes(key, alias <a href="/pkg/builtin/#string">string</a>, idxI <a href="/pkg/builtin/#int">int</a>) []<a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+GetRes gets results as a time or space series corresponding to a given alias
+for a single point or set of points.
+</p>
+<pre>idxI -- index in TimeInds slice corresponding to selected output time; use -1 for the last item.
+        If alias defines a single point, the whole time series is returned and idxI is ignored.
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="GetTexLabel">func <a href="https://github.com/cpmech/gofem/blob/master/out/styles.go?s=432:473#L13">GetTexLabel</a>
+				<a class="permalink" href="#GetTexLabel">&#xb6;</a>
+			</h2>
+			<pre>func GetTexLabel(key, unit <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+			
+			
+			
+
+		
+			
+			
+			<h2 id="GetXYZ">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=5328:5378#L206">GetXYZ</a>
+				<a class="permalink" href="#GetXYZ">&#xb6;</a>
+			</h2>
+			<pre>func GetXYZ(key, alias <a href="/pkg/builtin/#string">string</a>) (x, y, z []<a href="/pkg/builtin/#float64">float64</a>)</pre>
+			<p>
+GetXYZ returns the x-y-z coordinates of selected points that have a specified key
+</p>
+<pre>key -- use any to get coordinates of points with any key such as &#34;ux&#34;, &#34;pl&#34;, etc.
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="IntegOnPlane">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=6946:6998#L260">IntegOnPlane</a>
+				<a class="permalink" href="#IntegOnPlane">&#xb6;</a>
+			</h2>
+			<pre>func IntegOnPlane(key, alias <a href="/pkg/builtin/#string">string</a>) (res []<a href="/pkg/builtin/#float64">float64</a>)</pre>
+			<p>
+IntegOnPlane integrates the results of nodes located on a plane perpedicular to either {x,y,z}
+The mesh on the plane must be structured and with rectangle elements in order to build
+an {u,v} coordinates system
+Input:
+</p>
+<pre>key   -- node variable; e.g. &#34;uz&#34;, &#34;ex_sz&#34;
+alias -- alias of plane; e.g. &#34;surf&#34;
+</pre>
+<p>
+Output:
+</p>
+<pre>res -- the result of the integration res = ∫_u ∫_v f(u,v) du dv for all output times
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Integrate">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=6023:6081#L230">Integrate</a>
+				<a class="permalink" href="#Integrate">&#xb6;</a>
+			</h2>
+			<pre>func Integrate(key, alias, along <a href="/pkg/builtin/#string">string</a>, idxI <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+Integrate integrates key along direction &#34;x&#34;, &#34;y&#34;, or &#34;z&#34;
+</p>
+<pre>idxI -- index in TimeInds slice corresponding to selected output time; use -1 for the last item.
+        If alias defines a single point, the whole time series is returned and idxI is ignored.
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="LoadResults">func <a href="https://github.com/cpmech/gofem/blob/master/out/results.go?s=1537:1570#L51">LoadResults</a>
+				<a class="permalink" href="#LoadResults">&#xb6;</a>
+			</h2>
+			<pre>func LoadResults(times []<a href="/pkg/builtin/#float64">float64</a>)</pre>
+			<p>
+LoadResults loads all results after points are defined
+</p>
+<pre>times -- specified selected output times
+         use nil to indicate that all times are required
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="ParseKey">func <a href="https://github.com/cpmech/gofem/blob/master/out/auxiliary.go?s=730:769#L18">ParseKey</a>
+				<a class="permalink" href="#ParseKey">&#xb6;</a>
+			</h2>
+			<pre>func ParseKey(key <a href="/pkg/builtin/#string">string</a>) (<a href="/pkg/builtin/#string">string</a>, <a href="/pkg/builtin/#int">int</a>)</pre>
+			<p>
+ParseKey parses key like &#34;duxdt&#34; returning &#34;ux&#34; and time derivative number
+</p>
+<pre>Output: {key, number-of-time-derivatives}
+Examples:  &#34;ux&#34;      =&gt; &#34;ux&#34;, 0
+           &#34;duxdt&#34;   =&gt; &#34;ux&#34;, 1
+           &#34;d2uxdt2&#34; =&gt; &#34;ux&#34;, 2
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Plot">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=2142:2217#L60">Plot</a>
+				<a class="permalink" href="#Plot">&#xb6;</a>
+			</h2>
+			<pre>func Plot(xHandle, yHandle interface{}, alias <a href="/pkg/builtin/#string">string</a>, fm <a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#Fmt">Fmt</a>, idxI <a href="/pkg/builtin/#int">int</a>)</pre>
+			<p>
+Plot plots data
+</p>
+<pre>xHandle -- can be a string, e.g. &#34;t&#34; or a slice, e.g. pc = []float64{0, 1, 2}
+yHandle -- can be a string, e.g. &#34;pl&#34; or a slice, e.g. sl = []float64{0, 1, 2}
+alias   -- alias such as &#34;centre&#34;
+fm      -- formatting codes; e.g. plt.Fmt{C:&#34;blue&#34;, L:&#34;label&#34;}
+idxI    -- index of time; use -1 for all times
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Splot">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=1279:1312#L33">Splot</a>
+				<a class="permalink" href="#Splot">&#xb6;</a>
+			</h2>
+			<pre>func Splot(id, splotTitle <a href="/pkg/builtin/#string">string</a>)</pre>
+			<p>
+Splot activates a new subplot window
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SplotConfig">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=1452:1513#L40">SplotConfig</a>
+				<a class="permalink" href="#SplotConfig">&#xb6;</a>
+			</h2>
+			<pre>func SplotConfig(xunit, yunit <a href="/pkg/builtin/#string">string</a>, xscale, yscale <a href="/pkg/builtin/#float64">float64</a>)</pre>
+			<p>
+SplotConfig configures units and scales of axes
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Start">func <a href="https://github.com/cpmech/gofem/blob/master/out/out.go?s=2514:2567#L58">Start</a>
+				<a class="permalink" href="#Start">&#xb6;</a>
+			</h2>
+			<pre>func Start(simfnpath <a href="/pkg/builtin/#string">string</a>, stageIdx, regionIdx <a href="/pkg/builtin/#int">int</a>)</pre>
+			<p>
+Start starts handling of results given a simulation input file
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Along">type <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=1055:1077#L28">Along</a>
+				<a class="permalink" href="#Along">&#xb6;</a>
+			</h2>
+			<pre>type Along [][]<a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+Along implements locator along line =&gt; LineLocator
+</p>
+<pre>Example: with 2 points in 3D: {{0,0,0}, {1,1,1}}
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Along.Locate">func (Along) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=3765:3801#L167">Locate</a>
+					<a class="permalink" href="#Along.Locate">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#Along">Along</a>) Locate() (res <a href="#Points">Points</a>)</pre>
+				<p>
+Locate finds points
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="AlongX">type <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=1161:1182#L31">AlongX</a>
+				<a class="permalink" href="#AlongX">&#xb6;</a>
+			</h2>
+			<pre>type AlongX []<a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+AlongX implements LineLocator with []float64{y_cte} or []float64{y_cte, z_cte}
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="AlongX.Locate">func (AlongX) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4287:4324#L198">Locate</a>
+					<a class="permalink" href="#AlongX.Locate">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#AlongX">AlongX</a>) Locate() (res <a href="#Points">Points</a>)</pre>
+				<p>
+Locate finds points
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="AlongY">type <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=1266:1287#L34">AlongY</a>
+				<a class="permalink" href="#AlongY">&#xb6;</a>
+			</h2>
+			<pre>type AlongY []<a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+AlongY implements LineLocator with []float64{x_cte} or []float64{x_cte, z_cte}
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="AlongY.Locate">func (AlongY) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4498:4535#L207">Locate</a>
+					<a class="permalink" href="#AlongY.Locate">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#AlongY">AlongY</a>) Locate() (res <a href="#Points">Points</a>)</pre>
+				<p>
+Locate finds points
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="AlongZ">type <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=1351:1372#L37">AlongZ</a>
+				<a class="permalink" href="#AlongZ">&#xb6;</a>
+			</h2>
+			<pre>type AlongZ []<a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+AlongZ implements LineLocator with []float64{x_cte, y_cte}
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="AlongZ.Locate">func (AlongZ) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4709:4746#L216">Locate</a>
+					<a class="permalink" href="#AlongZ.Locate">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#AlongZ">AlongZ</a>) Locate() (res <a href="#Points">Points</a>)</pre>
+				<p>
+Locate finds points
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="At">type <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=393:410#L10">At</a>
+				<a class="permalink" href="#At">&#xb6;</a>
+			</h2>
+			<pre>type At []<a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+At implements locator at point =&gt; PointLocator
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="At.Locate">func (At) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=1653:1680#L45">Locate</a>
+					<a class="permalink" href="#At.Locate">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#At">At</a>) Locate() <a href="#Points">Points</a></pre>
+				<p>
+Locate finds points
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="AtIp">type <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=541:560#L14">AtIp</a>
+				<a class="permalink" href="#AtIp">&#xb6;</a>
+			</h2>
+			<pre>type AtIp []<a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+AtIp implements locator at integration point =&gt; PointLocator
+</p>
+<pre>Note: this is useful when there are vertices overlapping ips
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="AtIp.Locate">func (AtIp) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=1994:2023#L68">Locate</a>
+					<a class="permalink" href="#AtIp.Locate">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#AtIp">AtIp</a>) Locate() <a href="#Points">Points</a></pre>
+				<p>
+Locate finds integration points
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="IpData_t">type <a href="https://github.com/cpmech/gofem/blob/master/out/out.go?s=773:990#L18">IpData_t</a>
+				<a class="permalink" href="#IpData_t">&#xb6;</a>
+			</h2>
+			<pre>type IpData_t struct {
+    Cid  <a href="/pkg/builtin/#int">int</a>                <span class="comment">// id of cell/element holding this integration point</span>
+    X    []<a href="/pkg/builtin/#float64">float64</a>          <span class="comment">// coordinates of integration point</span>
+    Vals map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// current (@ time t) values</span>
+}</pre>
+			<p>
+IpData_t is an auxiliary structure holding element id and integration point coordinates
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Locator">type <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=298:341#L5">Locator</a>
+				<a class="permalink" href="#Locator">&#xb6;</a>
+			</h2>
+			<pre>type Locator interface {
+    Locate() <a href="#Points">Points</a>
+}</pre>
+			<p>
+PointLocator defines interface for locating space positions
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="N">type <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=641:653#L18">N</a>
+				<a class="permalink" href="#N">&#xb6;</a>
+			</h2>
+			<pre>type N []<a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+N implements node locator
+Ids or tags of vertices can be stored in Verts
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="AllNodes">func <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=5319:5336#L246">AllNodes</a>
+					<a class="permalink" href="#AllNodes">&#xb6;</a>
+				</h3>
+				<pre>func AllNodes() <a href="#N">N</a></pre>
+				<p>
+AllNodes returns all nodes
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="N.Locate">func (N) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=2178:2210#L80">Locate</a>
+					<a class="permalink" href="#N.Locate">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#N">N</a>) Locate() (res <a href="#Points">Points</a>)</pre>
+				<p>
+Locate finds nodes
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="OnZplane">type <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=1605:1628#L42">OnZplane</a>
+				<a class="permalink" href="#OnZplane">&#xb6;</a>
+			</h2>
+			<pre>type OnZplane []<a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+OnZplane implements locator for nodes/ips on plane perpendicular to z-axis
+</p>
+<pre>Note: slice must contain at least one value; e.g. []float64{z_cte}
+      a second value is used as tolerance; e.g. []float64{z_cte, z_tolerance}
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="OnZplane.Locate">func (OnZplane) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4932:4971#L222">Locate</a>
+					<a class="permalink" href="#OnZplane.Locate">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#OnZplane">OnZplane</a>) Locate() (res <a href="#Points">Points</a>)</pre>
+				<p>
+Locate finds points on z-plane. TODO: use bins to optimise search
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="P">type <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=932:946#L24">P</a>
+				<a class="permalink" href="#P">&#xb6;</a>
+			</h2>
+			<pre>type P [][]<a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+P implements [element][integrationPoint] locator
+Pairs of ids or tags of cells and integration points indices can be stored in Cells
+</p>
+<pre>Note: 1) negative element ids means element tags
+      2) negative integration poitns ids means all integration points of element
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="AllIps">func <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=5149:5164#L235">AllIps</a>
+					<a class="permalink" href="#AllIps">&#xb6;</a>
+				</h3>
+				<pre>func AllIps() <a href="#P">P</a></pre>
+				<p>
+AllIps returns all cell/ip indices
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="P.Locate">func (P) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=2769:2801#L113">Locate</a>
+					<a class="permalink" href="#P.Locate">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#P">P</a>) Locate() (res <a href="#Points">Points</a>)</pre>
+				<p>
+Locate finds points
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="PlaneData">type <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=475:1318#L9">PlaneData</a>
+				<a class="permalink" href="#PlaneData">&#xb6;</a>
+			</h2>
+			<pre>type PlaneData struct {
+    Plane <a href="/pkg/builtin/#int">int</a>          <span class="comment">// Plane indicator: {0,1,2} == {x-pane, y-plane, z-plane}. plane perpendicular to {x,y,z}</span>
+    Ids   map[<a href="/pkg/builtin/#int">int</a>]<a href="/pkg/builtin/#bool">bool</a> <span class="comment">// Ids in Dom.Msh.Verts or Ipoints of notes/ips on plane</span>
+    Dx    []<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// Increments between cells in global coordinates</span>
+    Iu    []<a href="/pkg/builtin/#int">int</a>        <span class="comment">// Index of global coordinates corresponding to {u,v} plane</span>
+    Du    []<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// Increments between cells in {u,v} coordinates</span>
+    Umin  []<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// min {u,v} coordinates</span>
+    Umax  []<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// max {u,v} coordinates</span>
+    Nu    []<a href="/pkg/builtin/#int">int</a>        <span class="comment">// number of divisions along {u,v}</span>
+    Ubins <a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Bins">Bins</a>      <span class="comment">// bins to search points in {u,v} grid</span>
+    F     [][]<a href="/pkg/builtin/#float64">float64</a>  <span class="comment">// [nu][nv] values of a function evaluated at the uv coords; i.e. f(u,v)</span>
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+PlaneData holds data for handling planes described by {u,v}-coordinates
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NodesOnPlane">func <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=2937:2975#L77">NodesOnPlane</a>
+					<a class="permalink" href="#NodesOnPlane">&#xb6;</a>
+				</h3>
+				<pre>func NodesOnPlane(ftag <a href="/pkg/builtin/#int">int</a>) *<a href="#PlaneData">PlaneData</a></pre>
+				<p>
+NodesOnPlane finds vertices located on {x,y,z} plane and returns an iterator
+that can be used to extract results on the plane. An {u,v}-coordinates system is built
+on the plane.
+</p>
+<pre>Input:
+  ftag -- cells&#39; face tag; e.g. -31
+Output:
+  dat -- plane data holding vertices on plane and other information; see above
+Note:
+  1) this function works with 3D cells only
+  2) faces on cells must be either &#34;qua4&#34; or &#34;qua8&#34; types
+  3) middle nodes in &#34;qua8&#34; are disregarded in order to buidl an {u,v} grid
+  4) the resulting mesh on plane must be equally spaced; i.e. Δx and Δy are constant;
+     but not necessarily equal to each other
+</pre>
+
+				
+				
+			
+
+			
+				
+				<h3 id="PlaneData.ConnectResults">func (*PlaneData) <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=1727:1775#L42">ConnectResults</a>
+					<a class="permalink" href="#PlaneData.ConnectResults">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#PlaneData">PlaneData</a>) ConnectResults(alias <a href="/pkg/builtin/#string">string</a>)</pre>
+				<p>
+ConnectResults connects Ids to Points in Results structure
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="PlaneData.Locate">func (PlaneData) <a href="https://github.com/cpmech/gofem/blob/master/out/topology.go?s=1387:1427#L26">Locate</a>
+					<a class="permalink" href="#PlaneData.Locate">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#PlaneData">PlaneData</a>) Locate() (res <a href="#Points">Points</a>)</pre>
+				<p>
+Locate finds points on plane =&gt; implement the Locator interface
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="PltEntity">type <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=400:650#L8">PltEntity</a>
+				<a class="permalink" href="#PltEntity">&#xb6;</a>
+			</h2>
+			<pre>type PltEntity struct {
+    Alias <a href="/pkg/builtin/#string">string</a>    <span class="comment">// alias</span>
+    X     []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// x-values</span>
+    Y     []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// y-values</span>
+    Xlbl  <a href="/pkg/builtin/#string">string</a>    <span class="comment">// horizontal axis label (raw; e.g. &#34;t&#34;)</span>
+    Ylbl  <a href="/pkg/builtin/#string">string</a>    <span class="comment">// vertical axis label (raw; e.g. &#34;pl&#34;)</span>
+    Style <a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#Fmt">Fmt</a>   <span class="comment">// style</span>
+}</pre>
+			<p>
+PltEntity stores all data for a plot entity (X vs Y)
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Point">type <a href="https://github.com/cpmech/gofem/blob/master/out/point.go?s=268:614#L1">Point</a>
+				<a class="permalink" href="#Point">&#xb6;</a>
+			</h2>
+			<pre>type Point struct {
+    Vid  <a href="/pkg/builtin/#int">int</a>                  <span class="comment">// vertex id; -1 =&gt; not node</span>
+    IpId <a href="/pkg/builtin/#int">int</a>                  <span class="comment">// ip id; -1 =&gt; not ip</span>
+    X    []<a href="/pkg/builtin/#float64">float64</a>            <span class="comment">// coordinates</span>
+    Dist <a href="/pkg/builtin/#float64">float64</a>              <span class="comment">// distance from reference point (if along line)</span>
+    Vals map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// combines keys to results along time; e.g. &#34;ux&#34; : {0,0.0001,0,0002,...}</span>
+}</pre>
+			<p>
+Point holds information about one specific node xor one integration point
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Point.String">func (Point) <a href="https://github.com/cpmech/gofem/blob/master/out/printing.go?s=212:242#L1">String</a>
+					<a class="permalink" href="#Point.String">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#Point">Point</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Points">type <a href="https://github.com/cpmech/gofem/blob/master/out/point.go?s=644:664#L9">Points</a>
+				<a class="permalink" href="#Points">&#xb6;</a>
+			</h2>
+			<pre>type Points []*<a href="#Point">Point</a></pre>
+			<p>
+Points is a set of Point
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Points.Len">func (Points) <a href="https://github.com/cpmech/gofem/blob/master/out/point.go?s=702:727#L12">Len</a>
+					<a class="permalink" href="#Points.Len">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#Points">Points</a>) Len() <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+Len returns the length of Points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Points.Less">func (Points) <a href="https://github.com/cpmech/gofem/blob/master/out/point.go?s=875:910#L22">Less</a>
+					<a class="permalink" href="#Points.Less">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#Points">Points</a>) Less(i, j <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+				<p>
+Less compares Points considering Dist
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Points.String">func (Points) <a href="https://github.com/cpmech/gofem/blob/master/out/printing.go?s=600:631#L17">String</a>
+					<a class="permalink" href="#Points.String">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#Points">Points</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Points.Swap">func (Points) <a href="https://github.com/cpmech/gofem/blob/master/out/point.go?s=773:803#L17">Swap</a>
+					<a class="permalink" href="#Points.Swap">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#Points">Points</a>) Swap(i, j <a href="/pkg/builtin/#int">int</a>)</pre>
+				<p>
+Swap swaps two Points
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ResultsMap">type <a href="https://github.com/cpmech/gofem/blob/master/out/out.go?s=647:680#L15">ResultsMap</a>
+				<a class="permalink" href="#ResultsMap">&#xb6;</a>
+			</h2>
+			<pre>type ResultsMap map[<a href="/pkg/builtin/#string">string</a>]<a href="#Points">Points</a></pre>
+			<p>
+ResultsMap maps aliases to points
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="ResultsMap.String">func (ResultsMap) <a href="https://github.com/cpmech/gofem/blob/master/out/printing.go?s=756:791#L29">String</a>
+					<a class="permalink" href="#ResultsMap.String">&#xb6;</a>
+				</h3>
+				<pre>func (o <a href="#ResultsMap">ResultsMap</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="SplotDat">type <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=696:1237#L18">SplotDat</a>
+				<a class="permalink" href="#SplotDat">&#xb6;</a>
+			</h2>
+			<pre>type SplotDat struct {
+    Id      <a href="/pkg/builtin/#string">string</a>       <span class="comment">// unique identifier</span>
+    Title   <a href="/pkg/builtin/#string">string</a>       <span class="comment">// title of subplot</span>
+    Topts   <a href="/pkg/builtin/#string">string</a>       <span class="comment">// title options</span>
+    Xscale  <a href="/pkg/builtin/#float64">float64</a>      <span class="comment">// x-axis scale</span>
+    Yscale  <a href="/pkg/builtin/#float64">float64</a>      <span class="comment">// y-axis scale</span>
+    Xrange  []<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// x range</span>
+    Yrange  []<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// x range</span>
+    Xlbl    <a href="/pkg/builtin/#string">string</a>       <span class="comment">// x-axis label (formatted; e.g. &#34;$t$&#34;)</span>
+    Ylbl    <a href="/pkg/builtin/#string">string</a>       <span class="comment">// y-axis label (formatted; e.g. &#34;$p_{\ell}$&#34;)</span>
+    GllArgs <a href="/pkg/builtin/#string">string</a>       <span class="comment">// extra arguments for Gll such as leg_out</span>
+    Data    []*<a href="#PltEntity">PltEntity</a> <span class="comment">// data and styles to be plotted</span>
+}</pre>
+			<p>
+SplotDat stores all data for one subplot
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Styles">type <a href="https://github.com/cpmech/gofem/blob/master/out/styles.go?s=257:278#L3">Styles</a>
+				<a class="permalink" href="#Styles">&#xb6;</a>
+			</h2>
+			<pre>type Styles []<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#Fmt">Fmt</a></pre>
+			<p>
+Styles
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="GetDefaultStyles">func <a href="https://github.com/cpmech/gofem/blob/master/out/styles.go?s=280:320#L5">GetDefaultStyles</a>
+					<a class="permalink" href="#GetDefaultStyles">&#xb6;</a>
+				</h3>
+				<pre>func GetDefaultStyles(qts <a href="#Points">Points</a>) <a href="#Styles">Styles</a></pre>
+				
+				
+				
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	
+
+
+	<div class="pkg-dir">
+		<table>
+			<tr>
+				<th class="pkg-name">Name</th>
+				<th class="pkg-synopsis">Synopsis</th>
+			</tr>
+
+			
+			<tr>
+				<td colspan="2"><a href="..">..</a></td>
+			</tr>
+			
+
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="cmp/">cmp</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="data/">data</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+		</table>
+	</div>
+
+
+	
+
 </div><!-- page -->
 <div id="footer">
 <br /><br />

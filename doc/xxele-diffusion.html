@@ -1,0 +1,760 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Gofem &ndash; package ele/diffusion</title>
+<link type="text/css" rel="stylesheet" href="static/style.css">
+<script type="text/javascript" src="static/godocs.js"></script>
+<style type="text/css"></style>
+</head>
+<body>
+<div id="page"><h1>Gofem &ndash; <b>ele/diffusion</b> &ndash; elements for diffusion(-like) problems</h1>
+use 'godoc cmd/github.com/cpmech/gofem/ele/diffusion' for documentation on the github.com/cpmech/gofem/ele/diffusion command 
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = ;
+	document.CALLGRAPH = ;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/cpmech/gofem/ele/diffusion"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+package diffusion implements elements for diffusion problems
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="#Diffusion">type Diffusion</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.AddToKb">func (o *Diffusion) AddToKb(Kb *la.Triplet, sol *ele.Solution, firstIt bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.AddToRhs">func (o *Diffusion) AddToRhs(fb []float64, sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.BackupIvs">func (o *Diffusion) BackupIvs(aux bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.Decode">func (o *Diffusion) Decode(dec utl.Decoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.Encode">func (o *Diffusion) Encode(enc utl.Encoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.Id">func (o *Diffusion) Id() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.InterpStarVars">func (o *Diffusion) InterpStarVars(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.OutIpCoords">func (o *Diffusion) OutIpCoords() (C [][]float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.OutIpKeys">func (o *Diffusion) OutIpKeys() []string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.OutIpVals">func (o *Diffusion) OutIpVals(M *ele.IpsMap, sol *ele.Solution)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.RestoreIvs">func (o *Diffusion) RestoreIvs(aux bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.SetEleConds">func (o *Diffusion) SetEleConds(key string, f fun.Func, extra string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.SetEqs">func (o *Diffusion) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.SetIniIvs">func (o *Diffusion) SetIniIvs(sol *ele.Solution, ignored map[string][]float64) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.Update">func (o *Diffusion) Update(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Diffusion.Ureset">func (o *Diffusion) Ureset(sol *ele.Solution) (err error)</a></dd>
+				
+			
+				
+				<dd><a href="#Phi">type Phi</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.AddToKb">func (o *Phi) AddToKb(Kb *la.Triplet, sol *ele.Solution, firstIt bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.AddToRhs">func (o *Phi) AddToRhs(fb []float64, sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.Decode">func (o *Phi) Decode(dec utl.Decoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.Encode">func (o *Phi) Encode(enc utl.Encoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.Id">func (o *Phi) Id() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.InterpStarVars">func (o *Phi) InterpStarVars(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.OutIpCoords">func (o *Phi) OutIpCoords() (C [][]float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.OutIpKeys">func (o *Phi) OutIpKeys() []string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.OutIpVals">func (o *Phi) OutIpVals(M *ele.IpsMap, sol *ele.Solution)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.SetEleConds">func (o *Phi) SetEleConds(key string, f fun.Func, extra string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Phi.SetEqs">func (o *Phi) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/github.com/cpmech/gofem/ele/diffusion/diffusion.go">diffusion.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/diffusion/phi.go">phi.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+		
+			
+			
+			<h2 id="Diffusion">type <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=759:1664#L15">Diffusion</a>
+				<a class="permalink" href="#Diffusion">&#xb6;</a>
+			</h2>
+			<pre>type Diffusion struct {
+
+    <span class="comment">// basic data</span>
+    Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>     <span class="comment">// the cell structure</span>
+    X    [][]<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// matrix of nodal coordinates [ndim][nnode]</span>
+    Ndim <a href="/pkg/builtin/#int">int</a>           <span class="comment">// space dimension</span>
+    Umap []<a href="/pkg/builtin/#int">int</a>         <span class="comment">// assembly map (location array/element equations)</span>
+    Mdl  *<a href="/pkg/github.com/cpmech/gofem/mdl/diffusion/">diffusion</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/diffusion/#M1">M1</a> <span class="comment">// model</span>
+    Sfun <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>      <span class="comment">// s(x) function</span>
+
+    <span class="comment">// integration points</span>
+    IpsElem []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points of element</span>
+    IpsFace []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points corresponding to faces</span>
+
+    <span class="comment">// natural boundary conditions</span>
+    NatBcs []*<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#NaturalBc">NaturalBc</a> <span class="comment">// natural boundary conditions</span>
+
+    <span class="comment">// scratchpad</span>
+    Ustar []<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// [nip] ustar* = β1 u + β2 dudt</span>
+    Xip   []<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// real coordinates of ip</span>
+    Uval  <a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// u(t,x) scalar field @ ip</span>
+    Gradu []<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// [ndim] ∇u(t,x): gradient of u @ ip</span>
+    Wvec  []<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// [ndim] w(t,x) vector @ ip</span>
+    Tmp   []<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// auxiliary vector</span>
+    K     [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Jacobian matrix</span>
+}</pre>
+			<p>
+Diffusion implements an element for solving the diffusion equation expressed as
+</p>
+<pre>  du                                      du
+ρ ── + div w = s      with      w = -k(u) ──
+  dt                                      dx
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Diffusion.AddToKb">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=5791:5879#L207">AddToKb</a>
+					<a class="permalink" href="#Diffusion.AddToKb">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddToKb adds element K to global Jacobian matrix Kb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.AddToRhs">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=4630:4703#L158">AddToRhs</a>
+					<a class="permalink" href="#Diffusion.AddToRhs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddToRhs adds -R to global residual vector fb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.BackupIvs">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=7273:7324#L268">BackupIvs</a>
+					<a class="permalink" href="#Diffusion.BackupIvs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+BackupIvs creates copy of internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.Decode">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=7851:7906#L290">Decode</a>
+					<a class="permalink" href="#Diffusion.Decode">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) Decode(dec <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Decode decodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.Encode">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=7745:7800#L285">Encode</a>
+					<a class="permalink" href="#Diffusion.Encode">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) Encode(enc <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Encode encodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.Id">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=3610:3638#L114">Id</a>
+					<a class="permalink" href="#Diffusion.Id">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+Id returns the cell Id
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.InterpStarVars">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=4138:4203#L136">InterpStarVars</a>
+					<a class="permalink" href="#Diffusion.InterpStarVars">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) InterpStarVars(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+InterpStarVars interpolates star variables to integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.OutIpCoords">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=7981:8030#L295">OutIpCoords</a>
+					<a class="permalink" href="#Diffusion.OutIpCoords">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) OutIpCoords() (C [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+OutIpCoords returns the coordinates of integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.OutIpKeys">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=8214:8254#L304">OutIpKeys</a>
+					<a class="permalink" href="#Diffusion.OutIpKeys">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) OutIpKeys() []<a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+OutIpKeys returns the integration points&#39; keys
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.OutIpVals">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=8346:8409#L309">OutIpVals</a>
+					<a class="permalink" href="#Diffusion.OutIpVals">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) OutIpVals(M *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#IpsMap">IpsMap</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>)</pre>
+				<p>
+OutIpVals returns the integration points&#39; values corresponding to keys
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.RestoreIvs">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=7392:7444#L273">RestoreIvs</a>
+					<a class="permalink" href="#Diffusion.RestoreIvs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+RestoreIvs restores internal variables from copies
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.SetEleConds">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=3928:4009#L127">SetEleConds</a>
+					<a class="permalink" href="#Diffusion.SetEleConds">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEleConds sets element conditions
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.SetEqs">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=3686:3758#L117">SetEqs</a>
+					<a class="permalink" href="#Diffusion.SetEqs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEqs sets equations
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.SetIniIvs">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=7121:7211#L263">SetIniIvs</a>
+					<a class="permalink" href="#Diffusion.SetIniIvs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) SetIniIvs(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, ignored map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetIniIvs sets initial ivs for given values in sol and ivs map
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.Update">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=6881:6938#L256">Update</a>
+					<a class="permalink" href="#Diffusion.Update">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) Update(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Update performs (tangent) update
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Diffusion.Ureset">func (*Diffusion) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/diffusion.go?s=7534:7591#L278">Ureset</a>
+					<a class="permalink" href="#Diffusion.Ureset">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Diffusion">Diffusion</a>) Ureset(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Ureset fixes internal variables after u (displacements) have been zeroed
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Phi">type <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=578:1159#L12">Phi</a>
+				<a class="permalink" href="#Phi">&#xb6;</a>
+			</h2>
+			<pre>type Phi struct {
+
+    <span class="comment">// basic data</span>
+    Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>   <span class="comment">// the cell structure</span>
+    X    [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [ndim][nnode] matrix of nodal coordinates</span>
+    Nu   <a href="/pkg/builtin/#int">int</a>         <span class="comment">// total number of unknowns == number of vertices</span>
+    Ndim <a href="/pkg/builtin/#int">int</a>         <span class="comment">// space dimension</span>
+
+    <span class="comment">// integration points</span>
+    IpsElem []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// [nip] integration points of element</span>
+
+    <span class="comment">// local starred variables</span>
+    Psi []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nip] ψ* = β1.φ + β2.dφdt</span>
+
+    <span class="comment">// scratchpad. computed @ each ip</span>
+    K [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nu][nu] consistent tangent matrix</span>
+
+    <span class="comment">// problem variables</span>
+    Umap []<a href="/pkg/builtin/#int">int</a> <span class="comment">// assembly map (location array/element equations)</span>
+}</pre>
+			<p>
+Phi implementes a general element to solve the following equation
+</p>
+<pre>dφ       ∂φ
+-- + v . -- = s(x)
+dt       ∂x
+</pre>
+<p>
+Notes: v is a constant vector
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Phi.AddToKb">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=4226:4308#L165">AddToKb</a>
+					<a class="permalink" href="#Phi.AddToKb">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddToKb adds element K to global Jacobian matrix Kb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Phi.AddToRhs">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=3370:3437#L128">AddToRhs</a>
+					<a class="permalink" href="#Phi.AddToRhs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddToRhs adds -R to global residual vector fb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Phi.Decode">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=5211:5260#L212">Decode</a>
+					<a class="permalink" href="#Phi.Decode">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) Decode(dec <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Decode decodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Phi.Encode">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=5111:5160#L207">Encode</a>
+					<a class="permalink" href="#Phi.Encode">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) Encode(enc <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Encode encodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Phi.Id">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=2492:2514#L90">Id</a>
+					<a class="permalink" href="#Phi.Id">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+Id returns the cell Id
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Phi.InterpStarVars">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=2919:2978#L107">InterpStarVars</a>
+					<a class="permalink" href="#Phi.InterpStarVars">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) InterpStarVars(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+InterpStarVars interpolate star variables to integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Phi.OutIpCoords">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=5335:5378#L217">OutIpCoords</a>
+					<a class="permalink" href="#Phi.OutIpCoords">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) OutIpCoords() (C [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+OutIpCoords returns the coordinates of integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Phi.OutIpKeys">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=5562:5596#L226">OutIpKeys</a>
+					<a class="permalink" href="#Phi.OutIpKeys">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) OutIpKeys() []<a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+OutIpKeys returns the integration points&#39; keys
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Phi.OutIpVals">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=5777:5834#L234">OutIpVals</a>
+					<a class="permalink" href="#Phi.OutIpVals">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) OutIpVals(M *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#IpsMap">IpsMap</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>)</pre>
+				<p>
+OutIpVals returns the integration points&#39; values corresponding to keys
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Phi.SetEleConds">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=2763:2838#L102">SetEleConds</a>
+					<a class="permalink" href="#Phi.SetEleConds">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEleConds set element conditions
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Phi.SetEqs">func (*Phi) <a href="https://github.com/cpmech/gofem/blob/master/ele/diffusion/phi.go?s=2561:2627#L93">SetEqs</a>
+					<a class="permalink" href="#Phi.SetEqs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Phi">Phi</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEqs set equations
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	
+
+
+	<div class="pkg-dir">
+		<table>
+			<tr>
+				<th class="pkg-name">Name</th>
+				<th class="pkg-synopsis">Synopsis</th>
+			</tr>
+
+			
+			<tr>
+				<td colspan="2"><a href="..">..</a></td>
+			</tr>
+			
+
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="data/">data</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+		</table>
+	</div>
+
+
+	
+
+</div><!-- page -->
+<div id="footer">
+<br /><br />
+<hr>
+<pre class="copyright">
+Copyright (c) 2015, The Gofem Authors. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Gofem nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+</pre><!-- copyright -->
+</div><!-- footer -->
+</body>
+</html>

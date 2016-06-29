@@ -1,0 +1,1214 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Gofem &ndash; package ele/seepage</title>
+<link type="text/css" rel="stylesheet" href="static/style.css">
+<script type="text/javascript" src="static/godocs.js"></script>
+<style type="text/css"></style>
+</head>
+<body>
+<div id="page"><h1>Gofem &ndash; <b>ele/seepage</b> &ndash; elements for seepage problems (with liquid and/or gases)</h1>
+use 'godoc cmd/github.com/cpmech/gofem/ele/seepage' for documentation on the github.com/cpmech/gofem/ele/seepage command 
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = ;
+	document.CALLGRAPH = ;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/cpmech/gofem/ele/seepage"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+package seepage implements elements for solving seepage problems
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#GasFlowKeys">func GasFlowKeys(ndim int) []string</a></dd>
+			
+				
+				<dd><a href="#GetSeepFaceFlags">func GetSeepFaceFlags(extra string) (Macaulay bool, BetRamp, Kappa float64)</a></dd>
+			
+				
+				<dd><a href="#LiqFlowKeys">func LiqFlowKeys(ndim int) []string</a></dd>
+			
+			
+				
+				<dd><a href="#Liquid">type Liquid</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.AddNatBcsToJac">func (o *Liquid) AddNatBcsToJac(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.AddNatBcsToRhs">func (o *Liquid) AddNatBcsToRhs(fb []float64, sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.AddToKb">func (o *Liquid) AddToKb(Kb *la.Triplet, sol *ele.Solution, firstIt bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.AddToRhs">func (o *Liquid) AddToRhs(fb []float64, sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.BackupIvs">func (o *Liquid) BackupIvs(aux bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.CalcFaceIpVars">func (o *Liquid) CalcFaceIpVars(fidx int, sol *ele.Solution) (ρl, pl, fl float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.CalcIpVars">func (o *Liquid) CalcIpVars(idx int, sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.ComputeGrav">func (o *Liquid) ComputeGrav(t float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.Decode">func (o *Liquid) Decode(dec utl.Decoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.Encode">func (o *Liquid) Encode(enc utl.Encoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.Id">func (o *Liquid) Id() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.InterpStarVars">func (o *Liquid) InterpStarVars(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.OutIpCoords">func (o *Liquid) OutIpCoords() (C [][]float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.OutIpKeys">func (o *Liquid) OutIpKeys() []string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.OutIpVals">func (o *Liquid) OutIpVals(M *ele.IpsMap, sol *ele.Solution)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.Ramp">func (o *Liquid) Ramp(x float64) float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.RampDeriv">func (o *Liquid) RampDeriv(x float64) float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.RestoreIvs">func (o *Liquid) RestoreIvs(aux bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.SetEleConds">func (o *Liquid) SetEleConds(key string, f fun.Func, extra string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.SetEqs">func (o *Liquid) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.SetIniIvs">func (o *Liquid) SetIniIvs(sol *ele.Solution, ignored map[string][]float64) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.Update">func (o *Liquid) Update(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Liquid.Ureset">func (o *Liquid) Ureset(sol *ele.Solution) (err error)</a></dd>
+				
+			
+				
+				<dd><a href="#LiquidGas">type LiquidGas</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.AddNatBcsToJac">func (o *LiquidGas) AddNatBcsToJac(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.AddNatBcsToRhs">func (o *LiquidGas) AddNatBcsToRhs(fb []float64, sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.AddToKb">func (o *LiquidGas) AddToKb(Kb *la.Triplet, sol *ele.Solution, firstIt bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.AddToRhs">func (o *LiquidGas) AddToRhs(fb []float64, sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.AssembleKs">func (o *LiquidGas) AssembleKs(Kb *la.Triplet)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.BackupIvs">func (o *LiquidGas) BackupIvs(aux bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.CalcFaceIpVars">func (o *LiquidGas) CalcFaceIpVars(fidx int, sol *ele.Solution) (ρl, pl, fl float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.CalcIpVars">func (o *LiquidGas) CalcIpVars(idx int, sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.ComputeGrav">func (o *LiquidGas) ComputeGrav(t float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.Decode">func (o *LiquidGas) Decode(dec utl.Decoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.Encode">func (o *LiquidGas) Encode(enc utl.Encoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.Id">func (o *LiquidGas) Id() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.InterpStarVars">func (o *LiquidGas) InterpStarVars(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.OutIpCoords">func (o *LiquidGas) OutIpCoords() (C [][]float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.OutIpKeys">func (o *LiquidGas) OutIpKeys() []string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.OutIpVals">func (o *LiquidGas) OutIpVals(M *ele.IpsMap, sol *ele.Solution)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.Ramp">func (o *LiquidGas) Ramp(x float64) float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.RampDeriv">func (o *LiquidGas) RampDeriv(x float64) float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.RestoreIvs">func (o *LiquidGas) RestoreIvs(aux bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.SetEleConds">func (o *LiquidGas) SetEleConds(key string, f fun.Func, extra string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.SetEqs">func (o *LiquidGas) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.SetIniIvs">func (o *LiquidGas) SetIniIvs(sol *ele.Solution, ignored map[string][]float64) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.Update">func (o *LiquidGas) Update(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LiquidGas.Ureset">func (o *LiquidGas) Ureset(sol *ele.Solution) (err error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/github.com/cpmech/gofem/ele/seepage/aux-flags.go">aux-flags.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/seepage/aux-keys.go">aux-keys.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/seepage/liquid-gas.go">liquid-gas.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/seepage/liquid.go">liquid.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+			
+			
+			<h2 id="GasFlowKeys">func <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/aux-keys.go?s=353:388#L5">GasFlowKeys</a>
+				<a class="permalink" href="#GasFlowKeys">&#xb6;</a>
+			</h2>
+			<pre>func GasFlowKeys(ndim <a href="/pkg/builtin/#int">int</a>) []<a href="/pkg/builtin/#string">string</a></pre>
+			
+			
+			
+
+		
+			
+			
+			<h2 id="GetSeepFaceFlags">func <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/aux-flags.go?s=230:305#L3">GetSeepFaceFlags</a>
+				<a class="permalink" href="#GetSeepFaceFlags">&#xb6;</a>
+			</h2>
+			<pre>func GetSeepFaceFlags(extra <a href="/pkg/builtin/#string">string</a>) (Macaulay <a href="/pkg/builtin/#bool">bool</a>, BetRamp, Kappa <a href="/pkg/builtin/#float64">float64</a>)</pre>
+			
+			
+			
+
+		
+			
+			
+			<h2 id="LiqFlowKeys">func <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/aux-keys.go?s=180:215#L1">LiqFlowKeys</a>
+				<a class="permalink" href="#LiqFlowKeys">&#xb6;</a>
+			</h2>
+			<pre>func LiqFlowKeys(ndim <a href="/pkg/builtin/#int">int</a>) []<a href="/pkg/builtin/#string">string</a></pre>
+			
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Liquid">type <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=850:3509#L18">Liquid</a>
+				<a class="permalink" href="#Liquid">&#xb6;</a>
+			</h2>
+			<pre>type Liquid struct {
+
+    <span class="comment">// basic data</span>
+    Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>   <span class="comment">// the cell structure</span>
+    X    [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// matrix of nodal coordinates [ndim][nnode]</span>
+    Np   <a href="/pkg/builtin/#int">int</a>         <span class="comment">// total number of unknowns == number of vertices</span>
+    Ndim <a href="/pkg/builtin/#int">int</a>         <span class="comment">// space dimension</span>
+
+    <span class="comment">// integration points</span>
+    IpsElem []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points of element</span>
+    IpsFace []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points corresponding to faces</span>
+
+    <span class="comment">// material model</span>
+    Mdl *<a href="/pkg/github.com/cpmech/gofem/mdl/porous/">porous</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/porous/#Model">Model</a> <span class="comment">// model</span>
+
+    <span class="comment">// problem variables</span>
+    Pmap []<a href="/pkg/builtin/#int">int</a> <span class="comment">// assembly map (location array/element equations)</span>
+
+    <span class="comment">// internal variables</span>
+    States    []*<a href="/pkg/github.com/cpmech/gofem/mdl/porous/">porous</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/porous/#State">State</a>
+    StatesBkp []*<a href="/pkg/github.com/cpmech/gofem/mdl/porous/">porous</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/porous/#State">State</a>
+    StatesAux []*<a href="/pkg/github.com/cpmech/gofem/mdl/porous/">porous</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/porous/#State">State</a>
+
+    <span class="comment">// gravity</span>
+    Gfcn <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// gravity function</span>
+
+    <span class="comment">// natural boundary conditions</span>
+    NatBcs []*<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#NaturalBc">NaturalBc</a> <span class="comment">// natural boundary conditions</span>
+
+    <span class="comment">// flux boundary conditions (qb == \bar{q})</span>
+    Rhol_ex     []<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// [nverts] ρl extrapolted to nodes =&gt; if has qb (flux)</span>
+    Drholdpl_ex [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nverts][nverts] Cpl extrapolted to nodes =&gt; if has qb (flux)</span>
+    Emat        [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nverts][nips] extrapolator matrix</span>
+    DoExtrap    <a href="/pkg/builtin/#bool">bool</a>        <span class="comment">// do extrapolation of ρl and Cpl =&gt; for use with flux and seepage conditions</span>
+
+    <span class="comment">// seepage face</span>
+    Nf         <a href="/pkg/builtin/#int">int</a>         <span class="comment">// number of fl variables</span>
+    HasSeep    <a href="/pkg/builtin/#bool">bool</a>        <span class="comment">// indicates if this element has seepage faces</span>
+    Vid2seepId []<a href="/pkg/builtin/#int">int</a>       <span class="comment">// [nverts] maps local vertex id to index in Fmap</span>
+    SeepId2vid []<a href="/pkg/builtin/#int">int</a>       <span class="comment">// [nf] maps seepage face variable id to local vertex id</span>
+    Fmap       []<a href="/pkg/builtin/#int">int</a>       <span class="comment">// [nf] map of &#34;fl&#34; variables (seepage face)</span>
+    Macaulay   <a href="/pkg/builtin/#bool">bool</a>        <span class="comment">// use discrete ramp function instead of smooth ramp</span>
+    BetRmp     <a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// coefficient for Sramp</span>
+    Kap        <a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// κ coefficient to normalise equation for seepage face modelling</span>
+    Hst        []<a href="/pkg/builtin/#bool">bool</a>      <span class="comment">// [nf] set hydrostatic plmax</span>
+    Plmax      [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nf][nipsFace] specified plmax (not corrected by multiplier)</span>
+
+    <span class="comment">// local starred variables</span>
+    PsiL []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nip] ψl* = β1.p + β2.dpdt</span>
+
+    <span class="comment">// scratchpad. computed @ each ip</span>
+    Grav   []<a href="/pkg/builtin/#float64">float64</a>      <span class="comment">// [ndim] gravity vector</span>
+    Pl     <a href="/pkg/builtin/#float64">float64</a>        <span class="comment">// pl: liquid pressure</span>
+    GradPl []<a href="/pkg/builtin/#float64">float64</a>      <span class="comment">// [ndim] ∇pl: gradient of liquid pressure</span>
+    Rhowl  []<a href="/pkg/builtin/#float64">float64</a>      <span class="comment">// [ndim] ρl*wl: weighted liquid relative velocity</span>
+    Kpp    [][]<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// [np][np] Kpp := dRpl/dpl consistent tangent matrix</span>
+    Kpf    [][]<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// [np][nf] Kpf := dRpl/dfl consistent tangent matrix</span>
+    Kfp    [][]<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// [nf][np] Kfp := dRfl/dpl consistent tangent matrix</span>
+    Kff    [][]<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// [nf][nf] Kff := dRfl/dfl consistent tangent matrix</span>
+    LsVars *<a href="/pkg/github.com/cpmech/gofem/mdl/porous/">porous</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/porous/#LsVars">LsVars</a> <span class="comment">// variable to hold results from CalcLs</span>
+    Tmp    []<a href="/pkg/builtin/#float64">float64</a>      <span class="comment">// [ndim] temporary (auxiliary) vector</span>
+}</pre>
+			<p>
+Liquid implements an element for transient seepage analyses [1]
+</p>
+<pre>References:
+ [1] Pedroso DM (2015) A solution to transient seepage in unsaturated porous media.
+     Computer Methods in Applied Mechanics and Engineering, 285 791-816,
+     <a href="http://dx.doi.org/10.1016/j.cma.2014.12.009">http://dx.doi.org/10.1016/j.cma.2014.12.009</a>
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Liquid.AddNatBcsToJac">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=19550:19612#L744">AddNatBcsToJac</a>
+					<a class="permalink" href="#Liquid.AddNatBcsToJac">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) AddNatBcsToJac(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddNatBcsToJac adds contribution from natural boundary conditions to Jacobian
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.AddNatBcsToRhs">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=18028:18104#L681">AddNatBcsToRhs</a>
+					<a class="permalink" href="#Liquid.AddNatBcsToRhs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) AddNatBcsToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddNatBcsToRhs adds natural boundary conditions to rhs
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.AddToKb">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=9944:10029#L338">AddToKb</a>
+					<a class="permalink" href="#Liquid.AddToKb">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddToKb adds element K to global Jacobian matrix Kb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.AddToRhs">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=8459:8529#L275">AddToRhs</a>
+					<a class="permalink" href="#Liquid.AddToRhs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddToRhs adds -R to global residual vector fb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.BackupIvs">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=14776:14824#L551">BackupIvs</a>
+					<a class="permalink" href="#Liquid.BackupIvs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+BackupIvs creates copy of internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.CalcFaceIpVars">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=17676:17758#L669">CalcFaceIpVars</a>
+					<a class="permalink" href="#Liquid.CalcFaceIpVars">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) CalcFaceIpVars(fidx <a href="/pkg/builtin/#int">int</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (ρl, pl, fl <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+CalcFaceIpVars computes current values @ face integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.CalcIpVars">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=17008:17075#L640">CalcIpVars</a>
+					<a class="permalink" href="#Liquid.CalcIpVars">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) CalcIpVars(idx <a href="/pkg/builtin/#int">int</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+CalcIpVars computes current values @ integration points. idx == index of integration point
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.ComputeGrav">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=21987:22026#L837">ComputeGrav</a>
+					<a class="permalink" href="#Liquid.ComputeGrav">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) ComputeGrav(t <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+ComputeGrav computes gravity vector @ time t
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.Decode">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=15641:15693#L591">Decode</a>
+					<a class="permalink" href="#Liquid.Decode">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) Decode(dec <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Decode decodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.Encode">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=15517:15569#L586">Encode</a>
+					<a class="permalink" href="#Liquid.Encode">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) Encode(enc <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Encode encodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.Id">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=7411:7436#L229">Id</a>
+					<a class="permalink" href="#Liquid.Id">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+Id returns the cell Id
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.InterpStarVars">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=7990:8052#L254">InterpStarVars</a>
+					<a class="permalink" href="#Liquid.InterpStarVars">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) InterpStarVars(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+InterpStarVars interpolates star variables to integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.OutIpCoords">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=15845:15891#L600">OutIpCoords</a>
+					<a class="permalink" href="#Liquid.OutIpCoords">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) OutIpCoords() (C [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+OutIpCoords returns the coordinates of integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.OutIpKeys">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=16075:16112#L609">OutIpKeys</a>
+					<a class="permalink" href="#Liquid.OutIpKeys">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) OutIpKeys() []<a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+OutIpKeys returns the integration points&#39; keys
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.OutIpVals">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=16253:16313#L614">OutIpVals</a>
+					<a class="permalink" href="#Liquid.OutIpVals">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) OutIpVals(M *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#IpsMap">IpsMap</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>)</pre>
+				<p>
+OutIpVals returns the integration points&#39; values corresponding to keys
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.Ramp">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=21640:21680#L821">Ramp</a>
+					<a class="permalink" href="#Liquid.Ramp">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) Ramp(x <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
+				<p>
+Ramp implements the ramp function
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.RampDeriv">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=21814:21859#L829">RampDeriv</a>
+					<a class="permalink" href="#Liquid.RampDeriv">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) RampDeriv(x <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
+				<p>
+RampDeriv returns the ramp function first derivative
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.RestoreIvs">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=15031:15080#L565">RestoreIvs</a>
+					<a class="permalink" href="#Liquid.RestoreIvs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+RestoreIvs restores internal variables from copies
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.SetEleConds">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=7786:7864#L246">SetEleConds</a>
+					<a class="permalink" href="#Liquid.SetEleConds">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEleConds sets element conditions
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.SetEqs">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=7484:7553#L232">SetEqs</a>
+					<a class="permalink" href="#Liquid.SetEqs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEqs sets equations
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.SetIniIvs">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=12958:13045#L471">SetIniIvs</a>
+					<a class="permalink" href="#Liquid.SetIniIvs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) SetIniIvs(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, ignored map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetIniIvs sets initial ivs for given values in sol and ivs map
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.Update">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=12180:12234#L439">Update</a>
+					<a class="permalink" href="#Liquid.Update">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) Update(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Update performs (tangent) update
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Liquid.Ureset">func (*Liquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid.go?s=15309:15363#L579">Ureset</a>
+					<a class="permalink" href="#Liquid.Ureset">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Liquid">Liquid</a>) Ureset(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Ureset fixes internal variables after u (displacements) have been zeroed
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="LiquidGas">type <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=545:4034#L13">LiquidGas</a>
+				<a class="permalink" href="#LiquidGas">&#xb6;</a>
+			</h2>
+			<pre>type LiquidGas struct {
+
+    <span class="comment">// basic data</span>
+    Cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>   <span class="comment">// the cell structure</span>
+    X    [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// matrix of nodal coordinates [ndim][nnode]</span>
+    Np   <a href="/pkg/builtin/#int">int</a>         <span class="comment">// number of vertices == number of pl or pg</span>
+    Ndim <a href="/pkg/builtin/#int">int</a>         <span class="comment">// space dimension</span>
+
+    <span class="comment">// integration points</span>
+    IpsElem []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points of element</span>
+    IpsFace []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points corresponding to faces</span>
+
+    <span class="comment">// material model</span>
+    Mdl *<a href="/pkg/github.com/cpmech/gofem/mdl/porous/">porous</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/porous/#Model">Model</a> <span class="comment">// model</span>
+
+    <span class="comment">// problem variables</span>
+    Plmap []<a href="/pkg/builtin/#int">int</a> <span class="comment">// assembly map -- liquid pressure</span>
+    Pgmap []<a href="/pkg/builtin/#int">int</a> <span class="comment">// assembly map -- gas pressure</span>
+
+    <span class="comment">// internal variables</span>
+    States    []*<a href="/pkg/github.com/cpmech/gofem/mdl/porous/">porous</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/porous/#State">State</a>
+    StatesBkp []*<a href="/pkg/github.com/cpmech/gofem/mdl/porous/">porous</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/porous/#State">State</a>
+    StatesAux []*<a href="/pkg/github.com/cpmech/gofem/mdl/porous/">porous</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/porous/#State">State</a>
+
+    <span class="comment">// gravity</span>
+    Gfcn <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// gravity function</span>
+
+    <span class="comment">// natural boundary conditions</span>
+    NatBcs []*<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#NaturalBc">NaturalBc</a> <span class="comment">// natural boundary conditions</span>
+
+    <span class="comment">// flux boundary conditions (qb == \bar{q})</span>
+    Rhol_ex     []<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// [nverts] ρl extrapolted to nodes =&gt; if has qb (flux)</span>
+    Rhog_ex     []<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// [nverts] ρg extrapolted to nodes =&gt; if has qb (flux)</span>
+    Drholdpl_ex [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nverts][nverts] Cpl extrapolted to nodes =&gt; if has qb (flux)</span>
+    Drhogdpg_ex [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nverts][nverts] Cpl extrapolted to nodes =&gt; if has qb (flux)</span>
+    Emat        [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nverts][nips] extrapolator matrix</span>
+    DoExtrap    <a href="/pkg/builtin/#bool">bool</a>        <span class="comment">// do extrapolation of ρl and Cpl =&gt; for use with flux and seepage conditions</span>
+
+    <span class="comment">// seepage face</span>
+    Nf         <a href="/pkg/builtin/#int">int</a>         <span class="comment">// number of fl variables</span>
+    HasSeep    <a href="/pkg/builtin/#bool">bool</a>        <span class="comment">// indicates if this element has seepage faces</span>
+    Vid2seepId []<a href="/pkg/builtin/#int">int</a>       <span class="comment">// [nverts] maps local vertex id to index in Fmap</span>
+    SeepId2vid []<a href="/pkg/builtin/#int">int</a>       <span class="comment">// [nf] maps seepage face variable id to local vertex id</span>
+    Flmap      []<a href="/pkg/builtin/#int">int</a>       <span class="comment">// [nf] map of &#34;fl&#34; variables (seepage face)</span>
+    Macaulay   <a href="/pkg/builtin/#bool">bool</a>        <span class="comment">// use discrete ramp function instead of smooth ramp</span>
+    BetRmp     <a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// coefficient for Sramp</span>
+    Kap        <a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// Kap coefficient to normalise equation for seepage face modelling</span>
+    Hst        []<a href="/pkg/builtin/#bool">bool</a>      <span class="comment">// [nf] set hydrostatic plmax</span>
+    Plmax      [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nf][nipsFace] specified plmax (not corrected by multiplier)</span>
+
+    <span class="comment">// local starred variables</span>
+    PsiL []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nip] ψl* = β1・pl + β2・dpldt</span>
+    PsiG []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nip] ψg* = β1・pg + β2・dpgdt</span>
+
+    <span class="comment">// scratchpad. computed @ each ip</span>
+    Grav      []<a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// [ndim] gravity vector</span>
+    Pl        <a href="/pkg/builtin/#float64">float64</a>         <span class="comment">// pl: liquid pressure</span>
+    Pg        <a href="/pkg/builtin/#float64">float64</a>         <span class="comment">// pg: gas pressure</span>
+    GradPl    []<a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// [ndim] ∇pl: gradient of liquid pressure</span>
+    GradPg    []<a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// [ndim] ∇pg: gradient of gas pressure</span>
+    Wlb       []<a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// [ndim] wlb = ρl*wl: augmented filter velocity -- liquid</span>
+    Wgb       []<a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// [ndim] wgb = ρg*wg: augmented filter velocity -- gas</span>
+    Dwlbdpl_n []<a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// [ndim] dwlb/dpl^n</span>
+    Dwlbdpg_n []<a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// [ndim] dwlb/dpg^n</span>
+    Dwgbdpl_n []<a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// [ndim] dwgb/dpl^n</span>
+    Dwgbdpg_n []<a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// [ndim] dwgb/dpg^n</span>
+    Kll       [][]<a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// [np][np] dRpl/dpl consistent tangent matrix</span>
+    Klg       [][]<a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// [np][np] dRpl/dpg consistent tangent matrix</span>
+    Kgl       [][]<a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// [np][np] dRpg/dpl consistent tangent matrix</span>
+    Kgg       [][]<a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// [np][np] dRpg/dpg consistent tangent matrix</span>
+    Klf       [][]<a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// [np][nf] dRpl/dfl consistent tangent matrix</span>
+    Kfl       [][]<a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// [nf][np] dRfl/dpl consistent tangent matrix</span>
+    Kff       [][]<a href="/pkg/builtin/#float64">float64</a>     <span class="comment">// [nf][nf] dRfl/dfl consistent tangent matrix</span>
+    LgsVars   *<a href="/pkg/github.com/cpmech/gofem/mdl/porous/">porous</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/porous/#LgsVars">LgsVars</a> <span class="comment">// variable to hold results from CalcLgs</span>
+}</pre>
+			<p>
+LiquidGas implements an element for liquid-gas flow analyses
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="LiquidGas.AddNatBcsToJac">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=24049:24114#L856">AddNatBcsToJac</a>
+					<a class="permalink" href="#LiquidGas.AddNatBcsToJac">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) AddNatBcsToJac(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddNatBcsToJac adds contribution from natural boundary conditions to Jacobian
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.AddNatBcsToRhs">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=22249:22328#L783">AddNatBcsToRhs</a>
+					<a class="permalink" href="#LiquidGas.AddNatBcsToRhs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) AddNatBcsToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddNatBcsToRhs adds natural boundary conditions to rhs
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.AddToKb">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=11463:11551#L369">AddToKb</a>
+					<a class="permalink" href="#LiquidGas.AddToKb">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddToKb adds element K to global Jacobian matrix Kb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.AddToRhs">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=9582:9655#L297">AddToRhs</a>
+					<a class="permalink" href="#LiquidGas.AddToRhs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddToRhs adds -R to global residual vector fb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.AssembleKs">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=14551:14597#L476">AssembleKs</a>
+					<a class="permalink" href="#LiquidGas.AssembleKs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) AssembleKs(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>)</pre>
+				<p>
+AssembleKs assemble K matrices into Kb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.BackupIvs">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=18529:18580#L642">BackupIvs</a>
+					<a class="permalink" href="#LiquidGas.BackupIvs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+BackupIvs creates copy of internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.CalcFaceIpVars">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=21892:21977#L771">CalcFaceIpVars</a>
+					<a class="permalink" href="#LiquidGas.CalcFaceIpVars">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) CalcFaceIpVars(fidx <a href="/pkg/builtin/#int">int</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (ρl, pl, fl <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+CalcFaceIpVars computes current values @ face integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.CalcIpVars">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=21084:21154#L739">CalcIpVars</a>
+					<a class="permalink" href="#LiquidGas.CalcIpVars">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) CalcIpVars(idx <a href="/pkg/builtin/#int">int</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+CalcIpVars computes current values @ integration points. idx == index of integration point
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.ComputeGrav">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=26496:26538#L949">ComputeGrav</a>
+					<a class="permalink" href="#LiquidGas.ComputeGrav">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) ComputeGrav(t <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+ComputeGrav computes gravity vector @ time t
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.Decode">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=19406:19461#L682">Decode</a>
+					<a class="permalink" href="#LiquidGas.Decode">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) Decode(dec <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Decode decodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.Encode">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=19279:19334#L677">Encode</a>
+					<a class="permalink" href="#LiquidGas.Encode">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) Encode(enc <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Encode encodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.Id">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=8392:8420#L248">Id</a>
+					<a class="permalink" href="#LiquidGas.Id">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+Id returns the cell Id
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.InterpStarVars">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=9037:9102#L275">InterpStarVars</a>
+					<a class="permalink" href="#LiquidGas.InterpStarVars">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) InterpStarVars(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+InterpStarVars interpolates star variables to integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.OutIpCoords">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=19613:19662#L691">OutIpCoords</a>
+					<a class="permalink" href="#LiquidGas.OutIpCoords">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) OutIpCoords() (C [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+OutIpCoords returns the coordinates of integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.OutIpKeys">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=19846:19886#L700">OutIpKeys</a>
+					<a class="permalink" href="#LiquidGas.OutIpKeys">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) OutIpKeys() []<a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+OutIpKeys returns the integration points&#39; keys
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.OutIpVals">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=20079:20142#L706">OutIpVals</a>
+					<a class="permalink" href="#LiquidGas.OutIpVals">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) OutIpVals(M *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#IpsMap">IpsMap</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>)</pre>
+				<p>
+OutIpVals returns the integration points&#39; values corresponding to keys
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.Ramp">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=26143:26186#L933">Ramp</a>
+					<a class="permalink" href="#LiquidGas.Ramp">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) Ramp(x <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
+				<p>
+Ramp implements the ramp function
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.RampDeriv">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=26320:26368#L941">RampDeriv</a>
+					<a class="permalink" href="#LiquidGas.RampDeriv">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) RampDeriv(x <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
+				<p>
+RampDeriv returns the ramp function first derivative
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.RestoreIvs">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=18787:18839#L656">RestoreIvs</a>
+					<a class="permalink" href="#LiquidGas.RestoreIvs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+RestoreIvs restores internal variables from copies
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.SetEleConds">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=8830:8911#L267">SetEleConds</a>
+					<a class="permalink" href="#LiquidGas.SetEleConds">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEleConds sets element conditions
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.SetEqs">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=8468:8540#L251">SetEqs</a>
+					<a class="permalink" href="#LiquidGas.SetEqs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEqs sets equations
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.SetIniIvs">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=16520:16610#L557">SetIniIvs</a>
+					<a class="permalink" href="#LiquidGas.SetIniIvs">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) SetIniIvs(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, ignored map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetIniIvs sets initial ivs for given values in sol and ivs map
+</p>
+<pre>Note: this function assumes a hydrostatic fully saturated initial condition, thus:
+      sl=1, krl=1, wlb=0  sg=0, krg=krgMin, wgb=0
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.Update">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=15456:15513#L520">Update</a>
+					<a class="permalink" href="#LiquidGas.Update">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) Update(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Update performs (tangent) update
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LiquidGas.Ureset">func (*LiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/seepage/liquid-gas.go?s=19068:19125#L670">Ureset</a>
+					<a class="permalink" href="#LiquidGas.Ureset">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#LiquidGas">LiquidGas</a>) Ureset(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Ureset fixes internal variables after u (displacements) have been zeroed
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	
+
+
+	<div class="pkg-dir">
+		<table>
+			<tr>
+				<th class="pkg-name">Name</th>
+				<th class="pkg-synopsis">Synopsis</th>
+			</tr>
+
+			
+			<tr>
+				<td colspan="2"><a href="..">..</a></td>
+			</tr>
+			
+
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="data/">data</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+		</table>
+	</div>
+
+
+	
+
+</div><!-- page -->
+<div id="footer">
+<br /><br />
+<hr>
+<pre class="copyright">
+Copyright (c) 2015, The Gofem Authors. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Gofem nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+</pre><!-- copyright -->
+</div><!-- footer -->
+</body>
+</html>

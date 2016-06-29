@@ -1,0 +1,1143 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Gofem &ndash; package ele</title>
+<link type="text/css" rel="stylesheet" href="static/style.css">
+<script type="text/javascript" src="static/godocs.js"></script>
+<style type="text/css"></style>
+</head>
+<body>
+<div id="page"><h1>Gofem &ndash; <b>ele</b> &ndash; finite elements</h1>
+use 'godoc cmd/github.com/cpmech/gofem/ele' for documentation on the github.com/cpmech/gofem/ele command 
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = ;
+	document.CALLGRAPH = ;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/cpmech/gofem/ele"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+				<dd><a href="#pkg-subdirectories">Subdirectories</a></dd>
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+package ele implements finite elements
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#BuildCoordsMatrix">func BuildCoordsMatrix(cell *inp.Cell, msh *inp.Mesh) (x [][]float64)</a></dd>
+			
+				
+				<dd><a href="#SetAllocator">func SetAllocator(elementName string, fcn AllocatorType)</a></dd>
+			
+				
+				<dd><a href="#SetInfoFunc">func SetInfoFunc(elementName string, fcn InfoFuncType)</a></dd>
+			
+			
+				
+				<dd><a href="#AllocatorType">type AllocatorType</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#GetAllocator">func GetAllocator(elementName string) AllocatorType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#CanExtrapolate">type CanExtrapolate</a></dd>
+				
+				
+			
+				
+				<dd><a href="#CanOutputIps">type CanOutputIps</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Connector">type Connector</a></dd>
+				
+				
+			
+				
+				<dd><a href="#DynCoefs">type DynCoefs</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.CalcAlphas">func (o *DynCoefs) CalcAlphas(Δt float64) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.CalcBetas">func (o *DynCoefs) CalcBetas(Δt float64) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.CalcBoth">func (o *DynCoefs) CalcBoth(Δt float64) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetAlp1">func (o *DynCoefs) GetAlp1() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetAlp2">func (o *DynCoefs) GetAlp2() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetAlp3">func (o *DynCoefs) GetAlp3() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetAlp4">func (o *DynCoefs) GetAlp4() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetAlp5">func (o *DynCoefs) GetAlp5() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetAlp6">func (o *DynCoefs) GetAlp6() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetAlp7">func (o *DynCoefs) GetAlp7() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetAlp8">func (o *DynCoefs) GetAlp8() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetBet1">func (o *DynCoefs) GetBet1() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetBet2">func (o *DynCoefs) GetBet2() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.GetHmin">func (o *DynCoefs) GetHmin() float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.Init">func (o *DynCoefs) Init(dat *inp.SolverData)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DynCoefs.Print">func (o *DynCoefs) Print()</a></dd>
+				
+			
+				
+				<dd><a href="#Element">type Element</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#New">func New(cell *inp.Cell, reg *inp.Region, sim *inp.Simulation) (ele Element, err error)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Info">type Info</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#GetInfo">func GetInfo(cell *inp.Cell, reg *inp.Region, sim *inp.Simulation) (info *Info, inactive bool, err error)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#InfoFuncType">type InfoFuncType</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#GetInfoFunc">func GetInfoFunc(elementName string) InfoFuncType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#IpsMap">type IpsMap</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewIpsMap">func NewIpsMap() *IpsMap</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IpsMap.Get">func (o *IpsMap) Get(key string, idx int) float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#IpsMap.Set">func (o *IpsMap) Set(key string, idx, nip int, val float64)</a></dd>
+				
+			
+				
+				<dd><a href="#NaturalBc">type NaturalBc</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Solution">type Solution</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Solution.Reset">func (o *Solution) Reset(steady bool)</a></dd>
+				
+			
+				
+				<dd><a href="#WithFixedKM">type WithFixedKM</a></dd>
+				
+				
+			
+				
+				<dd><a href="#WithIntVars">type WithIntVars</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/github.com/cpmech/gofem/ele/auxiliary.go">auxiliary.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/dyncoefs.go">dyncoefs.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/element.go">element.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/factory.go">factory.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/info.go">info.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/ipsmap.go">ipsmap.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/naturalbcs.go">naturalbcs.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/ele/solution.go">solution.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+			
+			
+			<h2 id="BuildCoordsMatrix">func <a href="https://github.com/cpmech/gofem/blob/master/ele/auxiliary.go?s=320:389#L3">BuildCoordsMatrix</a>
+				<a class="permalink" href="#BuildCoordsMatrix">&#xb6;</a>
+			</h2>
+			<pre>func BuildCoordsMatrix(cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>, msh *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Mesh">Mesh</a>) (x [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+			<p>
+BuildCoordsMatrix returns the coordinate matrix of a particular Cell
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SetAllocator">func <a href="https://github.com/cpmech/gofem/blob/master/ele/factory.go?s=2293:2349#L57">SetAllocator</a>
+				<a class="permalink" href="#SetAllocator">&#xb6;</a>
+			</h2>
+			<pre>func SetAllocator(elementName <a href="/pkg/builtin/#string">string</a>, fcn <a href="#AllocatorType">AllocatorType</a>)</pre>
+			<p>
+SetAllocator sets a new callback function to allocate an element
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SetInfoFunc">func <a href="https://github.com/cpmech/gofem/blob/master/ele/factory.go?s=1983:2037#L49">SetInfoFunc</a>
+				<a class="permalink" href="#SetInfoFunc">&#xb6;</a>
+			</h2>
+			<pre>func SetInfoFunc(elementName <a href="/pkg/builtin/#string">string</a>, fcn <a href="#InfoFuncType">InfoFuncType</a>)</pre>
+			<p>
+SetInfoFunc sets a new callback function to return information about an element
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="AllocatorType">type <a href="https://github.com/cpmech/gofem/blob/master/ele/factory.go?s=487:590#L6">AllocatorType</a>
+				<a class="permalink" href="#AllocatorType">&#xb6;</a>
+			</h2>
+			<pre>type AllocatorType func(sim *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a>, cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>, edat *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#ElemData">ElemData</a>, x [][]<a href="/pkg/builtin/#float64">float64</a>) <a href="#Element">Element</a></pre>
+			<p>
+AllocatorType defines a function that allocates an element
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="GetAllocator">func <a href="https://github.com/cpmech/gofem/blob/master/ele/factory.go?s=2881:2932#L74">GetAllocator</a>
+					<a class="permalink" href="#GetAllocator">&#xb6;</a>
+				</h3>
+				<pre>func GetAllocator(elementName <a href="/pkg/builtin/#string">string</a>) <a href="#AllocatorType">AllocatorType</a></pre>
+				<p>
+GetAllocator gets callback function to allocate an element
+</p>
+
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="CanExtrapolate">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2355:2469#L44">CanExtrapolate</a>
+				<a class="permalink" href="#CanExtrapolate">&#xb6;</a>
+			</h2>
+			<pre>type CanExtrapolate interface {
+    AddToExt(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// adds extrapolated values to global array</span>
+}</pre>
+			<p>
+CanExtrapolate defines elements with functions to extrapolate internal values
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="CanOutputIps">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2547:2883#L49">CanOutputIps</a>
+				<a class="permalink" href="#CanOutputIps">&#xb6;</a>
+			</h2>
+			<pre>type CanOutputIps interface {
+    Id() <a href="/pkg/builtin/#int">int</a>                            <span class="comment">// returns the cell Id</span>
+    OutIpCoords() [][]<a href="/pkg/builtin/#float64">float64</a>           <span class="comment">// coordinates of integration points</span>
+    OutIpKeys() []<a href="/pkg/builtin/#string">string</a>                <span class="comment">// integration points&#39; keys; e.g. &#34;pl&#34;, &#34;sl&#34;</span>
+    OutIpVals(M *<a href="#IpsMap">IpsMap</a>, sol *<a href="#Solution">Solution</a>) <span class="comment">// integration points&#39; values corresponding to keys</span>
+}</pre>
+			<p>
+CanOutputIps defines elements that can output integration points&#39; values
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Connector">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2019:2272#L38">Connector</a>
+				<a class="permalink" href="#Connector">&#xb6;</a>
+			</h2>
+			<pre>type Connector interface {
+    Id() <a href="/pkg/builtin/#int">int</a>                                                       <span class="comment">// returns the cell Id</span>
+    Connect(cid2elem []<a href="#Element">Element</a>, c *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>) (nnzK <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// connect multiple elements; e.g.: connect rod/solid elements in Rjoints</span>
+}</pre>
+			<p>
+Connector defines connector elements; elements that depend upon others
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="DynCoefs">type <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=663:866#L11">DynCoefs</a>
+				<a class="permalink" href="#DynCoefs">&#xb6;</a>
+			</h2>
+			<pre>type DynCoefs struct {
+    HHT <a href="/pkg/builtin/#bool">bool</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+DynCoefs calculates θ-method, Newmark&#39;s or HHT coefficients.
+</p>
+<pre>Notes:
+ θ1  -- Newmark parameter (gamma)  [0 &lt;= θ1 &lt;= 1]
+ θ2  -- Newmark parameter (2*beta) [0 &lt;= θ2 &lt;= 1]
+ HHT -- use Hilber-Hughes-Taylor method ?
+ α   -- Hilber-Hughes-Taylor parameter [-1/3 &lt;= α &lt;= 0]
+ if HHT==True, θ1 and θ2 are automatically calculated for unconditional stability
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="DynCoefs.CalcAlphas">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=2854:2908#L100">CalcAlphas</a>
+					<a class="permalink" href="#DynCoefs.CalcAlphas">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) CalcAlphas(Δt <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+CalcAlphas computes only alphas
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.CalcBetas">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=2552:2605#L85">CalcBetas</a>
+					<a class="permalink" href="#DynCoefs.CalcBetas">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) CalcBetas(Δt <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+CalcBetas computes only betas
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.CalcBoth">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=2375:2427#L75">CalcBoth</a>
+					<a class="permalink" href="#DynCoefs.CalcBoth">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) CalcBoth(Δt <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+CalcBoth computes betas and alphas
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetAlp1">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=987:1023#L28">GetAlp1</a>
+					<a class="permalink" href="#DynCoefs.GetAlp1">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetAlp1() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetAlp2">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=1041:1077#L29">GetAlp2</a>
+					<a class="permalink" href="#DynCoefs.GetAlp2">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetAlp2() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetAlp3">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=1095:1131#L30">GetAlp3</a>
+					<a class="permalink" href="#DynCoefs.GetAlp3">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetAlp3() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetAlp4">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=1149:1185#L31">GetAlp4</a>
+					<a class="permalink" href="#DynCoefs.GetAlp4">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetAlp4() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetAlp5">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=1203:1239#L32">GetAlp5</a>
+					<a class="permalink" href="#DynCoefs.GetAlp5">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetAlp5() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetAlp6">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=1257:1293#L33">GetAlp6</a>
+					<a class="permalink" href="#DynCoefs.GetAlp6">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetAlp6() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetAlp7">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=1311:1347#L34">GetAlp7</a>
+					<a class="permalink" href="#DynCoefs.GetAlp7">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetAlp7() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetAlp8">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=1365:1401#L35">GetAlp8</a>
+					<a class="permalink" href="#DynCoefs.GetAlp8">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetAlp8() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetBet1">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=879:915#L26">GetBet1</a>
+					<a class="permalink" href="#DynCoefs.GetBet1">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetBet1() <a href="/pkg/builtin/#float64">float64</a></pre>
+				<p>
+getters
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetBet2">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=933:969#L27">GetBet2</a>
+					<a class="permalink" href="#DynCoefs.GetBet2">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetBet2() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.GetHmin">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=1419:1455#L36">GetHmin</a>
+					<a class="permalink" href="#DynCoefs.GetHmin">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) GetHmin() <a href="/pkg/builtin/#float64">float64</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.Init">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=1510:1554#L39">Init</a>
+					<a class="permalink" href="#DynCoefs.Init">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) Init(dat *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#SolverData">SolverData</a>)</pre>
+				<p>
+Init initialises this structure
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="DynCoefs.Print">func (*DynCoefs) <a href="https://github.com/cpmech/gofem/blob/master/ele/dyncoefs.go?s=3374:3400#L123">Print</a>
+					<a class="permalink" href="#DynCoefs.Print">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#DynCoefs">DynCoefs</a>) Print()</pre>
+				<p>
+Print prints coefficients
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Element">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=403:1297#L7">Element</a>
+				<a class="permalink" href="#Element">&#xb6;</a>
+			</h2>
+			<pre>type Element interface {
+
+    <span class="comment">// information and initialisation</span>
+    Id() <a href="/pkg/builtin/#int">int</a>                                             <span class="comment">// returns the cell Id</span>
+    SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// set equations</span>
+
+    <span class="comment">// conditions (natural BCs and element&#39;s)</span>
+    SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// set element conditions</span>
+
+    <span class="comment">// called for each time step</span>
+    InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// interpolate star variables to integration points</span>
+
+    <span class="comment">// called for each iteration</span>
+    AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)                <span class="comment">// adds -R to global residual vector fb</span>
+    AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// adds element K to global Jacobian matrix Kb</span>
+
+    <span class="comment">// reading and writing of element data</span>
+    Encode(enc <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// encodes internal variables</span>
+    Decode(dec <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// decodes internal variables</span>
+}</pre>
+			<p>
+Element defines what all elements must implement
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/ele/factory.go?s=1302:1389#L29">New</a>
+					<a class="permalink" href="#New">&#xb6;</a>
+				</h3>
+				<pre>func New(cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>, reg *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Region">Region</a>, sim *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a>) (ele <a href="#Element">Element</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+New returns a new element from from factory
+</p>
+
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="Info">type <a href="https://github.com/cpmech/gofem/blob/master/ele/info.go?s=241:771#L1">Info</a>
+				<a class="permalink" href="#Info">&#xb6;</a>
+			</h2>
+			<pre>type Info struct {
+
+    <span class="comment">// essential</span>
+    Dofs [][]<a href="/pkg/builtin/#string">string</a>        <span class="comment">// solution variables PER NODE. ex for 2 nodes: [[&#34;ux&#34;, &#34;uy&#34;, &#34;rz&#34;], [&#34;ux&#34;, &#34;uy&#34;, &#34;rz&#34;]]</span>
+    Y2F  map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#string">string</a> <span class="comment">// maps &#34;y&#34; keys to &#34;f&#34; keys. ex: &#34;ux&#34; =&gt; &#34;fx&#34;, &#34;pl&#34; =&gt; &#34;ql&#34;</span>
+
+    <span class="comment">// internal Dofs; e.g. for mixed formulations</span>
+    NintDofs <a href="/pkg/builtin/#int">int</a> <span class="comment">// number of internal dofs</span>
+
+    <span class="comment">// t1 and t2 variables (time-derivatives of first and second order)</span>
+    T1vars []<a href="/pkg/builtin/#string">string</a> <span class="comment">// &#34;pl&#34;</span>
+    T2vars []<a href="/pkg/builtin/#string">string</a> <span class="comment">// &#34;ux&#34;, &#34;uy&#34;</span>
+
+    <span class="comment">// required to be extrapolated; e.g. by beam-joints</span>
+    Nextrap <a href="/pkg/builtin/#int">int</a> <span class="comment">// e.g. &#34;nsig&#34;</span>
+}</pre>
+			<p>
+Info holds all information required to set a simulation stage
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="GetInfo">func <a href="https://github.com/cpmech/gofem/blob/master/ele/factory.go?s=651:756#L9">GetInfo</a>
+					<a class="permalink" href="#GetInfo">&#xb6;</a>
+				</h3>
+				<pre>func GetInfo(cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>, reg *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Region">Region</a>, sim *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a>) (info *<a href="#Info">Info</a>, inactive <a href="/pkg/builtin/#bool">bool</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+GetInfo returns information about elements from factory
+</p>
+
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="InfoFuncType">type <a href="https://github.com/cpmech/gofem/blob/master/ele/factory.go?s=338:423#L3">InfoFuncType</a>
+				<a class="permalink" href="#InfoFuncType">&#xb6;</a>
+			</h2>
+			<pre>type InfoFuncType func(sim *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Simulation">Simulation</a>, cell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>, edat *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#ElemData">ElemData</a>) *<a href="#Info">Info</a></pre>
+			<p>
+InfoFuncType defines a function that returns information about a certain element type
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="GetInfoFunc">func <a href="https://github.com/cpmech/gofem/blob/master/ele/factory.go?s=2610:2659#L65">GetInfoFunc</a>
+					<a class="permalink" href="#GetInfoFunc">&#xb6;</a>
+				</h3>
+				<pre>func GetInfoFunc(elementName <a href="/pkg/builtin/#string">string</a>) <a href="#InfoFuncType">InfoFuncType</a></pre>
+				<p>
+GetInfoFunc gets callback function to return information about an element
+</p>
+
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="IpsMap">type <a href="https://github.com/cpmech/gofem/blob/master/ele/ipsmap.go?s=237:269#L1">IpsMap</a>
+				<a class="permalink" href="#IpsMap">&#xb6;</a>
+			</h2>
+			<pre>type IpsMap map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a></pre>
+			<p>
+IpsMap defines a map to hold results @ integration points
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewIpsMap">func <a href="https://github.com/cpmech/gofem/blob/master/ele/ipsmap.go?s=305:329#L1">NewIpsMap</a>
+					<a class="permalink" href="#NewIpsMap">&#xb6;</a>
+				</h3>
+				<pre>func NewIpsMap() *<a href="#IpsMap">IpsMap</a></pre>
+				<p>
+NewIpsMap returns a new IpsMap
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="IpsMap.Get">func (*IpsMap) <a href="https://github.com/cpmech/gofem/blob/master/ele/ipsmap.go?s=1027:1076#L24">Get</a>
+					<a class="permalink" href="#IpsMap.Get">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#IpsMap">IpsMap</a>) Get(key <a href="/pkg/builtin/#string">string</a>, idx <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
+				<p>
+Get returns item corresponding to &#39;key&#39; and integration point &#39;idx&#39;
+</p>
+<pre>Note: this function returns 0 if &#39;key&#39; is not found. It also does not check for out-of-bound errors
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="IpsMap.Set">func (*IpsMap) <a href="https://github.com/cpmech/gofem/blob/master/ele/ipsmap.go?s=655:714#L12">Set</a>
+					<a class="permalink" href="#IpsMap.Set">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#IpsMap">IpsMap</a>) Set(key <a href="/pkg/builtin/#string">string</a>, idx, nip <a href="/pkg/builtin/#int">int</a>, val <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+Set sets item in map by key and ip-index. The slice is resized with nip in case it&#39;s empty
+</p>
+<pre>Input:
+ idx -- index of integration point
+ nip -- number of integration points (to resize if necessary)
+ val -- value of &#39;key&#39; @ integration point &#39;idx&#39;
+</pre>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="NaturalBc">type <a href="https://github.com/cpmech/gofem/blob/master/ele/naturalbcs.go?s=334:545#L1">NaturalBc</a>
+				<a class="permalink" href="#NaturalBc">&#xb6;</a>
+			</h2>
+			<pre>type NaturalBc struct {
+    Key     <a href="/pkg/builtin/#string">string</a>   <span class="comment">// key such as qn, qn0, ql, seepH, seepP, etc...</span>
+    IdxFace <a href="/pkg/builtin/#int">int</a>      <span class="comment">// local index of face</span>
+    Fcn     <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// function callback</span>
+    Extra   <a href="/pkg/builtin/#string">string</a>   <span class="comment">// extra information</span>
+}</pre>
+			<p>
+NaturalBc holds information on natural boundary conditioins such as
+distributed loads or fluxes acting on surfaces
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Solution">type <a href="https://github.com/cpmech/gofem/blob/master/ele/solution.go?s=369:1369#L5">Solution</a>
+				<a class="permalink" href="#Solution">&#xb6;</a>
+			</h2>
+			<pre>type Solution struct {
+
+    <span class="comment">// current state</span>
+    T      <a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// current time</span>
+    Y      []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// DOFs (solution variables); e.g. y = {u, p}</span>
+    Dydt   []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// dy/dt</span>
+    D2ydt2 []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// d²y/dt²</span>
+
+    <span class="comment">// auxiliary</span>
+    Dt  <a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// current time increment</span>
+    ΔY  []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// total increment (for nonlinear solver)</span>
+    Psi []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// t1 star vars; e.g. ψ* = β1.p + β2.dpdt</span>
+    Zet []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// t2 star vars; e.g. ζ* = α1.u + α2.v + α3.a</span>
+    Chi []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// t2 star vars; e.g. χ* = α4.u + α5.v + α6.a</span>
+    L   []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Lagrange multipliers</span>
+
+    <span class="comment">// extrapolated values</span>
+    Ext map[<a href="/pkg/builtin/#int">int</a>][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [optional] extrapolated values. nodeId =&gt; values (e.g. σ)</span>
+    Cnt map[<a href="/pkg/builtin/#int">int</a>]<a href="/pkg/builtin/#int">int</a>       <span class="comment">// [optional] counter for number of additions each node of Ext</span>
+
+    <span class="comment">// problem definition and constants</span>
+    Steady  <a href="/pkg/builtin/#bool">bool</a>      <span class="comment">// [from Sim] steady simulation</span>
+    Axisym  <a href="/pkg/builtin/#bool">bool</a>      <span class="comment">// [from Sim] axisymmetric</span>
+    Pstress <a href="/pkg/builtin/#bool">bool</a>      <span class="comment">// [from Sim] plane-stress</span>
+    DynCfs  *<a href="#DynCoefs">DynCoefs</a> <span class="comment">// [from FEM] coefficients for dynamics/transient simulations</span>
+}</pre>
+			<p>
+Solution holds the solution data @ nodes.
+</p>
+<pre>      / u \         / u \
+      |   | =&gt; y =  |   |
+yb =  | p |         \ p / (ny x 1)
+      |   |
+      \ λ / (nyb x 1)
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Solution.Reset">func (*Solution) <a href="https://github.com/cpmech/gofem/blob/master/ele/solution.go?s=1393:1430#L33">Reset</a>
+					<a class="permalink" href="#Solution.Reset">&#xb6;</a>
+				</h3>
+				<pre>func (o *<a href="#Solution">Solution</a>) Reset(steady <a href="/pkg/builtin/#bool">bool</a>)</pre>
+				<p>
+Reset clear values
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="WithFixedKM">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2979:3053#L57">WithFixedKM</a>
+				<a class="permalink" href="#WithFixedKM">&#xb6;</a>
+			</h2>
+			<pre>type WithFixedKM interface {
+    Recompute(withM <a href="/pkg/builtin/#bool">bool</a>) <span class="comment">// recompute K and M</span>
+}</pre>
+			<p>
+WithFixedKM defines elements with fixed K,M matrices; to be recomputed if prms are changed
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="WithIntVars">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=1361:1943#L29">WithIntVars</a>
+				<a class="permalink" href="#WithIntVars">&#xb6;</a>
+			</h2>
+			<pre>type WithIntVars interface {
+    Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)                              <span class="comment">// perform (tangent) update</span>
+    SetIniIvs(sol *<a href="#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// sets initial ivs for given values in sol and ivs map</span>
+    BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)                                <span class="comment">// create copy of internal variables</span>
+    RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)                               <span class="comment">// restore internal variables from copies</span>
+    Ureset(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)                              <span class="comment">// fixes internal variables after u (displacements) have been zeroed</span>
+}</pre>
+			<p>
+WithIntVars defines elements with {z,q} internal variables
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+	
+	
+		<h2 id="pkg-subdirectories">Subdirectories</h2>
+	
+	
+
+
+	<div class="pkg-dir">
+		<table>
+			<tr>
+				<th class="pkg-name">Name</th>
+				<th class="pkg-synopsis">Synopsis</th>
+			</tr>
+
+			
+			<tr>
+				<td colspan="2"><a href="..">..</a></td>
+			</tr>
+			
+
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="diffusion/">diffusion</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="porous/">porous</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="seepage/">seepage</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="solid/">solid</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+				
+					<tr>
+						<td class="pkg-name" style="padding-left: 0px;">
+							<a href="thermomech/">thermomech</a>
+						</td>
+						<td class="pkg-synopsis">
+							
+						</td>
+					</tr>
+				
+			
+		</table>
+	</div>
+
+
+	
+
+</div><!-- page -->
+<div id="footer">
+<br /><br />
+<hr>
+<pre class="copyright">
+Copyright (c) 2015, The Gofem Authors. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of Gofem nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+</pre><!-- copyright -->
+</div><!-- footer -->
+</body>
+</html>
