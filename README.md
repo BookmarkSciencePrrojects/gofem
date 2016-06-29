@@ -57,8 +57,7 @@ cd gofem
 ./all.bash
 ```
 
-See http://cpmech.github.io/gofem for more details.
-
+The documentation for developers is available here: http://rawgit.com/cpmech/gofem/master/doc/index.html
 
 
 ## Acknowledgements
