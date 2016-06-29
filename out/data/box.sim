@@ -13,7 +13,7 @@
     {
       "mshfile" : "box.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"elastic", "type":"u" }
+        { "tag":-1, "mat":"elastic", "type":"solid" }
       ]
     }
   ],

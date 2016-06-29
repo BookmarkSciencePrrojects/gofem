@@ -22,10 +22,10 @@ func Test_topo01(tst *testing.T) {
 	simfn := "box.sim"
 
 	// start simulation
-	processing := fem.NewFEM(datadir+simfn, "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain(datadir+simfn, "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
-	err := processing.Run()
+	err := main.Run()
 	if err != nil {
 		tst.Errorf("Run failed:\n%v", err)
 		return

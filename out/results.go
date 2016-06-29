@@ -7,7 +7,7 @@ package out
 import (
 	"strings"
 
-	"github.com/cpmech/gofem/fem"
+	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/num"
 	"github.com/cpmech/gosl/utl"
@@ -84,10 +84,10 @@ func LoadResults(times []float64) {
 		}
 
 		// current values @ ips
-		for _, ele := range ElemOutIps {
-			ipids := Cid2ips[ele.Id()]
-			allvals := fem.NewIpsMap()
-			ele.OutIpVals(allvals, Dom.Sol)
+		for _, element := range ElemOutIps {
+			ipids := Cid2ips[element.Id()]
+			allvals := ele.NewIpsMap()
+			element.OutIpVals(allvals, Dom.Sol)
 			for key, vals := range *allvals {
 				for i, ipid := range ipids {
 					Ipoints[ipid].Vals[key] = vals[i]

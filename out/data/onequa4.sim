@@ -13,7 +13,7 @@
     {
       "mshfile" : "onequa4.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"elast", "type":"u" }
+        { "tag":-1, "mat":"elast", "type":"solid" }
       ]
     }
   ],

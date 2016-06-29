@@ -19,22 +19,18 @@ func Test_plot01(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("plot01")
 
-	// constants
-	datadir := "$GOPATH/src/github.com/cpmech/gofem/fem/data/"
-	simfn := "p02.sim"
-
 	// start simulation
-	processing := fem.NewFEM(datadir+simfn, "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/p02.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
-	err := processing.Run()
+	err := main.Run()
 	if err != nil {
 		tst.Errorf("Run failed:\n%v", err)
 		return
 	}
 
 	// start post-processing
-	Start(datadir+simfn, 0, 0)
+	Start("data/p02.sim", 0, 0)
 
 	// define entities
 	Define("A", N{1})

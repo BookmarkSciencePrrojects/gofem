@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/cpmech/gofem/ana"
+	"github.com/cpmech/gofem/ele/solid"
 	"github.com/cpmech/gofem/fem"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -30,10 +31,10 @@ func Test_out01(tst *testing.T) {
 	chk.PrintTitle("out01")
 
 	// start simulation
-	processing := fem.NewFEM("data/onequa4.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/onequa4.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
-	err := processing.Run()
+	err := main.Run()
 	if err != nil {
 		tst.Errorf("Run failed:\n%v", err)
 		return
@@ -98,7 +99,7 @@ func Test_out01(tst *testing.T) {
 	}
 
 	// check s-keys
-	skeys := fem.StressKeys(Dom.Sim.Ndim)
+	skeys := solid.StressKeys(Dom.Sim.Ndim)
 	for _, l := range plabels {
 		for _, p := range Results[l] {
 			//io.Pfgreen("q = %v\n", p)
@@ -172,10 +173,10 @@ func Test_out02(tst *testing.T) {
 	chk.PrintTitle("out02")
 
 	// start simulation
-	processing := fem.NewFEM("data/twoqua4.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/twoqua4.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
-	err := processing.Run()
+	err := main.Run()
 	if err != nil {
 		tst.Errorf("Run failed:\n%v", err)
 		return

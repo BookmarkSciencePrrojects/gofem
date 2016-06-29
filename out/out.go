@@ -6,6 +6,8 @@
 package out
 
 import (
+	"github.com/cpmech/gofem/ele"
+	"github.com/cpmech/gofem/ele/solid"
 	"github.com/cpmech/gofem/fem"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/gm"
@@ -33,19 +35,19 @@ type IpData_t struct {
 var (
 
 	// data set by Start
-	Analysis   *fem.FEM         // the fem structure
-	Sum        *fem.Summary     // [from Analysis] summary
-	Dom        *fem.Domain      // [from Analysis] FE domain
-	Ipoints    []*IpData_t      // all integration points. ipid == index in Ipoints
-	Cid2ips    [][]int          // [ncells][nip] maps cell id to index in Ipoints
-	Ipkey2ips  map[string][]int // maps ip keys to indices in Ipoints
-	Ipkeys     map[string]bool  // all ip keys
-	NodBins    gm.Bins          // bins for nodes
-	IpsBins    gm.Bins          // bins for integration points
-	IpsMin     []float64        // [ndim] {x,y,z}_min among all ips
-	IpsMax     []float64        // [ndim] {x,y,z}_max among all ips
-	Beams      []*fem.Beam      // beams, if any
-	ElemOutIps []fem.ElemOutIps // subset of element that can output IP values
+	Analysis   *fem.Main          // the fem structure
+	Sum        *fem.Summary       // [from Analysis] summary
+	Dom        *fem.Domain        // [from Analysis] FE domain
+	Ipoints    []*IpData_t        // all integration points. ipid == index in Ipoints
+	Cid2ips    [][]int            // [ncells][nip] maps cell id to index in Ipoints
+	Ipkey2ips  map[string][]int   // maps ip keys to indices in Ipoints
+	Ipkeys     map[string]bool    // all ip keys
+	NodBins    gm.Bins            // bins for nodes
+	IpsBins    gm.Bins            // bins for integration points
+	IpsMin     []float64          // [ndim] {x,y,z}_min among all ips
+	IpsMax     []float64          // [ndim] {x,y,z}_max among all ips
+	Beams      []*solid.Beam      // beams, if any
+	ElemOutIps []ele.CanOutputIps // subset of element that can output IP values
 
 	// defined entities and results loaded by LoadResults
 	Planes   map[string]*PlaneData // for points defined on planes. maps aliases to data
@@ -66,7 +68,7 @@ var (
 func Start(simfnpath string, stageIdx, regionIdx int) {
 
 	// fem structure
-	Analysis = fem.NewFEM(simfnpath, "", false, false, true, false, false, 0)
+	Analysis = fem.NewMain(simfnpath, "", false, false, true, false, false, 0)
 	Dom = Analysis.Domains[regionIdx]
 	Sum = Analysis.Summary
 
@@ -92,8 +94,8 @@ func Start(simfnpath string, stageIdx, regionIdx int) {
 	TimeInds = make([]int, 0)
 	Times = make([]float64, 0)
 	Splots = make([]*SplotDat, 0)
-	Beams = make([]*fem.Beam, 0)
-	ElemOutIps = make([]fem.ElemOutIps, 0)
+	Beams = make([]*solid.Beam, 0)
+	ElemOutIps = make([]ele.CanOutputIps, 0)
 
 	// bins
 	m := Dom.Msh
@@ -128,13 +130,13 @@ func Start(simfnpath string, stageIdx, regionIdx int) {
 	first := true
 
 	// for all cells/elements
-	for cid, ele := range Dom.Cid2elem {
-		if ele == nil {
+	for cid, element := range Dom.Cid2elem {
+		if element == nil {
 			continue
 		}
 
 		// add integration points to slice of ips and to bins
-		if e, ok := ele.(fem.ElemOutIps); ok {
+		if e, ok := element.(ele.CanOutputIps); ok {
 			coords := e.OutIpCoords()
 			keys := e.OutIpKeys()
 			nip := len(coords)
@@ -175,7 +177,7 @@ func Start(simfnpath string, stageIdx, regionIdx int) {
 		}
 
 		// find beams
-		if beam, ok := ele.(*fem.Beam); ok {
+		if beam, ok := element.(*solid.Beam); ok {
 			Beams = append(Beams, beam)
 		}
 	}

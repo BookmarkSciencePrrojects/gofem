@@ -21,18 +21,18 @@ func Test_beamdiag01(tst *testing.T) {
 	if chk.Verbose {
 
 		// start simulation
-		processing := fem.NewFEM("../fem/data/beam03.sim", "", true, true, false, false, chk.Verbose, 0)
+		main := fem.NewMain("../fem/data/beam03.sim", "", true, true, false, false, chk.Verbose, 0)
 
 		// set stage
 		stgidx := 2
-		err := processing.SetStage(stgidx)
+		err := main.SetStage(stgidx)
 		if err != nil {
 			tst.Errorf("SetStage failed:\n%v", err)
 			return
 		}
 
 		// run one stage
-		err = processing.SolveOneStage(stgidx, true)
+		err = main.SolveOneStage(stgidx, true)
 		if err != nil {
 			tst.Errorf("SolveOneStage failed:\n%v", err)
 			return

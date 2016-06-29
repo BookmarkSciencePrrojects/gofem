@@ -5,7 +5,10 @@
 package out
 
 import (
-	"github.com/cpmech/gofem/fem"
+	"github.com/cpmech/gofem/ele"
+	"github.com/cpmech/gofem/ele/porous"
+	"github.com/cpmech/gofem/ele/seepage"
+	"github.com/cpmech/gofem/ele/solid"
 	"github.com/cpmech/gofem/shp"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/la"
@@ -27,23 +30,23 @@ func ComputeExtrapolatedValues(extrapKeys []string) {
 	}
 
 	// loop over elements
-	for _, ele := range Dom.Elems {
-		if e, ok := ele.(fem.ElemOutIps); ok {
+	for _, element := range Dom.Elems {
+		if e, ok := element.(ele.CanOutputIps); ok {
 
 			// get shape and integration points from known elements
 			var sha *shp.Shape
 			var ips []shp.Ipoint
-			switch e := ele.(type) {
-			case *fem.ElemP:
+			switch e := element.(type) {
+			case *seepage.Liquid:
 				sha = e.Cell.Shp
 				ips = e.IpsElem
-			case *fem.ElemU:
+			case *solid.Solid:
 				sha = e.Cell.Shp
 				ips = e.IpsElem
-			case *fem.ElemUP:
+			case *porous.SolidLiquid:
 				sha = e.U.Cell.Shp
 				ips = e.U.IpsElem
-			case *fem.ElemUPP:
+			case *porous.SolidLiquidGas:
 				sha = e.U.Cell.Shp
 				ips = e.U.IpsElem
 			}
@@ -60,11 +63,11 @@ func ComputeExtrapolatedValues(extrapKeys []string) {
 			}
 
 			// get ips data
-			allvals := fem.NewIpsMap()
+			allvals := ele.NewIpsMap()
 			e.OutIpVals(allvals, Dom.Sol)
 
 			// perform extrapolation
-			cell := cells[ele.Id()]
+			cell := cells[element.Id()]
 			for _, key := range extrapKeys {
 				if vals, ok := (*allvals)[key]; ok {
 					for i := 0; i < sha.Nverts; i++ {
