@@ -1,0 +1,27 @@
+{
+  "functions" : [],
+  "materials" : [
+    {
+      "name"  : "elast",
+      "type"  : "sld",
+      "model" : "lin-elast",
+      "prms"  : [
+        {"n":"E",   "v":1000},
+        {"n":"nu",  "v":0.25},
+        {"n":"rho", "v":2   }
+      ]
+    },
+    {
+      "name"  : "plast",
+      "type"  : "sld",
+      "model" : "vm",
+      "prms"  : [
+        {"n":"E",   "v":1000},
+        {"n":"nu",  "v":0.25},
+        {"n":"qy0", "v":1   },
+        {"n":"H",   "v":0   },
+        {"n":"rho", "v":1   }
+      ]
+    }
+  ]
+}

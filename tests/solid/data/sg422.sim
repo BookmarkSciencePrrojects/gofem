@@ -1,0 +1,29 @@
+{
+  "data" : {
+    "desc" : "Smith-Griffiths (5th ed) Figure 4.22 p138",
+    "matfile" : "sg.mat",
+    "steady" : true
+  },
+  "functions" : [
+    { "name":"P", "type":"cte", "prms":[{"n":"c", "v":-100, "u":"kN" }] }
+  ],
+  "regions" : [
+    {
+      "mshfile"   : "sg422.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"SG-4.22", "type":"beam", "extra":"!nsta:3" },
+        { "tag":-2, "mat":"SG-4.22", "type":"beam", "extra":"!nsta:3" },
+        { "tag":-3, "mat":"SG-4.22", "type":"beam", "extra":"!nsta:3" }
+      ]
+    }
+  ],
+  "stages" : [
+    {
+      "desc": "vertical load",
+      "nodebcs" : [
+        { "tag":-1, "keys":["ux","uy","uz","rx","ry","rz"], "funcs":["zero","zero","zero","zero","zero","zero"] },
+        { "tag":-2, "keys":["fy"], "funcs":["P"] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "materials" : [
+    {
+      "name"  : "B-1.4-M1",
+      "type"  : "sld",
+      "model" : "oned-elast",
+      "prms"  : [
+        {"n":"E", "v":200000},
+        {"n":"A", "v":1, "adj":1}
+      ]
+    },
+    {
+      "name"  : "B-1.4-M2",
+      "type"  : "sld",
+      "model" : "oned-elast",
+      "prms"  : [
+        {"n":"E", "v":1, "adj":2},
+        {"n":"A", "v":3000 }
+      ]
+    },
+    {
+      "name"  : "B-1.4-M3",
+      "type"  : "sld",
+      "model" : "oned-elast",
+      "prms"  : [
+        {"n":"E", "v":70000},
+        {"n":"A", "v":1, "adj":3}
+      ]
+    }
+  ]
+}
