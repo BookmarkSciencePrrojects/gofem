@@ -7,7 +7,7 @@ coupled problems are also targeted by Gofem. Efficiency is a goal as long as the
 code maintenance is not penalised. The computational efficiency is achieved by parallel computing
 using message passage interface (MPI). Several unit tests are employed for every detail of the code
 and its usage aims to be comprehensive. Gofem depends on the Go Scientific Library (Gosl) and was
-developed for obtaining the results presented in a number of journal papers, including [1] and [2].
+developed for obtaining the results presented in a number of journal papers, including [1-5].
 
 
 
@@ -70,13 +70,11 @@ Additionally, 'tools' contains some auxiliary tools.
 
 ## References
 
-[1] Pedroso DM (2015) A consistent u-p formulation for porous media with hysteresis.
-    Int Journal for Numerical Methods in Engineering, 101(8) 606-634
-    http://dx.doi.org/10.1002/nme.4808
-
-[2] Pedroso DM (2015) A solution to transient seepage in unsaturated porous media.
-    Computer Methods in Applied Mechanics and Engineering, 285 791-816
-    http://dx.doi.org/10.1016/j.cma.2014.12.009
+1. Pedroso DM (2015) A consistent u-p formulation for porous media with hysteresis. Int Journal for Numerical Methods in Engineering, 101(8) 606-634 http://dx.doi.org/10.1002/nme.4808
+2. Pedroso DM (2015) A solution to transient seepage in unsaturated porous media. Computer Methods in Applied Mechanics and Engineering, 285 791-816 http://dx.doi.org/10.1016/j.cma.2014.12.009
+3. Pedroso DM, Sheng D and Zhao, J (2009) The concept of reference curves for constitutive modelling in soil mechanics, Computers and Geotechnics, 36(1-2), 149-165, http://dx.doi.org/10.1016/j.compgeo.2008.01.009
+4. Pedroso DM and Williams DJ (2010) A novel approach for modelling soil-water characteristic curves with hysteresis, Computers and Geotechnics, 37(3), 374-380, http://dx.doi.org/10.1016/j.compgeo.2009.12.004
+5. Pedroso DM and Williams DJ (2011) Automatic Calibration of soil-water characteristic curves using genetic algorithms. Computers and Geotechnics, 38(3), 330-340, http://dx.doi.org/10.1016/j.compgeo.2010.12.004
 
 
 
