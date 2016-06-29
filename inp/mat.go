@@ -145,6 +145,20 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 		}
 	}
 
+	// alloc/init: generic
+	for _, m := range mdb.GEN {
+		m.Gen, err = generic.New(m.Model)
+		if err != nil {
+			err = chk.Err("cannot allocate generic model %q / material %q\n%v", m.Model, m.Name, err)
+			return
+		}
+		err = m.Gen.Init(ndim, m.Prms)
+		if err != nil {
+			err = chk.Err("cannot initialise generic model %q / material %q\n%v", m.Model, m.Name, err)
+			return
+		}
+	}
+
 	// alloc/init: solids
 	for _, m := range mdb.SLD {
 		m.Sld, err = solid.New(m.Model)
@@ -250,20 +264,6 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 		err = m.Por.Init(m.Prms, m.Cnd, m.Lrm, m.Liq, m.Gas, grav)
 		if err != nil {
 			err = chk.Err("cannot initialise porous model (material %q):\n%v\n", m.Name, err)
-			return
-		}
-	}
-
-	// alloc/init: generic
-	for _, m := range mdb.GEN {
-		m.Gen, err = generic.New(m.Model)
-		if err != nil {
-			err = chk.Err("cannot allocate generic model %q / material %q\n%v", m.Model, m.Name, err)
-			return
-		}
-		err = m.Gen.Init(ndim, m.Prms)
-		if err != nil {
-			err = chk.Err("cannot initialise generic model %q / material %q\n%v", m.Model, m.Name, err)
 			return
 		}
 	}
