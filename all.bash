@@ -15,14 +15,29 @@ compile() {
 
 compile ana
 compile shp
-compile mdl/sld
-compile mdl/cnd
-compile mdl/lrm
-compile mdl/fld
-compile mdl/por
+compile mdl/generic
+compile mdl/solid
+compile mdl/fluid
+compile mdl/conduct
+compile mdl/retention
+compile mdl/diffusion
+compile mdl/thermomech
+compile mdl/porous
 compile inp
-compile fem
-compile out
+#compile ele
+#compile ele/diffusion
+#compile ele/solid
+#compile ele/seepage
+#compile ele/thermomech
+#compile ele/porous
+#compile fem
+#compile tests
+#compile tests/diffusion
+#compile tests/solid
+#compile tests/seepage
+#compile tests/thermomech
+#compile tests/porous
+#compile out
 
 echo
 echo

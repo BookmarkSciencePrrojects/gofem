@@ -12,7 +12,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cpmech/gofem/mdl/fld"
+	"github.com/cpmech/gofem/mdl/fluid"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
@@ -246,16 +246,16 @@ type Simulation struct {
 	Stages    []*Stage   `json:"stages"`    // stores all stages
 
 	// derived
-	GoroutineId int        // id of goroutine to avoid race problems
-	DirOut      string     // directory to save results
-	Key         string     // simulation key; e.g. mysim01.sim => mysim01 or mysim01-alias
-	EncType     string     // encoder type
-	Ndim        int        // space dimension
-	MaxElev     float64    // maximum elevation
-	Grav0       float64    // gravity constant from stage #0
-	MatModels   *MatDb     // materials and models
-	LiqMdl      *fld.Model // liquid model to use when computing density and pressure along column; from stage #0
-	GasMdl      *fld.Model // gas model to use when computing density and pressure along column; from stage #0
+	GoroutineId int          // id of goroutine to avoid race problems
+	DirOut      string       // directory to save results
+	Key         string       // simulation key; e.g. mysim01.sim => mysim01 or mysim01-alias
+	EncType     string       // encoder type
+	Ndim        int          // space dimension
+	MaxElev     float64      // maximum elevation
+	Grav0       float64      // gravity constant from stage #0
+	MatModels   *MatDb       // materials and models
+	LiqMdl      *fluid.Model // liquid model to use when computing density and pressure along column; from stage #0
+	GasMdl      *fluid.Model // gas model to use when computing density and pressure along column; from stage #0
 
 	// adjustable parameters
 	Adjustable   fun.Prms         // adjustable parameters (not dependent)

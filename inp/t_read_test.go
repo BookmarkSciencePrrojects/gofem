@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cpmech/gofem/mdl/por"
+	"github.com/cpmech/gofem/mdl/porous"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
@@ -145,7 +145,7 @@ func Test_mat02(tst *testing.T) {
 	io.Pforan("Porous = %v\n", mat.Por)
 	if chk.Verbose {
 		plt.SetForEps(1.2, 400)
-		por.PlotLrm(mat.Por, "/tmp/gofem", "fig_mat02_lrm.eps", 20, 101, true, true, true, "", "", "", "", "")
+		porous.PlotLrm(mat.Por, "/tmp/gofem", "fig_mat02_retention.eps", 20, 101, true, true, true, "", "", "", "", "")
 	}
 }
 

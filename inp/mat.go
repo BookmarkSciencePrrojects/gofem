@@ -8,12 +8,14 @@ import (
 	"encoding/json"
 	"path/filepath"
 
-	"github.com/cpmech/gofem/mdl/cnd"
-	"github.com/cpmech/gofem/mdl/fld"
-	"github.com/cpmech/gofem/mdl/gen"
-	"github.com/cpmech/gofem/mdl/lrm"
-	"github.com/cpmech/gofem/mdl/por"
-	"github.com/cpmech/gofem/mdl/sld"
+	"github.com/cpmech/gofem/mdl/conduct"
+	"github.com/cpmech/gofem/mdl/diffusion"
+	"github.com/cpmech/gofem/mdl/fluid"
+	"github.com/cpmech/gofem/mdl/generic"
+	"github.com/cpmech/gofem/mdl/porous"
+	"github.com/cpmech/gofem/mdl/retention"
+	"github.com/cpmech/gofem/mdl/solid"
+	"github.com/cpmech/gofem/mdl/thermomech"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
@@ -24,19 +26,21 @@ type Material struct {
 
 	// input
 	Name  string   `json:"name"`  // name of material
-	Type  string   `json:"type"`  // type of material; e.g. "sld", "cnd", "lrm", "fld", "por", "gen"
+	Type  string   `json:"type"`  // type of material; e.g. "gen", "sld", "fld", "cnd", "lrm", "dif", "trm", "por"
 	Model string   `json:"model"` // name of model; e.g. "dp", "vm", "elast", etc.
 	Deps  []string `json:"deps"`  // dependencies; other material names. e.g. ["water", "dryair", "solid1", "conduct1", "lreten1"]
 	Prms  fun.Prms `json:"prms"`  // prms holds all model parameters for this material
 
 	// derived
-	Sld sld.Model  // pointer to solid model
-	Cnd cnd.Model  // pointer to conductivity model
-	Lrm lrm.Model  // pointer to retention model
-	Liq *fld.Model // pointer to liquid model
-	Gas *fld.Model // pointer to gas model
-	Por *por.Model // pointer to porous model
-	Gen gen.Model  // pointer to generic model
+	Gen generic.Model    // pointer to generic model
+	Sld solid.Model      // pointer to solid model
+	Liq *fluid.Model     // pointer to liquid model
+	Gas *fluid.Model     // pointer to gas model
+	Cnd conduct.Model    // pointer to conductivity model
+	Lrm retention.Model  // pointer to retention model
+	Dif diffusion.Model  // pointer to diffusion model
+	Trm thermomech.Model // pointer to thermo-mechanical model
+	Por *porous.Model    // pointer to porous model
 }
 
 // Mats holds materials
@@ -50,13 +54,15 @@ type MatDb struct {
 	Materials MatsData  `json:"materials"` // all materials
 
 	// derived
+	GEN map[string]*Material // subset with materials/models: generic materials
 	SLD map[string]*Material // subset with materials/models: solids
-	CND map[string]*Material // subset with materials/models: coductivities
-	LRM map[string]*Material // subset with materials/models: retention models
 	LIQ map[string]*Material // subset with materials/models: liquids
 	GAS map[string]*Material // subset with materials/models: gases
+	CND map[string]*Material // subset with materials/models: coductivities
+	LRM map[string]*Material // subset with materials/models: retention models
+	DIF map[string]*Material // subset with materials/models: diffusion
+	TRM map[string]*Material // subset with materials/models: thermomech
 	POR map[string]*Material // subset with materials/models: porous materials
-	GEN map[string]*Material // subset with materials/models: generic materials
 }
 
 // Clean cleans resources
@@ -87,23 +93,22 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 	}
 
 	// subsets
+	mdb.GEN = make(map[string]*Material)
 	mdb.SLD = make(map[string]*Material)
-	mdb.CND = make(map[string]*Material)
-	mdb.LRM = make(map[string]*Material)
 	mdb.LIQ = make(map[string]*Material)
 	mdb.GAS = make(map[string]*Material)
+	mdb.CND = make(map[string]*Material)
+	mdb.LRM = make(map[string]*Material)
+	mdb.DIF = make(map[string]*Material)
+	mdb.TRM = make(map[string]*Material)
 	mdb.POR = make(map[string]*Material)
-	mdb.GEN = make(map[string]*Material)
 	for _, m := range mdb.Materials {
 		switch m.Type {
+		case "gen":
+			mdb.GEN[m.Name] = m
+			continue
 		case "sld":
 			mdb.SLD[m.Name] = m
-			continue
-		case "cnd":
-			mdb.CND[m.Name] = m
-			continue
-		case "lrm":
-			mdb.LRM[m.Name] = m
 			continue
 		case "fld":
 			gas := false
@@ -119,21 +124,30 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 				mdb.LIQ[m.Name] = m
 			}
 			continue
+		case "cnd":
+			mdb.CND[m.Name] = m
+			continue
+		case "lrm":
+			mdb.LRM[m.Name] = m
+			continue
+		case "dif":
+			mdb.DIF[m.Name] = m
+			continue
+		case "trm":
+			mdb.TRM[m.Name] = m
+			continue
 		case "por":
 			mdb.POR[m.Name] = m
 			continue
-		case "gen":
-			mdb.GEN[m.Name] = m
-			continue
 		default:
-			err = chk.Err("material type %q is incorrect; options are \"sld\", \"cnd\", \"lrm\", \"fld\", \"por\" and \"gen\"", m.Type)
+			err = chk.Err("material type %q is incorrect; options are \"gem\", \"sld\", \"fld\", \"cnd\", \"lrm\", \"dif\", \"trm\" and \"por\"", m.Type)
 			return
 		}
 	}
 
 	// alloc/init: solids
 	for _, m := range mdb.SLD {
-		m.Sld, err = sld.New(m.Model)
+		m.Sld, err = solid.New(m.Model)
 		if err != nil {
 			err = chk.Err("cannot allocate solid model %q / material %q\n%v", m.Model, m.Name, err)
 			return
@@ -145,9 +159,21 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 		}
 	}
 
+	// alloc/init: liquids
+	for _, m := range mdb.LIQ {
+		m.Liq = new(fluid.Model)
+		m.Liq.Init(m.Prms, H, grav)
+	}
+
+	// alloc/init: gases
+	for _, m := range mdb.GAS {
+		m.Gas = new(fluid.Model)
+		m.Gas.Init(m.Prms, H, grav)
+	}
+
 	// alloc/init: conductivities
 	for _, m := range mdb.CND {
-		m.Cnd, err = cnd.New(m.Model)
+		m.Cnd, err = conduct.New(m.Model)
 		if err != nil {
 			err = chk.Err("cannot allocate conductivity model %q / material %q\n%v", m.Model, m.Name, err)
 			return
@@ -161,7 +187,7 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 
 	// alloc/init: liquid retention models
 	for _, m := range mdb.LRM {
-		m.Lrm, err = lrm.New(m.Model)
+		m.Lrm, err = retention.New(m.Model)
 		if err != nil {
 			err = chk.Err("cannot allocate liquid retention model %q / material %q\n%v", m.Model, m.Name, err)
 			return
@@ -173,16 +199,32 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 		}
 	}
 
-	// alloc/init: liquids
-	for _, m := range mdb.LIQ {
-		m.Liq = new(fld.Model)
-		m.Liq.Init(m.Prms, H, grav)
+	// alloc/init: diffusion models
+	for _, m := range mdb.DIF {
+		m.Dif, err = diffusion.New(m.Model)
+		if err != nil {
+			err = chk.Err("cannot allocate diffusion model %q / material %q\n%v", m.Model, m.Name, err)
+			return
+		}
+		err = m.Dif.Init(ndim, m.Prms)
+		if err != nil {
+			err = chk.Err("cannot initialise diffusion model %q / material %q\n%v", m.Model, m.Name, err)
+			return
+		}
 	}
 
-	// alloc/init: gases
-	for _, m := range mdb.GAS {
-		m.Gas = new(fld.Model)
-		m.Gas.Init(m.Prms, H, grav)
+	// alloc/init: thermo-mechanical models
+	for _, m := range mdb.TRM {
+		m.Trm, err = diffusion.New(m.Model)
+		if err != nil {
+			err = chk.Err("cannot allocate thermo-mechanical model %q / material %q\n%v", m.Model, m.Name, err)
+			return
+		}
+		err = m.Trm.Init(ndim, m.Prms)
+		if err != nil {
+			err = chk.Err("cannot initialise thermo-mechanical model %q / material %q\n%v", m.Model, m.Name, err)
+			return
+		}
 	}
 
 	// init: porous
@@ -204,7 +246,7 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 				m.Gas = mm.Gas
 			}
 		}
-		m.Por = new(por.Model)
+		m.Por = new(porous.Model)
 		err = m.Por.Init(m.Prms, m.Cnd, m.Lrm, m.Liq, m.Gas, grav)
 		if err != nil {
 			err = chk.Err("cannot initialise porous model (material %q):\n%v\n", m.Name, err)
@@ -214,7 +256,7 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 
 	// alloc/init: generic
 	for _, m := range mdb.GEN {
-		m.Gen, err = gen.New(m.Model)
+		m.Gen, err = generic.New(m.Model)
 		if err != nil {
 			err = chk.Err("cannot allocate generic model %q / material %q\n%v", m.Model, m.Name, err)
 			return
