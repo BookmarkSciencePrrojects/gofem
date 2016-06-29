@@ -5,10 +5,9 @@ language for applications in solid mechanics. The code aims to be as general as 
 focus on porous media mechanics. Nonetheless, classical plasticity and the solution of multi-physics
 coupled problems are also targeted by Gofem. Efficiency is a goal as long as the quality of code and
 code maintenance is not penalised. The computational efficiency is achieved by parallel computing
-using message passage interface (MPI). Finally, several unit tests are employed for every detail of
-the code and its usage aims to be comprehensive. Gofem depends on the Go Scientific Library (Gosl)
-and was developed for obtaining the results presented in a number of journal papers, including [1]
-and [2].
+using message passage interface (MPI). Several unit tests are employed for every detail of the code
+and its usage aims to be comprehensive. Gofem depends on the Go Scientific Library (Gosl) and was
+developed for obtaining the results presented in a number of journal papers, including [1] and [2].
 
 
 
