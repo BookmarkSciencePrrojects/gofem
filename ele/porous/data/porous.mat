@@ -1,0 +1,79 @@
+{
+  "functions" : [],
+  "materials" : [
+    {
+      "name"  : "conduct1",
+      "type"  : "cnd",
+      "model" : "m1",
+      "prms"  : [
+        {"n":"lam0l", "v":0.001},
+        {"n":"lam1l", "v":1.2  },
+        {"n":"alpl",  "v":0.01 },
+        {"n":"betl",  "v":10   },
+        {"n":"lam0g", "v":2    },
+        {"n":"lam1g", "v":0.001},
+        {"n":"alpg",  "v":0.01 },
+        {"n":"betg",  "v":10   }
+      ]
+    },
+    {
+      "name"  : "lreten1",
+      "type"  : "lrm",
+      "model" : "ref-m1",
+      "prms"  : [
+        {"n":"lamd",  "v":3    },
+        {"n":"lamw",  "v":3    },
+        {"n":"xrd",   "v":2    },
+        {"n":"xrw",   "v":2    },
+        {"n":"y0",    "v":1.0  },
+        {"n":"yr",    "v":0.005},
+        {"n":"betd",  "v":2    },
+        {"n":"betw",  "v":2    },
+        {"n":"bet1",  "v":2    },
+        {"n":"bet2",  "v":2    },
+        {"n":"alp",   "v":0.5  },
+        {"n":"nowet", "v":0    , "inact":true}
+      ]
+    },
+    {
+      "name"  : "solid1",
+      "type"  : "sld",
+      "model" : "lin-elast",
+      "prms"  : [
+        {"n":"E",   "v":10000},
+        {"n":"nu",  "v":0.2  },
+        {"n":"rho", "v":2.7  }
+      ]
+    },
+    {
+      "name" : "water",
+      "type" : "fld",
+      "prms" : [
+        {"n":"R0", "v":1.0     , "u":"Mg/m³"        },
+        {"n":"P0", "v":0.0     , "u":"kPa"          },
+        {"n":"C",  "v":4.53e-7 , "u":"Mg/(m³・kPa)" }
+      ]
+    },
+    {
+      "name" : "dryair",
+      "type" : "fld",
+      "prms" : [
+        {"n":"R0",  "v":0.0012  , "u":"Mg/m³"        },
+        {"n":"P0",  "v":0.0     , "u":"kPa"          },
+        {"n":"C",   "v":1.17e-5 , "u":"Mg/(m³・kPa)" },
+        {"n":"gas", "v":1 }
+      ]
+    },
+    {
+      "name" : "porous1",
+      "type" : "por",
+      "deps" : ["water", "dryair", "solid1", "conduct1", "lreten1"],
+      "prms" : [
+        {"n":"nf0",   "v":0.3   , "u":"-"     },
+        {"n":"RhoS0", "v":3.0   , "u":"Mg/m³" },
+        {"n":"kl",    "v":0.01  , "u":"m/s"   },
+        {"n":"kg",    "v":0.01  , "u":"m/s"   }
+      ]
+    }
+  ]
+}

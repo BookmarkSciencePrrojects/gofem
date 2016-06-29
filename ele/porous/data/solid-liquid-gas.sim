@@ -1,0 +1,27 @@
+{
+  "data" : {
+    "matfile" : "porous.mat",
+    "liq"     : "water",
+    "gas"     : "dryair",
+    "nolbb"   : false
+  },
+  "functions" : [
+    { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] }
+  ],
+  "regions" : [
+    {
+      "mshfile" : "squareQ9.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"porous1", "type":"solid-liquid-gas" },
+        { "tag":-2, "mat":"porous1", "type":"solid-liquid-gas" }
+      ]
+    }
+  ],
+  "stages" : [
+    {
+      "eleconds" : [
+        { "tag":-1, "keys":["g"], "funcs":["grav"] }
+      ]
+    }
+  ]
+}
