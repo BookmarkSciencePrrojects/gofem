@@ -1,7 +1,7 @@
 {
   "data" : {
     "desc"    : "Smith-Griffiths (5th ed) Figure 5.24 p195",
-    "matfile" : "sg.mat",
+    "matfile" : "sgm.mat",
     "steady"  : true
   },
   "functions" : [
@@ -10,7 +10,7 @@
   "regions" : [
     {
       "desc"      : "ground",
-      "mshfile"   : "sg524.msh",
+      "mshfile"   : "sgm524.msh",
       "elemsdata" : [
         { "tag":-1, "mat":"SG-5.24-M1", "type":"solid", "nip":8, "extra":"!useB:0" },
         { "tag":-2, "mat":"SG-5.24-M2", "type":"solid", "nip":8, "extra":"!useB:0" }

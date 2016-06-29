@@ -1,6 +1,6 @@
 {
   "data" : {
-    "matfile" : "sg.mat",
+    "matfile" : "sgm.mat",
     "steady" : true
   },
   "functions" : [

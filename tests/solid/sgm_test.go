@@ -15,9 +15,9 @@ import (
 	"github.com/cpmech/gosl/io"
 )
 
-func Test_sg52a(tst *testing.T) {
+func Test_sgm52a(tst *testing.T) {
 
-	/* Smith & Griffths (5th ed) Figure 5.2 p173
+	/* Smith, Griffiths and Margetts (5th ed) Figure 5.2 p173
 	 *
 	 *          0.25       0.5      0.25 kN/m
 	 *            ↓         ↓         ↓
@@ -38,10 +38,10 @@ func Test_sg52a(tst *testing.T) {
 	 */
 
 	//tests.Verbose()
-	chk.PrintTitle("sg52a. plane strain tri3. check DOFs")
+	chk.PrintTitle("sgm52a. plane strain tri3. check DOFs")
 
 	// start simulation
-	main := fem.NewMain("data/sg52.sim", "", true, false, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/sgm52.sim", "", true, false, false, false, chk.Verbose, 0)
 
 	// set stage
 	err := main.SetStage(0)
@@ -140,13 +140,13 @@ func Test_sg52a(tst *testing.T) {
 	chk.IntAssert(dom.PtNatBcs.Bcs[2].Eq, 9)
 }
 
-func Test_sg52b(tst *testing.T) {
+func Test_sgm52b(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("sg52b. plane strain tri3. run")
+	chk.PrintTitle("sgm52b. plane strain tri3. run")
 
 	// run simulation
-	main := fem.NewMain("data/sg52.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/sgm52.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
 	err := main.Run()
@@ -160,16 +160,16 @@ func Test_sg52b(tst *testing.T) {
 	tolK := 1e-9
 	tolu := 1e-17
 	tols := 1.56e-15
-	tests.CompareResults(tst, "data/sg52.sim", "cmp/sg52.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
+	tests.CompareResults(tst, "data/sgm52.sim", "cmp/sgm52.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
-func Test_sg57(tst *testing.T) {
+func Test_sgm57(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("sg57. plane strain tri15. qn given")
+	chk.PrintTitle("sgm57. plane strain tri15. qn given")
 
 	// run simulation
-	main := fem.NewMain("data/sg57.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/sgm57.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
 	err := main.Run()
@@ -183,16 +183,16 @@ func Test_sg57(tst *testing.T) {
 	tolK := 0.35
 	tolu := 2e-9
 	tols := 0.0002
-	tests.CompareResults(tst, "data/sg57.sim", "cmp/sg57.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
+	tests.CompareResults(tst, "data/sgm57.sim", "cmp/sgm57.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
-func Test_sg511(tst *testing.T) {
+func Test_sgm511(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("sg511. plane strain qua4. disp given")
+	chk.PrintTitle("sgm511. plane strain qua4. disp given")
 
 	// run simulation
-	main := fem.NewMain("data/sg511.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/sgm511.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
 	err := main.Run()
@@ -206,16 +206,16 @@ func Test_sg511(tst *testing.T) {
 	tolK := 0.1
 	tolu := 3e-14
 	tols := 1.56e-7
-	tests.CompareResults(tst, "data/sg511.sim", "cmp/sg511.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
+	tests.CompareResults(tst, "data/sgm511.sim", "cmp/sgm511.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
-func Test_sg515(tst *testing.T) {
+func Test_sgm515(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("sg515. plane strain qua8. qn given")
+	chk.PrintTitle("sgm515. plane strain qua8. qn given")
 
 	// run simulation
-	main := fem.NewMain("data/sg515.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/sgm515.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
 	err := main.Run()
@@ -239,17 +239,17 @@ func Test_sg515(tst *testing.T) {
 		tolK := 0.15
 		tolu := 3e-13
 		tols := 3e-8
-		tests.CompareResults(tst, "data/sg515.sim", "cmp/sg515.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
+		tests.CompareResults(tst, "data/sgm515.sim", "cmp/sgm515.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 	}
 }
 
-func Test_sg527(tst *testing.T) {
+func Test_sgm527(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("sg527. plane strain qua9. qn given")
+	chk.PrintTitle("sgm527. plane strain qua9. qn given")
 
 	// run simulation
-	main := fem.NewMain("data/sg527.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/sgm527.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
 	err := main.Run()
@@ -273,17 +273,17 @@ func Test_sg527(tst *testing.T) {
 		tolK := 1e-17
 		tolu := 3e-13
 		tols := 5e-8
-		tests.CompareResults(tst, "data/sg527.sim", "cmp/sg527.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
+		tests.CompareResults(tst, "data/sgm527.sim", "cmp/sgm527.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 	}
 }
 
-func Test_sg517(tst *testing.T) {
+func Test_sgm517(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("sg517. axisymmetric qua4")
+	chk.PrintTitle("sgm517. axisymmetric qua4")
 
 	// run simulation
-	main := fem.NewMain("data/sg517.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/sgm517.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
 	err := main.Run()
@@ -297,16 +297,16 @@ func Test_sg517(tst *testing.T) {
 	tolK := 0.0036
 	tolu := 1e-6
 	tols := 1e-4
-	tests.CompareResults(tst, "data/sg517.sim", "cmp/sg517.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
+	tests.CompareResults(tst, "data/sgm517.sim", "cmp/sgm517.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
-func Test_sg524(tst *testing.T) {
+func Test_sgm524(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("sg524. 3d hex8")
+	chk.PrintTitle("sgm524. 3d hex8")
 
 	// run simulation
-	main := fem.NewMain("data/sg524.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/sgm524.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
 	err := main.Run()
@@ -320,16 +320,16 @@ func Test_sg524(tst *testing.T) {
 	tolK := 1e-17
 	tolu := 1e-8
 	tols := 1e-7
-	tests.CompareResults(tst, "data/sg524.sim", "cmp/sg524.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
+	tests.CompareResults(tst, "data/sgm524.sim", "cmp/sgm524.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
-func Test_sg530(tst *testing.T) {
+func Test_sgm530(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("sg530. 3d tet4")
+	chk.PrintTitle("sgm530. 3d tet4")
 
 	// run simulation
-	main := fem.NewMain("data/sg530.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/sgm530.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
 	err := main.Run()
@@ -343,16 +343,16 @@ func Test_sg530(tst *testing.T) {
 	tolK := 1e-17
 	tolu := 1e-17
 	tols := 1e-15
-	tests.CompareResults(tst, "data/sg530.sim", "cmp/sg530.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
+	tests.CompareResults(tst, "data/sgm530.sim", "cmp/sgm530.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }
 
-func Test_sg422(tst *testing.T) {
+func Test_sgm422(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("sg422. small 3D frame")
+	chk.PrintTitle("sgm422. small 3D frame")
 
 	// run simulation
-	main := fem.NewMain("data/sg422.sim", "", true, true, false, false, chk.Verbose, 0)
+	main := fem.NewMain("data/sgm422.sim", "", true, true, false, false, chk.Verbose, 0)
 
 	// run simulation
 	err := main.Run()
@@ -372,5 +372,5 @@ func Test_sg422(tst *testing.T) {
 	tolK := 1e-17
 	tolu := 1e-17
 	tols := 1e-15
-	tests.CompareResults(tst, "data/sg422.sim", "cmp/sg422.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
+	tests.CompareResults(tst, "data/sgm422.sim", "cmp/sgm422.cmp", "", tolK, tolu, tols, skipK, chk.Verbose, nil)
 }

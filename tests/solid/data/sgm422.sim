@@ -1,7 +1,7 @@
 {
   "data" : {
     "desc" : "Smith-Griffiths (5th ed) Figure 4.22 p138",
-    "matfile" : "sg.mat",
+    "matfile" : "sgm.mat",
     "steady" : true
   },
   "functions" : [
@@ -9,7 +9,7 @@
   ],
   "regions" : [
     {
-      "mshfile"   : "sg422.msh",
+      "mshfile"   : "sgm422.msh",
       "elemsdata" : [
         { "tag":-1, "mat":"SG-4.22", "type":"beam", "extra":"!nsta:3" },
         { "tag":-2, "mat":"SG-4.22", "type":"beam", "extra":"!nsta:3" },

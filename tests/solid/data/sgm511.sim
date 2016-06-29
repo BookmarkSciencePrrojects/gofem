@@ -1,7 +1,7 @@
 {
   "data" : {
     "desc"    : "Smith-Griffiths (5th ed) Figure 5.11 p180",
-    "matfile" : "sg.mat",
+    "matfile" : "sgm.mat",
     "steady"  : true
   },
   "functions" : [
@@ -10,7 +10,7 @@
   "regions" : [
     {
       "desc"     : "flexible footing",
-      "mshfile"  : "sg511.msh",
+      "mshfile"  : "sgm511.msh",
       "elemsdata" : [
         { "tag":-1, "mat":"SG-5.11-M1", "type":"solid", "nip":4 }
       ]

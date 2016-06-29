@@ -1,7 +1,7 @@
 {
   "data" : {
     "desc"     : "Smith-Griffiths Figure 5.15 p183",
-    "matfile" : "sg.mat", 
+    "matfile" : "sgm.mat", 
     "steady"   : true
   },
   "functions" : [
@@ -10,7 +10,7 @@
   "regions" : [
     {
       "desc"      : "rectangle",
-      "mshfile"  : "sg515.msh",
+      "mshfile"  : "sgm515.msh",
       "elemsdata" : [
         { "tag":-1, "mat":"SG-5.15-M1", "type":"solid", "nip":4, "extra":"!useB:true" }
       ]
