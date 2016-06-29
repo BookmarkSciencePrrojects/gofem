@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/mdl/fld"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -87,7 +88,7 @@ func (o *EssentialBcs) Build(ny int) (nλ, nnzA int) {
 }
 
 // AddtoRhs adds the essential bcs / constraints terms to the augmented fb vector
-func (o *EssentialBcs) AddToRhs(fb []float64, sol *Solution) {
+func (o *EssentialBcs) AddToRhs(fb []float64, sol *ele.Solution) {
 
 	// skip if there are no constraints
 	if len(o.Bcs) == 0 {
@@ -244,7 +245,7 @@ func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.Func, extra string
 }
 
 // FixIniVals fixes functions of BCs that depend on initial values
-func (o *EssentialBcs) FixIniVals(sol *Solution) {
+func (o *EssentialBcs) FixIniVals(sol *ele.Solution) {
 	for eq, _ := range o.EqsIni {
 		for _, bc := range o.Bcs {
 			for _, eqOld := range bc.Eqs {

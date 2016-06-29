@@ -60,7 +60,7 @@ func (o Summary) Save(dirout, fnkey, enctype string, nproc, proc int, verbose bo
 
 	// buffer and encoder
 	var buf bytes.Buffer
-	enc := GetEncoder(&buf, enctype)
+	enc := utl.GetEncoder(&buf, enctype)
 
 	// encode summary
 	err = enc.Encode(o)
@@ -85,7 +85,7 @@ func (o *Summary) Read(dir, fnkey, enctype string) (err error) {
 	defer func() { err = fil.Close() }()
 
 	// decode summary
-	dec := GetDecoder(fil, enctype)
+	dec := utl.GetDecoder(fil, enctype)
 	err = dec.Decode(o)
 	if err != nil {
 		return chk.Err("cannot decode summary:\n%v", err)

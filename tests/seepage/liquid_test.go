@@ -16,7 +16,7 @@ import (
 	"github.com/cpmech/gosl/utl"
 )
 
-func Test_0p01a(tst *testing.T) {
+func Test_p01a(tst *testing.T) {
 
 	/* this tests simulates seepage flow along a column
 	 * by reducing the initial hydrostatic pressure at
@@ -53,7 +53,7 @@ func Test_0p01a(tst *testing.T) {
 	 */
 
 	//tests.Verbose()
-	chk.PrintTitle("0p01a")
+	chk.PrintTitle("p01a. Liquid. Check DOFs and BCs")
 
 	// start simulation
 	main := fem.NewMain("data/p01.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -149,10 +149,10 @@ func Test_0p01a(tst *testing.T) {
 	}
 }
 
-func Test_0p01b(tst *testing.T) {
+func Test_p01b(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("0p01b")
+	chk.PrintTitle("p01b. Liquid. Run")
 
 	// run simulation
 	main := fem.NewMain("data/p01.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -167,10 +167,10 @@ func Test_0p01b(tst *testing.T) {
 	// TODO: add check here
 }
 
-func Test_0p02(tst *testing.T) {
+func Test_p02(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("0p02")
+	chk.PrintTitle("p02. Liquid. Run and check Kb")
 
 	// run simulation
 	main := fem.NewMain("data/p02.sim", "", true, false, false, false, chk.Verbose, 0)

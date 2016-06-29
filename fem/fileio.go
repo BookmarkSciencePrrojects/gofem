@@ -6,44 +6,16 @@ package fem
 
 import (
 	"bytes"
-	"encoding/gob"
-	"encoding/json"
-	goio "io"
 	"os"
 	"path"
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
+	"github.com/cpmech/gosl/utl"
 )
 
-// Encoder defines encoders; e.g. gob or json
-type Encoder interface {
-	Encode(e interface{}) error
-}
-
-// Decoder defines decoders; e.g. gob or json
-type Decoder interface {
-	Decode(e interface{}) error
-}
-
-// GetEncoder returns a new encoder
-func GetEncoder(w goio.Writer, enctype string) Encoder {
-	if enctype == "json" {
-		return json.NewEncoder(w)
-	}
-	return gob.NewEncoder(w)
-}
-
-// GetDecoder returns a new decoder
-func GetDecoder(r goio.Reader, enctype string) Decoder {
-	if enctype == "json" {
-		return json.NewDecoder(r)
-	}
-	return gob.NewDecoder(r)
-}
-
 // SaveSol saves solution (o.Sol) to a file which name is set with tidx (time output index)
-func (o Domain) SaveSol(tidx int, verbose bool) (err error) {
+func (o *Domain) SaveSol(tidx int, verbose bool) (err error) {
 
 	// skip if root
 	if o.Proc != 0 {
@@ -52,7 +24,7 @@ func (o Domain) SaveSol(tidx int, verbose bool) (err error) {
 
 	// buffer and encoder
 	var buf bytes.Buffer
-	enc := GetEncoder(&buf, o.Sim.EncType)
+	enc := utl.GetEncoder(&buf, o.Sim.EncType)
 
 	// encode Sol
 	err = enc.Encode(o.Sol.T)
@@ -89,7 +61,7 @@ func (o *Domain) ReadSol(dir, fnkey, enctype string, tidx int) (err error) {
 	defer func() { err = fil.Close() }()
 
 	// get decoder
-	dec := GetDecoder(fil, enctype)
+	dec := utl.GetDecoder(fil, enctype)
 
 	// decode Sol
 	err = dec.Decode(&o.Sol.T)
@@ -112,11 +84,11 @@ func (o *Domain) ReadSol(dir, fnkey, enctype string, tidx int) (err error) {
 }
 
 // SaveIvs saves elements's internal values to a file which name is set with tidx (time output index)
-func (o Domain) SaveIvs(tidx int, verbose bool) (err error) {
+func (o *Domain) SaveIvs(tidx int, verbose bool) (err error) {
 
 	// buffer and encoder
 	var buf bytes.Buffer
-	enc := GetEncoder(&buf, o.Sim.EncType)
+	enc := utl.GetEncoder(&buf, o.Sim.EncType)
 
 	// elements that go to file
 	enc.Encode(o.MyCids)
@@ -146,7 +118,7 @@ func (o *Domain) ReadIvs(dir, fnkey, enctype string, tidx, proc int) (err error)
 	defer func() { err = fil.Close() }()
 
 	// decoder
-	dec := GetDecoder(fil, enctype)
+	dec := utl.GetDecoder(fil, enctype)
 
 	// elements that are in file
 	err = dec.Decode(&o.MyCids)

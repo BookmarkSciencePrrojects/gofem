@@ -56,7 +56,7 @@ func Test_upp01a(tst *testing.T) {
 	 */
 
 	//tests.Verbose()
-	chk.PrintTitle("upp01a")
+	chk.PrintTitle("upp01a. Solid-Liquid-Gas coupling. Check DOFs and BCs")
 
 	// start simulation
 	main := fem.NewMain("data/upp01.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -280,7 +280,7 @@ func Test_upp01a(tst *testing.T) {
 func Test_upp01b(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("upp01b")
+	chk.PrintTitle("upp01b. Solid-Liquid-Gas coupling. Run and check Kb")
 
 	// start simulation
 	main := fem.NewMain("data/upp01.sim", "", true, false, false, false, chk.Verbose, 0)

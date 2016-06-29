@@ -18,7 +18,7 @@ import (
 func Test_frees01a(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("frees01a")
+	chk.PrintTitle("frees01a. Freesurface liquid-only. Check DOFs and BCs")
 
 	// start simulation
 	main := fem.NewMain("data/frees01.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -77,7 +77,7 @@ func Test_frees01a(tst *testing.T) {
 func Test_frees01b(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("frees01b")
+	chk.PrintTitle("frees01b. Freesurface liquid-only. Run and check Kb")
 
 	// start simulation
 	main := fem.NewMain("data/frees01.sim", "", true, true, false, false, chk.Verbose, 0)

@@ -5,6 +5,7 @@
 package fem
 
 import (
+	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/inp"
 
 	"github.com/cpmech/gosl/chk"
@@ -12,41 +13,6 @@ import (
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 )
-
-// Solution holds the solution data @ nodes.
-//
-//        / u \         / u \
-//        |   | => y =  |   |
-//  yb =  | p |         \ p / (ny x 1)
-//        |   |
-//        \ λ / (nyb x 1)
-//
-type Solution struct {
-
-	// current state
-	T      float64   // current time
-	Y      []float64 // DOFs (solution variables); e.g. y = {u, p}
-	Dydt   []float64 // dy/dt
-	D2ydt2 []float64 // d²y/dt²
-
-	// auxiliary
-	Dt  float64   // current time increment
-	ΔY  []float64 // total increment (for nonlinear solver)
-	Psi []float64 // t1 star vars; e.g. ψ* = β1.p + β2.dpdt
-	Zet []float64 // t2 star vars; e.g. ζ* = α1.u + α2.v + α3.a
-	Chi []float64 // t2 star vars; e.g. χ* = α4.u + α5.v + α6.a
-	L   []float64 // Lagrange multipliers
-
-	// extrapolated values
-	Ext map[int][]float64 // [optional] extrapolated values. nodeId => values (e.g. σ)
-	Cnt map[int]int       // [optional] counter for number of additions each node of Ext
-
-	// problem definition and constants
-	Steady  bool      // [from Sim] steady simulation
-	Axisym  bool      // [from Sim] axisymmetric
-	Pstress bool      // [from Sim] plane-stress
-	DynCfs  *DynCoefs // [from FEM] coefficients for dynamics/transient simulations
-}
 
 // Domain holds all Nodes and Elements active during a stage in addition to the Solution at nodes.
 // Only elements in this processor are recorded here; however information from
@@ -62,12 +28,12 @@ type Domain struct {
 	Reg     *inp.Region     // region data
 	Msh     *inp.Mesh       // mesh data
 	LinSol  la.LinSol       // linear solver
-	DynCfs  *DynCoefs       // [from FEM] coefficients for dynamics/transient simulations
+	DynCfs  *ele.DynCoefs   // [from FEM] coefficients for dynamics/transient simulations
 
 	// stage: nodes (active) and elements (active AND in this processor)
-	Nodes  []*Node // active nodes (for each stage). Note: indices in Nodes do NOT correpond to Ids => use Vid2node to access Nodes using Ids.
-	Elems  []Elem  // [procNcells] only active elements in this processor (for each stage)
-	MyCids []int   // [procNcells] the ids of cells in this processor
+	Nodes  []*Node       // active nodes (for each stage). Note: indices in Nodes do NOT correpond to Ids => use Vid2node to access Nodes using Ids.
+	Elems  []ele.Element // [procNcells] only active elements in this processor (for each stage)
+	MyCids []int         // [procNcells] the ids of cells in this processor
 
 	// stage: auxiliary maps for dofs and equation types
 	F2Y      map[string]string // converts f-keys to y-keys; e.g.: "ux" => "fx"
@@ -75,17 +41,17 @@ type Domain struct {
 	Dof2Tnum map[string]int    // {t1,t2}-types: dof => t_number; e.g. "ux" => 2, "pl" => 1
 
 	// stage: auxiliary maps for nodes and elements
-	Vid2node   []*Node // [nverts] VertexId => index in Nodes. Inactive vertices are 'nil'
-	Cid2elem   []Elem  // [ncells] CellId => index in Elems. Cells in other processors or inactive are 'nil'
-	Cid2active []bool  // [ncells] CellId => whether cell is active or not in ANY processor
+	Vid2node   []*Node       // [nverts] VertexId => index in Nodes. Inactive vertices are 'nil'
+	Cid2elem   []ele.Element // [ncells] CellId => index in Elems. Cells in other processors or inactive are 'nil'
+	Cid2active []bool        // [ncells] CellId => whether cell is active or not in ANY processor
 
 	// stage: subsets of elements
-	ElemIntvars   []ElemIntvars   // elements with internal vars in this processor
-	ElemIvsCon    []ElemIntvars   // elements with internal vars that are connectors
-	ElemIvsNotCon []ElemIntvars   // elements with internal vars that are not connectors
-	ElemConnect   []ElemConnector // connector elements in this processor
-	ElemExtrap    []ElemExtrap    // elements with internal values to be extrapolated
-	ElemFixedKM   []ElemFixedKM   // elements with fixed K,M matrices; to be recomputed if prms are changed
+	ElemIntvars   []ele.WithIntVars    // elements with internal vars in this processor
+	ElemIvsCon    []ele.WithIntVars    // elements with internal vars that are connectors
+	ElemIvsNotCon []ele.WithIntVars    // elements with internal vars that are not connectors
+	ElemConnect   []ele.Connector      // connector elements in this processor
+	ElemExtrap    []ele.CanExtrapolate // elements with internal values to be extrapolated
+	ElemFixedKM   []ele.WithFixedKM    // elements with fixed K,M matrices; to be recomputed if prms are changed
 
 	// stage: coefficients and prescribed forces
 	EssenBcs EssentialBcs // constraints (Lagrange multipliers)
@@ -103,14 +69,14 @@ type Domain struct {
 	Nyb   int // total number of equations: ny + nλ
 
 	// stage: solution and linear solver
-	Sol      *Solution   // solution state
-	Kb       *la.Triplet // Jacobian == dRdy
-	Fb       []float64   // residual == -fb
-	Wb       []float64   // workspace
-	InitLSol bool        // flag telling that linear solver needs to be initialised prior to any further call
+	Sol      *ele.Solution // solution state
+	Kb       *la.Triplet   // Jacobian == dRdy
+	Fb       []float64     // residual == -fb
+	Wb       []float64     // workspace
+	InitLSol bool          // flag telling that linear solver needs to be initialised prior to any further call
 
 	// for divergence control
-	bkpSol *Solution // backup solution
+	bkpSol *ele.Solution // backup solution
 }
 
 // Clean cleans memory allocated by domain
@@ -120,7 +86,7 @@ func (o *Domain) Clean() {
 }
 
 // NewDomains returns domains
-func NewDomains(sim *inp.Simulation, dyncfs *DynCoefs, proc, nproc int, distr, verb bool) (doms []*Domain) {
+func NewDomains(sim *inp.Simulation, dyncfs *ele.DynCoefs, proc, nproc int, distr, verb bool) (doms []*Domain) {
 	doms = make([]*Domain, len(sim.Regions))
 	for i, reg := range sim.Regions {
 		doms[i] = new(Domain)
@@ -163,7 +129,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 
 	// nodes (active) and elements (active AND in this processor)
 	o.Nodes = make([]*Node, 0)
-	o.Elems = make([]Elem, 0)
+	o.Elems = make([]ele.Element, 0)
 	o.MyCids = make([]int, 0)
 
 	// auxiliary maps for dofs and equation types
@@ -173,12 +139,12 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 
 	// auxiliary maps for nodes and elements
 	o.Vid2node = make([]*Node, len(o.Msh.Verts))
-	o.Cid2elem = make([]Elem, len(o.Msh.Cells))
+	o.Cid2elem = make([]ele.Element, len(o.Msh.Cells))
 	o.Cid2active = make([]bool, len(o.Msh.Cells))
 
 	// subsets of elements
-	o.ElemConnect = make([]ElemConnector, 0)
-	o.ElemIntvars = make([]ElemIntvars, 0)
+	o.ElemConnect = make([]ele.Connector, 0)
+	o.ElemIntvars = make([]ele.WithIntVars, 0)
 
 	// allocate nodes and cells (active only) -------------------------------------------------------
 
@@ -194,7 +160,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 		}
 
 		// get element info
-		info, inactive, err := GetElemInfo(cell, o.Reg, o.Sim)
+		info, inactive, err := ele.GetInfo(cell, o.Reg, o.Sim)
 		if err != nil {
 			return chk.Err("get element information failed:\n%v", err)
 		}
@@ -254,7 +220,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 		if mycell || !o.Distr {
 
 			// new element
-			ele, err := NewElem(cell, o.Reg, o.Sim)
+			ele, err := ele.New(cell, o.Reg, o.Sim)
 			if err != nil {
 				return chk.Err("new element failed:\n%v", err)
 			}
@@ -389,7 +355,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 	o.Nyb = o.Ny + o.Nlam
 
 	// solution structure and linear solver
-	o.Sol = new(Solution)
+	o.Sol = new(ele.Solution)
 	o.Sol.Steady = o.Sim.Data.Steady
 	o.Sol.Axisym = o.Sim.Data.Axisym
 	o.Sol.Pstress = o.Sim.Data.Pstress
@@ -577,34 +543,13 @@ func (o *Domain) RecomputeKM() {
 
 // auxiliary functions //////////////////////////////////////////////////////////////////////////////
 
-// Reset clear values
-func (o *Solution) Reset(steady bool) {
-	o.T = 0
-	for i := 0; i < len(o.Y); i++ {
-		o.Y[i] = 0
-		o.ΔY[i] = 0
-	}
-	if !steady {
-		for i := 0; i < len(o.Y); i++ {
-			o.Psi[i] = 0
-			o.Zet[i] = 0
-			o.Chi[i] = 0
-			o.Dydt[i] = 0
-			o.D2ydt2[i] = 0
-		}
-	}
-	for i := 0; i < len(o.L); i++ {
-		o.L[i] = 0
-	}
-}
-
 // add_element_to_subsets adds an Elem to many subsets as it fits
-func (o *Domain) add_element_to_subsets(info *Info, ele Elem) {
+func (o *Domain) add_element_to_subsets(info *ele.Info, element ele.Element) {
 
 	// elements with internal variables
-	if e, ok := ele.(ElemIntvars); ok {
+	if e, ok := element.(ele.WithIntVars); ok {
 		o.ElemIntvars = append(o.ElemIntvars, e)
-		if _, connector := ele.(ElemConnector); connector {
+		if _, connector := element.(ele.Connector); connector {
 			o.ElemIvsCon = append(o.ElemIvsCon, e)
 		} else {
 			o.ElemIvsNotCon = append(o.ElemIvsNotCon, e)
@@ -612,19 +557,19 @@ func (o *Domain) add_element_to_subsets(info *Info, ele Elem) {
 	}
 
 	// connector elements
-	if e, ok := ele.(ElemConnector); ok {
+	if e, ok := element.(ele.Connector); ok {
 		o.ElemConnect = append(o.ElemConnect, e)
 	}
 
 	// subset of elements with data to be extrapolated
 	if info.Nextrap > 0 {
-		if e, ok := ele.(ElemExtrap); ok {
+		if e, ok := element.(ele.CanExtrapolate); ok {
 			o.ElemExtrap = append(o.ElemExtrap, e)
 		}
 	}
 
 	// subset of elements with fixed KM
-	if e, ok := ele.(ElemFixedKM); ok {
+	if e, ok := element.(ele.WithFixedKM); ok {
 		o.ElemFixedKM = append(o.ElemFixedKM, e)
 	}
 }
@@ -652,7 +597,7 @@ func (o *Domain) fix_inact_flags(eids_or_tags []int, deactivate bool) (err error
 // backup saves a copy of solution
 func (o *Domain) backup() {
 	if o.bkpSol == nil {
-		o.bkpSol = new(Solution)
+		o.bkpSol = new(ele.Solution)
 		o.bkpSol.Y = make([]float64, o.Ny)
 		o.bkpSol.ΔY = make([]float64, o.Ny)
 		o.bkpSol.L = make([]float64, o.Nlam)

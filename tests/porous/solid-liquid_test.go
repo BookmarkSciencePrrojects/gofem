@@ -59,7 +59,7 @@ func Test_up01a(tst *testing.T) {
 	 */
 
 	//tests.Verbose()
-	chk.PrintTitle("up01a")
+	chk.PrintTitle("up01a. Solid-Liquid coupling. Check DOFs")
 
 	// start simulation
 	main := fem.NewMain("data/up01.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -267,7 +267,7 @@ func Test_up01a(tst *testing.T) {
 func Test_up01b(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("up01b")
+	chk.PrintTitle("up01b. Solid-Liquid coupling. Run")
 
 	// start simulation
 	main := fem.NewMain("data/up01.sim", "", true, true, false, false, chk.Verbose, 0)
