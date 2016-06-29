@@ -53,29 +53,29 @@ Bhatti MA (2005) Fundamental Finite Element Analysis and Applications, Wiley, 70
 
 Smith IM, Griffiths DV and Margetts L (2014) Programming the Finite Element Method, 5th Edition, Wiley, 664p.
 
- 1. sgm52a. plane strain tri3. check DOFs
- 2. sgm52b. plane strain tri3. run
- 3. sgm57. plane strain tri15. qn given
- 4. sgm511. plane strain qua4. disp given
- 5. sgm515. plane strain qua8. qn given
- 6. sgm527. plane strain qua9. qn given
- 7. sgm517. axisymmetric qua4
- 8. sgm524. 3d hex8
- 9. sgm530. 3d tet4
+1. sgm52a. plane strain tri3. check DOFs
+2. sgm52b. plane strain tri3. run
+3. sgm57. plane strain tri15. qn given
+4. sgm511. plane strain qua4. disp given
+5. sgm515. plane strain qua8. qn given
+6. sgm527. plane strain qua9. qn given
+7. sgm517. axisymmetric qua4
+8. sgm524. 3d hex8
+9. sgm530. 3d tet4
 10. sgm422. small 3D frame
 
 ## Smooth contact element
 
 1. contact01b
 
-## Genral Solid Element
+## General Solid Element
 1. sigini01. zero displacements. initial stresses
 2. sigini02. initial stresses. run simulation
 3. square01. ini stress free square
 4. selfweight01. self-weight
 5. selfweight02. self-weight
 
-## De Souza Neto, Peric and Owen' Book
+## De Souza Neto, Peric and Owen's Book
 
 *Reference*
 
