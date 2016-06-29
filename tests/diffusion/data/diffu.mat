@@ -2,8 +2,8 @@
   "materials" : [
     {
       "name"  : "mat1",
-      "type"  : "gen",
-      "model" : "diffu01",
+      "type"  : "dif",
+      "model" : "m1",
       "prms"  : [
         {"n":"a0", "v":1.0},
         {"n":"k",  "v":1.0}

@@ -10,8 +10,8 @@ import (
 
 	"github.com/cpmech/gofem/ele/seepage"
 	"github.com/cpmech/gofem/fem"
-	"github.com/cpmech/gofem/mdl/cnd"
-	"github.com/cpmech/gofem/mdl/por"
+	"github.com/cpmech/gofem/mdl/conduct"
+	"github.com/cpmech/gofem/mdl/porous"
 	"github.com/cpmech/gofem/tests"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
@@ -210,12 +210,12 @@ func Test_pp01b(tst *testing.T) {
 		Cnd := ele.Mdl.Cnd
 		if true {
 			plt.SetForEps(1.2, 350)
-			por.PlotLrm(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true, "", "", "", "", "")
+			porous.PlotLrm(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true, "", "", "", "", "")
 			plt.SetForEps(1.2, 350)
-			cnd.Plot(Cnd, "/tmp/gofem", "fig_pp01b_liq.eps", 101, false, true, true)
+			conduct.Plot(Cnd, "/tmp/gofem", "fig_pp01b_liq.eps", 101, false, true, true)
 		}
 		plt.SetForEps(1.2, 350)
-		cnd.Plot(Cnd, "/tmp/gofem", "fig_pp01b_gas.eps", 101, true, true, true)
+		conduct.Plot(Cnd, "/tmp/gofem", "fig_pp01b_gas.eps", 101, true, true, true)
 	}
 
 	// TODO: add check here
