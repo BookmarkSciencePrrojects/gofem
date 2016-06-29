@@ -1,9 +1,6 @@
 {
   "data" : {
-    "matfile" : "porous.mat",
-    "liq"     : "water",
-    "gas"     : "dryair",
-    "nolbb"   : false
+    "matfile" : "porous.mat"
   },
   "functions" : [
     { "name":"grav", "type":"cte", "prms":[{"n":"c", "v":10}] }
@@ -12,7 +9,7 @@
     {
       "mshfile" : "squareQ9.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"porous1", "type":"solid-liquid-gas" }
+        { "tag":-1, "mat":"porous1", "type":"liquid" }
       ]
     }
   ],

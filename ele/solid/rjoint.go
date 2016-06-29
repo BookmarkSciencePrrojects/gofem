@@ -7,7 +7,7 @@ package solid
 import (
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mdl/sld"
+	"github.com/cpmech/gofem/mdl/solid"
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -59,13 +59,13 @@ type Rjoint struct {
 	Sim  *inp.Simulation // simulation
 	Edat *inp.ElemData   // element data; stored in allocator to be used in Connect
 	Cell *inp.Cell       // the cell structure
-	Ny   int             // total number of dofs == rod.Nu + sld.Nu
+	Ny   int             // total number of dofs == rod.Nu + solid.Nu
 	Ndim int             // space dimension
 
 	// essential
-	Rod *Rod          // rod element
-	Sld *Solid        // solid element
-	Mdl *sld.RjointM1 // material model
+	Rod *Rod            // rod element
+	Sld *Solid          // solid element
+	Mdl *solid.RjointM1 // material model
 
 	// shape functions evaluations and extrapolator matrices
 	Nmat [][]float64 // [sldNn][rodNn] shape functions of solids @ [N]odes of rod element
@@ -98,9 +98,9 @@ type Rjoint struct {
 	Kss [][]float64 // [sldNu][sldNu] Eq. (61)
 
 	// internal values
-	States    []*sld.OnedState // [nip] internal states
-	StatesBkp []*sld.OnedState // [nip] backup internal states
-	StatesAux []*sld.OnedState // [nip] backup internal states
+	States    []*solid.OnedState // [nip] internal states
+	StatesBkp []*solid.OnedState // [nip] backup internal states
+	StatesAux []*solid.OnedState // [nip] backup internal states
 
 	// extra variables for consistent tangent operator
 	Ncns   bool            // use non-consistent model
@@ -163,7 +163,7 @@ func (o *Rjoint) Connect(cid2elem []ele.Element, c *inp.Cell) (nnzK int, err err
 		err = chk.Err("materials database failed on getting %q material\n", o.Edat.Mat)
 		return
 	}
-	o.Mdl = mat.Sld.(*sld.RjointM1)
+	o.Mdl = mat.Sld.(*solid.RjointM1)
 
 	// flag
 	o.Coulomb = o.Mdl.A_μ > 0
@@ -731,9 +731,9 @@ func (o *Rjoint) Update(sol *ele.Solution) (err error) {
 // SetIniIvs sets initial ivs for given values in sol and ivs map
 func (o *Rjoint) SetIniIvs(sol *ele.Solution, ivs map[string][]float64) (err error) {
 	nip := len(o.Rod.IpsElem)
-	o.States = make([]*sld.OnedState, nip)
-	o.StatesBkp = make([]*sld.OnedState, nip)
-	o.StatesAux = make([]*sld.OnedState, nip)
+	o.States = make([]*solid.OnedState, nip)
+	o.StatesBkp = make([]*solid.OnedState, nip)
+	o.StatesAux = make([]*solid.OnedState, nip)
 	for i := 0; i < nip; i++ {
 		o.States[i], _ = o.Mdl.InitIntVars1D()
 		o.StatesBkp[i] = o.States[i].GetCopy()

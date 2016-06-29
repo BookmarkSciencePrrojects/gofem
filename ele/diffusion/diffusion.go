@@ -8,7 +8,7 @@ package diffusion
 import (
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mdl/gen"
+	"github.com/cpmech/gofem/mdl/diffusion"
 	"github.com/cpmech/gofem/shp"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -25,12 +25,12 @@ import (
 type Diffusion struct {
 
 	// basic data
-	Cell *inp.Cell    // the cell structure
-	X    [][]float64  // matrix of nodal coordinates [ndim][nnode]
-	Ndim int          // space dimension
-	Umap []int        // assembly map (location array/element equations)
-	Mdl  *gen.Diffu01 // model
-	Sfun fun.Func     // s(x) function
+	Cell *inp.Cell     // the cell structure
+	X    [][]float64   // matrix of nodal coordinates [ndim][nnode]
+	Ndim int           // space dimension
+	Umap []int         // assembly map (location array/element equations)
+	Mdl  *diffusion.M1 // model
+	Sfun fun.Func      // s(x) function
 
 	// integration points
 	IpsElem []shp.Ipoint // integration points of element
@@ -96,7 +96,7 @@ func init() {
 		if mat == nil {
 			chk.Panic("cannot get model for diffusion element {tag=%d id=%d material=%q}:\n%v", cell.Tag, cell.Id, edat.Mat, err)
 		}
-		o.Mdl = mat.Gen.(*gen.Diffu01)
+		o.Mdl = mat.Dif.(*diffusion.M1)
 		if sim.Data.Steady {
 			o.Mdl.Rho = 0
 		}

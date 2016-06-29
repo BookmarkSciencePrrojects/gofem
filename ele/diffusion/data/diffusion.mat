@@ -1,0 +1,14 @@
+{
+  "materials" : [
+    {
+      "name"  : "material",
+      "type"  : "dif",
+      "model" : "m1",
+      "prms"  : [
+        {"n":"rho", "v":1},
+        {"n":"a0",  "v":1},
+        {"n":"k",   "v":1}
+      ]
+    }
+  ]
+}

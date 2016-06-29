@@ -10,7 +10,7 @@ import (
 
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mdl/fld"
+	"github.com/cpmech/gofem/mdl/fluid"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/utl"
 )
@@ -49,9 +49,9 @@ type ColLayer struct {
 	SigV float64 // state @ top of layer
 
 	// auxiliary
-	Grav float64    // gravity
-	Liq  *fld.Model // liquid model
-	Gas  *fld.Model // gas model
+	Grav float64      // gravity
+	Liq  *fluid.Model // liquid model
+	Gas  *fluid.Model // gas model
 }
 
 // Calc_ρ computes ρ (mixture density)

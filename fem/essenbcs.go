@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/cpmech/gofem/ele"
-	"github.com/cpmech/gofem/mdl/fld"
+	"github.com/cpmech/gofem/mdl/fluid"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
@@ -43,7 +43,7 @@ type EbcArray []*EssentialBc
 // EssentialBcs implements a structure to record the definition of essential bcs / constraints.
 // Each constraint will have a unique Lagrange multiplier index.
 type EssentialBcs struct {
-	LiqMdl *fld.Model   // for computing hydrostatic conditions
+	LiqMdl *fluid.Model // for computing hydrostatic conditions
 	EqsIni map[int]bool // equations that depend on initial values
 	Bcs    EbcArray     // active essential bcs / constraints
 	A      la.Triplet   // matrix of coefficients 'A'
@@ -51,7 +51,7 @@ type EssentialBcs struct {
 }
 
 // Init initialises this structure
-func (o *EssentialBcs) Init(liqmdl *fld.Model) {
+func (o *EssentialBcs) Init(liqmdl *fluid.Model) {
 	o.LiqMdl = liqmdl
 	o.EqsIni = make(map[int]bool)
 	o.Bcs = make([]*EssentialBc, 0)

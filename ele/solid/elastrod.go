@@ -9,7 +9,7 @@ import (
 
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mdl/sld"
+	"github.com/cpmech/gofem/mdl/solid"
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -28,8 +28,8 @@ type ElastRod struct {
 	Ndim int         // space dimension
 
 	// parameters and properties
-	Mdl *sld.OnedLinElast // material model with: E, G, A, I22, I11, Jtt and Rho
-	L   float64           // length of rod
+	Mdl *solid.OnedLinElast // material model with: E, G, A, I22, I11, Jtt and Rho
+	L   float64             // length of rod
 
 	// variables for dynamics
 	Gfcn fun.Func // gravity function
@@ -94,7 +94,7 @@ func init() {
 		if mat == nil {
 			chk.Panic("cannot get materials data for elastic rod element {tag=%d id=%d material=%q}", cell.Tag, cell.Id, edat.Mat)
 		}
-		o.Mdl = mat.Sld.(*sld.OnedLinElast)
+		o.Mdl = mat.Sld.(*solid.OnedLinElast)
 
 		// vectors and matrices
 		o.K = la.MatAlloc(o.Nu, o.Nu)

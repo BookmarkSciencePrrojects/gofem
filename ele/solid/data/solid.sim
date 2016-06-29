@@ -1,0 +1,15 @@
+{
+  "data" : {
+    "matfile" : "solid.mat"
+  },
+  "regions" : [
+    {
+      "mshfile" : "squareQ9.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"solid1", "type":"solid" }
+      ]
+    }
+  ],
+  "stages" : [
+  ]
+}

@@ -7,7 +7,7 @@ package solid
 import (
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mdl/sld"
+	"github.com/cpmech/gofem/mdl/solid"
 	"github.com/cpmech/gofem/shp"
 
 	"github.com/cpmech/gosl/chk"
@@ -26,14 +26,14 @@ type BjointComp struct {
 	Sim    *inp.Simulation // simulation
 	Cell   *inp.Cell       // the cell structure
 	Edat   *inp.ElemData   // element data; stored in allocator to be used in Connect
-	Ny     int             // total number of dofs == LinNu + sld.Nu where LinNu is the number of displacement DOFs of beam == 2*Ndim
+	Ny     int             // total number of dofs == LinNu + solid.Nu where LinNu is the number of displacement DOFs of beam == 2*Ndim
 	Ndim   int             // space dimension
 	TolNod float64         // tolerance to find beam/solid compatible nodes
 
 	// essential
-	Lin *Beam         // beam (line) element
-	Sld *Solid        // solid element
-	Mdl *sld.RjointM1 // material model
+	Lin *Beam           // beam (line) element
+	Sld *Solid          // solid element
+	Mdl *solid.RjointM1 // material model
 
 	// asembly maps
 	LinUmap []int // beam umap with displacement DOFs equations only
@@ -60,9 +60,9 @@ type BjointComp struct {
 	Kss [][]float64 // [linNu][linNu] K_sld_sld: ∂fs/∂u
 
 	// internal values
-	States    []*sld.OnedState // [nip] internal states
-	StatesBkp []*sld.OnedState // [nip] backup internal states
-	StatesAux []*sld.OnedState // [nip] backup internal states
+	States    []*solid.OnedState // [nip] internal states
+	StatesBkp []*solid.OnedState // [nip] backup internal states
+	StatesAux []*solid.OnedState // [nip] backup internal states
 }
 
 // initialisation ///////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +162,7 @@ func (o *BjointComp) Connect(cid2elem []ele.Element, cell *inp.Cell) (nnzK int, 
 		err = chk.Err("materials database failed on getting %q material\n", o.Edat.Mat)
 		return
 	}
-	o.Mdl = mat.Sld.(*sld.RjointM1)
+	o.Mdl = mat.Sld.(*solid.RjointM1)
 
 	// variables for Coulomb model (scratchpad)
 	nsig := 2 * o.Ndim
@@ -410,9 +410,9 @@ func (o *BjointComp) Update(sol *ele.Solution) (err error) {
 // SetIniIvs sets initial ivs for given values in sol and ivs map
 func (o *BjointComp) SetIniIvs(sol *ele.Solution, ivs map[string][]float64) (err error) {
 	nip := len(o.LinIps)
-	o.States = make([]*sld.OnedState, nip)
-	o.StatesBkp = make([]*sld.OnedState, nip)
-	o.StatesAux = make([]*sld.OnedState, nip)
+	o.States = make([]*solid.OnedState, nip)
+	o.StatesBkp = make([]*solid.OnedState, nip)
+	o.StatesAux = make([]*solid.OnedState, nip)
 	for i := 0; i < nip; i++ {
 		o.States[i], _ = o.Mdl.InitIntVars1D()
 		o.StatesBkp[i] = o.States[i].GetCopy()

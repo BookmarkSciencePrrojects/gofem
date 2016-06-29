@@ -9,7 +9,7 @@ import (
 
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mdl/por"
+	"github.com/cpmech/gofem/mdl/porous"
 	"github.com/cpmech/gofem/shp"
 
 	"github.com/cpmech/gosl/chk"
@@ -33,16 +33,16 @@ type LiquidGas struct {
 	IpsFace []shp.Ipoint // integration points corresponding to faces
 
 	// material model
-	Mdl *por.Model // model
+	Mdl *porous.Model // model
 
 	// problem variables
 	Plmap []int // assembly map -- liquid pressure
 	Pgmap []int // assembly map -- gas pressure
 
 	// internal variables
-	States    []*por.State
-	StatesBkp []*por.State
-	StatesAux []*por.State
+	States    []*porous.State
+	StatesBkp []*porous.State
+	StatesAux []*porous.State
 
 	// gravity
 	Gfcn fun.Func // gravity function
@@ -75,25 +75,25 @@ type LiquidGas struct {
 	PsiG []float64 // [nip] ψg* = β1・pg + β2・dpgdt
 
 	// scratchpad. computed @ each ip
-	Grav      []float64    // [ndim] gravity vector
-	Pl        float64      // pl: liquid pressure
-	Pg        float64      // pg: gas pressure
-	GradPl    []float64    // [ndim] ∇pl: gradient of liquid pressure
-	GradPg    []float64    // [ndim] ∇pg: gradient of gas pressure
-	Wlb       []float64    // [ndim] wlb = ρl*wl: augmented filter velocity -- liquid
-	Wgb       []float64    // [ndim] wgb = ρg*wg: augmented filter velocity -- gas
-	Dwlbdpl_n []float64    // [ndim] dwlb/dpl^n
-	Dwlbdpg_n []float64    // [ndim] dwlb/dpg^n
-	Dwgbdpl_n []float64    // [ndim] dwgb/dpl^n
-	Dwgbdpg_n []float64    // [ndim] dwgb/dpg^n
-	Kll       [][]float64  // [np][np] dRpl/dpl consistent tangent matrix
-	Klg       [][]float64  // [np][np] dRpl/dpg consistent tangent matrix
-	Kgl       [][]float64  // [np][np] dRpg/dpl consistent tangent matrix
-	Kgg       [][]float64  // [np][np] dRpg/dpg consistent tangent matrix
-	Klf       [][]float64  // [np][nf] dRpl/dfl consistent tangent matrix
-	Kfl       [][]float64  // [nf][np] dRfl/dpl consistent tangent matrix
-	Kff       [][]float64  // [nf][nf] dRfl/dfl consistent tangent matrix
-	LgsVars   *por.LgsVars // variable to hold results from CalcLgs
+	Grav      []float64       // [ndim] gravity vector
+	Pl        float64         // pl: liquid pressure
+	Pg        float64         // pg: gas pressure
+	GradPl    []float64       // [ndim] ∇pl: gradient of liquid pressure
+	GradPg    []float64       // [ndim] ∇pg: gradient of gas pressure
+	Wlb       []float64       // [ndim] wlb = ρl*wl: augmented filter velocity -- liquid
+	Wgb       []float64       // [ndim] wgb = ρg*wg: augmented filter velocity -- gas
+	Dwlbdpl_n []float64       // [ndim] dwlb/dpl^n
+	Dwlbdpg_n []float64       // [ndim] dwlb/dpg^n
+	Dwgbdpl_n []float64       // [ndim] dwgb/dpl^n
+	Dwgbdpg_n []float64       // [ndim] dwgb/dpg^n
+	Kll       [][]float64     // [np][np] dRpl/dpl consistent tangent matrix
+	Klg       [][]float64     // [np][np] dRpl/dpg consistent tangent matrix
+	Kgl       [][]float64     // [np][np] dRpg/dpl consistent tangent matrix
+	Kgg       [][]float64     // [np][np] dRpg/dpg consistent tangent matrix
+	Klf       [][]float64     // [np][nf] dRpl/dfl consistent tangent matrix
+	Kfl       [][]float64     // [nf][np] dRfl/dpl consistent tangent matrix
+	Kff       [][]float64     // [nf][nf] dRfl/dfl consistent tangent matrix
+	LgsVars   *porous.LgsVars // variable to hold results from CalcLgs
 }
 
 // initialisation ///////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ func init() {
 		o.Klg = la.MatAlloc(o.Np, o.Np)
 		o.Kgl = la.MatAlloc(o.Np, o.Np)
 		o.Kgg = la.MatAlloc(o.Np, o.Np)
-		o.LgsVars = new(por.LgsVars)
+		o.LgsVars = new(porous.LgsVars)
 
 		// vertices on seepage faces
 		var seepverts []int
@@ -572,9 +572,9 @@ func (o *LiquidGas) SetIniIvs(sol *ele.Solution, ignored map[string][]float64) (
 	var ρL, ρG, pl, pg float64
 
 	// allocate slices of states
-	o.States = make([]*por.State, nip)
-	o.StatesBkp = make([]*por.State, nip)
-	o.StatesAux = make([]*por.State, nip)
+	o.States = make([]*porous.State, nip)
+	o.StatesBkp = make([]*porous.State, nip)
+	o.StatesAux = make([]*porous.State, nip)
 
 	// for each integration point
 	for idx, ip := range o.IpsElem {

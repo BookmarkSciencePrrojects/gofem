@@ -15,7 +15,7 @@ type Model interface {
 	Init(ndim int, prms fun.Prms) error // Init initialises this structure
 }
 
-// New generic model
+// New diffusion model
 func New(name string) (model Model, err error) {
 	allocator, ok := allocators[name]
 	if !ok {

@@ -8,7 +8,7 @@ package solid
 import (
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mdl/sld"
+	"github.com/cpmech/gofem/mdl/solid"
 	"github.com/cpmech/gofem/shp"
 
 	"github.com/cpmech/gosl/chk"
@@ -42,14 +42,14 @@ type Solid struct {
 	IpsFace []shp.Ipoint // integration points corresponding to faces
 
 	// material model and internal variables
-	Mdl      sld.Model // material model
-	MdlSmall sld.Small // model specialisation for small strains
-	MdlLarge sld.Large // model specialisation for large deformations
+	Mdl      solid.Model // material model
+	MdlSmall solid.Small // model specialisation for small strains
+	MdlLarge solid.Large // model specialisation for large deformations
 
 	// internal variables
-	States    []*sld.State // [nip] states
-	StatesBkp []*sld.State // [nip] backup states
-	StatesAux []*sld.State // [nip] auxiliary backup states
+	States    []*solid.State // [nip] states
+	StatesBkp []*solid.State // [nip] backup states
+	StatesAux []*solid.State // [nip] auxiliary backup states
 
 	// additional variables
 	Umap   []int            // assembly map (location array/element equations)
@@ -176,9 +176,9 @@ func init() {
 
 		// model specialisations
 		switch m := o.Mdl.(type) {
-		case sld.Small:
+		case solid.Small:
 			o.MdlSmall = m
-		case sld.Large:
+		case solid.Large:
 			o.MdlLarge = m
 		default:
 			chk.Panic("__internal_error__: 'u' element cannot determine the type of the material model")
@@ -520,9 +520,9 @@ func (o *Solid) SetIniIvs(sol *ele.Solution, ivs map[string][]float64) (err erro
 
 	// allocate slices of states
 	nip := len(o.IpsElem)
-	o.States = make([]*sld.State, nip)
-	o.StatesBkp = make([]*sld.State, nip)
-	o.StatesAux = make([]*sld.State, nip)
+	o.States = make([]*solid.State, nip)
+	o.StatesBkp = make([]*solid.State, nip)
+	o.StatesAux = make([]*solid.State, nip)
 
 	// has specified stresses?
 	_, has_sig := ivs["sx"]

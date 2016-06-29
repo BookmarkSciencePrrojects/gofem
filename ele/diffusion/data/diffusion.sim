@@ -1,0 +1,17 @@
+{
+  "data" : {
+    "matfile" : "diffusion.mat"
+  },
+  "regions" : [
+    {
+      "mshfile" : "squareQ9.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"material", "type":"diffusion" }
+      ]
+    }
+  ],
+  "stages" : [
+    {
+    }
+  ]
+}

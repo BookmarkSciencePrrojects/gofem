@@ -9,7 +9,7 @@ import (
 
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/inp"
-	"github.com/cpmech/gofem/mdl/sld"
+	"github.com/cpmech/gofem/mdl/solid"
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -56,8 +56,8 @@ type Beam struct {
 	Ndim int         // space dimension
 
 	// parameters and properties
-	Mdl *sld.OnedLinElast // material model with: E, G, A, I22, I11, Jtt and Rho
-	L   float64           // (derived) length of beam
+	Mdl *solid.OnedLinElast // material model with: E, G, A, I22, I11, Jtt and Rho
+	L   float64             // (derived) length of beam
 
 	// for output
 	Nstations int // number of points along beam to generate bending moment / shear force diagrams
@@ -141,7 +141,7 @@ func init() {
 		if mat == nil {
 			chk.Panic("cannot find material %q for beam {tag=%d, id=%d}\n", edat.Mat, cell.Tag, cell.Id)
 		}
-		o.Mdl = mat.Sld.(*sld.OnedLinElast)
+		o.Mdl = mat.Sld.(*solid.OnedLinElast)
 
 		// check
 		ϵp := 1e-9
