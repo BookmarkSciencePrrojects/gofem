@@ -60,12 +60,6 @@ cd gofem
 The documentation for developers is available here: http://rawgit.com/cpmech/gofem/master/doc/index.html
 
 
-## Acknowledgements
-Funding from the Australian Research Council is gratefully acknowledged.
-
-Additionally, 'tools' contains some auxiliary tools.
-
-
 
 ## References
 
@@ -77,7 +71,12 @@ Additionally, 'tools' contains some auxiliary tools.
 
 
 
+## Acknowledgements
+
+Funding from the Australian Research Council is gratefully acknowledged.
+
+
+
 ## License
 
-Unless otherwise noted, the Gofem source files are distributed
-under the BSD-style license found in the LICENSE file.
+Unless otherwise noted, the Gofem source files are distributed under the BSD-style license found in the LICENSE file.
