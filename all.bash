@@ -28,15 +28,15 @@ compile ele
 compile ele/solid
 compile ele/seepage
 compile ele/diffusion
-compile ele/thermomech
+#compile ele/thermomech
 compile ele/porous
-#compile fem
-#compile tests
-#compile tests/diffusion
-#compile tests/solid
-#compile tests/seepage
-#compile tests/thermomech
-#compile tests/porous
+compile fem
+compile tests
+compile tests/solid
+compile tests/seepage
+compile tests/diffusion
+compile tests/thermomech
+compile tests/porous
 #compile out
 
 echo

@@ -15,7 +15,7 @@ import (
 
 func Test_node01(tst *testing.T) {
 
-	//Verbose()
+	//verbose()
 	chk.PrintTitle("node01. Node and DOFs structures")
 
 	// new Vertice
