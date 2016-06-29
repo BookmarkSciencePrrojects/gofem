@@ -1,5 +1,7 @@
 # Tests: Porous Media
 
+Tests with elements for porous media (TPM) problems.
+
 1. up01a. Solid-Liquid coupling. Check DOFs and BCs
 2. up01b. Solid-Liquid coupling. Run
 3. upp01a. Solid-Liquid-Gas coupling. Check DOFs and BCs

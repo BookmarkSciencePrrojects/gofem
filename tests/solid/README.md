@@ -1,5 +1,7 @@
 # Tests: Solid
 
+Tests with elements for solid mechanics problems.
+
 ## Beam Element (frames)
 
 1. beam01a. check DOFs

@@ -1,5 +1,7 @@
 # Tests. Seepage
 
+Tests with elements for seepage problems.
+
 1. frees01a. Freesurface liquid-only. Check DOFs and BCs
 2. frees01b. Freesurface liquid-only. Run and check Kb
 3. pp01a. Liquid-Gas. Check DOFs and BCs
