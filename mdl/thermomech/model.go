@@ -5,11 +5,22 @@
 // package thermomech implements models thermo-mechanical problems
 package thermomech
 
-import "github.com/cpmech/gosl/fun"
+import (
+	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/chk"
+)
 
 // Model defines the interface for thermomech models
 type Model interface {
 	Init(ndim int, prms fun.Prms) error // initialises model
+}
+// New thermomech model
+func New(name string) (model Model, err error) {
+	allocator, ok := allocators[name]
+	if !ok {
+		return nil, chk.Err("model %q is not available in 'thermomech' database", name)
+	}
+	return allocator(), nil
 }
 
 // allocators holds all available models

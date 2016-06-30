@@ -229,7 +229,12 @@ func ReadMat(dir, fn string, ndim int, pstress bool, H, grav float64) (mdb *MatD
 
 	// alloc/init: thermo-mechanical models
 	for _, m := range mdb.TRM {
-		m.Trm, err = diffusion.New(m.Model)
+		for _, name := range m.Deps {
+			if mm, ok := mdb.SLD[name]; ok {
+				m.Sld = mm.Sld
+			}
+		}
+		m.Trm, err = thermomech.New(m.Model)
 		if err != nil {
 			err = chk.Err("cannot allocate thermo-mechanical model %q / material %q\n%v", m.Model, m.Name, err)
 			return
