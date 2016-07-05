@@ -17,12 +17,12 @@ import (
 //           if args1 == "", plot is skiped
 //  args2 -- arguments for model computed by directly calling sl(pc), if available
 //           if args2 == "", plot is skiped
-func Plot(mdl Model, pc0, sl0, pcf float64, npts int, useLog bool, args1, args2, label string) (err error) {
+func Plot(mdl Model, pc0, sl0, pcf float64, npts int, useLog bool, args1, args2, label string) (Pc, Sl, X []float64, err error) {
 
 	// plot using Update
-	Pc := utl.LinSpace(pc0, pcf, npts)
-	Sl := make([]float64, npts)
-	X := make([]float64, npts)
+	Pc = utl.LinSpace(pc0, pcf, npts)
+	Sl = make([]float64, npts)
+	X = make([]float64, npts)
 	X[0] = math.Log(1.0 + Pc[0])
 	if args1 != "" {
 		Sl[0] = sl0
