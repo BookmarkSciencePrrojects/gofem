@@ -32,7 +32,7 @@ func Test_refm1a(tst *testing.T) {
 
 	if chk.Verbose {
 		plt.Reset()
-		Plot(mdl, pc0, sl0, pcf, nptsA, "'b.-',markevery=10", "'r+-'", "ref-m1_drying")
+		Plot(mdl, pc0, sl0, pcf, nptsA, false, "'b.-',markevery=10", "'r+-'", "ref-m1_drying")
 	}
 
 	tolCc := 1e-17
@@ -47,7 +47,7 @@ func Test_refm1a(tst *testing.T) {
 	}
 
 	if chk.Verbose {
-		Plot(mdl, pcf, slf, pc0, nptsA, "'b*-',markevery=10", "'r+:'", "ref-m1_wetting")
+		Plot(mdl, pcf, slf, pc0, nptsA, false, "'b*-',markevery=10", "'r+:'", "ref-m1_wetting")
 	}
 
 	tolD1b = 1e-4

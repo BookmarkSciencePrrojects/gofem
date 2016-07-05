@@ -30,7 +30,7 @@ func Test_lin01(tst *testing.T) {
 
 	if chk.Verbose {
 		plt.Reset()
-		Plot(mdl, pc0, sl0, pcf, nptsA, "'b.-'", "'r+-'", "lin")
+		Plot(mdl, pc0, sl0, pcf, nptsA, false, "'b.-'", "'r+-'", "lin")
 	}
 
 	tolCc := 1e-13

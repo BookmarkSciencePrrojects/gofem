@@ -5,6 +5,8 @@
 package retention
 
 import (
+	"math"
+
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
@@ -15,11 +17,13 @@ import (
 //           if args1 == "", plot is skiped
 //  args2 -- arguments for model computed by directly calling sl(pc), if available
 //           if args2 == "", plot is skiped
-func Plot(mdl Model, pc0, sl0, pcf float64, npts int, args1, args2, label string) (err error) {
+func Plot(mdl Model, pc0, sl0, pcf float64, npts int, useLog bool, args1, args2, label string) (err error) {
 
 	// plot using Update
 	Pc := utl.LinSpace(pc0, pcf, npts)
 	Sl := make([]float64, npts)
+	X := make([]float64, npts)
+	X[0] = math.Log(1.0 + Pc[0])
 	if args1 != "" {
 		Sl[0] = sl0
 		for i := 1; i < npts; i++ {
@@ -27,8 +31,13 @@ func Plot(mdl Model, pc0, sl0, pcf float64, npts int, args1, args2, label string
 			if err != nil {
 				return
 			}
+			if useLog {
+				X[i] = math.Log(1.0 + Pc[i])
+			} else {
+				X[i] = Pc[i]
+			}
 		}
-		plt.Plot(Pc, Sl, io.Sf("%s, label='%s', clip_on=0", args1, label))
+		plt.Plot(X, Sl, io.Sf("%s, label='%s', clip_on=0", args1, label))
 	}
 
 	// plot using Sl function
@@ -38,8 +47,13 @@ func Plot(mdl Model, pc0, sl0, pcf float64, npts int, args1, args2, label string
 			Sl = make([]float64, 101)
 			for i, pc := range Pc {
 				Sl[i] = m.Sl(pc)
+				if useLog {
+					X[i] = math.Log(1.0 + pc)
+				} else {
+					X[i] = pc
+				}
 			}
-			plt.Plot(Pc, Sl, io.Sf("%s, label='%s_direct', clip_on=0", args2, label))
+			plt.Plot(X, Sl, io.Sf("%s, label='%s_direct', clip_on=0", args2, label))
 		}
 	}
 	return

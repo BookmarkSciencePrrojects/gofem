@@ -30,7 +30,7 @@ func Test_bc01(tst *testing.T) {
 
 	if chk.Verbose {
 		plt.Reset()
-		Plot(mdl, pc0, sl0, pcf, nptsA, "'b.-'", "'r+-'", "bc")
+		Plot(mdl, pc0, sl0, pcf, nptsA, false, "'b.-'", "'r+-'", "bc")
 	}
 
 	tolCc := 1e-11

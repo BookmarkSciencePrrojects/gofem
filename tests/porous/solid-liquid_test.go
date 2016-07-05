@@ -332,7 +332,7 @@ func Test_up01b(tst *testing.T) {
 		// plot
 		plt.SetForEps(0.75, 400)
 		Lrm := e.P.Mdl.Lrm
-		retention.Plot(Lrm, 0, Lrm.SlMax(), 30, 101, "'k-^', markerfacecolor='white', ms=5, markevery=10", "", "model")
+		retention.Plot(Lrm, 0, Lrm.SlMax(), 30, 101, false, "'k-^', markerfacecolor='white', ms=5, markevery=10", "", "model")
 		M := []string{".", "+", "x", "1", "2", "3", "4", "|", "_"}
 		for i := 0; i < nip; i++ {
 			plt.Plot(Pc[i], Sl[i], io.Sf("'b.', clip_on=0, markevery=%d, marker='%s'", 3+i, M[i]))

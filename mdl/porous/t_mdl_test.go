@@ -84,7 +84,7 @@ func Test_mdl01(tst *testing.T) {
 	if doplot {
 		npts := 41
 		plt.Reset()
-		retention.Plot(mdl.Lrm, pc0, sl0, pcf, npts, "'b.-'", "", lrm_name)
+		retention.Plot(mdl.Lrm, pc0, sl0, pcf, npts, false, "'b.-'", "", lrm_name)
 	}
 
 	// state A

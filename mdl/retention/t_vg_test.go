@@ -41,8 +41,8 @@ func Test_vg01(tst *testing.T) {
 
 	if chk.Verbose {
 		plt.Reset()
-		Plot(ref, pc0, sl0, pcf, nptsA, "'k--'", "'k--'", "ref-m1")
-		Plot(mdl, pc0, sl0, pcf, nptsA, "'b.-'", "'r+-'", "vg")
+		Plot(ref, pc0, sl0, pcf, nptsA, false, "'k--'", "'k--'", "ref-m1")
+		Plot(mdl, pc0, sl0, pcf, nptsA, false, "'b.-'", "'r+-'", "vg")
 	}
 
 	tolCc := 1e-10
