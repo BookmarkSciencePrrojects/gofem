@@ -18,8 +18,8 @@ import (
 //   kval = a0  +  a1 u  +  a2 u² +  a3 u³
 //
 type Thermomech struct {
-	a0, a1, a2, a3, H 	float64
-	Bcte			[]float64
+	a0, a1, a2, a3, Cp, H, Re, Sb, T0 	float64
+	Acte			[]float64
 	Kcte			[][]float64
 }
 
@@ -36,36 +36,40 @@ func (o *Thermomech) Init(ndim int, prms fun.Prms) (err error) {
 	prms.Connect(&o.a1, "a1", "a1 Thermomech model")
 	prms.Connect(&o.a2, "a2", "a2 Thermomech model")
 	prms.Connect(&o.a3, "a3", "a3 Thermomech model")
+	prms.Connect(&o.Cp, "cp", "cp Thermomech model")
 	prms.Connect(&o.H, "h", "h Thermomech model")
+	prms.Connect(&o.Re, "re", "re Thermomech model")
+	prms.Connect(&o.Sb, "sb", "sb Thermomech model")
+	prms.Connect(&o.T0, "t0", "t0 Thermomech model")
 
 	// expansion keys
-	b_keys := []string{"bx", "by"}
+	a_keys := []string{"ax", "ay"}
 	if ndim == 3 {
-		b_keys = []string{"bx", "by", "bz"}
+		a_keys = []string{"ax", "ay", "az"}
 	}
 
-	// bcte parameters
-	var bx, by, bz float64
-	b_values, b_found := prms.GetValues(b_keys)
-	if !utl.BoolAllTrue(b_found) {
-		p := prms.Find("b")
+	// acte parameters
+	var ax, ay, az float64
+	a_values, a_found := prms.GetValues(a_keys)
+	if !utl.BoolAllTrue(a_found) {
+		p := prms.Find("a")
 		if p == nil {
-			return chk.Err("Thermomech model: either 'b' (isotropic) or ['bx', 'by', 'bz'] must be given in database of material parameters")
+			return chk.Err("Thermomech model: either 'a' (isotropic) or ['ax', 'ay', 'az'] must be given in database of material parameters")
 		}
-		bx, by, bz = p.V, p.V, p.V
+		ax, ay, az = p.V, p.V, p.V
 	} else {
-		bx, by = b_values[0], b_values[1]
+		ax, ay = a_values[0], a_values[1]
 		if ndim == 3 {
-			bz = b_values[2]
+			az = a_values[2]
 		}
 	}
 
 	// btensor
-	o.Bcte = make([]float64, 3)
-	o.Bcte[0] = bx
-	o.Bcte[1] = by
+	o.Acte = make([]float64, 3)
+	o.Acte[0] = ax
+	o.Acte[1] = ay
 	if ndim == 3 {
-		o.Bcte[2] = bz
+		o.Acte[2] = az
 	}
 
 	// conductivity keys

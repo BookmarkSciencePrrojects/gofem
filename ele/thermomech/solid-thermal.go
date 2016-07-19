@@ -18,6 +18,7 @@ import (
 	"github.com/cpmech/gofem/shp"
 	"github.com/cpmech/gosl/utl"
 	"github.com/cpmech/gofem/ele"
+	"math"
 )
 
 // ElemUT implements the solid-thermal coupling
@@ -415,7 +416,7 @@ func (o *SolidThermal) AddToRhs(fb []float64, sol *ele.Solution) (err error) {
 				for i := 0; i < o.Ndim; i++ {
 					ru := o.Umap[i+m*o.Ndim]
 					for n := 0; n < u_nverts; n++ {
-						fb[ru] += coef * G[m][i] * S[n] * o.TrmMdl.Bcte[i] / E[0] * o.tval // coupling term Fu
+						fb[ru] += coef * G[m][i] * S[n] * o.TrmMdl.Acte[i] * E[0] * o.tval // coupling term Fu
 					}
 				}
 			}
@@ -428,7 +429,7 @@ func (o *SolidThermal) AddToRhs(fb []float64, sol *ele.Solution) (err error) {
 						fb[ru] -= coef * tsr.M2T(σe, i, j) * G[m][j]
 					}
 					for n := 0; n < u_nverts; n++ {
-						fb[ru] += coef * G[m][i] * S[n] * o.TrmMdl.Bcte[i] / E[0] * o.tval // coupling term Fu
+						fb[ru] += coef * G[m][i] * S[n] * o.TrmMdl.Acte[i] * E[0] * o.tval // coupling term Fu
 					}
 				}
 			}
@@ -451,11 +452,11 @@ func (o *SolidThermal) AddToRhs(fb []float64, sol *ele.Solution) (err error) {
 		// diffu residuals
 		for m := 0; m < t_nverts; m++ {
 			rt := o.Tmap[m]
-			fb[rt] -= coef * St[m] * (ρ *dudt - sval) // - ftrs + fext/sval
+			fb[rt] -= coef * St[m] * (ρ * o.TrmMdl.Cp *dudt - sval) // - ftrs + fext/sval
 			for i := 0; i < o.Ndim; i++ {
 				fb[rt] += coef * Gt[m][i] * o.wvec[i] // + fint
 				for n:=0; n < t_nverts; n++{
-					fb[rt] += coef * Gt[m][i] * St[n] * o.TrmMdl.Bcte[i] / E[0] * (-α4 * o.us[i] + o.χs[idx][i]) // coupling term Ft
+					fb[rt] -= coef * St[m] * (o.tval + o.TrmMdl.T0) * o.TrmMdl.Acte[i] * E[0] * (α4 * o.us[i] - o.χs[idx][i]) * Gt[n][i]  // coupling term Ft
 				}
 			}
 		}
@@ -562,16 +563,17 @@ func (o *SolidThermal) AddToKb(Kb *la.Triplet, sol *ele.Solution, firstIt bool) 
 			for n := 0; n < u_nverts; n++ {
 				for i := 0; i < o.Ndim; i++ {
 					r := i + n * o.Ndim
-					o.Kut[r][m] -= coef * Gt[m][i] * S[n] * o.TrmMdl.Bcte[i] / E[0]
-					o.Ktu[m][r] += coef * G[n][i] * St[m] * o.TrmMdl.Bcte[i] / E[0] * α4
+					o.Kut[r][m] -= coef * Gt[m][i] * S[n] * o.TrmMdl.Acte[i] * E[0]
+					o.Ktu[m][r] += coef * St[m] * G[n][i] * o.TrmMdl.Acte[i] * E[0] * (o.tval + o.TrmMdl.T0) * α4
 				}
 			}
 			for n := 0; n < t_nverts; n++ {
-				o.Ktt[n][m] += coef * St[n] * St[m] * β1 * ρ
+				o.Ktt[n][m] += coef * St[m] * St[n] * β1 * ρ * o.TrmMdl.Cp
 				for i := 0; i < o.Ndim; i++ {
 					for j := 0; j < o.Ndim; j++ {
 						o.Ktt[n][m] += coef * Gt[n][i] * o.TrmMdl.Kcte[i][j] * o.tmp[j]
 					}
+					o.Ktt[n][m] += coef * St[m] * St[n] * o.TrmMdl.Acte[i] * E[0] * (α4*o.us[i]-o.χs[idx][i]) * Gt[n][i]
 				}
 			}
 		}
@@ -898,12 +900,11 @@ func (o *SolidThermal) add_surfloads_to_rhs(fb []float64, sol *ele.Solution) (er
 func (o *SolidThermal) add_natbcs_to_rhs(fb []float64, sol *ele.Solution) (err error) {
 
 	// compute surface integral
-	var qb, temp0 float64
+	var bcval float64
 	for _, nbc := range o.NatBcs {
 
-		// specified flux
-		qb = nbc.Fcn.F(sol.T, nil)
-		temp0 = nbc.Fcn.F(sol.T, nil)
+		// specified boandary condition value: qb->flux, qc->external temp, qr->external temp
+		bcval = nbc.Fcn.F(sol.T, nil)
 
 		// loop over ips of face
 		for _, ipf := range o.IpsFace {
@@ -925,8 +926,9 @@ func (o *SolidThermal) add_natbcs_to_rhs(fb []float64, sol *ele.Solution) (err e
 			// flux prescribed
 			case "qb":
 				for i, m := range o.LbbCell.Shp.FaceLocalVerts[iface] {
-					fb[o.Tmap[m]] -= coef * qb * Sf[i]
+					fb[o.Tmap[m]] += coef * bcval * Sf[i]
 				}
+			// Convection
 			case "qc":
 				// clear temperature @ face ip
 				tface := 0.0
@@ -936,8 +938,9 @@ func (o *SolidThermal) add_natbcs_to_rhs(fb []float64, sol *ele.Solution) (err e
 					tface += Sf[j] * sol.Y[o.Tmap[n]]
 				}
 				for i, m := range o.LbbCell.Shp.FaceLocalVerts[iface] {
-					fb[o.Tmap[m]] -= coef * o.TrmMdl.H * (tface - temp0)  * Sf[i]
+					fb[o.Tmap[m]] -= coef * Sf[i] * o.TrmMdl.H * (tface - bcval)
 				}
+			// Convection, mixed formulation
 			case "qcm":
 				// clear temperature @ face ip
 				tface := 0.0
@@ -951,8 +954,20 @@ func (o *SolidThermal) add_natbcs_to_rhs(fb []float64, sol *ele.Solution) (err e
 				}
 				for i, m := range o.LbbCell.Shp.FaceLocalVerts[iface] {
 					μ := o.Vid2convId[m]
-					fb[o.Tmap[m]] -= coef * o.TrmMdl.H * fl * Sf[i]
-					fb[o.Cmap[μ]] -= coef * o.TrmMdl.H * (tface - fl - temp0)  * Sf[i]
+					fb[o.Tmap[m]] -= coef * Sf[i] * o.TrmMdl.H * fl
+					fb[o.Cmap[μ]] -= coef * Sf[i] * o.TrmMdl.H * (tface - fl - bcval)
+				}
+			// Radiation (Stefan-Boltzmann)
+			case "qr":
+				// clear temperature @ face ip
+				tface := 0.0
+
+				// compute tface @ face ip by means of interpolating from nodes
+				for j, n := range o.LbbCell.Shp.FaceLocalVerts[iface] {
+					tface += Sf[j] * sol.Y[o.Tmap[n]]
+				}
+				for i, m := range o.LbbCell.Shp.FaceLocalVerts[iface] {
+					fb[o.Tmap[m]] -= coef * Sf[i] * o.TrmMdl.Sb * o.TrmMdl.Re * (math.Pow((tface+o.TrmMdl.T0), 4.0) - math.Pow((bcval+o.TrmMdl.T0), 4.0))
 				}
 			}
 		}
@@ -989,7 +1004,7 @@ func (o *SolidThermal) add_natbcs_to_jac(sol *ele.Solution) (err error) {
 						o.Ktt[n][m] += coef * o.TrmMdl.H * Sf[i] * Sf[j]
 					}
 				}
-			//Convection
+			// Convection, mixed formulation
 			case "qcm":
 				for i, m := range o.LbbCell.Shp.FaceLocalVerts[iface] {
 					μ := o.Vid2convId[m]
@@ -998,6 +1013,22 @@ func (o *SolidThermal) add_natbcs_to_jac(sol *ele.Solution) (err error) {
 						o.Ktc[m][ν] += coef * o.TrmMdl.H * Sf[i] * Sf[j]
 						o.Kct[μ][n] += coef * o.TrmMdl.H * Sf[i] * Sf[j]
 						o.Kcc[μ][ν] -= coef * o.TrmMdl.H * Sf[i] * Sf[j]
+					}
+				}
+			// Radiation (Stefan-Boltzmann)
+			case "qr":
+				// clear temperature @ face ip
+				tface := 0.0
+
+				// compute tface @ face ip by means of interpolating from nodes
+				for j, n := range o.LbbCell.Shp.FaceLocalVerts[iface] {
+					tface += Sf[j] * sol.Y[o.Tmap[n]]
+				}
+				for i, m := range o.LbbCell.Shp.FaceLocalVerts[iface] {
+					for j, n := range o.LbbCell.Shp.FaceLocalVerts[iface] {
+						o.Ktt[n][m] += coef * Sf[i] * o.TrmMdl.Sb * o.TrmMdl.Re *
+						(4.0 * math.Pow(tface, 3.0) + 12.0 * math.Pow(tface, 2.0) * o.TrmMdl.T0 +
+						12.0 * tface * math.Pow(o.TrmMdl.T0, 2.0) + 4.0 * Sf[j] * math.Pow(o.TrmMdl.T0, 3.0))
 					}
 				}
 			}

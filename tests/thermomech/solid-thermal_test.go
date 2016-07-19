@@ -207,6 +207,6 @@ func Test_ut01b(tst *testing.T) {
 		}
 	}
 	//Analytical solution from Richard B. Hetnarski, Thermal Stresses - Advanced Theory and Applications, p.228
-	io.Pfyel("\nANALYTICAL RESULT u[0]:\nx=[0   10]   u= %10.4f\n", 1.0/1000*(100.0-0.0)*10.0*10.0/2.0/2.5)
+	io.Pfyel("\nANALYTICAL RESULT u[0]:\nx=[0   10]   u= %10.4f\n", 0.000015*(120.0-20.0)*10.0*10.0/2.0/2.5)
 }
 
