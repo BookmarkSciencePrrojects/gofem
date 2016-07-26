@@ -1026,9 +1026,7 @@ func (o *SolidThermal) add_natbcs_to_jac(sol *ele.Solution) (err error) {
 				}
 				for i, m := range o.LbbCell.Shp.FaceLocalVerts[iface] {
 					for j, n := range o.LbbCell.Shp.FaceLocalVerts[iface] {
-						o.Ktt[n][m] += coef * Sf[i] * o.TrmMdl.Sb * o.TrmMdl.Re *
-						(4.0 * math.Pow(tface, 3.0) + 12.0 * math.Pow(tface, 2.0) * o.TrmMdl.T0 +
-						12.0 * tface * math.Pow(o.TrmMdl.T0, 2.0) + 4.0 * Sf[j] * math.Pow(o.TrmMdl.T0, 3.0))
+						o.Ktt[n][m] += coef * Sf[i] * o.TrmMdl.Sb * o.TrmMdl.Re * 4.0 * Sf[j] * math.Pow((tface + o.TrmMdl.T0), 3.0)
 					}
 				}
 			}
