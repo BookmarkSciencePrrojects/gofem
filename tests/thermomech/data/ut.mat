@@ -1,0 +1,30 @@
+{
+  "materials" : [
+    {
+       "name"  : "solid",
+       "type"  : "sld",
+       "model" : "lin-elast",
+       "prms"  : [
+         {"n":"E",   "v":1000},
+         {"n":"nu",  "v":0.0  },
+         {"n":"rho", "v":1.0  }
+       ]
+     },
+     {
+       "name"  : "thermomech",
+       "type"  : "trm",
+       "deps" :  ["solid"],
+       "model" : "thermomech",
+       "prms" : [
+         {"n":"a0", "v":1.4},
+         {"n":"a",  "v":0.000015},
+         {"n":"cp",  "v":1.0},
+         {"n":"h",  "v":27.0},
+         {"n":"k",  "v":1.0},
+         {"n":"re", "v":1.0},
+         {"n":"sb", "v":0.0000000567036713},
+         {"n":"t0",  "v":273.15}
+       ]
+     }
+  ]
+}

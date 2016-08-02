@@ -1,0 +1,46 @@
+{
+  "data" : {
+    "desc"    : "ut",
+    "matfile" : "ut.mat",
+    "pstress" : true,
+    "steady"  : true,
+    "noLBB"   : false
+  },
+  "functions" : [
+    { "name":"t", "type":"cte", "prms":[{"n":"c", "v":120.0 }] },
+    { "name":"t0", "type":"cte", "prms":[{"n":"c", "v":20.0 }] },
+    { "name":"q", "type":"cte", "prms":[{"n":"c", "v":2.0 }] }
+  ],
+  "regions" : [
+    {
+      "desc"      : "mesh",
+      "mshfile"   : "ut_beam.msh",
+      "elemsdata" : [
+        { "tag":-1, "mat":"thermomech", "type":"solid-thermal", "extra":"!thick:1"}
+      ]
+    }
+  ],
+  "solver" : {
+          "NmaxIt"  : 50,
+          "showR" : true
+  },
+  "stages" : [
+    {
+      "desc"     : "apply loading",
+      "nodebcs" : [
+          { "tag":-100, "keys":["ux","uy"], "funcs":["zero","zero"] },
+          { "tag":-101, "keys":["uy"], "funcs":["zero"] }
+        ],
+      "facebcs" : [
+            { "tag":-11, "keys":["qr"], "funcs":["t0"] },
+            { "tag":-13, "keys":["temp"], "funcs":["t"] }
+          ],
+      "control" : {
+              "tf"    : 1000,
+              "dt"    : 1000,
+              "dtout" : 1000
+      }
+    }
+  ]
+}
+
