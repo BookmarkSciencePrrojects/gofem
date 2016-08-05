@@ -58,7 +58,7 @@ testandinstall tests
 testonly       tests/solid
 testonly       tests/seepage
 testonly       tests/diffusion
-#testonly       tests/thermomech
+testonly       tests/thermomech
 testonly       tests/porous
 testandinstall out
 

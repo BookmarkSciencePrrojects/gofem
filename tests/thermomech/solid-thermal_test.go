@@ -19,39 +19,39 @@ func Test_ut01a(tst *testing.T) {
 
 	/*Test thermomechanical coupling
 	 *
-	 *   using mesh from col10m4e2lay.msh
+	 *   using mesh from ut_beam.msh
 	 *
 	 *      Nodes / Tags                       Equations
 	 *                              ux uy  t               ux uy  t
-	 *     8 o----o----o 9 (-5)     53 54 55  o----o----o  50 51 52
+	 *     8 o----o----o 9          53 54 55  o----o----o  50 51 52
 	 *       |   14    |             .  .  .  |  58 59  |   .  .  .
 	 *       |  (-1)   |             .  .  .  |         |   .  .  .
-	 *    21 o    o    o 22 (-6)    60 61  .  o    o    o  56 57  .
+	 *    21 o    o    o 22         60 61  .  o    o    o  56 57  .
 	 *       |   26    |             .  .  .  |  62 63  |   .  .  .
 	 *       |         |             .  .  .  |         |   .  .  .
-	 *     6 o----o----o 7 (-4)     39 40 41  o----o----o  36 37 38
+	 *     6 o----o----o 7          39 40 41  o----o----o  36 37 38
 	 *       |   13    |             .  .  .  |  44 45  |   .  .  .
 	 *       |  (-1)   |             .  .  .  |         |   .  .  .
-	 *    19 o    o    o 20 (-6)    46 47  .  o    o    o  42 43  .
+	 *    19 o    o    o 20         46 47  .  o    o    o  42 43  .
 	 *       |   25    |             .  .  .  |  48 49  |   .  .  .
 	 *       |         |             .  .  .  |         |   .  .  .
-	 *     4 o----o----o 5 (-3)     25 26 27  o----o----o  22 23 24
+	 *     4 o----o----o 5          25 26 27  o----o----o  22 23 24
 	 *       |   12    |             .  .  .  |  30 31  |   .  .  .
-	 *       |  (-2)   |             .  .  .  |         |   .  .  .
-	 *    17 o    o    o 18 (-6)    32 33  .  o    o    o  28 29  .
+	 *       |  (-1)   |             .  .  .  |         |   .  .  .
+	 *    17 o    o    o 18         32 33  .  o    o    o  28 29  .
 	 *       |   24    |             .  .  .  |  34 35  |   .  .  .
 	 *       |         |             .  .  .  |         |   .  .  .
-	 *     2 o----o----o 3 (-2)      9 10 11  o----o----o   6  7  8
+	 *     2 o----o----o 3           9 10 11  o----o----o   6  7  8
 	 *       |   11    |             .  .  .  |  16 17  |   .  .  .
-	 *       |  (-2)   |             .  .  .  |         |   .  .  .
-	 *    15 o    o    o 16 (-6)    18 19     o    o    o  14 15
+	 *       |  (-1)   |             .  .  .  |         |   .  .  .
+	 *    15 o    o    o 16         18 19     o    o    o  14 15
 	 *       |   23    |             .  .  .  |  20 21  |   .  .  .
 	 *       |         |             .  .  .  |         |   .  .  .
-	 *     0 o----o----o 1 (-1)      0  1  2  o----o----o   3  4  5
+	 *     0 o----o----o 1           0  1  2  o----o----o   3  4  5
 	 *           10                              12 13
 	 */
 
-	tests.Verbose()
+	//tests.Verbose()
 	chk.PrintTitle("ut01a")
 
 	// start simulation
@@ -129,7 +129,7 @@ func Test_ut01a(tst *testing.T) {
 		}
 
 		// constraints
-		//chk.IntAssert(len(dom.EssenBcs.Bcs), 3+3+5+5)
+		chk.IntAssert(len(dom.EssenBcs.Bcs), 3+5+5)
 		var ct_ux_eqs []int // equations with ux prescribed [sorted]
 		var ct_uy_eqs []int // equations with uy prescribed [sorted]
 		var ct_t_eqs []int // equations with t prescribed [sorted]
@@ -151,8 +151,8 @@ func Test_ut01a(tst *testing.T) {
 		sort.Ints(ct_ux_eqs)
 		sort.Ints(ct_uy_eqs)
 		sort.Ints(ct_t_eqs)
-		chk.Ints(tst, "equations with ux prescribed", ct_ux_eqs, []int{0, 3, 12})
-		chk.Ints(tst, "equations with uy prescribed", ct_uy_eqs, []int{1, 4, 13})
+		chk.Ints(tst, "equations with ux prescribed", ct_ux_eqs, []int{0})
+		chk.Ints(tst, "equations with uy prescribed", ct_uy_eqs, []int{1, 4})
 		chk.Ints(tst, "equations with t prescribed", ct_t_eqs, []int{2, 5, 8, 11, 24, 27, 38, 41, 52, 55})
 
 	}
@@ -174,39 +174,3 @@ func Test_ut01a(tst *testing.T) {
 		}
 	}
 }
-
-func Test_ut01b(tst *testing.T) {
-
-	tests.Verbose()
-	chk.PrintTitle("ut01b")
-
-	// start simulation
-	main := fem.NewMain("data/ut01.sim", "", true, true, false, false, chk.Verbose, 0)
-
-	// run simulation
-	err := main.Run()
-	if err != nil {
-		tst.Errorf("Run failed:\n%v", err)
-	}
-
-	// domain and element
-	dom := main.Domains[0]
-
-	// check displacements and temperatures
-	for _, n := range dom.Nodes {
-		eqx := n.GetEq("ux")
-		eqy := n.GetEq("uy")
-		eqt := n.GetEq("temp")
-		//fmt.Printf("id=%v, dofs=%v", n, len(n.Dofs))
-		if len(n.Dofs) == 2 {
-			u := []float64{dom.Sol.Y[eqx], dom.Sol.Y[eqy]}
-			io.Pfyel("x=%4.3v   u=%10.4v\n", n.Vert.C, u)
-		} else {
-			u := []float64{dom.Sol.Y[eqx], dom.Sol.Y[eqy], dom.Sol.Y[eqt]}
-			io.Pfyel("x=%4.3v   u=%10.4v\n", n.Vert.C, u)
-		}
-	}
-	//Analytical solution from Richard B. Hetnarski, Thermal Stresses - Advanced Theory and Applications, p.228
-	io.Pfyel("\nANALYTICAL RESULT u[0]:\nx=[0   10]   u= %10.4f\n", 0.000015*(120.0-20.0)*10.0*10.0/2.0/2.5)
-}
-
