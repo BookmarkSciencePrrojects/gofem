@@ -1,13 +1,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
 <title>Gofem &ndash; package ele/thermomech</title>
 <link type="text/css" rel="stylesheet" href="static/style.css">
 <script type="text/javascript" src="static/godocs.js"></script>
 <style type="text/css"></style>
 </head>
 <body>
-<div id="page"><h1>Gofem &ndash; <b>ele/thermomech</b> &ndash; elements for thermo-mechanical applications</h1>
+<div id="page" class=\wide">
+<div class="container">
+<h1>Gofem &ndash; <b>ele/thermomech</b> &ndash; elements for thermo-mechanical applications</h1>
+use 'godoc cmd/github.com/cpmech/gofem/ele/thermomech' for documentation on the github.com/cpmech/gofem/ele/thermomech command 
+
 <!--
 	Copyright 2009 The Go Authors. All rights reserved.
 	Use of this source code is governed by a BSD-style
@@ -20,11 +26,449 @@
 	correspond to Go identifiers).
 -->
 
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = ;
+	document.CALLGRAPH = ;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "github.com/cpmech/gofem/ele/thermomech"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="#SolidThermal">type SolidThermal</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.AddToExt">func (o *SolidThermal) AddToExt(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.AddToKb">func (o *SolidThermal) AddToKb(Kb *la.Triplet, sol *ele.Solution, firstIt bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.AddToRhs">func (o *SolidThermal) AddToRhs(fb []float64, sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.BackupIvs">func (o *SolidThermal) BackupIvs(aux bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.Decode">func (o *SolidThermal) Decode(dec utl.Decoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.Encode">func (o *SolidThermal) Encode(enc utl.Encoder) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.Id">func (o *SolidThermal) Id() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.InterpStarVars">func (o *SolidThermal) InterpStarVars(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.OutIpCoords">func (o *SolidThermal) OutIpCoords() (C [][]float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.OutIpKeys">func (o *SolidThermal) OutIpKeys() []string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.OutIpVals">func (o *SolidThermal) OutIpVals(M *ele.IpsMap, sol *ele.Solution)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.RestoreIvs">func (o *SolidThermal) RestoreIvs(aux bool) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.SetEleConds">func (o *SolidThermal) SetEleConds(key string, f fun.Func, extra string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.SetEqs">func (o *SolidThermal) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.SetIniIvs">func (o *SolidThermal) SetIniIvs(sol *ele.Solution, ivs map[string][]float64) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.Update">func (o *SolidThermal) Update(sol *ele.Solution) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.Ureset">func (o *SolidThermal) Ureset(sol *ele.Solution) (err error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/github.com/cpmech/gofem/ele/thermomech/solid-thermal.go">solid-thermal.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+		
+			
+			
+			<h2 id="SolidThermal">type <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=673:4524#L15">SolidThermal</a></h2>
+			<pre>type SolidThermal struct {
+
+    <span class="comment">// basic data</span>
+    Cell    *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>     <span class="comment">// the cell structure</span>
+    LbbCell *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>     <span class="comment">// if LBB==false, same as Cell; otherwise LbbCell is a new cell with less vertices</span>
+    Edat    *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#ElemData">ElemData</a> <span class="comment">// element data; stored in allocator to be used in Connect</span>
+    X       [][]<a href="/pkg/builtin/#float64">float64</a>   <span class="comment">// matrix of nodal coordinates [ndim][nnode]</span>
+    Ndim    <a href="/pkg/builtin/#int">int</a>           <span class="comment">// space dimension</span>
+    Nu      <a href="/pkg/builtin/#int">int</a>           <span class="comment">// total number of unknown displacements</span>
+    Nt      <a href="/pkg/builtin/#int">int</a>           <span class="comment">// total number of unknown temperatures</span>
+    Nc      <a href="/pkg/builtin/#int">int</a>           <span class="comment">// if mixed formulation is used, number of fl variables</span>
+
+    <span class="comment">// variables for dynamics</span>
+    Cdam <a href="/pkg/builtin/#float64">float64</a>  <span class="comment">// coefficient for damping // TODO: read this value</span>
+    Gfcn <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// gravity function</span>
+
+    <span class="comment">// optional data</span>
+    UseB      <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// use B matrix</span>
+    Thickness <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// thickness</span>
+    Debug     <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// debugging flag</span>
+
+    <span class="comment">// integration points (integration points of displacement element)</span>
+    IpsElem []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points of element</span>
+    IpsFace []<a href="/pkg/github.com/cpmech/gofem/shp/">shp</a>.<a href="/pkg/github.com/cpmech/gofem/shp/#Ipoint">Ipoint</a> <span class="comment">// integration points corresponding to faces</span>
+
+    <span class="comment">// material models and internal variables (sld model)</span>
+    SldMdl      <a href="/pkg/github.com/cpmech/gofem/mdl/solid/">mdlsolid</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/solid/#Model">Model</a>         <span class="comment">// material model</span>
+    SldMdlSmall <a href="/pkg/github.com/cpmech/gofem/mdl/solid/">mdlsolid</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/solid/#Small">Small</a>         <span class="comment">// model specialisation for small strains</span>
+    SldMdlLarge <a href="/pkg/github.com/cpmech/gofem/mdl/solid/">mdlsolid</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/solid/#Large">Large</a>         <span class="comment">// model specialisation for large deformations</span>
+    TrmMdl      *<a href="/pkg/github.com/cpmech/gofem/mdl/thermomech/">thermomech</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/thermomech/#Thermomech">Thermomech</a> <span class="comment">// thermal material model</span>
+
+    <span class="comment">// internal variables</span>
+    States    []*<a href="/pkg/github.com/cpmech/gofem/mdl/solid/">mdlsolid</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/solid/#State">State</a> <span class="comment">// [nip] states</span>
+    StatesBkp []*<a href="/pkg/github.com/cpmech/gofem/mdl/solid/">mdlsolid</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/solid/#State">State</a> <span class="comment">// [nip] backup states</span>
+    StatesAux []*<a href="/pkg/github.com/cpmech/gofem/mdl/solid/">mdlsolid</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/solid/#State">State</a> <span class="comment">// [nip] auxiliary backup states</span>
+
+    <span class="comment">// additional variables</span>
+    Umap   []<a href="/pkg/builtin/#int">int</a>            <span class="comment">// assembly map (location array/element equations)</span>
+    Tmap   []<a href="/pkg/builtin/#int">int</a>            <span class="comment">// assembly map (location array/element equations)</span>
+    Cmap   []<a href="/pkg/builtin/#int">int</a>            <span class="comment">// [nc] map of &#34;fl&#34; variables (mixed formulation)</span>
+    NatBcs []*<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#NaturalBc">NaturalBc</a> <span class="comment">// natural boundary conditions</span>
+    Emat   [][]<a href="/pkg/builtin/#float64">float64</a>      <span class="comment">// [nvert][nip] extrapolator matrix; if AddToExt is called</span>
+
+    B [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nsig][nu] B matrix for axisymetric case</span>
+    D [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nsig][nsig] constitutive consistent tangent matrix</span>
+
+    Sfun <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// s(x) function for temperature element</span>
+
+    Δε []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// incremental strains leading to updated strains</span>
+
+    <span class="comment">//Mixed form</span>
+    MixedForm  <a href="/pkg/builtin/#bool">bool</a>  <span class="comment">// indicates if this element has mixed form BC&#39;s</span>
+    Vid2convId []<a href="/pkg/builtin/#int">int</a> <span class="comment">// [nverts] maps local vertex id to index in Cmap</span>
+    ConvId2vid []<a href="/pkg/builtin/#int">int</a> <span class="comment">// [nf] maps mixed form BC face variable id to local vertex id</span>
+
+    <span class="comment">// Stiffness matrices (u-t coupling)</span>
+    Kuu [][]<a href="/pkg/builtin/#float64">float64</a>
+    Kut [][]<a href="/pkg/builtin/#float64">float64</a>
+    Ktu [][]<a href="/pkg/builtin/#float64">float64</a>
+    Ktt [][]<a href="/pkg/builtin/#float64">float64</a>
+
+    <span class="comment">//Additional stiffness matrices for mixed form solution</span>
+    Ktc [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nt][nc]</span>
+    Kct [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nc][nt]</span>
+    Kcc [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nc][nc]</span>
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+ElemUT implements the solid-thermal coupling
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="SolidThermal.AddToExt">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=21449:21511#L776">AddToExt</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) AddToExt(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddToExt extrapolates stresses at integration points to nodes
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.AddToKb">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=13874:13965#L478">AddToKb</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+adds element K to global Jacobian matrix Kb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.AddToRhs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=11026:11102#L366">AddToRhs</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+adds -R to global residual vector fb
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.BackupIvs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=19151:19205#L686">BackupIvs</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+BackupIvs create copy of internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.Decode">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20182:20240#L732">Decode</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) Decode(dec <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Decode decodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.Encode">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20052:20110#L727">Encode</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) Encode(enc <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Encode encodes internal variables
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.Id">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=9140:9171#L277">Id</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+Id returns the cell Id
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.InterpStarVars">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=10005:10073#L319">InterpStarVars</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) InterpStarVars(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+InterpStarVars interpolates star variables to integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.OutIpCoords">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20392:20444#L741">OutIpCoords</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) OutIpCoords() (C [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+OutIpCoords returns the coordinates of integration points
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.OutIpKeys">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20628:20671#L750">OutIpKeys</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) OutIpKeys() []<a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+OutIpKeys returns the integration points&#39; keys
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.OutIpVals">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20890:20956#L759">OutIpVals</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) OutIpVals(M *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#IpsMap">IpsMap</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>)</pre>
+				<p>
+OutIpVals returns the integration points&#39; values corresponding to keys
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.RestoreIvs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=19411:19466#L700">RestoreIvs</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+RestoreIvs restore internal variables from copies
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.SetEleConds">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=9735:9819#L305">SetEleConds</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEleConds set element conditions
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.SetEqs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=9218:9293#L280">SetEqs</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetEqs set equations
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.SetIniIvs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=18455:18544#L659">SetIniIvs</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) SetIniIvs(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SetIniIvs sets initial ivs for given values in sol and ivs map
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.Update">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=17344:17404#L622">Update</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) Update(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Update perform (tangent) update
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="SolidThermal.Ureset">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=19695:19755#L714">Ureset</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) Ureset(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Ureset fixes internal variables after u (displacements) have been zeroed
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
 
 
 
 
-</div><!-- page -->
+
+
 <div id="footer">
 <br /><br />
 <hr>
@@ -58,5 +502,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </pre><!-- copyright -->
 </div><!-- footer -->
+
+</div><!-- container -->
+</div><!-- page -->
 </body>
 </html>

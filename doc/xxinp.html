@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
 <title>Gofem &ndash; package inp</title>
 <link type="text/css" rel="stylesheet" href="static/style.css">
 <script type="text/javascript" src="static/godocs.js"></script>
 <style type="text/css"></style>
 </head>
 <body>
-<div id="page"><h1>Gofem &ndash; <b>inp</b> &ndash; input data (.sim = simulation, .mat = materials, .msh = meshes)</h1>
+<div id="page" class=\wide">
+<div class="container">
+<h1>Gofem &ndash; <b>inp</b> &ndash; input data (.sim = simulation, .mat = materials, .msh = meshes)</h1>
 use 'godoc cmd/github.com/cpmech/gofem/inp' for documentation on the github.com/cpmech/gofem/inp command 
 
 <!--
@@ -399,9 +403,7 @@ constants
 		
 			
 			
-			<h2 id="Cell">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=728:2059#L27">Cell</a>
-				<a class="permalink" href="#Cell">&#xb6;</a>
-			</h2>
+			<h2 id="Cell">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=728:2059#L27">Cell</a></h2>
 			<pre>type Cell struct {
 
     <span class="comment">// input data</span>
@@ -452,9 +454,7 @@ Cell holds cell data
 
 			
 				
-				<h3 id="Cell.GetNverts">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9081:9119#L353">GetNverts</a>
-					<a class="permalink" href="#Cell.GetNverts">&#xb6;</a>
-				</h3>
+				<h3 id="Cell.GetNverts">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9081:9119#L353">GetNverts</a></h3>
 				<pre>func (o *<a href="#Cell">Cell</a>) GetNverts(lbb <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 GetNverts returns the number of vertices, whether LBB condition is on or not
@@ -465,9 +465,7 @@ GetNverts returns the number of vertices, whether LBB condition is on or not
 				
 			
 				
-				<h3 id="Cell.GetSimilar">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9899:9950#L391">GetSimilar</a>
-					<a class="permalink" href="#Cell.GetSimilar">&#xb6;</a>
-				</h3>
+				<h3 id="Cell.GetSimilar">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9899:9950#L391">GetSimilar</a></h3>
 				<pre>func (o *<a href="#Cell">Cell</a>) GetSimilar(lbb <a href="/pkg/builtin/#bool">bool</a>) (newcell *<a href="#Cell">Cell</a>)</pre>
 				<p>
 GetSimilar allocates a copy of this cell
@@ -480,9 +478,7 @@ GetSimilar allocates a copy of this cell
 				
 			
 				
-				<h3 id="Cell.GetVtkInfo">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9310:9378#L364">GetVtkInfo</a>
-					<a class="permalink" href="#Cell.GetVtkInfo">&#xb6;</a>
-				</h3>
+				<h3 id="Cell.GetVtkInfo">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9310:9378#L364">GetVtkInfo</a></h3>
 				<pre>func (o *<a href="#Cell">Cell</a>) GetVtkInfo(lbb, v3beam <a href="/pkg/builtin/#bool">bool</a>) (nvtkverts, vtkcode <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 GetVtkInfo returns information about this cell for generating VTK files
@@ -493,9 +489,7 @@ GetVtkInfo returns information about this cell for generating VTK files
 				
 			
 				
-				<h3 id="Cell.SetFaceConds">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/facecond.go?s=2299:2371#L64">SetFaceConds</a>
-					<a class="permalink" href="#Cell.SetFaceConds">&#xb6;</a>
-				</h3>
+				<h3 id="Cell.SetFaceConds">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/facecond.go?s=2299:2371#L64">SetFaceConds</a></h3>
 				<pre>func (o *<a href="#Cell">Cell</a>) SetFaceConds(stg *<a href="#Stage">Stage</a>, functions <a href="#FuncsData">FuncsData</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetFaceConds sets face boundary conditions map in cell
@@ -506,9 +500,7 @@ SetFaceConds sets face boundary conditions map in cell
 				
 			
 				
-				<h3 id="Cell.String">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=8646:8676#L333">String</a>
-					<a class="permalink" href="#Cell.String">&#xb6;</a>
-				</h3>
+				<h3 id="Cell.String">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=8646:8676#L333">String</a></h3>
 				<pre>func (o *<a href="#Cell">Cell</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String returns a JSON representation of *Cell
@@ -521,9 +513,7 @@ String returns a JSON representation of *Cell
 		
 			
 			
-			<h2 id="CellFaceId">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=2085:2152#L62">CellFaceId</a>
-				<a class="permalink" href="#CellFaceId">&#xb6;</a>
-			</h2>
+			<h2 id="CellFaceId">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=2085:2152#L62">CellFaceId</a></h2>
 			<pre>type CellFaceId struct {
     C   *<a href="#Cell">Cell</a> <span class="comment">// cell</span>
     Fid <a href="/pkg/builtin/#int">int</a>   <span class="comment">// face id</span>
@@ -547,9 +537,7 @@ CellFaceId structure
 		
 			
 			
-			<h2 id="CellSeamId">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=2178:2245#L68">CellSeamId</a>
-				<a class="permalink" href="#CellSeamId">&#xb6;</a>
-			</h2>
+			<h2 id="CellSeamId">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=2178:2245#L68">CellSeamId</a></h2>
 			<pre>type CellSeamId struct {
     C   *<a href="#Cell">Cell</a> <span class="comment">// cell</span>
     Sid <a href="/pkg/builtin/#int">int</a>   <span class="comment">// seam id</span>
@@ -573,9 +561,7 @@ CellSeamId structure
 		
 			
 			
-			<h2 id="Data">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=546:1754#L14">Data</a>
-				<a class="permalink" href="#Data">&#xb6;</a>
-			</h2>
+			<h2 id="Data">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=546:1754#L14">Data</a></h2>
 			<pre>type Data struct {
 
     <span class="comment">// global information</span>
@@ -616,9 +602,7 @@ Data holds global data for simulations
 		
 			
 			
-			<h2 id="EleCond">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=6586:6905#L146">EleCond</a>
-				<a class="permalink" href="#EleCond">&#xb6;</a>
-			</h2>
+			<h2 id="EleCond">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=6586:6905#L146">EleCond</a></h2>
 			<pre>type EleCond struct {
     Tag   <a href="/pkg/builtin/#int">int</a>      `json:&#34;tag&#34;`   <span class="comment">// tag of cell/element</span>
     Keys  []<a href="/pkg/builtin/#string">string</a> `json:&#34;keys&#34;`  <span class="comment">// key indicating type of condition. ex: &#34;g&#34; (gravity), &#34;qn&#34; for beams, etc.</span>
@@ -644,9 +628,7 @@ EleCond holds element condition
 		
 			
 			
-			<h2 id="ElemData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=4436:5025#L93">ElemData</a>
-				<a class="permalink" href="#ElemData">&#xb6;</a>
-			</h2>
+			<h2 id="ElemData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=4436:5025#L93">ElemData</a></h2>
 			<pre>type ElemData struct {
 
     <span class="comment">// input data</span>
@@ -680,9 +662,7 @@ ElemData holds element data
 		
 			
 			
-			<h2 id="FaceBc">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=5496:5817#L122">FaceBc</a>
-				<a class="permalink" href="#FaceBc">&#xb6;</a>
-			</h2>
+			<h2 id="FaceBc">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=5496:5817#L122">FaceBc</a></h2>
 			<pre>type FaceBc struct {
     Tag   <a href="/pkg/builtin/#int">int</a>      `json:&#34;tag&#34;`   <span class="comment">// tag of face</span>
     Keys  []<a href="/pkg/builtin/#string">string</a> `json:&#34;keys&#34;`  <span class="comment">// key indicating type of bcs. ex: qn, pw, ux, uy, uz, wwx, wwy, wwz</span>
@@ -708,9 +688,7 @@ FaceBc holds face boundary condition
 		
 			
 			
-			<h2 id="FaceCond">type <a href="https://github.com/cpmech/gofem/blob/master/inp/facecond.go?s=1227:1610#L24">FaceCond</a>
-				<a class="permalink" href="#FaceCond">&#xb6;</a>
-			</h2>
+			<h2 id="FaceCond">type <a href="https://github.com/cpmech/gofem/blob/master/inp/facecond.go?s=1227:1610#L24">FaceCond</a></h2>
 			<pre>type FaceCond struct {
     FaceId      <a href="/pkg/builtin/#int">int</a>      <span class="comment">// msh: cell&#39;s face local id</span>
     LocalVerts  []<a href="/pkg/builtin/#int">int</a>    <span class="comment">// msh: cell&#39;s face local vertices ids (sorted)</span>
@@ -756,9 +734,7 @@ face id =&gt; condition
 		
 			
 			
-			<h2 id="FaceConds">type <a href="https://github.com/cpmech/gofem/blob/master/inp/facecond.go?s=1660:1686#L34">FaceConds</a>
-				<a class="permalink" href="#FaceConds">&#xb6;</a>
-			</h2>
+			<h2 id="FaceConds">type <a href="https://github.com/cpmech/gofem/blob/master/inp/facecond.go?s=1660:1686#L34">FaceConds</a></h2>
 			<pre>type FaceConds []*<a href="#FaceCond">FaceCond</a></pre>
 			<p>
 FaceConds hold many face boundary conditions
@@ -777,9 +753,7 @@ FaceConds hold many face boundary conditions
 
 			
 				
-				<h3 id="FaceConds.GetVerts">func (FaceConds) <a href="https://github.com/cpmech/gofem/blob/master/inp/facecond.go?s=1794:1852#L38">GetVerts</a>
-					<a class="permalink" href="#FaceConds.GetVerts">&#xb6;</a>
-				</h3>
+				<h3 id="FaceConds.GetVerts">func (FaceConds) <a href="https://github.com/cpmech/gofem/blob/master/inp/facecond.go?s=1794:1852#L38">GetVerts</a></h3>
 				<pre>func (o <a href="#FaceConds">FaceConds</a>) GetVerts(conds ...<a href="/pkg/builtin/#string">string</a>) (verts []<a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 GetVerts gets all vertices with any of the given conditions
@@ -794,9 +768,7 @@ GetVerts gets all vertices with any of the given conditions
 		
 			
 			
-			<h2 id="FuncData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=749:1145#L15">FuncData</a>
-				<a class="permalink" href="#FuncData">&#xb6;</a>
-			</h2>
+			<h2 id="FuncData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=749:1145#L15">FuncData</a></h2>
 			<pre>type FuncData struct {
     Name     <a href="/pkg/builtin/#string">string</a>   `json:&#34;name&#34;`     <span class="comment">// name of function. ex: zero, load, myfunction1, etc.</span>
     Type     <a href="/pkg/builtin/#string">string</a>   `json:&#34;type&#34;`     <span class="comment">// type of function. ex: cte, rmp</span>
@@ -823,9 +795,7 @@ FuncData holds function definition
 
 			
 				
-				<h3 id="FuncData.String">func (FuncData) <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=2592:2625#L82">String</a>
-					<a class="permalink" href="#FuncData.String">&#xb6;</a>
-				</h3>
+				<h3 id="FuncData.String">func (FuncData) <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=2592:2625#L82">String</a></h3>
 				<pre>func (o <a href="#FuncData">FuncData</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String prints one function
@@ -838,9 +808,7 @@ String prints one function
 		
 			
 			
-			<h2 id="FuncsData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=1172:1198#L26">FuncsData</a>
-				<a class="permalink" href="#FuncsData">&#xb6;</a>
-			</h2>
+			<h2 id="FuncsData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=1172:1198#L26">FuncsData</a></h2>
 			<pre>type FuncsData []*<a href="#FuncData">FuncData</a></pre>
 			<p>
 Funcs holds functions
@@ -859,9 +827,7 @@ Funcs holds functions
 
 			
 				
-				<h3 id="FuncsData.Get">func (FuncsData) <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=1232:1293#L29">Get</a>
-					<a class="permalink" href="#FuncsData.Get">&#xb6;</a>
-				</h3>
+				<h3 id="FuncsData.Get">func (FuncsData) <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=1232:1293#L29">Get</a></h3>
 				<pre>func (o <a href="#FuncsData">FuncsData</a>) Get(name <a href="/pkg/builtin/#string">string</a>) (fcn <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Get returns function by name
@@ -872,9 +838,7 @@ Get returns function by name
 				
 			
 				
-				<h3 id="FuncsData.PlotAll">func (FuncsData) <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=1683:1746#L48">PlotAll</a>
-					<a class="permalink" href="#FuncsData.PlotAll">&#xb6;</a>
-				</h3>
+				<h3 id="FuncsData.PlotAll">func (FuncsData) <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=1683:1746#L48">PlotAll</a></h3>
 				<pre>func (o <a href="#FuncsData">FuncsData</a>) PlotAll(pd *<a href="#PlotFdata">PlotFdata</a>, dirout, fnkey <a href="/pkg/builtin/#string">string</a>)</pre>
 				<p>
 PlotAll plot all functions
@@ -885,9 +849,7 @@ PlotAll plot all functions
 				
 			
 				
-				<h3 id="FuncsData.String">func (FuncsData) <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=2803:2837#L88">String</a>
-					<a class="permalink" href="#FuncsData.String">&#xb6;</a>
-				</h3>
+				<h3 id="FuncsData.String">func (FuncsData) <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=2803:2837#L88">String</a></h3>
 				<pre>func (o <a href="#FuncsData">FuncsData</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String prints functions
@@ -900,9 +862,7 @@ String prints functions
 		
 			
 			
-			<h2 id="IniFcnData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=8508:8797#L185">IniFcnData</a>
-				<a class="permalink" href="#IniFcnData">&#xb6;</a>
-			</h2>
+			<h2 id="IniFcnData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=8508:8797#L185">IniFcnData</a></h2>
 			<pre>type IniFcnData struct {
     File <a href="/pkg/builtin/#string">string</a>   `json:&#34;file&#34;` <span class="comment">// file with values at each node is given; filename with path is provided</span>
     Fcns []<a href="/pkg/builtin/#string">string</a> `json:&#34;fcns&#34;` <span class="comment">// functions F(t, x) are given; from functions database</span>
@@ -927,9 +887,7 @@ IniFcnData holds data for setting initial solution values such as Y, dYdt and d2
 		
 			
 			
-			<h2 id="IniImportRes">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=8882:9138#L192">IniImportRes</a>
-				<a class="permalink" href="#IniImportRes">&#xb6;</a>
-			</h2>
+			<h2 id="IniImportRes">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=8882:9138#L192">IniImportRes</a></h2>
 			<pre>type IniImportRes struct {
     Dir    <a href="/pkg/builtin/#string">string</a> `json:&#34;dir&#34;`    <span class="comment">// output directory with previous simulation files</span>
     Fnk    <a href="/pkg/builtin/#string">string</a> `json:&#34;fnk&#34;`    <span class="comment">// previous simulation file name key (without .sim)</span>
@@ -954,9 +912,7 @@ IniImportRes holds definitions for importing results from a previous simulation
 		
 			
 			
-			<h2 id="IniPorousData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=7516:7891#L167">IniPorousData</a>
-				<a class="permalink" href="#IniPorousData">&#xb6;</a>
-			</h2>
+			<h2 id="IniPorousData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=7516:7891#L167">IniPorousData</a></h2>
 			<pre>type IniPorousData struct {
     Nu     []<a href="/pkg/builtin/#float64">float64</a> `json:&#34;nu&#34;`     <span class="comment">// [nlayers] Poisson&#39;s coefficient to compute effective horizontal state for each layer</span>
     K0     []<a href="/pkg/builtin/#float64">float64</a> `json:&#34;K0&#34;`     <span class="comment">// [nlayers] or Earth pressure coefficient at rest to compute effective horizontal stresses</span>
@@ -981,9 +937,7 @@ IniPorousData  holds data for setting initial porous media state (e.g. geostatic
 		
 			
 			
-			<h2 id="IniStressData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=7950:8418#L174">IniStressData</a>
-				<a class="permalink" href="#IniStressData">&#xb6;</a>
-			</h2>
+			<h2 id="IniStressData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=7950:8418#L174">IniStressData</a></h2>
 			<pre>type IniStressData struct {
     Hom <a href="/pkg/builtin/#bool">bool</a>    `json:&#34;hom&#34;` <span class="comment">// homogeneous stress distribution</span>
     Iso <a href="/pkg/builtin/#bool">bool</a>    `json:&#34;iso&#34;` <span class="comment">// isotropic state</span>
@@ -1012,9 +966,7 @@ IniStressData holds data for setting initial stresses
 		
 			
 			
-			<h2 id="LinSolData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=1800:2171#L37">LinSolData</a>
-				<a class="permalink" href="#LinSolData">&#xb6;</a>
-			</h2>
+			<h2 id="LinSolData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=1800:2171#L37">LinSolData</a></h2>
 			<pre>type LinSolData struct {
     Name      <a href="/pkg/builtin/#string">string</a> `json:&#34;name&#34;`      <span class="comment">// &#34;mumps&#34; or &#34;umfpack&#34;</span>
     Symmetric <a href="/pkg/builtin/#bool">bool</a>   `json:&#34;symmetric&#34;` <span class="comment">// use symmetric solver</span>
@@ -1040,9 +992,7 @@ LinSolData holds data for linear solvers
 
 			
 				
-				<h3 id="LinSolData.SetDefault">func (*LinSolData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19415:19448#L557">SetDefault</a>
-					<a class="permalink" href="#LinSolData.SetDefault">&#xb6;</a>
-				</h3>
+				<h3 id="LinSolData.SetDefault">func (*LinSolData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19415:19448#L557">SetDefault</a></h3>
 				<pre>func (o *<a href="#LinSolData">LinSolData</a>) SetDefault()</pre>
 				<p>
 SetDefault sets defaults values
@@ -1055,9 +1005,7 @@ SetDefault sets defaults values
 		
 			
 			
-			<h2 id="MatDb">type <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=1719:2517#L40">MatDb</a>
-				<a class="permalink" href="#MatDb">&#xb6;</a>
-			</h2>
+			<h2 id="MatDb">type <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=1719:2517#L40">MatDb</a></h2>
 			<pre>type MatDb struct {
 
     <span class="comment">// input</span>
@@ -1090,9 +1038,7 @@ MatDb implements a database of materials
 
 			
 				
-				<h3 id="ReadMat">func <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=2715:2808#L68">ReadMat</a>
-					<a class="permalink" href="#ReadMat">&#xb6;</a>
-				</h3>
+				<h3 id="ReadMat">func <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=2715:2808#L68">ReadMat</a></h3>
 				<pre>func ReadMat(dir, fn <a href="/pkg/builtin/#string">string</a>, ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, H, grav <a href="/pkg/builtin/#float64">float64</a>) (mdb *<a href="#MatDb">MatDb</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ReadMat reads all materials data from a .mat JSON file
@@ -1104,9 +1050,7 @@ ReadMat reads all materials data from a .mat JSON file
 
 			
 				
-				<h3 id="MatDb.Clean">func (*MatDb) <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=2545:2568#L59">Clean</a>
-					<a class="permalink" href="#MatDb.Clean">&#xb6;</a>
-				</h3>
+				<h3 id="MatDb.Clean">func (*MatDb) <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=2545:2568#L59">Clean</a></h3>
 				<pre>func (o *<a href="#MatDb">MatDb</a>) Clean()</pre>
 				<p>
 Clean cleans resources
@@ -1117,9 +1061,7 @@ Clean cleans resources
 				
 			
 				
-				<h3 id="MatDb.Get">func (MatDb) <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=7410:7451#L265">Get</a>
-					<a class="permalink" href="#MatDb.Get">&#xb6;</a>
-				</h3>
+				<h3 id="MatDb.Get">func (MatDb) <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=7507:7548#L270">Get</a></h3>
 				<pre>func (o <a href="#MatDb">MatDb</a>) Get(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Material">Material</a></pre>
 				<p>
 Get returns a material
@@ -1132,9 +1074,7 @@ Get returns a material
 				
 			
 				
-				<h3 id="MatDb.String">func (MatDb) <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=8079:8109#L294">String</a>
-					<a class="permalink" href="#MatDb.String">&#xb6;</a>
-				</h3>
+				<h3 id="MatDb.String">func (MatDb) <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=8176:8206#L299">String</a></h3>
 				<pre>func (o <a href="#MatDb">MatDb</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String outputs all materials
@@ -1147,9 +1087,7 @@ String outputs all materials
 		
 			
 			
-			<h2 id="Material">type <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=658:1622#L15">Material</a>
-				<a class="permalink" href="#Material">&#xb6;</a>
-			</h2>
+			<h2 id="Material">type <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=658:1622#L15">Material</a></h2>
 			<pre>type Material struct {
 
     <span class="comment">// input</span>
@@ -1187,9 +1125,7 @@ Material holds material data
 
 			
 				
-				<h3 id="Material.String">func (*Material) <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=7579:7613#L275">String</a>
-					<a class="permalink" href="#Material.String">&#xb6;</a>
-				</h3>
+				<h3 id="Material.String">func (*Material) <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=7676:7710#L280">String</a></h3>
 				<pre>func (o *<a href="#Material">Material</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String prints one function
@@ -1202,9 +1138,7 @@ String prints one function
 		
 			
 			
-			<h2 id="MatsData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=1648:1673#L37">MatsData</a>
-				<a class="permalink" href="#MatsData">&#xb6;</a>
-			</h2>
+			<h2 id="MatsData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=1648:1673#L37">MatsData</a></h2>
 			<pre>type MatsData []*<a href="#Material">Material</a></pre>
 			<p>
 Mats holds materials
@@ -1223,9 +1157,7 @@ Mats holds materials
 
 			
 				
-				<h3 id="MatsData.String">func (MatsData) <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=7875:7908#L281">String</a>
-					<a class="permalink" href="#MatsData.String">&#xb6;</a>
-				</h3>
+				<h3 id="MatsData.String">func (MatsData) <a href="https://github.com/cpmech/gofem/blob/master/inp/mat.go?s=7972:8005#L286">String</a></h3>
 				<pre>func (o <a href="#MatsData">MatsData</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String prints materials
@@ -1238,9 +1170,7 @@ String prints materials
 		
 			
 			
-			<h2 id="Mesh">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=2284:3347#L74">Mesh</a>
-				<a class="permalink" href="#Mesh">&#xb6;</a>
-			</h2>
+			<h2 id="Mesh">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=2284:3347#L74">Mesh</a></h2>
 			<pre>type Mesh struct {
 
     <span class="comment">// from JSON</span>
@@ -1284,9 +1214,7 @@ Mesh holds a mesh for FE analyses
 
 			
 				
-				<h3 id="ReadMsh">func <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=3421:3487#L105">ReadMsh</a>
-					<a class="permalink" href="#ReadMsh">&#xb6;</a>
-				</h3>
+				<h3 id="ReadMsh">func <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=3421:3487#L105">ReadMsh</a></h3>
 				<pre>func ReadMsh(dir, fn <a href="/pkg/builtin/#string">string</a>, goroutineId <a href="/pkg/builtin/#int">int</a>) (o *<a href="#Mesh">Mesh</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ReadMsh reads a mesh for FE analyses
@@ -1300,9 +1228,7 @@ ReadMsh reads a mesh for FE analyses
 
 			
 				
-				<h3 id="Mesh.CalcDerived">func (*Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=3827:3882#L129">CalcDerived</a>
-					<a class="permalink" href="#Mesh.CalcDerived">&#xb6;</a>
-				</h3>
+				<h3 id="Mesh.CalcDerived">func (*Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=3827:3882#L129">CalcDerived</a></h3>
 				<pre>func (o *<a href="#Mesh">Mesh</a>) CalcDerived(goroutineId <a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcDerived computes derived quantities
@@ -1313,9 +1239,7 @@ CalcDerived computes derived quantities
 				
 			
 				
-				<h3 id="Mesh.Draw2d">func (*Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=11309:11381#L460">Draw2d</a>
-					<a class="permalink" href="#Mesh.Draw2d">&#xb6;</a>
-				</h3>
+				<h3 id="Mesh.Draw2d">func (*Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=11309:11381#L460">Draw2d</a></h3>
 				<pre>func (o *<a href="#Mesh">Mesh</a>) Draw2d(onlyLin, setup <a href="/pkg/builtin/#bool">bool</a>, lwds map[<a href="/pkg/builtin/#int">int</a>]<a href="/pkg/builtin/#float64">float64</a>, ms <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 Draw2d draws 2D mesh
@@ -1329,9 +1253,7 @@ ms   -- markersize for nodes
 				
 			
 				
-				<h3 id="Mesh.String">func (Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=10882:10911#L438">String</a>
-					<a class="permalink" href="#Mesh.String">&#xb6;</a>
-				</h3>
+				<h3 id="Mesh.String">func (Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=10882:10911#L438">String</a></h3>
 				<pre>func (o <a href="#Mesh">Mesh</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String returns a JSON representation of *Mesh
@@ -1344,9 +1266,7 @@ String returns a JSON representation of *Mesh
 		
 			
 			
-			<h2 id="NodeBc">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=6232:6549#L138">NodeBc</a>
-				<a class="permalink" href="#NodeBc">&#xb6;</a>
-			</h2>
+			<h2 id="NodeBc">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=6232:6549#L138">NodeBc</a></h2>
 			<pre>type NodeBc struct {
     Tag   <a href="/pkg/builtin/#int">int</a>      `json:&#34;tag&#34;`   <span class="comment">// tag of node</span>
     Keys  []<a href="/pkg/builtin/#string">string</a> `json:&#34;keys&#34;`  <span class="comment">// key indicating type of bcs. ex: pw, ux, uy, uz, wwx, wwy, wwz</span>
@@ -1372,9 +1292,7 @@ NodeBc holds node boundary condition
 		
 			
 			
-			<h2 id="PlotFdata">type <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=386:709#L6">PlotFdata</a>
-				<a class="permalink" href="#PlotFdata">&#xb6;</a>
-			</h2>
+			<h2 id="PlotFdata">type <a href="https://github.com/cpmech/gofem/blob/master/inp/func.go?s=386:709#L6">PlotFdata</a></h2>
 			<pre>type PlotFdata struct {
     Ti      <a href="/pkg/builtin/#float64">float64</a>  `json:&#34;ti&#34;`      <span class="comment">// initial time</span>
     Tf      <a href="/pkg/builtin/#float64">float64</a>  `json:&#34;tf&#34;`      <span class="comment">// final time</span>
@@ -1401,9 +1319,7 @@ PlotFdata holds information to plot functions
 		
 			
 			
-			<h2 id="Region">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=5055:5454#L109">Region</a>
-				<a class="permalink" href="#Region">&#xb6;</a>
-			</h2>
+			<h2 id="Region">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=5055:5454#L109">Region</a></h2>
 			<pre>type Region struct {
 
     <span class="comment">// input data</span>
@@ -1432,9 +1348,7 @@ Region holds region data
 
 			
 				
-				<h3 id="Region.Etag2data">func (*Region) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=18167:18213#L502">Etag2data</a>
-					<a class="permalink" href="#Region.Etag2data">&#xb6;</a>
-				</h3>
+				<h3 id="Region.Etag2data">func (*Region) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=18167:18213#L502">Etag2data</a></h3>
 				<pre>func (o *<a href="#Region">Region</a>) Etag2data(etag <a href="/pkg/builtin/#int">int</a>) *<a href="#ElemData">ElemData</a></pre>
 				<p>
 Etag2data returns the ElemData corresponding to element tag
@@ -1449,9 +1363,7 @@ Etag2data returns the ElemData corresponding to element tag
 		
 			
 			
-			<h2 id="SeamBc">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=5869:6190#L130">SeamBc</a>
-				<a class="permalink" href="#SeamBc">&#xb6;</a>
-			</h2>
+			<h2 id="SeamBc">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=5869:6190#L130">SeamBc</a></h2>
 			<pre>type SeamBc struct {
     Tag   <a href="/pkg/builtin/#int">int</a>      `json:&#34;tag&#34;`   <span class="comment">// tag of seam</span>
     Keys  []<a href="/pkg/builtin/#string">string</a> `json:&#34;keys&#34;`  <span class="comment">// key indicating type of bcs. ex: qn, pw, ux, uy, uz, wwx, wwy, wwz</span>
@@ -1477,9 +1389,7 @@ SeamBc holds seam (3D edge) boundary condition
 		
 			
 			
-			<h2 id="Simulation">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=10619:12190#L227">Simulation</a>
-				<a class="permalink" href="#Simulation">&#xb6;</a>
-			</h2>
+			<h2 id="Simulation">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=10619:12190#L227">Simulation</a></h2>
 			<pre>type Simulation struct {
 
     <span class="comment">// input</span>
@@ -1524,9 +1434,7 @@ Simulation holds all simulation data
 
 			
 				
-				<h3 id="ReadSim">func <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=12463:12548#L267">ReadSim</a>
-					<a class="permalink" href="#ReadSim">&#xb6;</a>
-				</h3>
+				<h3 id="ReadSim">func <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=12463:12548#L267">ReadSim</a></h3>
 				<pre>func ReadSim(simfilepath, alias <a href="/pkg/builtin/#string">string</a>, erasefiles <a href="/pkg/builtin/#bool">bool</a>, goroutineId <a href="/pkg/builtin/#int">int</a>) *<a href="#Simulation">Simulation</a></pre>
 				<p>
 ReadSim reads all simulation data from a .sim JSON file
@@ -1538,9 +1446,7 @@ ReadSim reads all simulation data from a .sim JSON file
 
 			
 				
-				<h3 id="Simulation.Clean">func (*Simulation) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=12320:12348#L260">Clean</a>
-					<a class="permalink" href="#Simulation.Clean">&#xb6;</a>
-				</h3>
+				<h3 id="Simulation.Clean">func (*Simulation) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=12320:12348#L260">Clean</a></h3>
 				<pre>func (o *<a href="#Simulation">Simulation</a>) Clean()</pre>
 				<p>
 Clean cleans resources
@@ -1551,9 +1457,7 @@ Clean cleans resources
 				
 			
 				
-				<h3 id="Simulation.GetInfo">func (*Simulation) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=18354:18409#L512">GetInfo</a>
-					<a class="permalink" href="#Simulation.GetInfo">&#xb6;</a>
-				</h3>
+				<h3 id="Simulation.GetInfo">func (*Simulation) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=18354:18409#L512">GetInfo</a></h3>
 				<pre>func (o *<a href="#Simulation">Simulation</a>) GetInfo(w <a href="/pkg/io/">goio</a>.<a href="/pkg/io/#Writer">Writer</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 GetInfo returns formatted information
@@ -1564,9 +1468,7 @@ GetInfo returns formatted information
 				
 			
 				
-				<h3 id="Simulation.PrmAdjust">func (*Simulation) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20576:20628#L619">PrmAdjust</a>
-					<a class="permalink" href="#Simulation.PrmAdjust">&#xb6;</a>
-				</h3>
+				<h3 id="Simulation.PrmAdjust">func (*Simulation) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20576:20628#L619">PrmAdjust</a></h3>
 				<pre>func (o *<a href="#Simulation">Simulation</a>) PrmAdjust(adj <a href="/pkg/builtin/#int">int</a>, val <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 PrmAdjust adjusts parameter (random variable or not)
@@ -1577,9 +1479,7 @@ PrmAdjust adjusts parameter (random variable or not)
 				
 			
 				
-				<h3 id="Simulation.PrmGetAdj">func (*Simulation) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20806:20859#L628">PrmGetAdj</a>
-					<a class="permalink" href="#Simulation.PrmGetAdj">&#xb6;</a>
-				</h3>
+				<h3 id="Simulation.PrmGetAdj">func (*Simulation) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20806:20859#L628">PrmGetAdj</a></h3>
 				<pre>func (o *<a href="#Simulation">Simulation</a>) PrmGetAdj(adj <a href="/pkg/builtin/#int">int</a>) (val <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 PrmGetAdj gets adjustable parameter (random variable or not)
@@ -1592,9 +1492,7 @@ PrmGetAdj gets adjustable parameter (random variable or not)
 		
 			
 			
-			<h2 id="SolverData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=2209:4403#L47">SolverData</a>
-				<a class="permalink" href="#SolverData">&#xb6;</a>
-			</h2>
+			<h2 id="SolverData">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=2209:4403#L47">SolverData</a></h2>
 			<pre>type SolverData struct {
 
     <span class="comment">// nonlinear solver</span>
@@ -1656,9 +1554,7 @@ SolverData holds FEM solver data
 
 			
 				
-				<h3 id="SolverData.PostProcess">func (*SolverData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20069:20103#L597">PostProcess</a>
-					<a class="permalink" href="#SolverData.PostProcess">&#xb6;</a>
-				</h3>
+				<h3 id="SolverData.PostProcess">func (*SolverData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=20069:20103#L597">PostProcess</a></h3>
 				<pre>func (o *<a href="#SolverData">SolverData</a>) PostProcess()</pre>
 				<p>
 PostProcess performs a post-processing of the just read json file
@@ -1669,9 +1565,7 @@ PostProcess performs a post-processing of the just read json file
 				
 			
 				
-				<h3 id="SolverData.SetDefault">func (*SolverData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19548:19581#L564">SetDefault</a>
-					<a class="permalink" href="#SolverData.SetDefault">&#xb6;</a>
-				</h3>
+				<h3 id="SolverData.SetDefault">func (*SolverData) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19548:19581#L564">SetDefault</a></h3>
 				<pre>func (o *<a href="#SolverData">SolverData</a>) SetDefault()</pre>
 				<p>
 SetDefault set defaults values
@@ -1684,9 +1578,7 @@ SetDefault set defaults values
 		
 			
 			
-			<h2 id="Stage">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=9166:10577#L199">Stage</a>
-				<a class="permalink" href="#Stage">&#xb6;</a>
-			</h2>
+			<h2 id="Stage">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=9166:10577#L199">Stage</a></h2>
 			<pre>type Stage struct {
 
     <span class="comment">// main</span>
@@ -1730,9 +1622,7 @@ Stage holds stage data
 
 			
 				
-				<h3 id="Stage.GetEleCond">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=18627:18674#L523">GetEleCond</a>
-					<a class="permalink" href="#Stage.GetEleCond">&#xb6;</a>
-				</h3>
+				<h3 id="Stage.GetEleCond">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=18627:18674#L523">GetEleCond</a></h3>
 				<pre>func (o <a href="#Stage">Stage</a>) GetEleCond(elemtag <a href="/pkg/builtin/#int">int</a>) *<a href="#EleCond">EleCond</a></pre>
 				<p>
 GetEleCond returns element condition structure by giving an elem tag
@@ -1745,9 +1635,7 @@ GetEleCond returns element condition structure by giving an elem tag
 				
 			
 				
-				<h3 id="Stage.GetFaceBc">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19135:19180#L545">GetFaceBc</a>
-					<a class="permalink" href="#Stage.GetFaceBc">&#xb6;</a>
-				</h3>
+				<h3 id="Stage.GetFaceBc">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=19135:19180#L545">GetFaceBc</a></h3>
 				<pre>func (o <a href="#Stage">Stage</a>) GetFaceBc(facetag <a href="/pkg/builtin/#int">int</a>) *<a href="#FaceBc">FaceBc</a></pre>
 				<p>
 GetFaceBc returns face boundary condition structure by giving a face tag
@@ -1760,9 +1648,7 @@ GetFaceBc returns face boundary condition structure by giving a face tag
 				
 			
 				
-				<h3 id="Stage.GetNodeBc">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=18881:18926#L534">GetNodeBc</a>
-					<a class="permalink" href="#Stage.GetNodeBc">&#xb6;</a>
-				</h3>
+				<h3 id="Stage.GetNodeBc">func (Stage) <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=18881:18926#L534">GetNodeBc</a></h3>
 				<pre>func (o <a href="#Stage">Stage</a>) GetNodeBc(nodetag <a href="/pkg/builtin/#int">int</a>) *<a href="#NodeBc">NodeBc</a></pre>
 				<p>
 GetNodeBc returns node boundary condition structure by giving a node tag
@@ -1777,9 +1663,7 @@ GetNodeBc returns node boundary condition structure by giving a node tag
 		
 			
 			
-			<h2 id="TimeControl">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=6975:7416#L154">TimeControl</a>
-				<a class="permalink" href="#TimeControl">&#xb6;</a>
-			</h2>
+			<h2 id="TimeControl">type <a href="https://github.com/cpmech/gofem/blob/master/inp/sim.go?s=6975:7416#L154">TimeControl</a></h2>
 			<pre>type TimeControl struct {
     Tf     <a href="/pkg/builtin/#float64">float64</a> `json:&#34;tf&#34;`     <span class="comment">// final time</span>
     Dt     <a href="/pkg/builtin/#float64">float64</a> `json:&#34;dt&#34;`     <span class="comment">// time step size (if constant)</span>
@@ -1810,9 +1694,7 @@ TimeControl holds data for defining the simulation time stepping
 		
 			
 			
-			<h2 id="Vert">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=530:702#L19">Vert</a>
-				<a class="permalink" href="#Vert">&#xb6;</a>
-			</h2>
+			<h2 id="Vert">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=530:702#L19">Vert</a></h2>
 			<pre>type Vert struct {
     Id       <a href="/pkg/builtin/#int">int</a>       <span class="comment">// id</span>
     Tag      <a href="/pkg/builtin/#int">int</a>       <span class="comment">// tag</span>
@@ -1836,9 +1718,7 @@ Vert holds vertex data
 
 			
 				
-				<h3 id="Vert.String">func (*Vert) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=8392:8422#L320">String</a>
-					<a class="permalink" href="#Vert.String">&#xb6;</a>
-				</h3>
+				<h3 id="Vert.String">func (*Vert) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=8392:8422#L320">String</a></h3>
 				<pre>func (o *<a href="#Vert">Vert</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String returns a JSON representation of *Vert
@@ -1895,7 +1775,7 @@ String returns a JSON representation of *Vert
 
 	
 
-</div><!-- page -->
+
 <div id="footer">
 <br /><br />
 <hr>
@@ -1929,5 +1809,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </pre><!-- copyright -->
 </div><!-- footer -->
+
+</div><!-- container -->
+</div><!-- page -->
 </body>
 </html>

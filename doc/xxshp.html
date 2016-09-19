@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
 <title>Gofem &ndash; package shp</title>
 <link type="text/css" rel="stylesheet" href="static/style.css">
 <script type="text/javascript" src="static/godocs.js"></script>
 <style type="text/css"></style>
 </head>
 <body>
-<div id="page"><h1>Gofem &ndash; <b>shp</b> &ndash; shape (interpolation) structures and quadrature points</h1>
+<div id="page" class=\wide">
+<div class="container">
+<h1>Gofem &ndash; <b>shp</b> &ndash; shape (interpolation) structures and quadrature points</h1>
 use 'godoc cmd/github.com/cpmech/gofem/shp' for documentation on the github.com/cpmech/gofem/shp command 
 
 <!--
@@ -335,9 +339,7 @@ constants
 		
 			
 			
-			<h2 id="CheckDSdR">func <a href="https://github.com/cpmech/gofem/blob/master/shp/testing.go?s=2745:2829#L118">CheckDSdR</a>
-				<a class="permalink" href="#CheckDSdR">&#xb6;</a>
-			</h2>
+			<h2 id="CheckDSdR">func <a href="https://github.com/cpmech/gofem/blob/master/shp/testing.go?s=2745:2829#L118">CheckDSdR</a></h2>
 			<pre>func CheckDSdR(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, shape *<a href="#Shape">Shape</a>, r []<a href="/pkg/builtin/#float64">float64</a>, tol <a href="/pkg/builtin/#float64">float64</a>, verbose <a href="/pkg/builtin/#bool">bool</a>)</pre>
 			<p>
 CheckDSdR checks dSdR derivatives of shape structures
@@ -349,9 +351,7 @@ CheckDSdR checks dSdR derivatives of shape structures
 		
 			
 			
-			<h2 id="CheckDSdx">func <a href="https://github.com/cpmech/gofem/blob/master/shp/testing.go?s=3625:3727#L149">CheckDSdx</a>
-				<a class="permalink" href="#CheckDSdx">&#xb6;</a>
-			</h2>
+			<h2 id="CheckDSdx">func <a href="https://github.com/cpmech/gofem/blob/master/shp/testing.go?s=3625:3727#L149">CheckDSdx</a></h2>
 			<pre>func CheckDSdx(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, shape *<a href="#Shape">Shape</a>, xmat [][]<a href="/pkg/builtin/#float64">float64</a>, x []<a href="/pkg/builtin/#float64">float64</a>, tol <a href="/pkg/builtin/#float64">float64</a>, verbose <a href="/pkg/builtin/#bool">bool</a>)</pre>
 			<p>
 CheckDSdx checks G=dSdx derivatives of shape structures
@@ -363,9 +363,7 @@ CheckDSdx checks G=dSdx derivatives of shape structures
 		
 			
 			
-			<h2 id="CheckIsop">func <a href="https://github.com/cpmech/gofem/blob/master/shp/testing.go?s=2119:2196#L92">CheckIsop</a>
-				<a class="permalink" href="#CheckIsop">&#xb6;</a>
-			</h2>
+			<h2 id="CheckIsop">func <a href="https://github.com/cpmech/gofem/blob/master/shp/testing.go?s=2119:2196#L92">CheckIsop</a></h2>
 			<pre>func CheckIsop(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, shape *<a href="#Shape">Shape</a>, C [][]<a href="/pkg/builtin/#float64">float64</a>, Cnat [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 			<p>
 CheckIsop checks isoparametric property
@@ -380,9 +378,7 @@ Cnat -- [2][4] natural coordinates of corners
 		
 			
 			
-			<h2 id="CheckShape">func <a href="https://github.com/cpmech/gofem/blob/master/shp/testing.go?s=363:435#L7">CheckShape</a>
-				<a class="permalink" href="#CheckShape">&#xb6;</a>
-			</h2>
+			<h2 id="CheckShape">func <a href="https://github.com/cpmech/gofem/blob/master/shp/testing.go?s=363:435#L7">CheckShape</a></h2>
 			<pre>func CheckShape(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, shape *<a href="#Shape">Shape</a>, tol <a href="/pkg/builtin/#float64">float64</a>, verbose <a href="/pkg/builtin/#bool">bool</a>)</pre>
 			<p>
 CheckShape checks that shape functions evaluate to 1.0 @ nodes
@@ -394,9 +390,7 @@ CheckShape checks that shape functions evaluate to 1.0 @ nodes
 		
 			
 			
-			<h2 id="CheckShapeFace">func <a href="https://github.com/cpmech/gofem/blob/master/shp/testing.go?s=1082:1158#L43">CheckShapeFace</a>
-				<a class="permalink" href="#CheckShapeFace">&#xb6;</a>
-			</h2>
+			<h2 id="CheckShapeFace">func <a href="https://github.com/cpmech/gofem/blob/master/shp/testing.go?s=1082:1158#L43">CheckShapeFace</a></h2>
 			<pre>func CheckShapeFace(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, shape *<a href="#Shape">Shape</a>, tol <a href="/pkg/builtin/#float64">float64</a>, verbose <a href="/pkg/builtin/#bool">bool</a>)</pre>
 			<p>
 CheckShapeFace checks shape functions @ faces
@@ -408,9 +402,7 @@ CheckShapeFace checks shape functions @ faces
 		
 			
 			
-			<h2 id="Hex20">func <a href="https://github.com/cpmech/gofem/blob/master/shp/hexs.go?s=4357:4437#L125">Hex20</a>
-				<a class="permalink" href="#Hex20">&#xb6;</a>
-			</h2>
+			<h2 id="Hex20">func <a href="https://github.com/cpmech/gofem/blob/master/shp/hexs.go?s=4357:4437#L125">Hex20</a></h2>
 			<pre>func Hex20(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Hex20 calculates the shape functions (S) and derivatives of shape functions (dSdR) of hex20
@@ -423,9 +415,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Hex8">func <a href="https://github.com/cpmech/gofem/blob/master/shp/hexs.go?s=2123:2202#L59">Hex8</a>
-				<a class="permalink" href="#Hex8">&#xb6;</a>
-			</h2>
+			<h2 id="Hex8">func <a href="https://github.com/cpmech/gofem/blob/master/shp/hexs.go?s=2123:2202#L59">Hex8</a></h2>
 			<pre>func Hex8(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Hex8 calculates the shape functions (S) and derivatives of shape functions (dSdR) of hex8
@@ -438,9 +428,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Lin2">func <a href="https://github.com/cpmech/gofem/blob/master/shp/lins.go?s=2102:2181#L82">Lin2</a>
-				<a class="permalink" href="#Lin2">&#xb6;</a>
-			</h2>
+			<h2 id="Lin2">func <a href="https://github.com/cpmech/gofem/blob/master/shp/lins.go?s=2102:2181#L82">Lin2</a></h2>
 			<pre>func Lin2(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Lin2 calculates the shape functions (S) and derivatives of shape functions (dSdR) of lin2
@@ -453,9 +441,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Lin3">func <a href="https://github.com/cpmech/gofem/blob/master/shp/lins.go?s=2551:2630#L101">Lin3</a>
-				<a class="permalink" href="#Lin3">&#xb6;</a>
-			</h2>
+			<h2 id="Lin3">func <a href="https://github.com/cpmech/gofem/blob/master/shp/lins.go?s=2551:2630#L101">Lin3</a></h2>
 			<pre>func Lin3(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Lin3 calculates the shape functions (S) and derivatives of shape functions (dSdR) of lin3
@@ -468,9 +454,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Lin4">func <a href="https://github.com/cpmech/gofem/blob/master/shp/lins.go?s=3048:3127#L122">Lin4</a>
-				<a class="permalink" href="#Lin4">&#xb6;</a>
-			</h2>
+			<h2 id="Lin4">func <a href="https://github.com/cpmech/gofem/blob/master/shp/lins.go?s=3048:3127#L122">Lin4</a></h2>
 			<pre>func Lin4(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Lin4 calculates the shape functions (S) and derivatives of shape functions (dSdR) of lin4
@@ -483,9 +467,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Lin5">func <a href="https://github.com/cpmech/gofem/blob/master/shp/lins.go?s=3874:3953#L146">Lin5</a>
-				<a class="permalink" href="#Lin5">&#xb6;</a>
-			</h2>
+			<h2 id="Lin5">func <a href="https://github.com/cpmech/gofem/blob/master/shp/lins.go?s=3874:3953#L146">Lin5</a></h2>
 			<pre>func Lin5(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Lin5 calculates the shape functions (S) and derivatives of shape functions (dSdR) of lin5
@@ -498,9 +480,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Qua12">func <a href="https://github.com/cpmech/gofem/blob/master/shp/quads.go?s=7675:7755#L253">Qua12</a>
-				<a class="permalink" href="#Qua12">&#xb6;</a>
-			</h2>
+			<h2 id="Qua12">func <a href="https://github.com/cpmech/gofem/blob/master/shp/quads.go?s=7675:7755#L253">Qua12</a></h2>
 			<pre>func Qua12(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Qua12 calculates the shape functions (S) and derivatives of shape functions (dSdR) of qua12
@@ -513,9 +493,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Qua16">func <a href="https://github.com/cpmech/gofem/blob/master/shp/quads.go?s=10467:10547#L321">Qua16</a>
-				<a class="permalink" href="#Qua16">&#xb6;</a>
-			</h2>
+			<h2 id="Qua16">func <a href="https://github.com/cpmech/gofem/blob/master/shp/quads.go?s=10467:10547#L321">Qua16</a></h2>
 			<pre>func Qua16(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Qua16 calculates the shape functions (S) and derivatives of shape functions (dSdR) of qua16
@@ -528,9 +506,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Qua4">func <a href="https://github.com/cpmech/gofem/blob/master/shp/quads.go?s=3713:3792#L123">Qua4</a>
-				<a class="permalink" href="#Qua4">&#xb6;</a>
-			</h2>
+			<h2 id="Qua4">func <a href="https://github.com/cpmech/gofem/blob/master/shp/quads.go?s=3713:3792#L123">Qua4</a></h2>
 			<pre>func Qua4(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Qua4 calculates the shape functions (S) and derivatives of shape functions (dSdR) of qua4
@@ -543,9 +519,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Qua8">func <a href="https://github.com/cpmech/gofem/blob/master/shp/quads.go?s=4554:4633#L155">Qua8</a>
-				<a class="permalink" href="#Qua8">&#xb6;</a>
-			</h2>
+			<h2 id="Qua8">func <a href="https://github.com/cpmech/gofem/blob/master/shp/quads.go?s=4554:4633#L155">Qua8</a></h2>
 			<pre>func Qua8(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Qua8 calculates the shape functions (S) and derivatives of shape functions (dSdR) of qua8
@@ -558,9 +532,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Qua9">func <a href="https://github.com/cpmech/gofem/blob/master/shp/quads.go?s=5980:6059#L200">Qua9</a>
-				<a class="permalink" href="#Qua9">&#xb6;</a>
-			</h2>
+			<h2 id="Qua9">func <a href="https://github.com/cpmech/gofem/blob/master/shp/quads.go?s=5980:6059#L200">Qua9</a></h2>
 			<pre>func Qua9(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Qua9 calculates the shape functions (S) and derivatives of shape functions (dSdR) of qua9
@@ -573,9 +545,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Tet10">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tets.go?s=3125:3205#L115">Tet10</a>
-				<a class="permalink" href="#Tet10">&#xb6;</a>
-			</h2>
+			<h2 id="Tet10">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tets.go?s=3125:3205#L115">Tet10</a></h2>
 			<pre>func Tet10(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Tet10 calculates the shape functions (S) and derivatives of shape functions (dSdR) of tet10
@@ -588,9 +558,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Tet4">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tets.go?s=1778:1857#L57">Tet4</a>
-				<a class="permalink" href="#Tet4">&#xb6;</a>
-			</h2>
+			<h2 id="Tet4">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tets.go?s=1778:1857#L57">Tet4</a></h2>
 			<pre>func Tet4(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Tet4 calculates the shape functions (S) and derivatives of shape functions (dSdR) of tet4
@@ -603,9 +571,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Tri10">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tris.go?s=4870:4950#L180">Tri10</a>
-				<a class="permalink" href="#Tri10">&#xb6;</a>
-			</h2>
+			<h2 id="Tri10">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tris.go?s=4870:4950#L180">Tri10</a></h2>
 			<pre>func Tri10(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Tri10 calculates the shape functions (S) and derivatives of shape functions (dSdR) of tri10
@@ -618,9 +584,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Tri15">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tris.go?s=6473:6553#L254">Tri15</a>
-				<a class="permalink" href="#Tri15">&#xb6;</a>
-			</h2>
+			<h2 id="Tri15">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tris.go?s=6473:6553#L254">Tri15</a></h2>
 			<pre>func Tri15(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Tri15 calculates the shape functions (S) and derivatives of shape functions (dSdR) of tri15
@@ -633,9 +597,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Tri3">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tris.go?s=3014:3093#L101">Tri3</a>
-				<a class="permalink" href="#Tri3">&#xb6;</a>
-			</h2>
+			<h2 id="Tri3">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tris.go?s=3014:3093#L101">Tri3</a></h2>
 			<pre>func Tri3(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Tri3 calculates the shape functions (S) and derivatives of shape functions (dSdR) of tri3
@@ -648,9 +610,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Tri6">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tris.go?s=3774:3853#L136">Tri6</a>
-				<a class="permalink" href="#Tri6">&#xb6;</a>
-			</h2>
+			<h2 id="Tri6">func <a href="https://github.com/cpmech/gofem/blob/master/shp/tris.go?s=3774:3853#L136">Tri6</a></h2>
 			<pre>func Tri6(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Tri6 calculates the shape functions (S) and derivatives of shape functions (dSdR) of tri6
@@ -664,9 +624,7 @@ elements at {r,s,t} natural coordinates. The derivatives are calculated only if 
 		
 			
 			
-			<h2 id="Ipoint">type <a href="https://github.com/cpmech/gofem/blob/master/shp/ipoints.go?s=362:383#L6">Ipoint</a>
-				<a class="permalink" href="#Ipoint">&#xb6;</a>
-			</h2>
+			<h2 id="Ipoint">type <a href="https://github.com/cpmech/gofem/blob/master/shp/ipoints.go?s=362:383#L6">Ipoint</a></h2>
 			<pre>type Ipoint []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// len==4 =&gt; [r, s, t, w]</span>
 </pre>
 			<p>
@@ -688,9 +646,7 @@ Ipoint implements integration point data: natural coordinates and weight
 		
 			
 			
-			<h2 id="Shape">type <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=634:3574#L13">Shape</a>
-				<a class="permalink" href="#Shape">&#xb6;</a>
-			</h2>
+			<h2 id="Shape">type <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=634:3574#L13">Shape</a></h2>
 			<pre>type Shape struct {
 
     <span class="comment">// geometry</span>
@@ -760,9 +716,7 @@ Shape holds geometry data
 
 			
 				
-				<h3 id="Get">func <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5058:5106#L129">Get</a>
-					<a class="permalink" href="#Get">&#xb6;</a>
-				</h3>
+				<h3 id="Get">func <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5058:5106#L129">Get</a></h3>
 				<pre>func Get(geoType <a href="/pkg/builtin/#string">string</a>, goroutineId <a href="/pkg/builtin/#int">int</a>) *<a href="#Shape">Shape</a></pre>
 				<p>
 Get returns an existent Shape structure
@@ -775,9 +729,7 @@ Get returns an existent Shape structure
 				
 			
 				
-				<h3 id="GetShapeNurbs">func <a href="https://github.com/cpmech/gofem/blob/master/shp/nurbs.go?s=499:579#L6">GetShapeNurbs</a>
-					<a class="permalink" href="#GetShapeNurbs">&#xb6;</a>
-				</h3>
+				<h3 id="GetShapeNurbs">func <a href="https://github.com/cpmech/gofem/blob/master/shp/nurbs.go?s=499:579#L6">GetShapeNurbs</a></h3>
 				<pre>func GetShapeNurbs(nurbs *<a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Nurbs">Nurbs</a>, nrbfaces []*<a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Nurbs">Nurbs</a>, span []<a href="/pkg/builtin/#int">int</a>) (o *<a href="#Shape">Shape</a>)</pre>
 				<p>
 GetShapeNurbs returns a shape structure based on NURBS
@@ -792,9 +744,7 @@ Note: FaceLocalVerts does not work for internal surfaces; only those @ boundarie
 
 			
 				
-				<h3 id="Shape.AxisymGetRadius">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=9115:9178#L288">AxisymGetRadius</a>
-					<a class="permalink" href="#Shape.AxisymGetRadius">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.AxisymGetRadius">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=9115:9178#L288">AxisymGetRadius</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) AxisymGetRadius(x [][]<a href="/pkg/builtin/#float64">float64</a>) (radius <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 AxisymGetRadius returns the x0 == radius for axisymmetric computations
@@ -807,9 +757,7 @@ AxisymGetRadius returns the x0 == radius for axisymmetric computations
 				
 			
 				
-				<h3 id="Shape.AxisymGetRadiusF">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=9383:9460#L297">AxisymGetRadiusF</a>
-					<a class="permalink" href="#Shape.AxisymGetRadiusF">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.AxisymGetRadiusF">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=9383:9460#L297">AxisymGetRadiusF</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) AxisymGetRadiusF(x [][]<a href="/pkg/builtin/#float64">float64</a>, idxface <a href="/pkg/builtin/#int">int</a>) (radius <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 AxisymGetRadiusF (face) returns the x0 == radius for axisymmetric computations
@@ -822,9 +770,7 @@ AxisymGetRadiusF (face) returns the x0 == radius for axisymmetric computations
 				
 			
 				
-				<h3 id="Shape.CalcAtFaceIp">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=8016:8096#L245">CalcAtFaceIp</a>
-					<a class="permalink" href="#Shape.CalcAtFaceIp">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.CalcAtFaceIp">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=8016:8096#L245">CalcAtFaceIp</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) CalcAtFaceIp(x [][]<a href="/pkg/builtin/#float64">float64</a>, ipf <a href="#Ipoint">Ipoint</a>, idxface <a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcAtFaceIp calculates face data such as Sf and Fnvec
@@ -842,9 +788,7 @@ Output:
 				
 			
 				
-				<h3 id="Shape.CalcAtIp">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=6359:6434#L179">CalcAtIp</a>
-					<a class="permalink" href="#Shape.CalcAtIp">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.CalcAtIp">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=6359:6434#L179">CalcAtIp</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) CalcAtIp(x [][]<a href="/pkg/builtin/#float64">float64</a>, ip <a href="#Ipoint">Ipoint</a>, derivs <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcAtIp calculates volume data such as S and G at natural coordinate r
@@ -861,9 +805,7 @@ Output:
 				
 			
 				
-				<h3 id="Shape.CalcAtR">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=7634:7710#L234">CalcAtR</a>
-					<a class="permalink" href="#Shape.CalcAtR">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.CalcAtR">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=7634:7710#L234">CalcAtR</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) CalcAtR(x [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcAtR calculates volume data such as S and G at natural coordinate r
@@ -880,9 +822,7 @@ Output:
 				
 			
 				
-				<h3 id="Shape.CellBryDist">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=4825:4873#L191">CellBryDist</a>
-					<a class="permalink" href="#Shape.CellBryDist">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.CellBryDist">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=4825:4873#L191">CellBryDist</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) CellBryDist(R []<a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 CellBryDist returns the shortest distance between R and the boundary of the cell in natural coordinates
@@ -894,9 +834,7 @@ TODO: test this
 				
 			
 				
-				<h3 id="Shape.CellBryDistDeriv">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=5401:5462#L213">CellBryDistDeriv</a>
-					<a class="permalink" href="#Shape.CellBryDistDeriv">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.CellBryDistDeriv">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=5401:5462#L213">CellBryDistDeriv</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) CellBryDistDeriv(dfdR []<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				
 				
@@ -904,9 +842,7 @@ TODO: test this
 				
 			
 				
-				<h3 id="Shape.Extrapolator">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=3654:3723#L141">Extrapolator</a>
-					<a class="permalink" href="#Shape.Extrapolator">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.Extrapolator">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=3654:3723#L141">Extrapolator</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) Extrapolator(E [][]<a href="/pkg/builtin/#float64">float64</a>, ips []<a href="#Ipoint">Ipoint</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Extrapolator computes the extrapolation matrix for this Shape with a combination of integration points &#39;ips&#39;
@@ -919,9 +855,7 @@ Extrapolator computes the extrapolation matrix for this Shape with a combination
 				
 			
 				
-				<h3 id="Shape.FaceIpRealCoords">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5815:5901#L161">FaceIpRealCoords</a>
-					<a class="permalink" href="#Shape.FaceIpRealCoords">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.FaceIpRealCoords">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5815:5901#L161">FaceIpRealCoords</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) FaceIpRealCoords(x [][]<a href="/pkg/builtin/#float64">float64</a>, ipf <a href="#Ipoint">Ipoint</a>, idxface <a href="/pkg/builtin/#int">int</a>) (y []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 FaceIpRealCoords returns the real coordinates (y) of an integration point @ face
@@ -933,9 +867,7 @@ TODO: check this function
 				
 			
 				
-				<h3 id="Shape.GetCopy">func (Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=3630:3661#L69">GetCopy</a>
-					<a class="permalink" href="#Shape.GetCopy">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.GetCopy">func (Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=3630:3661#L69">GetCopy</a></h3>
 				<pre>func (o <a href="#Shape">Shape</a>) GetCopy() *<a href="#Shape">Shape</a></pre>
 				<p>
 GetCopy returns a new copy of this shape structure
@@ -946,9 +878,7 @@ GetCopy returns a new copy of this shape structure
 				
 			
 				
-				<h3 id="Shape.GetIps">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/ipoints.go?s=630:699#L13">GetIps</a>
-					<a class="permalink" href="#Shape.GetIps">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.GetIps">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/ipoints.go?s=630:699#L13">GetIps</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) GetIps(nips, nipf <a href="/pkg/builtin/#int">int</a>) (ips, ipf []<a href="#Ipoint">Ipoint</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 GetIps returns a set of integration points
@@ -961,9 +891,7 @@ GetIps returns a set of integration points
 				
 			
 				
-				<h3 id="Shape.GetIpsNatCoordsMat">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=2853:2919#L112">GetIpsNatCoordsMat</a>
-					<a class="permalink" href="#Shape.GetIpsNatCoordsMat">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.GetIpsNatCoordsMat">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=2853:2919#L112">GetIpsNatCoordsMat</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) GetIpsNatCoordsMat(ips []<a href="#Ipoint">Ipoint</a>) (ξh [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 GetIpsNatCoordsMat returns the matrix (\hat{ξ}) with natural coordinates of interation
@@ -975,9 +903,7 @@ points, augmented by one column which is filled with ones [nip][ndim+1]
 				
 			
 				
-				<h3 id="Shape.GetNodesNatCoordsMat">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=2451:2506#L99">GetNodesNatCoordsMat</a>
-					<a class="permalink" href="#Shape.GetNodesNatCoordsMat">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.GetNodesNatCoordsMat">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=2451:2506#L99">GetNodesNatCoordsMat</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) GetNodesNatCoordsMat() (ξ [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 GetNodesNatCoordsMat returns the matrix (ξ) with natural coordinates of nodes,
@@ -989,9 +915,7 @@ augmented by one column which is filled with ones [nverts][ndim+1]
 				
 			
 				
-				<h3 id="Shape.GetShapeMatAtIps">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=3222:3284#L126">GetShapeMatAtIps</a>
-					<a class="permalink" href="#Shape.GetShapeMatAtIps">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.GetShapeMatAtIps">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=3222:3284#L126">GetShapeMatAtIps</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) GetShapeMatAtIps(ips []<a href="#Ipoint">Ipoint</a>) (N [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 GetShapeMatAtIps returns a matrix formed by computing the shape functions
@@ -1003,9 +927,7 @@ at all integration points [nip][nverts]
 				
 			
 				
-				<h3 id="Shape.InvMap">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=751:816#L19">InvMap</a>
-					<a class="permalink" href="#Shape.InvMap">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.InvMap">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/algos.go?s=751:816#L19">InvMap</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) InvMap(r, y []<a href="/pkg/builtin/#float64">float64</a>, x [][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InvMap computes the natural coordinates r, given the real coordinate y
@@ -1022,9 +944,7 @@ Output:
 				
 			
 				
-				<h3 id="Shape.IpRealCoords">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5443:5511#L147">IpRealCoords</a>
-					<a class="permalink" href="#Shape.IpRealCoords">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.IpRealCoords">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5443:5511#L147">IpRealCoords</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) IpRealCoords(x [][]<a href="/pkg/builtin/#float64">float64</a>, ip <a href="#Ipoint">Ipoint</a>) (y []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 IpRealCoords returns the real coordinates (y) of an integration point
@@ -1035,9 +955,7 @@ IpRealCoords returns the real coordinates (y) of an integration point
 				
 			
 				
-				<h3 id="Shape.NurbsFaceFunc">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/nurbs.go?s=3314:3413#L106">NurbsFaceFunc</a>
-					<a class="permalink" href="#Shape.NurbsFaceFunc">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.NurbsFaceFunc">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/nurbs.go?s=3314:3413#L106">NurbsFaceFunc</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) NurbsFaceFunc(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, r []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 NurbsFaceFunc implements shape/deriv functions for faces of NURBS
@@ -1048,9 +966,7 @@ NurbsFaceFunc implements shape/deriv functions for faces of NURBS
 				
 			
 				
-				<h3 id="Shape.NurbsFunc">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/nurbs.go?s=3080:3175#L101">NurbsFunc</a>
-					<a class="permalink" href="#Shape.NurbsFunc">&#xb6;</a>
-				</h3>
+				<h3 id="Shape.NurbsFunc">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/nurbs.go?s=3080:3175#L101">NurbsFunc</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) NurbsFunc(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, r []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 NurbsFunc implements shape/deriv functions for NURBS
@@ -1063,9 +979,7 @@ NurbsFunc implements shape/deriv functions for NURBS
 		
 			
 			
-			<h2 id="ShpFunc">type <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=516:603#L10">ShpFunc</a>
-				<a class="permalink" href="#ShpFunc">&#xb6;</a>
-			</h2>
+			<h2 id="ShpFunc">type <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=516:603#L10">ShpFunc</a></h2>
 			<pre>type ShpFunc func(S []<a href="/pkg/builtin/#float64">float64</a>, dSdR [][]<a href="/pkg/builtin/#float64">float64</a>, r []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>, idxface <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 ShpFunc is the shape functions callback function
@@ -1092,7 +1006,7 @@ ShpFunc is the shape functions callback function
 
 
 
-</div><!-- page -->
+
 <div id="footer">
 <br /><br />
 <hr>
@@ -1126,5 +1040,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </pre><!-- copyright -->
 </div><!-- footer -->
+
+</div><!-- container -->
+</div><!-- page -->
 </body>
 </html>

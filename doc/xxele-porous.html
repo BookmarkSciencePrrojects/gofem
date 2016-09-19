@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
 <title>Gofem &ndash; package ele/porous</title>
 <link type="text/css" rel="stylesheet" href="static/style.css">
 <script type="text/javascript" src="static/godocs.js"></script>
 <style type="text/css"></style>
 </head>
 <body>
-<div id="page"><h1>Gofem &ndash; <b>ele/porous</b> &ndash; elements for porous media simulations (TPM)</h1>
+<div id="page" class=\wide">
+<div class="container">
+<h1>Gofem &ndash; <b>ele/porous</b> &ndash; elements for porous media simulations (TPM)</h1>
 use 'godoc cmd/github.com/cpmech/gofem/ele/porous' for documentation on the github.com/cpmech/gofem/ele/porous command 
 
 <!--
@@ -247,9 +251,7 @@ package porous implements elements for porous media applications (TPM)
 		
 			
 			
-			<h2 id="SolidLiquid">type <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=1081:2064#L19">SolidLiquid</a>
-				<a class="permalink" href="#SolidLiquid">&#xb6;</a>
-			</h2>
+			<h2 id="SolidLiquid">type <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=1081:2064#L19">SolidLiquid</a></h2>
 			<pre>type SolidLiquid struct {
 
     <span class="comment">// auxiliary</span>
@@ -292,9 +294,7 @@ SolidLiquid represents an element for porous media based on the u-p formulation 
 
 			
 				
-				<h3 id="SolidLiquid.AddNatBcsToJac">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=19181:19248#L731">AddNatBcsToJac</a>
-					<a class="permalink" href="#SolidLiquid.AddNatBcsToJac">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.AddNatBcsToJac">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=19181:19248#L731">AddNatBcsToJac</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) AddNatBcsToJac(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddNatBcsToJac adds contribution from natural boundary conditions to Jacobian
@@ -305,9 +305,7 @@ AddNatBcsToJac adds contribution from natural boundary conditions to Jacobian
 				
 			
 				
-				<h3 id="SolidLiquid.AddToKb">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=8819:8909#L316">AddToKb</a>
-					<a class="permalink" href="#SolidLiquid.AddToKb">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.AddToKb">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=8819:8909#L316">AddToKb</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds element K to global Jacobian matrix Kb
@@ -318,9 +316,7 @@ adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="SolidLiquid.AddToRhs">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=5905:5980#L195">AddToRhs</a>
-					<a class="permalink" href="#SolidLiquid.AddToRhs">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.AddToRhs">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=5905:5980#L195">AddToRhs</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds -R to global residual vector fb
@@ -331,9 +327,7 @@ adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="SolidLiquid.BackupIvs">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=15129:15182#L576">BackupIvs</a>
-					<a class="permalink" href="#SolidLiquid.BackupIvs">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.BackupIvs">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=15129:15182#L576">BackupIvs</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 BackupIvs create copy of internal variables
@@ -344,9 +338,7 @@ BackupIvs create copy of internal variables
 				
 			
 				
-				<h3 id="SolidLiquid.Decode">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=16444:16501#L631">Decode</a>
-					<a class="permalink" href="#SolidLiquid.Decode">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.Decode">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=16444:16501#L631">Decode</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) Decode(dec <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
@@ -357,9 +349,7 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="SolidLiquid.Encode">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=16268:16325#L622">Encode</a>
-					<a class="permalink" href="#SolidLiquid.Encode">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.Encode">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=16268:16325#L622">Encode</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) Encode(enc <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
@@ -370,9 +360,7 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="SolidLiquid.Id">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=4478:4508#L138">Id</a>
-					<a class="permalink" href="#SolidLiquid.Id">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.Id">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=4478:4508#L138">Id</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
@@ -383,9 +371,7 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="SolidLiquid.InterpStarVars">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=5700:5767#L186">InterpStarVars</a>
-					<a class="permalink" href="#SolidLiquid.InterpStarVars">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.InterpStarVars">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=5700:5767#L186">InterpStarVars</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) InterpStarVars(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolates star variables to integration points
@@ -396,9 +382,7 @@ InterpStarVars interpolates star variables to integration points
 				
 			
 				
-				<h3 id="SolidLiquid.OutIpCoords">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=16644:16695#L640">OutIpCoords</a>
-					<a class="permalink" href="#SolidLiquid.OutIpCoords">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.OutIpCoords">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=16644:16695#L640">OutIpCoords</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) OutIpCoords() (C [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 OutIpCoords returns the coordinates of integration points
@@ -409,9 +393,7 @@ OutIpCoords returns the coordinates of integration points
 				
 			
 				
-				<h3 id="SolidLiquid.OutIpKeys">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=16777:16819#L645">OutIpKeys</a>
-					<a class="permalink" href="#SolidLiquid.OutIpKeys">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.OutIpKeys">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=16777:16819#L645">OutIpKeys</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) OutIpKeys() []<a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 OutIpKeys returns the integration points&#39; keys
@@ -422,9 +404,7 @@ OutIpKeys returns the integration points&#39; keys
 				
 			
 				
-				<h3 id="SolidLiquid.OutIpVals">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=17017:17082#L651">OutIpVals</a>
-					<a class="permalink" href="#SolidLiquid.OutIpVals">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.OutIpVals">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=17017:17082#L651">OutIpVals</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) OutIpVals(M *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#IpsMap">IpsMap</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>)</pre>
 				<p>
 OutIpVals returns the integration points&#39; values corresponding to keys
@@ -435,9 +415,7 @@ OutIpVals returns the integration points&#39; values corresponding to keys
 				
 			
 				
-				<h3 id="SolidLiquid.RestoreIvs">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=15323:15377#L585">RestoreIvs</a>
-					<a class="permalink" href="#SolidLiquid.RestoreIvs">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.RestoreIvs">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=15323:15377#L585">RestoreIvs</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 RestoreIvs restore internal variables from copies
@@ -448,9 +426,7 @@ RestoreIvs restore internal variables from copies
 				
 			
 				
-				<h3 id="SolidLiquid.SetEleConds">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=5437:5520#L177">SetEleConds</a>
-					<a class="permalink" href="#SolidLiquid.SetEleConds">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.SetEleConds">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=5437:5520#L177">SetEleConds</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds set element conditions
@@ -461,9 +437,7 @@ SetEleConds set element conditions
 				
 			
 				
-				<h3 id="SolidLiquid.SetEqs">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=4555:4629#L141">SetEqs</a>
-					<a class="permalink" href="#SolidLiquid.SetEqs">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.SetEqs">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=4555:4629#L141">SetEqs</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs set equations
@@ -474,9 +448,7 @@ SetEqs set equations
 				
 			
 				
-				<h3 id="SolidLiquid.SetIniIvs">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=13964:14052#L524">SetIniIvs</a>
-					<a class="permalink" href="#SolidLiquid.SetIniIvs">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.SetIniIvs">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=13964:14052#L524">SetIniIvs</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) SetIniIvs(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetIniIvs sets initial ivs for given values in sol and ivs map
@@ -487,9 +459,7 @@ SetIniIvs sets initial ivs for given values in sol and ivs map
 				
 			
 				
-				<h3 id="SolidLiquid.Update">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=13654:13713#L513">Update</a>
-					<a class="permalink" href="#SolidLiquid.Update">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.Update">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=13654:13713#L513">Update</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) Update(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update perform (tangent) update
@@ -500,9 +470,7 @@ Update perform (tangent) update
 				
 			
 				
-				<h3 id="SolidLiquid.Ureset">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=15543:15602#L594">Ureset</a>
-					<a class="permalink" href="#SolidLiquid.Ureset">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquid.Ureset">func (*SolidLiquid) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid.go?s=15543:15602#L594">Ureset</a></h3>
 				<pre>func (o *<a href="#SolidLiquid">SolidLiquid</a>) Ureset(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Ureset fixes internal variables after u (displacements) have been zeroed
@@ -515,9 +483,7 @@ Ureset fixes internal variables after u (displacements) have been zeroed
 		
 			
 			
-			<h2 id="SolidLiquidGas">type <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=532:1640#L11">SolidLiquidGas</a>
-				<a class="permalink" href="#SolidLiquidGas">&#xb6;</a>
-			</h2>
+			<h2 id="SolidLiquidGas">type <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=532:1640#L11">SolidLiquidGas</a></h2>
 			<pre>type SolidLiquidGas struct {
 
     <span class="comment">// auxiliary</span>
@@ -558,9 +524,7 @@ SolidLiquidGas implements the u-pl-pg formulation
 
 			
 				
-				<h3 id="SolidLiquidGas.AddNatBcsToJac">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=21246:21316#L776">AddNatBcsToJac</a>
-					<a class="permalink" href="#SolidLiquidGas.AddNatBcsToJac">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.AddNatBcsToJac">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=21246:21316#L776">AddNatBcsToJac</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) AddNatBcsToJac(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddNatBcsToJac adds contribution from natural boundary conditions to Jacobian
@@ -571,9 +535,7 @@ AddNatBcsToJac adds contribution from natural boundary conditions to Jacobian
 				
 			
 				
-				<h3 id="SolidLiquidGas.AddToKb">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=8848:8941#L321">AddToKb</a>
-					<a class="permalink" href="#SolidLiquidGas.AddToKb">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.AddToKb">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=8848:8941#L321">AddToKb</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds element K to global Jacobian matrix Kb
@@ -584,9 +546,7 @@ adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="SolidLiquidGas.AddToRhs">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=5620:5698#L194">AddToRhs</a>
-					<a class="permalink" href="#SolidLiquidGas.AddToRhs">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.AddToRhs">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=5620:5698#L194">AddToRhs</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds -R to global residual vector fb
@@ -597,9 +557,7 @@ adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="SolidLiquidGas.BackupIvs">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=16626:16682#L609">BackupIvs</a>
-					<a class="permalink" href="#SolidLiquidGas.BackupIvs">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.BackupIvs">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=16626:16682#L609">BackupIvs</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 BackupIvs create copy of internal variables
@@ -610,9 +568,7 @@ BackupIvs create copy of internal variables
 				
 			
 				
-				<h3 id="SolidLiquidGas.Decode">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=17953:18013#L664">Decode</a>
-					<a class="permalink" href="#SolidLiquidGas.Decode">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.Decode">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=17953:18013#L664">Decode</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) Decode(dec <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
@@ -623,9 +579,7 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="SolidLiquidGas.Encode">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=17774:17834#L655">Encode</a>
-					<a class="permalink" href="#SolidLiquidGas.Encode">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.Encode">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=17774:17834#L655">Encode</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) Encode(enc <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
@@ -636,9 +590,7 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="SolidLiquidGas.Id">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=4177:4210#L137">Id</a>
-					<a class="permalink" href="#SolidLiquidGas.Id">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.Id">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=4177:4210#L137">Id</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
@@ -649,9 +601,7 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="SolidLiquidGas.InterpStarVars">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=5412:5482#L185">InterpStarVars</a>
-					<a class="permalink" href="#SolidLiquidGas.InterpStarVars">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.InterpStarVars">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=5412:5482#L185">InterpStarVars</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) InterpStarVars(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolates star variables to integration points
@@ -662,9 +612,7 @@ InterpStarVars interpolates star variables to integration points
 				
 			
 				
-				<h3 id="SolidLiquidGas.OutIpCoords">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=18156:18210#L673">OutIpCoords</a>
-					<a class="permalink" href="#SolidLiquidGas.OutIpCoords">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.OutIpCoords">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=18156:18210#L673">OutIpCoords</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) OutIpCoords() (C [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 OutIpCoords returns the coordinates of integration points
@@ -675,9 +623,7 @@ OutIpCoords returns the coordinates of integration points
 				
 			
 				
-				<h3 id="SolidLiquidGas.OutIpKeys">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=18292:18337#L678">OutIpKeys</a>
-					<a class="permalink" href="#SolidLiquidGas.OutIpKeys">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.OutIpKeys">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=18292:18337#L678">OutIpKeys</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) OutIpKeys() []<a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 OutIpKeys returns the integration points&#39; keys
@@ -688,9 +634,7 @@ OutIpKeys returns the integration points&#39; keys
 				
 			
 				
-				<h3 id="SolidLiquidGas.OutIpVals">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=18602:18670#L685">OutIpVals</a>
-					<a class="permalink" href="#SolidLiquidGas.OutIpVals">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.OutIpVals">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=18602:18670#L685">OutIpVals</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) OutIpVals(M *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#IpsMap">IpsMap</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>)</pre>
 				<p>
 OutIpVals returns the integration points&#39; values corresponding to keys
@@ -701,9 +645,7 @@ OutIpVals returns the integration points&#39; values corresponding to keys
 				
 			
 				
-				<h3 id="SolidLiquidGas.RestoreIvs">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=16823:16880#L618">RestoreIvs</a>
-					<a class="permalink" href="#SolidLiquidGas.RestoreIvs">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.RestoreIvs">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=16823:16880#L618">RestoreIvs</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 RestoreIvs restore internal variables from copies
@@ -714,9 +656,7 @@ RestoreIvs restore internal variables from copies
 				
 			
 				
-				<h3 id="SolidLiquidGas.SetEleConds">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=5146:5232#L176">SetEleConds</a>
-					<a class="permalink" href="#SolidLiquidGas.SetEleConds">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.SetEleConds">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=5146:5232#L176">SetEleConds</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds set element conditions
@@ -727,9 +667,7 @@ SetEleConds set element conditions
 				
 			
 				
-				<h3 id="SolidLiquidGas.SetEqs">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=4257:4334#L140">SetEqs</a>
-					<a class="permalink" href="#SolidLiquidGas.SetEqs">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.SetEqs">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=4257:4334#L140">SetEqs</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs set equations
@@ -740,9 +678,7 @@ SetEqs set equations
 				
 			
 				
-				<h3 id="SolidLiquidGas.SetIniIvs">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=15329:15420#L552">SetIniIvs</a>
-					<a class="permalink" href="#SolidLiquidGas.SetIniIvs">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.SetIniIvs">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=15329:15420#L552">SetIniIvs</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) SetIniIvs(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetIniIvs sets initial ivs for given values in sol and ivs map
@@ -753,9 +689,7 @@ SetIniIvs sets initial ivs for given values in sol and ivs map
 				
 			
 				
-				<h3 id="SolidLiquidGas.Update">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=15016:15078#L541">Update</a>
-					<a class="permalink" href="#SolidLiquidGas.Update">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.Update">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=15016:15078#L541">Update</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) Update(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update perform (tangent) update
@@ -766,9 +700,7 @@ Update perform (tangent) update
 				
 			
 				
-				<h3 id="SolidLiquidGas.Ureset">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=17046:17108#L627">Ureset</a>
-					<a class="permalink" href="#SolidLiquidGas.Ureset">&#xb6;</a>
-				</h3>
+				<h3 id="SolidLiquidGas.Ureset">func (*SolidLiquidGas) <a href="https://github.com/cpmech/gofem/blob/master/ele/porous/solid-liquid-gas.go?s=17046:17108#L627">Ureset</a></h3>
 				<pre>func (o *<a href="#SolidLiquidGas">SolidLiquidGas</a>) Ureset(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Ureset fixes internal variables after u (displacements) have been zeroed
@@ -825,7 +757,7 @@ Ureset fixes internal variables after u (displacements) have been zeroed
 
 	
 
-</div><!-- page -->
+
 <div id="footer">
 <br /><br />
 <hr>
@@ -859,5 +791,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </pre><!-- copyright -->
 </div><!-- footer -->
+
+</div><!-- container -->
+</div><!-- page -->
 </body>
 </html>

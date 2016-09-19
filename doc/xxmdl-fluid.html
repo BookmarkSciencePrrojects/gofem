@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
 <title>Gofem &ndash; package mdl/fluid</title>
 <link type="text/css" rel="stylesheet" href="static/style.css">
 <script type="text/javascript" src="static/godocs.js"></script>
 <style type="text/css"></style>
 </head>
 <body>
-<div id="page"><h1>Gofem &ndash; <b>mdl/fluid</b> &ndash; models for fluids (liquid / gas)</h1>
+<div id="page" class=\wide">
+<div class="container">
+<h1>Gofem &ndash; <b>mdl/fluid</b> &ndash; models for fluids (liquid / gas)</h1>
 use 'godoc cmd/github.com/cpmech/gofem/mdl/fluid' for documentation on the github.com/cpmech/gofem/mdl/fluid command 
 
 <!--
@@ -148,9 +152,7 @@ package fluid implements models for fluid density
 		
 			
 			
-			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=530:913#L9">Model</a>
-				<a class="permalink" href="#Model">&#xb6;</a>
-			</h2>
+			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=530:913#L9">Model</a></h2>
 			<pre>type Model struct {
 
     <span class="comment">// material data</span>
@@ -183,9 +185,7 @@ along a column with gravity (g). The model is:
 
 			
 				
-				<h3 id="Model.Calc">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=2146:2191#L75">Calc</a>
-					<a class="permalink" href="#Model.Calc">&#xb6;</a>
-				</h3>
+				<h3 id="Model.Calc">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=2146:2191#L75">Calc</a></h3>
 				<pre>func (o <a href="#Model">Model</a>) Calc(z <a href="/pkg/builtin/#float64">float64</a>) (p, R <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Calc computes pressure and density
@@ -196,9 +196,7 @@ Calc computes pressure and density
 				
 			
 				
-				<h3 id="Model.GetPrms">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=1410:1455#L45">GetPrms</a>
-					<a class="permalink" href="#Model.GetPrms">&#xb6;</a>
-				</h3>
+				<h3 id="Model.GetPrms">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=1410:1455#L45">GetPrms</a></h3>
 				<pre>func (o <a href="#Model">Model</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
 				<p>
 GetPrms gets (an example of) parameters
@@ -214,9 +212,7 @@ Note:
 				
 			
 				
-				<h3 id="Model.Init">func (*Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=950:1002#L23">Init</a>
-					<a class="permalink" href="#Model.Init">&#xb6;</a>
-				</h3>
+				<h3 id="Model.Init">func (*Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=950:1002#L23">Init</a></h3>
 				<pre>func (o *<a href="#Model">Model</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>, H, grav <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Init initialises this structure
@@ -227,9 +223,7 @@ Init initialises this structure
 				
 			
 				
-				<h3 id="Model.Plot">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=2346:2395#L82">Plot</a>
-					<a class="permalink" href="#Model.Plot">&#xb6;</a>
-				</h3>
+				<h3 id="Model.Plot">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=2346:2395#L82">Plot</a></h3>
 				<pre>func (o <a href="#Model">Model</a>) Plot(dirout, fnkey <a href="/pkg/builtin/#string">string</a>, np <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 Plot plots pressure and density along height of column
@@ -248,7 +242,7 @@ Plot plots pressure and density along height of column
 
 
 
-</div><!-- page -->
+
 <div id="footer">
 <br /><br />
 <hr>
@@ -282,5 +276,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </pre><!-- copyright -->
 </div><!-- footer -->
+
+</div><!-- container -->
+</div><!-- page -->
 </body>
 </html>

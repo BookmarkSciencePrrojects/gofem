@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
 <title>Gofem &ndash; package mdl/diffusion</title>
 <link type="text/css" rel="stylesheet" href="static/style.css">
 <script type="text/javascript" src="static/godocs.js"></script>
 <style type="text/css"></style>
 </head>
 <body>
-<div id="page"><h1>Gofem &ndash; <b>mdl/diffusion</b> &ndash; models for diffusion applications</h1>
+<div id="page" class=\wide">
+<div class="container">
+<h1>Gofem &ndash; <b>mdl/diffusion</b> &ndash; models for diffusion applications</h1>
 use 'godoc cmd/github.com/cpmech/gofem/mdl/diffusion' for documentation on the github.com/cpmech/gofem/mdl/diffusion command 
 
 <!--
@@ -158,9 +162,7 @@ package diffusion implements models to solve diffusion(-like) problems
 		
 			
 			
-			<h2 id="M1">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/m1.go?s=469:563#L10">M1</a>
-				<a class="permalink" href="#M1">&#xb6;</a>
-			</h2>
+			<h2 id="M1">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/m1.go?s=469:563#L10">M1</a></h2>
 			<pre>type M1 struct {
     Rho  <a href="/pkg/builtin/#float64">float64</a>
     Kcte [][]<a href="/pkg/builtin/#float64">float64</a>
@@ -187,9 +189,7 @@ kval = a0  +  a1 u  +  a2 u² +  a3 u³
 
 			
 				
-				<h3 id="M1.DkDu">func (*M1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/m1.go?s=1753:1789#L69">DkDu</a>
-					<a class="permalink" href="#M1.DkDu">&#xb6;</a>
-				</h3>
+				<h3 id="M1.DkDu">func (*M1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/m1.go?s=1753:1789#L69">DkDu</a></h3>
 				<pre>func (o *<a href="#M1">M1</a>) DkDu(u <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 DkDu computes dk/du
@@ -200,9 +200,7 @@ DkDu computes dk/du
 				
 			
 				
-				<h3 id="M1.Init">func (*M1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/m1.go?s=693:747#L22">Init</a>
-					<a class="permalink" href="#M1.Init">&#xb6;</a>
-				</h3>
+				<h3 id="M1.Init">func (*M1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/m1.go?s=693:747#L22">Init</a></h3>
 				<pre>func (o *<a href="#M1">M1</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises this structure
@@ -213,9 +211,7 @@ Init initialises this structure
 				
 			
 				
-				<h3 id="M1.Kten">func (*M1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/m1.go?s=1878:1924#L74">Kten</a>
-					<a class="permalink" href="#M1.Kten">&#xb6;</a>
-				</h3>
+				<h3 id="M1.Kten">func (*M1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/m1.go?s=1878:1924#L74">Kten</a></h3>
 				<pre>func (o *<a href="#M1">M1</a>) Kten(kten [][]<a href="/pkg/builtin/#float64">float64</a>, u <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Kten computes ktensor = kval(u) * kcte
@@ -226,9 +222,7 @@ Kten computes ktensor = kval(u) * kcte
 				
 			
 				
-				<h3 id="M1.Kval">func (*M1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/m1.go?s=1642:1678#L64">Kval</a>
-					<a class="permalink" href="#M1.Kval">&#xb6;</a>
-				</h3>
+				<h3 id="M1.Kval">func (*M1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/m1.go?s=1642:1678#L64">Kval</a></h3>
 				<pre>func (o *<a href="#M1">M1</a>) Kval(u <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Kval computes k(u)
@@ -241,9 +235,7 @@ Kval computes k(u)
 		
 			
 			
-			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/model.go?s=362:458#L4">Model</a>
-				<a class="permalink" href="#Model">&#xb6;</a>
-			</h2>
+			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/model.go?s=362:458#L4">Model</a></h2>
 			<pre>type Model interface {
     Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) <a href="/pkg/builtin/#error">error</a> <span class="comment">// Init initialises this structure</span>
 }</pre>
@@ -262,9 +254,7 @@ Model defines diffusion models
 
 			
 				
-				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/model.go?s=483:529#L9">New</a>
-					<a class="permalink" href="#New">&#xb6;</a>
-				</h3>
+				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/diffusion/model.go?s=483:529#L9">New</a></h3>
 				<pre>func New(name <a href="/pkg/builtin/#string">string</a>) (model <a href="#Model">Model</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 New diffusion model
@@ -284,7 +274,7 @@ New diffusion model
 
 
 
-</div><!-- page -->
+
 <div id="footer">
 <br /><br />
 <hr>
@@ -318,5 +308,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </pre><!-- copyright -->
 </div><!-- footer -->
+
+</div><!-- container -->
+</div><!-- page -->
 </body>
 </html>

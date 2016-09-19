@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
 <title>Gofem &ndash; package mdl/generic</title>
 <link type="text/css" rel="stylesheet" href="static/style.css">
 <script type="text/javascript" src="static/godocs.js"></script>
 <style type="text/css"></style>
 </head>
 <body>
-<div id="page"><h1>Gofem &ndash; <b>mdl/generic</b> &ndash; generic models (placeholder for parameters set)</h1>
+<div id="page" class=\wide">
+<div class="container">
+<h1>Gofem &ndash; <b>mdl/generic</b> &ndash; generic models (placeholder for parameters set)</h1>
 use 'godoc cmd/github.com/cpmech/gofem/mdl/generic' for documentation on the github.com/cpmech/gofem/mdl/generic command 
 
 <!--
@@ -149,9 +153,7 @@ package generic implements a place holder for generic models
 		
 			
 			
-			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/generic.go?s=354:450#L4">Model</a>
-				<a class="permalink" href="#Model">&#xb6;</a>
-			</h2>
+			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/generic.go?s=354:450#L4">Model</a></h2>
 			<pre>type Model interface {
     Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) <a href="/pkg/builtin/#error">error</a> <span class="comment">// Init initialises this structure</span>
 }</pre>
@@ -170,9 +172,7 @@ Model defines a generic model type
 
 			
 				
-				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/generic.go?s=473:519#L9">New</a>
-					<a class="permalink" href="#New">&#xb6;</a>
-				</h3>
+				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/generic.go?s=473:519#L9">New</a></h3>
 				<pre>func New(name <a href="/pkg/builtin/#string">string</a>) (model <a href="#Model">Model</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 New generic model
@@ -186,9 +186,7 @@ New generic model
 		
 			
 			
-			<h2 id="Scalars">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/scalars.go?s=280:408#L1">Scalars</a>
-				<a class="permalink" href="#Scalars">&#xb6;</a>
-			</h2>
+			<h2 id="Scalars">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/scalars.go?s=280:408#L1">Scalars</a></h2>
 			<pre>type Scalars struct {
     A, B, C, D, E, F, G, H    <a href="/pkg/builtin/#float64">float64</a>
     I, J, K, L, M, N, O, P, Q <a href="/pkg/builtin/#float64">float64</a>
@@ -211,9 +209,7 @@ Scalars is a placeholder model to collect scalar parameters
 
 			
 				
-				<h3 id="Scalars.Init">func (*Scalars) <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/scalars.go?s=548:607#L12">Init</a>
-					<a class="permalink" href="#Scalars.Init">&#xb6;</a>
-				</h3>
+				<h3 id="Scalars.Init">func (*Scalars) <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/scalars.go?s=548:607#L12">Init</a></h3>
 				<pre>func (o *<a href="#Scalars">Scalars</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises this structure
@@ -232,7 +228,7 @@ Init initialises this structure
 
 
 
-</div><!-- page -->
+
 <div id="footer">
 <br /><br />
 <hr>
@@ -266,5 +262,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </pre><!-- copyright -->
 </div><!-- footer -->
+
+</div><!-- container -->
+</div><!-- page -->
 </body>
 </html>

@@ -1,13 +1,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
 <title>Gofem &ndash; package mdl/thermomech</title>
 <link type="text/css" rel="stylesheet" href="static/style.css">
 <script type="text/javascript" src="static/godocs.js"></script>
 <style type="text/css"></style>
 </head>
 <body>
-<div id="page"><h1>Gofem &ndash; <b>mdl/thermomech</b> &ndash; models for thermo-mechanical applications</h1>
+<div id="page" class=\wide">
+<div class="container">
+<h1>Gofem &ndash; <b>mdl/thermomech</b> &ndash; models for thermo-mechanical applications</h1>
 use 'godoc cmd/github.com/cpmech/gofem/mdl/thermomech' for documentation on the github.com/cpmech/gofem/mdl/thermomech command 
 
 <!--
@@ -72,6 +76,26 @@ package thermomech implements models thermo-mechanical problems
 				
 				<dd><a href="#Model">type Model</a></dd>
 				
+					
+					<dd>&nbsp; &nbsp; <a href="#New">func New(name string) (model Model, err error)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Thermomech">type Thermomech</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Thermomech.DkDu">func (o *Thermomech) DkDu(u float64) float64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Thermomech.Init">func (o *Thermomech) Init(ndim int, prms fun.Prms) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Thermomech.Kten">func (o *Thermomech) Kten(kten [][]float64, u float64)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Thermomech.Kval">func (o *Thermomech) Kval(u float64) float64</a></dd>
 				
 			
 			
@@ -86,6 +110,8 @@ package thermomech implements models thermo-mechanical problems
 			<span style="font-size:90%">
 			
 				<a href="/src/github.com/cpmech/gofem/mdl/thermomech/model.go">model.go</a>
+			
+				<a href="/src/github.com/cpmech/gofem/mdl/thermomech/thermomech.go">thermomech.go</a>
 			
 			</span>
 			</p>
@@ -136,9 +162,7 @@ package thermomech implements models thermo-mechanical problems
 		
 			
 			
-			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/thermomech/model.go?s=340:422#L1">Model</a>
-				<a class="permalink" href="#Model">&#xb6;</a>
-			</h2>
+			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/thermomech/model.go?s=375:457#L4">Model</a></h2>
 			<pre>type Model interface {
     Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) <a href="/pkg/builtin/#error">error</a> <span class="comment">// initialises model</span>
 }</pre>
@@ -156,7 +180,91 @@ Model defines the interface for thermomech models
 			
 
 			
+				
+				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/thermomech/model.go?s=482:528#L8">New</a></h3>
+				<pre>func New(name <a href="/pkg/builtin/#string">string</a>) (model <a href="#Model">Model</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+New thermomech model
+</p>
 
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="Thermomech">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/thermomech/thermomech.go?s=496:604#L10">Thermomech</a></h2>
+			<pre>type Thermomech struct {
+    Cp, H, Re, Sb, T0 <a href="/pkg/builtin/#float64">float64</a>
+    Acte              []<a href="/pkg/builtin/#float64">float64</a>
+    Kcte              [][]<a href="/pkg/builtin/#float64">float64</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Thermomech implements a model for thermomechanical problems with nonlinear conduction coefficient
+</p>
+<pre>kten = kval(u) * kcte
+
+kval = a0  +  a1 u  +  a2 u² +  a3 u³
+</pre>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Thermomech.DkDu">func (*Thermomech) <a href="https://github.com/cpmech/gofem/blob/master/mdl/thermomech/thermomech.go?s=2722:2766#L103">DkDu</a></h3>
+				<pre>func (o *<a href="#Thermomech">Thermomech</a>) DkDu(u <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
+				<p>
+DkDu computes dk/du
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Thermomech.Init">func (*Thermomech) <a href="https://github.com/cpmech/gofem/blob/master/mdl/thermomech/thermomech.go?s=750:812#L22">Init</a></h3>
+				<pre>func (o *<a href="#Thermomech">Thermomech</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Init initialises this structure
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Thermomech.Kten">func (*Thermomech) <a href="https://github.com/cpmech/gofem/blob/master/mdl/thermomech/thermomech.go?s=2855:2909#L108">Kten</a></h3>
+				<pre>func (o *<a href="#Thermomech">Thermomech</a>) Kten(kten [][]<a href="/pkg/builtin/#float64">float64</a>, u <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<p>
+Kten computes ktensor = kval(u) * kcte
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Thermomech.Kval">func (*Thermomech) <a href="https://github.com/cpmech/gofem/blob/master/mdl/thermomech/thermomech.go?s=2603:2647#L98">Kval</a></h3>
+				<pre>func (o *<a href="#Thermomech">Thermomech</a>) Kval(u <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
+				<p>
+Kval computes k(u)
+</p>
+
+				
+				
+				
 			
 		
 	
@@ -167,7 +275,7 @@ Model defines the interface for thermomech models
 
 
 
-</div><!-- page -->
+
 <div id="footer">
 <br /><br />
 <hr>
@@ -201,5 +309,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </pre><!-- copyright -->
 </div><!-- footer -->
+
+</div><!-- container -->
+</div><!-- page -->
 </body>
 </html>
