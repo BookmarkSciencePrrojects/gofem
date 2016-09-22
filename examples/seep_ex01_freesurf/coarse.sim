@@ -17,8 +17,8 @@
     {
       "mshfile"   : "msh/coarse.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"ex 1 and 2", "type":"p", "extra":"!bet:70 !kap:1 !mac:1" },
-        { "tag":-2, "mat":"ex 1 and 2", "type":"p", "extra":"!bet:70 !kap:1 !mac:1" }
+        { "tag":-1, "mat":"ex 1 and 2", "type":"liquid", "extra":"!bet:70 !kap:1 !mac:1" },
+        { "tag":-2, "mat":"ex 1 and 2", "type":"liquid", "extra":"!bet:70 !kap:1 !mac:1" }
       ]
     }
   ],

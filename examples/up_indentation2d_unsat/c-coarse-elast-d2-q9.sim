@@ -33,9 +33,9 @@
       "mshfile"   : "msh/square-coarse-q9.msh",
       "mshfile_"  : "msh/square-ufine-q9.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"grp1", "type":"up", "extra":"!ncns:0 !ncns2:0 !mac:1" },
-        { "tag":-2, "mat":"grp1", "type":"up", "extra":"!ncns:0 !ncns2:0 !mac:1" },
-        { "tag":-3, "mat":"grp1", "type":"up", "extra":"!ncns:0 !ncns2:0 !mac:1" }
+        { "tag":-1, "mat":"grp1", "type":"solid-liquid", "extra":"!ncns:0 !ncns2:0 !mac:1" },
+        { "tag":-2, "mat":"grp1", "type":"solid-liquid", "extra":"!ncns:0 !ncns2:0 !mac:1" },
+        { "tag":-3, "mat":"grp1", "type":"solid-liquid", "extra":"!ncns:0 !ncns2:0 !mac:1" }
       ]
     }
   ],

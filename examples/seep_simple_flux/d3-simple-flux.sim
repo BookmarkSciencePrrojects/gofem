@@ -19,7 +19,7 @@
     {
       "mshfile"   : "msh/d3-coarse.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"sand", "type":"p" }
+        { "tag":-1, "mat":"sand", "type":"liquid" }
       ]
     }
   ],

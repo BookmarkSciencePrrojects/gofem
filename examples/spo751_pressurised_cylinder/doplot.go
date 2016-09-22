@@ -10,6 +10,8 @@ import (
 	"math"
 
 	"github.com/cpmech/gofem/ana"
+	"github.com/cpmech/gofem/ele"
+	"github.com/cpmech/gofem/ele/solid"
 	"github.com/cpmech/gofem/fem"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
@@ -59,7 +61,7 @@ func main() {
 	R_ana, Sr_ana, St_ana := sol.CalcStresses(Psel, np)
 
 	// fem
-	analysis := fem.NewFEM(filename, "", false, false, true, false, true, 0)
+	analysis := fem.NewMain(filename, "", false, false, true, false, true, 0)
 	err := analysis.SetStage(0)
 	if err != nil {
 		chk.Panic("SetStage failed:\n%v", err)
@@ -95,10 +97,10 @@ func main() {
 
 		// stresses
 		if isPsel(Psel, P[tidx], tolPsel) {
-			for j, ele := range dom.ElemIntvars {
-				e := ele.(*fem.ElemU)
+			for j, ee := range dom.ElemIntvars {
+				e := ee.(*solid.Solid)
 				X := e.OutIpCoords()
-				M := fem.NewIpsMap()
+				M := ele.NewIpsMap()
 				e.OutIpVals(M, dom.Sol)
 				for k := 0; k < nips; k++ {
 					x, y := X[k][0], X[k][1]

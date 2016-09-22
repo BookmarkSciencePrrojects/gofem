@@ -7,8 +7,8 @@ package main
 import (
 	"testing"
 
-	"github.com/cpmech/gofem/fem"
 	"github.com/cpmech/gofem/out"
+	"github.com/cpmech/gofem/tests"
 	"github.com/cpmech/gosl/plt"
 )
 
@@ -34,7 +34,7 @@ func main() {
 	tols := 1e-04
 
 	var tst testing.T
-	fem.TestingCompareResultsU(&tst, "spo754.sim", "spo754.cmp", "", tolK, tolu, tols, skipK, verbose, nil)
+	tests.CompareResults(&tst, "spo754.sim", "spo754.cmp", "", tolK, tolu, tols, skipK, verbose, nil)
 
 	// save
 	plt.SetForPng(0.8, 400, 200)

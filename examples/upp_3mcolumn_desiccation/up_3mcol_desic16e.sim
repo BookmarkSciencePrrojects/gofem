@@ -18,8 +18,8 @@
     {
       "mshfile" : "col3m16eQ9.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"porous1", "type":"up", "extra":"!useB:0" },
-        { "tag":-2, "mat":"porous1", "type":"up", "extra":"!useB:0" }
+        { "tag":-1, "mat":"porous1", "type":"solid-liquid", "extra":"!useB:0" },
+        { "tag":-2, "mat":"porous1", "type":"solid-liquid", "extra":"!useB:0" }
       ]
     }
   ],

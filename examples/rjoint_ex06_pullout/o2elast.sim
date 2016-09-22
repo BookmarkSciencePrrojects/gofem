@@ -30,7 +30,7 @@
     {
       "mshfile" : "msh/o2.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"ex 6: solid elastic", "type":"u",   "extra":"!nip:27" },
+        { "tag":-1, "mat":"ex 6: solid elastic", "type":"solid", "extra":"!nip:27" },
         { "tag":-2, "mat":"ex 6: rod elastic",   "type":"rod", "extra":"!nip:3" },
         { "tag":-3, "mat":"ex 6: link plastic",  "type":"rjoint" }
       ]

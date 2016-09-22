@@ -30,7 +30,7 @@
       "desc"      : "strip footing",
       "mshfile"  : "spo754.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"M.7.5.4-mises", "type":"u", "extra":"!nip:4" }
+        { "tag":-1, "mat":"M.7.5.4-mises", "type":"solid", "extra":"!nip:4" }
       ]
     }
   ],

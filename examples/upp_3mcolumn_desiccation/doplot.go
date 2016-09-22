@@ -9,7 +9,7 @@ package main
 import (
 	"strings"
 
-	"github.com/cpmech/gofem/mdl/lrm"
+	"github.com/cpmech/gofem/mdl/retention"
 	"github.com/cpmech/gofem/out"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
@@ -152,7 +152,7 @@ func main() {
 		if id == "lrm" {
 			mat := sim.MatModels.Get("lreten1")
 			Lrm := mat.Lrm
-			lrm.Plot(Lrm, 0, Lrm.SlMax(), 30, 101, "'k-^', markerfacecolor='white', ms=5, markevery=10", "", "model")
+			retention.Plot(Lrm, 0, Lrm.SlMax(), 30, 101, false, "'k-^', markerfacecolor='white', ms=5, markevery=10", "", "model")
 		}
 	})
 }

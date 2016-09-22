@@ -19,8 +19,8 @@
       "desc" : "porous column",
       "mshfile" : "msh/col3m16eQ9.msh",
       "elemsdata" : [
-        { "tag":-1, "mat":"fig8", "type":"up", "extra":"!ncns:0 !ncns2:0" },
-        { "tag":-2, "mat":"fig8", "type":"up", "extra":"!ncns:0 !ncns2:0" }
+        { "tag":-1, "mat":"fig8", "type":"solid-liquid", "extra":"!ncns:0 !ncns2:0" },
+        { "tag":-2, "mat":"fig8", "type":"solid-liquid", "extra":"!ncns:0 !ncns2:0" }
       ]
     }
   ],
