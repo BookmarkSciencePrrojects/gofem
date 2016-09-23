@@ -154,7 +154,7 @@ func run_iterations(t, Δt float64, d *Domain, dc *ele.DynCoefs, sum *Summary, d
 
 	// calculate global starred vectors and interpolate starred variables from nodes to integration points
 	β1 := dc.GetBet1()
-	β2 := dc.GetBet1()
+	β2 := dc.GetBet2()
 	α1 := dc.GetAlp1()
 	α2 := dc.GetAlp2()
 	α3 := dc.GetAlp3()

@@ -86,7 +86,7 @@ func (o *LinearImplicit) Run(tf float64, dtFunc, dtoFunc fun.Func, verbose bool,
 				return chk.Err("cannot compute dynamic coefficients")
 			}
 			β1 = o.dc.GetBet1()
-			β2 = o.dc.GetBet1()
+			β2 = o.dc.GetBet2()
 			α1 = o.dc.GetAlp1()
 			α2 = o.dc.GetAlp2()
 			α3 = o.dc.GetAlp3()
