@@ -59,6 +59,11 @@ func NewMain(simfilepath, alias string, erasePrev, saveSummary, readSummary, all
 		chk.Panic("cannot ready simulation input data")
 	}
 
+	// wait for directory to be cleaned
+	if mpi.IsOn() {
+		mpi.Barrier()
+	}
+
 	// read summary of previous simulation
 	if saveSummary || readSummary {
 		o.Summary = new(Summary)
