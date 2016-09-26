@@ -11,6 +11,7 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
+	"github.com/cpmech/gosl/mpi"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -34,6 +35,9 @@ func (o *Summary) SaveDomains(time float64, doms []*Domain, verbose bool) (err e
 	// output results from all domains
 	for _, d := range doms {
 		err = d.Save(o.tidx, verbose)
+		if d.Distr {
+			mpi.Barrier()
+		}
 		if err != nil {
 			return chk.Err("SaveResults failed:\n%v", err)
 		}
