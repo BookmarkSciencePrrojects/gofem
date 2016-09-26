@@ -12,9 +12,10 @@ seep_simple_flux \
 spo751_pressurised_cylinder \
 spo754_strip_footing_collapse \
 up_3mcolumn_desiccation \
-up_indentation2d_unsat \
 upp_3mcolumn_desiccation
 "
+
+#up_indentation2d_unsat \
 
 for ex in $examples; do
     echo
