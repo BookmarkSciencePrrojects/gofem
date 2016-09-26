@@ -46,6 +46,13 @@ func NewMain(simfilepath, alias string, erasePrev, saveSummary, readSummary, all
 	// new Main object
 	o = new(Main)
 
+	// fix erasePrev flag when MPI is on
+	if mpi.IsOn() {
+		if mpi.Rank() != 0 {
+			erasePrev = false
+		}
+	}
+
 	// read input data
 	o.Sim = inp.ReadSim(simfilepath, alias, erasePrev, goroutineId)
 	if o.Sim == nil {
