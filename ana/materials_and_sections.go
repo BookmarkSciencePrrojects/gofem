@@ -215,6 +215,8 @@ func (o *Material) Init(typ, unitPres string) {
 
 func (o *Material) GetMatString(name, model, numfmt string, section *CrossSection) string {
 	l := io.Sf("    {\n      \"name\" : %q,\n", name)
+	l += io.Sf("      \"type\" : \"sld\",\n")
+	l += io.Sf("      \"model\" : \"oned-elast\",\n")
 	if model != "" {
 		l += io.Sf("      \"model\" : %q,\n", model)
 	}
