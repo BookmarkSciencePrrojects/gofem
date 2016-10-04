@@ -658,6 +658,7 @@ func (o *Simulation) append_adjustable_parameter(prm *fun.Prm) {
 			distr := rnd.GetDistribution(prm.D)
 			o.AdjRandom = append(o.AdjRandom, &rnd.VarData{
 				D: distr, M: prm.V, S: prm.S, Min: prm.Min, Max: prm.Max, Prm: prm,
+				Key: io.Sf("adj%d", prm.Adj),
 			})
 		}
 	}
