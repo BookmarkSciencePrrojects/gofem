@@ -86,6 +86,8 @@ type Beam struct {
 	Qt   fun.Func // distributed tangential load
 	Q1   fun.Func // 3D: load on plane s-t
 	Q2   fun.Func // 3D: load on plane r-t
+	Q1c  fun.Func // 3D: compressive load on plane s-t (will be multiplied by -1)
+	Q2c  fun.Func // 3D: compressive load on plane r-t (will be multiplied by -1)
 
 	// scratchpad. computed @ each ip
 	grav []float64 // [ndim] gravity vector
@@ -230,6 +232,10 @@ func (o *Beam) SetEleConds(key string, f fun.Func, extra string) (err error) {
 		o.Hasq, o.Q1 = true, f
 	case "q2":
 		o.Hasq, o.Q2 = true, f
+	case "q1c": // compressive q1 (will be multiplied by -1)
+		o.Hasq, o.Q1c = true, f
+	case "q2c": // compressive q2 (will be multiplied by -1)
+		o.Hasq, o.Q2c = true, f
 	default:
 		return chk.Err("cannot handle boundary condition named %q", key)
 	}
@@ -599,6 +605,12 @@ func (o *Beam) calc_loads(time float64) (qnL, qnR, qt, q1, q2 float64) {
 	}
 	if o.Q2 != nil {
 		q2 = o.Q2.F(time, nil)
+	}
+	if o.Q1c != nil {
+		q1 = o.Q1c.F(time, nil) * (-1.0)
+	}
+	if o.Q2c != nil {
+		q2 = o.Q2c.F(time, nil) * (-1.0)
 	}
 	return
 }
