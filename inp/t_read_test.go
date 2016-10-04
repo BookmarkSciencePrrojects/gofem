@@ -154,7 +154,7 @@ func Test_sim01(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("sim01")
 
-	sim := ReadSim("data/bh16.sim", "", true, 0)
+	sim := ReadSim("data/bh16.sim", "", true, true, 0)
 	if sim == nil {
 		tst.Errorf("test failed:\n")
 		return
@@ -178,7 +178,7 @@ func Test_sim02(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("sim02")
 
-	sim := ReadSim("data/frees01.sim", "", true, 0)
+	sim := ReadSim("data/frees01.sim", "", true, true, 0)
 	if sim == nil {
 		tst.Errorf("test failed:\n")
 		return
@@ -232,7 +232,7 @@ func Test_sim03(tst *testing.T) {
 	//verbose()
 	chk.PrintTitle("sim03. frame2d with random vars")
 
-	sim := ReadSim("data/frame2d.sim", "", true, 0)
+	sim := ReadSim("data/frame2d.sim", "", true, true, 0)
 
 	chk.IntAssert(len(sim.Adjustable), 6)
 	values := []float64{0.25, 0.16, 0.36, 0.20, 0.15, 30}

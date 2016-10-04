@@ -19,7 +19,7 @@ func Test_solid01(tst *testing.T) {
 	chk.PrintTitle("solid01")
 
 	// load sim => mesh => edat => cell
-	sim := inp.ReadSim("data/solid.sim", "", true, 0)
+	sim := inp.ReadSim("data/solid.sim", "", true, true, 0)
 	msh := sim.Regions[0].Msh
 	edat := sim.Regions[0].ElemsData[0]
 	cell := msh.Cells[0]

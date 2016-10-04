@@ -274,7 +274,7 @@ func (o *Simulation) Clean() {
 }
 
 // ReadSim reads all simulation data from a .sim JSON file
-func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simulation {
+func ReadSim(simfilepath, alias string, erasePrev, createDirOut bool, goroutineId int) *Simulation {
 
 	// new sim
 	var o Simulation
@@ -318,12 +318,16 @@ func ReadSim(simfilepath, alias string, erasefiles bool, goroutineId int) *Simul
 		o.EncType = "gob"
 	}
 
-	// create directory and erase previous simulation results
-	if erasefiles {
+	// create directory
+	if createDirOut {
 		err = os.MkdirAll(o.DirOut, 0777)
 		if err != nil {
 			chk.Panic("cannot create directory for output results (%s): %v", o.DirOut, err)
 		}
+	}
+
+	// erase previous simulation results
+	if erasePrev {
 		io.RemoveAll(io.Sf("%s/%s*", o.DirOut, fnkey))
 	}
 

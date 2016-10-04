@@ -37,11 +37,11 @@ type Main struct {
 //   simfilepath   -- simulation (.sim) filename including full path
 //   alias         -- word to be appended to simulation key; e.g. when running multiple FE solutions
 //   erasePrev     -- erase previous results files
-//   saveSummary   -- save summary
-//   readSummary   -- ready summary of previous simulation
+//   saveResults   -- save results
+//   readResults   -- read results from previous simulation
 //   allowParallel -- allow parallel execution; otherwise, run in serial mode regardless whether MPI is on or not
 //   verbose       -- show messages
-func NewMain(simfilepath, alias string, erasePrev, saveSummary, readSummary, allowParallel, verbose bool, goroutineId int) (o *Main) {
+func NewMain(simfilepath, alias string, erasePrev, saveResults, readResults, allowParallel, verbose bool, goroutineId int) (o *Main) {
 
 	// new Main object
 	o = new(Main)
@@ -54,7 +54,7 @@ func NewMain(simfilepath, alias string, erasePrev, saveSummary, readSummary, all
 	}
 
 	// read input data
-	o.Sim = inp.ReadSim(simfilepath, alias, erasePrev, goroutineId)
+	o.Sim = inp.ReadSim(simfilepath, alias, erasePrev, saveResults, goroutineId)
 	if o.Sim == nil {
 		chk.Panic("cannot ready simulation input data")
 	}
@@ -65,10 +65,10 @@ func NewMain(simfilepath, alias string, erasePrev, saveSummary, readSummary, all
 	}
 
 	// read summary of previous simulation
-	if saveSummary || readSummary {
+	if saveResults || readResults {
 		o.Summary = new(Summary)
 	}
-	if readSummary {
+	if readResults {
 		err := o.Summary.Read(o.Sim.DirOut, o.Sim.Key, o.Sim.EncType)
 		if err != nil {
 			chk.Panic("cannot ready summary:\n%v", err)
