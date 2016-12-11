@@ -125,7 +125,7 @@ func Draw(dirout, fname string, nr, nc int, split bool, extra func(id string)) {
 				y = make([]float64, len(d.Y))
 				la.VecCopy(y, spl.Yscale, d.Y)
 			}
-			plt.Plot(x, y, d.Style.GetArgs("clip_on=0"))
+			plt.Plot(x, y, d.Style.GetArgs(""))
 		}
 		plt.Gll(spl.Xlbl, spl.Ylbl, spl.GllArgs)
 		if len(spl.Xrange) == 2 {
