@@ -65,4 +65,7 @@ testandinstall out
 echo
 echo
 echo "[1;32m>>> compiling binaries <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<[0m"
-make
+go install
+cd tools
+bash install.bash
+cd ..
