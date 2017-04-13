@@ -98,7 +98,7 @@ func (o PressCylin) ElastOuterU(P float64) (ub float64) {
 // TODO: check what's 'c' exactly
 func (o *PressCylin) Calc_c(P float64) float64 {
 	var nls num.NlSolver
-	defer nls.Clean()
+	defer nls.Free()
 	o.P_fx = P
 	Res := []float64{(o.a + o.b) / 2.0} // initial values
 	nls.Init(1, o.fx_fun, nil, o.dfdx_fun, true, false, nil)

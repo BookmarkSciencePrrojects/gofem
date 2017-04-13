@@ -46,9 +46,9 @@ func init() {
 	allocators["smp"] = func() Model { return new(SmpInvs) }
 }
 
-// Clean clean resources
-func (o *SmpInvs) Clean() {
-	o.PU.Clean()
+// Free frees memory
+func (o *SmpInvs) Free() {
+	o.PU.Free()
 }
 
 // GetRho returns density

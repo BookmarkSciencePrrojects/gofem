@@ -65,11 +65,11 @@ type MatDb struct {
 	POR map[string]*Material // subset with materials/models: porous materials
 }
 
-// Clean cleans resources
-func (o *MatDb) Clean() {
+// Free frees memory
+func (o *MatDb) Free() {
 	for _, mat := range o.Materials {
 		if mat.Sld != nil {
-			mat.Sld.Clean()
+			mat.Sld.Free()
 		}
 	}
 }

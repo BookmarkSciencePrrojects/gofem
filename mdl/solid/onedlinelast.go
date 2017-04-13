@@ -22,8 +22,8 @@ func init() {
 	allocators["oned-elast"] = func() Model { return new(OnedLinElast) }
 }
 
-// Clean clean resources
-func (o *OnedLinElast) Clean() {
+// Free frees memory
+func (o *OnedLinElast) Free() {
 }
 
 // GetRho returns density

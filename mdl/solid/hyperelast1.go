@@ -43,8 +43,8 @@ func init() {
 	allocators["hyp-elast1"] = func() Model { return new(HyperElast1) }
 }
 
-// Clean clean resources
-func (o *HyperElast1) Clean() {
+// Free frees memory
+func (o *HyperElast1) Free() {
 }
 
 // GetRho returns density

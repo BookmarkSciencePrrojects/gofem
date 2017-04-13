@@ -79,9 +79,9 @@ type Domain struct {
 	bkpSol *ele.Solution // backup solution
 }
 
-// Clean cleans memory allocated by domain
-func (o *Domain) Clean() {
-	o.LinSol.Clean()
+// Free frees memory
+func (o *Domain) Free() {
+	o.LinSol.Free()
 	o.InitLSol = true // tell solver that lis has to be initialised before use
 }
 

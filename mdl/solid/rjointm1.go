@@ -32,8 +32,8 @@ func (o *RjointM1) Set_mu(mu float64) {
 	o.A_μ = mu
 }
 
-// Clean clean resources
-func (o *RjointM1) Clean() {
+// Free frees memory
+func (o *RjointM1) Free() {
 }
 
 // GetRho returns density

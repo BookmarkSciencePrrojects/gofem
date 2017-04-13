@@ -231,13 +231,13 @@ func (o *Main) SolveOneStage(stgidx int, zerostage bool) (err error) {
 
 // auxiliary //////////////////////////////////////////////////////////////////////////////////////
 
-// onexit clean domains, prints final message with simulation and cpu times and save summary
+// onexit frees memory, prints final message with simulation and cpu times and save summary
 func (o *Main) onexit(cputime time.Time, prevErr error) (err error) {
 
-	// clean resources
-	o.Sim.Clean()
+	// free memory
+	o.Sim.Free()
 	for _, d := range o.Domains {
-		d.Clean()
+		d.Free()
 	}
 
 	// show final message

@@ -26,8 +26,8 @@ func init() {
 	allocators["dp"] = func() Model { return new(DruckerPrager) }
 }
 
-// Clean clean resources
-func (o *DruckerPrager) Clean() {
+// Free frees memory
+func (o *DruckerPrager) Free() {
 }
 
 // GetRho returns density

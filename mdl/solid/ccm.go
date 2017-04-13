@@ -39,9 +39,9 @@ func init() {
 	allocators["ccm"] = func() Model { return new(CamClayMod) }
 }
 
-// Clean clean resources
-func (o *CamClayMod) Clean() {
-	o.PU.Clean()
+// Free frees memory
+func (o *CamClayMod) Free() {
+	o.PU.Free()
 }
 
 // GetRho returns density

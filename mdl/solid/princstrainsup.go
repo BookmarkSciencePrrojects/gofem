@@ -74,9 +74,9 @@ type PrincStrainsUp struct {
 	ChkSilent bool        // silent check
 }
 
-// Clean cleans allocated resources
-func (o *PrincStrainsUp) Clean() {
-	o.nls.Clean()
+// Free frees memory
+func (o *PrincStrainsUp) Free() {
+	o.nls.Free()
 }
 
 // Init initialises this structure

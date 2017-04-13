@@ -24,8 +24,8 @@ func init() {
 	allocators["vm"] = func() Model { return new(VonMises) }
 }
 
-// Clean clean resources
-func (o *VonMises) Clean() {
+// Free frees memory
+func (o *VonMises) Free() {
 }
 
 // GetRho returns density

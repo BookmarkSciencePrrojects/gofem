@@ -40,8 +40,8 @@ func init() {
 	allocators["ogden"] = func() Model { return new(Ogden) }
 }
 
-// Clean clean resources
-func (o *Ogden) Clean() {
+// Free frees memory
+func (o *Ogden) Free() {
 }
 
 // GetRho returns density

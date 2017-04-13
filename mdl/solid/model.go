@@ -33,7 +33,7 @@ type Model interface {
 	InitIntVars(σ []float64) (*State, error)          // initialises AND allocates internal (secondary) variables
 	GetPrms() fun.Prms                                // gets (an example) of parameters
 	GetRho() float64                                  // returns density
-	Clean()                                           // clean resources as when calling C code
+	Free()                                            // free memory; e.g. when calling C code
 }
 
 // Small defines rate type solid models for small strain analyses

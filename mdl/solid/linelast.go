@@ -16,8 +16,8 @@ func init() {
 	allocators["lin-elast"] = func() Model { return new(LinElast) }
 }
 
-// Clean clean resources
-func (o *LinElast) Clean() {
+// Free frees memory
+func (o *LinElast) Free() {
 }
 
 // Init initialises model

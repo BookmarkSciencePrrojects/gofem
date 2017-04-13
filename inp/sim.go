@@ -266,10 +266,10 @@ type Simulation struct {
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
 
-// Clean cleans resources
-func (o *Simulation) Clean() {
+// Free frees memory
+func (o *Simulation) Free() {
 	if o.MatModels != nil {
-		o.MatModels.Clean()
+		o.MatModels.Free()
 	}
 }
 
