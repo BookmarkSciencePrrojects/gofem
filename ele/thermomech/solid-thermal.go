@@ -7,17 +7,17 @@ package thermomech
 import (
 	"github.com/cpmech/gofem/inp"
 
-	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
-	"github.com/cpmech/gosl/la"
-	"github.com/cpmech/gosl/tsr"
-	"github.com/cpmech/gosl/io"
-	"github.com/cpmech/gofem/mdl/thermomech"
+	"github.com/cpmech/gofem/ele"
 	elesolid "github.com/cpmech/gofem/ele/solid"
 	mdlsolid "github.com/cpmech/gofem/mdl/solid"
+	"github.com/cpmech/gofem/mdl/thermomech"
 	"github.com/cpmech/gofem/shp"
+	"github.com/cpmech/gosl/chk"
+	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/io"
+	"github.com/cpmech/gosl/la"
+	"github.com/cpmech/gosl/tsr"
 	"github.com/cpmech/gosl/utl"
-	"github.com/cpmech/gofem/ele"
 	"math"
 )
 
@@ -25,86 +25,86 @@ import (
 type SolidThermal struct {
 
 	// basic data
-	Cell      *inp.Cell      // the cell structure
-	LbbCell   *inp.Cell      // if LBB==false, same as Cell; otherwise LbbCell is a new cell with less vertices
-	Edat      *inp.ElemData  // element data; stored in allocator to be used in Connect
-	X         [][]float64    // matrix of nodal coordinates [ndim][nnode]
-	Ndim      int            // space dimension
-	Nu        int            // total number of unknown displacements
-	Nt        int            // total number of unknown temperatures
-	Nc        int            // if mixed formulation is used, number of fl variables
+	Cell    *inp.Cell     // the cell structure
+	LbbCell *inp.Cell     // if LBB==false, same as Cell; otherwise LbbCell is a new cell with less vertices
+	Edat    *inp.ElemData // element data; stored in allocator to be used in Connect
+	X       [][]float64   // matrix of nodal coordinates [ndim][nnode]
+	Ndim    int           // space dimension
+	Nu      int           // total number of unknown displacements
+	Nt      int           // total number of unknown temperatures
+	Nc      int           // if mixed formulation is used, number of fl variables
 
 	// variables for dynamics
-	Cdam      float64        // coefficient for damping // TODO: read this value
-	Gfcn      fun.Func       // gravity function
+	Cdam float64       // coefficient for damping // TODO: read this value
+	Gfcn fun.TimeSpace // gravity function
 
 	// optional data
-	UseB      bool           // use B matrix
-	Thickness float64        // thickness
-	Debug     bool           // debugging flag
+	UseB      bool    // use B matrix
+	Thickness float64 // thickness
+	Debug     bool    // debugging flag
 
 	// integration points (integration points of displacement element)
-	IpsElem   []shp.Ipoint   // integration points of element
-	IpsFace   []shp.Ipoint   // integration points corresponding to faces
+	IpsElem []shp.Ipoint // integration points of element
+	IpsFace []shp.Ipoint // integration points corresponding to faces
 
 	// material models and internal variables (sld model)
-	SldMdl       mdlsolid.Model      // material model
-	SldMdlSmall  mdlsolid.Small      // model specialisation for small strains
-	SldMdlLarge  mdlsolid.Large      // model specialisation for large deformations
-	TrmMdl       *thermomech.Thermomech      // thermal material model
+	SldMdl      mdlsolid.Model         // material model
+	SldMdlSmall mdlsolid.Small         // model specialisation for small strains
+	SldMdlLarge mdlsolid.Large         // model specialisation for large deformations
+	TrmMdl      *thermomech.Thermomech // thermal material model
 
 	// internal variables
-	States    []*mdlsolid.State   // [nip] states
-	StatesBkp []*mdlsolid.State   // [nip] backup states
-	StatesAux []*mdlsolid.State   // [nip] auxiliary backup states
+	States    []*mdlsolid.State // [nip] states
+	StatesBkp []*mdlsolid.State // [nip] backup states
+	StatesAux []*mdlsolid.State // [nip] auxiliary backup states
 
 	// additional variables
-	Umap   []int             // assembly map (location array/element equations)
-	Tmap   []int             // assembly map (location array/element equations)
-	Cmap    []int            // [nc] map of "fl" variables (mixed formulation)
-	NatBcs []*ele.NaturalBc  // natural boundary conditions
-	Emat   [][]float64       // [nvert][nip] extrapolator matrix; if AddToExt is called
+	Umap   []int            // assembly map (location array/element equations)
+	Tmap   []int            // assembly map (location array/element equations)
+	Cmap   []int            // [nc] map of "fl" variables (mixed formulation)
+	NatBcs []*ele.NaturalBc // natural boundary conditions
+	Emat   [][]float64      // [nvert][nip] extrapolator matrix; if AddToExt is called
 
 	// local starred variables for displacements
-	ζs    [][]float64        // [nip][ndim] t2 star vars: ζ* = α1.u + α2.v + α3.a
-	χs    [][]float64        // [nip][ndim] t2 star vars: χ* = α4.u + α5.v + α6.a
-	divχs []float64          // [nip] divergent of χs (for coupled sims)
+	ζs    [][]float64 // [nip][ndim] t2 star vars: ζ* = α1.u + α2.v + α3.a
+	χs    [][]float64 // [nip][ndim] t2 star vars: χ* = α4.u + α5.v + α6.a
+	divχs []float64   // [nip] divergent of χs (for coupled sims)
 
 	// scratchpad. computed @ each ip (displacement element)
-	grav []float64           // [ndim] gravity vector
-	us   []float64           // [ndim] displacements @ ip
-	fi      []float64        // [nu] internal forces
-	B       [][]float64      // [nsig][nu] B matrix for axisymetric case
-	D       [][]float64      // [nsig][nsig] constitutive consistent tangent matrix
+	grav []float64   // [ndim] gravity vector
+	us   []float64   // [ndim] displacements @ ip
+	fi   []float64   // [nu] internal forces
+	B    [][]float64 // [nsig][nu] B matrix for axisymetric case
+	D    [][]float64 // [nsig][nsig] constitutive consistent tangent matrix
 
 	// scratchpad. computed @ each ip (temperature element)
-	tstar   []float64        // [nip] ustar* = β1 u + β2 dudt
-	xip     []float64        // real coordinates of ip
-	tval    float64          // u(t,x) scalar field @ ip
-	gradu   []float64        // [ndim] ∇u(t,x): gradient of u @ ip
-	wvec    []float64        // [ndim] w(t,x) vector @ ip
-	tmp     []float64        // auxiliary vector
-	Sfun    fun.Func         // s(x) function for temperature element
+	tstar []float64     // [nip] ustar* = β1 u + β2 dudt
+	xip   []float64     // real coordinates of ip
+	tval  float64       // u(t,x) scalar field @ ip
+	gradu []float64     // [ndim] ∇u(t,x): gradient of u @ ip
+	wvec  []float64     // [ndim] w(t,x) vector @ ip
+	tmp   []float64     // auxiliary vector
+	Sfun  fun.TimeSpace // s(x) function for temperature element
 
 	// strains
-	ε       []float64        // total (updated) strains
-	Δε      []float64        // incremental strains leading to updated strains
+	ε  []float64 // total (updated) strains
+	Δε []float64 // incremental strains leading to updated strains
 
 	//Mixed form
-	MixedForm  bool          // indicates if this element has mixed form BC's
-	Vid2convId []int         // [nverts] maps local vertex id to index in Cmap
-	ConvId2vid []int         // [nf] maps mixed form BC face variable id to local vertex id
+	MixedForm  bool  // indicates if this element has mixed form BC's
+	Vid2convId []int // [nverts] maps local vertex id to index in Cmap
+	ConvId2vid []int // [nf] maps mixed form BC face variable id to local vertex id
 
 	// Stiffness matrices (u-t coupling)
-	Kuu        [][]float64
-	Kut        [][]float64
-	Ktu        [][]float64
-	Ktt        [][]float64
+	Kuu [][]float64
+	Kut [][]float64
+	Ktu [][]float64
+	Ktt [][]float64
 
 	//Additional stiffness matrices for mixed form solution
-	Ktc        [][]float64   // [nt][nc]
-	Kct        [][]float64   // [nc][nt]
-	Kcc        [][]float64   // [nc][nc]
+	Ktc [][]float64 // [nt][nc]
+	Kct [][]float64 // [nc][nt]
+	Kcc [][]float64 // [nc][nc]
 }
 
 // initialisation ///////////////////////////////////////////////////////////////////////////////////
@@ -130,12 +130,12 @@ func init() {
 		info.Dofs = make([][]string, nverts)
 		for m := 0; m < nverts; m++ {
 			info.Dofs[m] = ykeys
-			if m > cell.GetNverts(!sim.Data.NoLBB) - 1{
+			if m > cell.GetNverts(!sim.Data.NoLBB)-1 {
 				info.Dofs[m] = info.Dofs[m][:len(info.Dofs[m])-1]
 			}
 		}
 
-		info.Y2F = map[string]string{"ux": "fx", "uy": "fy", "uz": "fz", "temp" : "q"}
+		info.Y2F = map[string]string{"ux": "fx", "uy": "fy", "uz": "fz", "temp": "q"}
 
 		// vertices on convective faces
 		if len(cell.FaceBcs) > 0 {
@@ -312,13 +312,13 @@ func (o *SolidThermal) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *SolidThermal) SetEleConds(key string, f fun.Func, extra string) (err error) {
+func (o *SolidThermal) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
 	o.Sfun = nil
 	switch key {
 
-	case "g" : // gravity
+	case "g": // gravity
 		o.Gfcn = f
-	case "s" : // source
+	case "s": // source
 		o.Sfun = f
 	}
 
@@ -362,7 +362,7 @@ func (o *SolidThermal) InterpStarVars(sol *ele.Solution) (err error) {
 		}
 
 		// clear local variables
-		o.tstar[idx] =0
+		o.tstar[idx] = 0
 
 		// interpolate starred variables
 		for m := 0; m < o.Nt; m++ {
@@ -384,7 +384,7 @@ func (o *SolidThermal) AddToRhs(fb []float64, sol *ele.Solution) (err error) {
 	α4 := sol.DynCfs.GetAlp4()
 	β1 := sol.DynCfs.GetBet1()
 	prms := o.SldMdl.GetPrms()
-	E , _ := prms.GetValues([]string{"E"})
+	E, _ := prms.GetValues([]string{"E"})
 	ρ := o.SldMdl.GetRho()
 	u_nverts := o.Cell.Shp.Nverts
 	t_nverts := o.LbbCell.Shp.Nverts
@@ -452,11 +452,11 @@ func (o *SolidThermal) AddToRhs(fb []float64, sol *ele.Solution) (err error) {
 		// diffu residuals
 		for m := 0; m < t_nverts; m++ {
 			rt := o.Tmap[m]
-			fb[rt] -= coef * St[m] * (ρ * o.TrmMdl.Cp *dudt - sval) // - ftrs + fext/sval
+			fb[rt] -= coef * St[m] * (ρ*o.TrmMdl.Cp*dudt - sval) // - ftrs + fext/sval
 			for i := 0; i < o.Ndim; i++ {
 				fb[rt] += coef * Gt[m][i] * o.wvec[i] // + fint
-				for n:=0; n < t_nverts; n++{
-					fb[rt] -= coef * St[m] * (o.tval + o.TrmMdl.T0) * o.TrmMdl.Acte[i] * E[0] * (α4 * o.us[i] - o.χs[idx][i]) * Gt[n][i]  // coupling term Ft
+				for n := 0; n < t_nverts; n++ {
+					fb[rt] -= coef * St[m] * (o.tval + o.TrmMdl.T0) * o.TrmMdl.Acte[i] * E[0] * (α4*o.us[i] - o.χs[idx][i]) * Gt[n][i] // coupling term Ft
 				}
 			}
 		}
@@ -498,7 +498,7 @@ func (o *SolidThermal) AddToKb(Kb *la.Triplet, sol *ele.Solution, firstIt bool) 
 	α4 := sol.DynCfs.GetAlp4()
 	β1 := sol.DynCfs.GetBet1()
 	prms := o.SldMdl.GetPrms()
-	E , _ := prms.GetValues([]string{"E"})
+	E, _ := prms.GetValues([]string{"E"})
 	ρ := o.SldMdl.GetRho()
 	u_nverts := o.Cell.Shp.Nverts
 	t_nverts := o.LbbCell.Shp.Nverts
@@ -547,10 +547,10 @@ func (o *SolidThermal) AddToKb(Kb *la.Triplet, sol *ele.Solution, firstIt bool) 
 		// dynamic u term
 		for m := 0; m < u_nverts; m++ {
 			for i := 0; i < o.Ndim; i++ {
-				r := i + m * o.Ndim
+				r := i + m*o.Ndim
 				for n := 0; n < u_nverts; n++ {
-					c := i + n * o.Ndim
-					o.Kuu[r][c] += coef * S[m] * S[n] * (ρ * α1 + o.Cdam * α4)
+					c := i + n*o.Ndim
+					o.Kuu[r][c] += coef * S[m] * S[n] * (ρ*α1 + o.Cdam*α4)
 				}
 			}
 		}
@@ -562,7 +562,7 @@ func (o *SolidThermal) AddToKb(Kb *la.Triplet, sol *ele.Solution, firstIt bool) 
 			}
 			for n := 0; n < u_nverts; n++ {
 				for i := 0; i < o.Ndim; i++ {
-					r := i + n * o.Ndim
+					r := i + n*o.Ndim
 					o.Kut[r][m] -= coef * Gt[m][i] * S[n] * o.TrmMdl.Acte[i] * E[0]
 					o.Ktu[m][r] += coef * St[m] * G[n][i] * o.TrmMdl.Acte[i] * E[0] * (o.tval + o.TrmMdl.T0) * α4
 				}
@@ -573,7 +573,7 @@ func (o *SolidThermal) AddToKb(Kb *la.Triplet, sol *ele.Solution, firstIt bool) 
 					for j := 0; j < o.Ndim; j++ {
 						o.Ktt[n][m] += coef * Gt[n][i] * o.TrmMdl.Kcte[i][j] * o.tmp[j]
 					}
-					o.Ktt[n][m] += coef * St[m] * St[n] * o.TrmMdl.Acte[i] * E[0] * (α4*o.us[i]-o.χs[idx][i]) * Gt[n][i]
+					o.Ktt[n][m] += coef * St[m] * St[n] * o.TrmMdl.Acte[i] * E[0] * (α4*o.us[i] - o.χs[idx][i]) * Gt[n][i]
 				}
 			}
 		}
@@ -780,6 +780,7 @@ func (o *SolidThermal) OutIpVals(M *ele.IpsMap, sol *ele.Solution) {
 		}
 	}
 }
+
 // extra ////////////////////////////////////////////////////////////////////////////////////////////
 
 // AddToExt extrapolates stresses at integration points to nodes
@@ -896,6 +897,7 @@ func (o *SolidThermal) add_surfloads_to_rhs(fb []float64, sol *ele.Solution) (er
 	}
 	return
 }
+
 // add_natbcs_to_rhs adds natural boundary conditions to rhs
 func (o *SolidThermal) add_natbcs_to_rhs(fb []float64, sol *ele.Solution) (err error) {
 
@@ -974,6 +976,7 @@ func (o *SolidThermal) add_natbcs_to_rhs(fb []float64, sol *ele.Solution) (err e
 	}
 	return
 }
+
 // add_natbcs_to_Ktt adds natural boundary conditions to Ktt
 func (o *SolidThermal) add_natbcs_to_jac(sol *ele.Solution) (err error) {
 
@@ -1026,7 +1029,7 @@ func (o *SolidThermal) add_natbcs_to_jac(sol *ele.Solution) (err error) {
 				}
 				for i, m := range o.LbbCell.Shp.FaceLocalVerts[iface] {
 					for j, n := range o.LbbCell.Shp.FaceLocalVerts[iface] {
-						o.Ktt[n][m] += coef * Sf[i] * o.TrmMdl.Sb * o.TrmMdl.Re * 4.0 * Sf[j] * math.Pow((tface + o.TrmMdl.T0), 3.0)
+						o.Ktt[n][m] += coef * Sf[i] * o.TrmMdl.Sb * o.TrmMdl.Re * 4.0 * Sf[j] * math.Pow((tface+o.TrmMdl.T0), 3.0)
 					}
 				}
 			}
