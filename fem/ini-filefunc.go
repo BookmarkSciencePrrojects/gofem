@@ -24,7 +24,7 @@ func (o *Domain) IniSetFileFunc(stg *inp.Stage) (err error) {
 	}
 
 	// loop over functions
-	var fcn fun.Func
+	var fcn fun.TimeSpace
 	for i, fname := range stg.IniFcn.Fcns {
 
 		// get function

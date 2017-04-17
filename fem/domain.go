@@ -261,7 +261,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 	o.PtNatBcs.Reset()
 
 	// element conditions
-	var fcn fun.Func
+	var fcn fun.TimeSpace
 	for _, ec := range stg.EleConds {
 		cells, ok := o.Msh.CellTag2cells[ec.Tag]
 		if !ok {

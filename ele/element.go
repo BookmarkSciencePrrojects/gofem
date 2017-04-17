@@ -21,7 +21,7 @@ type Element interface {
 	SetEqs(eqs [][]int, mixedform_eqs []int) (err error) // set equations
 
 	// conditions (natural BCs and element's)
-	SetEleConds(key string, f fun.Func, extra string) (err error) // set element conditions
+	SetEleConds(key string, f fun.TimeSpace, extra string) (err error) // set element conditions
 
 	// called for each time step
 	InterpStarVars(sol *Solution) (err error) // interpolate star variables to integration points

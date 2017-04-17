@@ -77,7 +77,7 @@ func (o *RichardsonExtrap) Init() {
 	o.diverging = false
 }
 
-func (o *RichardsonExtrap) Run(tf float64, dtFunc, dtoFunc fun.Func, verbose bool, dbgKb DebugKb_t) (err error) {
+func (o *RichardsonExtrap) Run(tf float64, dtFunc, dtoFunc fun.TimeSpace, verbose bool, dbgKb DebugKb_t) (err error) {
 
 	// constants
 	dat := o.doms[0].Sim.Solver

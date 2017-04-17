@@ -32,7 +32,7 @@ type ElastRod struct {
 	L   float64             // length of rod
 
 	// variables for dynamics
-	Gfcn fun.Func // gravity function
+	Gfcn fun.TimeSpace // gravity function
 
 	// vectors and matrices
 	T [][]float64 // [ndim][nu] transformation matrix: system aligned to rod => element system
@@ -164,7 +164,7 @@ func (o *ElastRod) InterpStarVars(sol *ele.Solution) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *ElastRod) SetEleConds(key string, f fun.Func, extra string) (err error) {
+func (o *ElastRod) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
 	if key == "g" {
 		chk.Panic("ElastRod cannot handle gravity yet")
 		o.Gfcn = f

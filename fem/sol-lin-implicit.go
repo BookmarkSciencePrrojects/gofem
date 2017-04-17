@@ -34,7 +34,7 @@ func init() {
 	}
 }
 
-func (o *LinearImplicit) Run(tf float64, dtFunc, dtoFunc fun.Func, verbose bool, notused DebugKb_t) (err error) {
+func (o *LinearImplicit) Run(tf float64, dtFunc, dtoFunc fun.TimeSpace, verbose bool, notused DebugKb_t) (err error) {
 
 	// control
 	t := o.dom.Sol.T

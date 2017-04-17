@@ -12,11 +12,11 @@ import (
 // PtNaturalBc holds information on point natural boundary conditions such as
 // prescribed forces or fluxes) at nodes
 type PtNaturalBc struct {
-	Key   string    // key such as fux, fpl, etc...
-	Eq    int       // equation
-	X     []float64 // location
-	Fcn   fun.Func  // function
-	Extra string    // extra information
+	Key   string        // key such as fux, fpl, etc...
+	Eq    int           // equation
+	X     []float64     // location
+	Fcn   fun.TimeSpace // function
+	Extra string        // extra information
 }
 
 // PointLoads is a set of prescribed forces
@@ -39,7 +39,7 @@ func (o PtNaturalBcs) AddToRhs(fb []float64, t float64) {
 }
 
 // Set sets new point natural boundary condition data
-func (o *PtNaturalBcs) Set(key string, nod *Node, fcn fun.Func, extra string) (setisok bool) {
+func (o *PtNaturalBcs) Set(key string, nod *Node, fcn fun.TimeSpace, extra string) (setisok bool) {
 	d := nod.GetDof(key)
 	if d == nil { // handle LBB nodes
 		return

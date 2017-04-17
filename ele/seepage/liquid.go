@@ -49,7 +49,7 @@ type Liquid struct {
 	StatesAux []*porous.State
 
 	// gravity
-	Gfcn fun.Func // gravity function
+	Gfcn fun.TimeSpace // gravity function
 
 	// natural boundary conditions
 	NatBcs []*ele.NaturalBc // natural boundary conditions
@@ -253,7 +253,7 @@ func (o *Liquid) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds sets element conditions
-func (o *Liquid) SetEleConds(key string, f fun.Func, extra string) (err error) {
+func (o *Liquid) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
 	if key == "g" { // gravity
 		o.Gfcn = f
 	}

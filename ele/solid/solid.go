@@ -29,8 +29,8 @@ type Solid struct {
 	Ndim int         // space dimension
 
 	// variables for dynamics
-	Cdam float64  // coefficient for damping // TODO: read this value
-	Gfcn fun.Func // gravity function
+	Cdam float64       // coefficient for damping // TODO: read this value
+	Gfcn fun.TimeSpace // gravity function
 
 	// optional data
 	UseB      bool    // use B matrix
@@ -268,7 +268,7 @@ func (o *Solid) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *Solid) SetEleConds(key string, f fun.Func, extra string) (err error) {
+func (o *Solid) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
 	if key == "g" { // gravity
 		o.Gfcn = f
 	}

@@ -109,7 +109,7 @@ func (o *Phi) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *Phi) SetEleConds(key string, f fun.Func, extra string) (err error) {
+func (o *Phi) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
 	return
 }
 

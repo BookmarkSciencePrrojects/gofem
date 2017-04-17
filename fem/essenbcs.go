@@ -31,10 +31,10 @@ import (
 //         Kb       δyb          fb
 //
 type EssentialBc struct {
-	Key   string    // key such as 'ux', 'uy', 'rigid', 'incsup', 'hst'
-	Eqs   []int     // equations numbers; can be more than one e.g. for inclined support
-	ValsA []float64 // values for matrix A
-	Fcn   fun.Func  // function that implements the "c" vector in  A・y = c
+	Key   string        // key such as 'ux', 'uy', 'rigid', 'incsup', 'hst'
+	Eqs   []int         // equations numbers; can be more than one e.g. for inclined support
+	ValsA []float64     // values for matrix A
+	Fcn   fun.TimeSpace // function that implements the "c" vector in  A・y = c
 }
 
 // EbcArray is an array of EssentialBc's
@@ -126,7 +126,7 @@ func GetIsEssenKeyMap() map[string]bool {
 //   3) if the key as a suffix "_ini", the initial value of essential key will be multiplied
 //      by fcn==mult in order to define the boundary condition according to:
 //          y(t,z) = y(z)_ini・mult(t)
-func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.Func, extra string) (err error) {
+func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.TimeSpace, extra string) (err error) {
 
 	// auxiliary
 	chk.IntAssertLessThan(0, len(nodes)) // 0 < len(nod)
@@ -275,7 +275,7 @@ func (o *EssentialBcs) List(t float64) (l string) {
 // auxiliary /////////////////////////////////////////////////////////////////////////////////////////
 
 // set_eqs sets/replace constraint and equations
-func (o *EssentialBcs) set_eqs(key string, eqs []int, valsA []float64, fcn fun.Func) {
+func (o *EssentialBcs) set_eqs(key string, eqs []int, valsA []float64, fcn fun.TimeSpace) {
 
 	// replace existent
 	for _, eq := range eqs {

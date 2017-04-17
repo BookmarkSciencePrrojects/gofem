@@ -169,8 +169,8 @@ type TimeControl struct {
 	DtoFcn string  `json:"dtofcn"` // time step size for output (function name)
 
 	// derived
-	DtFunc  fun.Func // time step function
-	DtoFunc fun.Func // output time step function
+	DtFunc  fun.TimeSpace // time step function
+	DtoFunc fun.TimeSpace // output time step function
 }
 
 // IniPorousData  holds data for setting initial porous media state (e.g. geostatic, hydrostatic)

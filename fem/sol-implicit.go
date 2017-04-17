@@ -33,7 +33,7 @@ func init() {
 	}
 }
 
-func (o *Implicit) Run(tf float64, dtFunc, dtoFunc fun.Func, verbose bool, dbgKb DebugKb_t) (err error) {
+func (o *Implicit) Run(tf float64, dtFunc, dtoFunc fun.TimeSpace, verbose bool, dbgKb DebugKb_t) (err error) {
 
 	// auxiliary
 	md := 1.0    // time step multiplier if divergence control is on

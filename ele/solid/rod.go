@@ -26,7 +26,7 @@ type Rod struct {
 	Ndim int         // space dimension
 
 	// variables for dynamics
-	Gfcn fun.Func // gravity function
+	Gfcn fun.TimeSpace // gravity function
 
 	// integration points
 	IpsElem []shp.Ipoint // integration points of element
@@ -143,7 +143,7 @@ func (o *Rod) InterpStarVars(sol *ele.Solution) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *Rod) SetEleConds(key string, f fun.Func, extra string) (err error) {
+func (o *Rod) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
 	if key == "g" {
 		o.Gfcn = f
 	}

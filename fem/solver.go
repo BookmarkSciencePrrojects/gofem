@@ -11,7 +11,7 @@ import (
 
 // Solver implements the actual solver (time loop)
 type Solver interface {
-	Run(tf float64, dtFunc, dtoFunc fun.Func, verbose bool, dbgKb DebugKb_t) (err error)
+	Run(tf float64, dtFunc, dtoFunc fun.TimeSpace, verbose bool, dbgKb DebugKb_t) (err error)
 }
 
 // allocators holds all available solvers

@@ -32,12 +32,12 @@ import (
 //         2 => "qn"    => localVerts={2,3} => globalVerts={35,36}
 //         2 => "seepH" => localVerts={2,3} => globalVerts={35,36}
 type FaceCond struct {
-	FaceId      int      // msh: cell's face local id
-	LocalVerts  []int    // msh: cell's face local vertices ids (sorted)
-	GlobalVerts []int    // msh: global vertices ids (sorted)
-	Cond        string   // sim: condition; e.g. "qn" or "seepH"
-	Func        fun.Func // sim: function to compute boundary condition
-	Extra       string   // sim: extra information
+	FaceId      int           // msh: cell's face local id
+	LocalVerts  []int         // msh: cell's face local vertices ids (sorted)
+	GlobalVerts []int         // msh: global vertices ids (sorted)
+	Cond        string        // sim: condition; e.g. "qn" or "seepH"
+	Func        fun.TimeSpace // sim: function to compute boundary condition
+	Extra       string        // sim: extra information
 }
 
 // FaceConds hold many face boundary conditions

@@ -334,7 +334,7 @@ func (o *Rjoint) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *Rjoint) SetEleConds(key string, f fun.Func, extra string) (err error) {
+func (o *Rjoint) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
 	return
 }
 

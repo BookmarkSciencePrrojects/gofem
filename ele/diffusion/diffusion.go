@@ -30,7 +30,7 @@ type Diffusion struct {
 	Ndim int           // space dimension
 	Umap []int         // assembly map (location array/element equations)
 	Mdl  *diffusion.M1 // model
-	Sfun fun.Func      // s(x) function
+	Sfun fun.TimeSpace // s(x) function
 
 	// integration points
 	IpsElem []shp.Ipoint // integration points of element
@@ -134,7 +134,7 @@ func (o *Diffusion) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds sets element conditions
-func (o *Diffusion) SetEleConds(key string, f fun.Func, extra string) (err error) {
+func (o *Diffusion) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
 	o.Sfun = nil
 	if key == "s" {
 		o.Sfun = f

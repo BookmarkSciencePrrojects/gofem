@@ -193,7 +193,7 @@ func (o *BjointComp) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *BjointComp) SetEleConds(key string, f fun.Func, extra string) (err error) {
+func (o *BjointComp) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
 	return
 }
 

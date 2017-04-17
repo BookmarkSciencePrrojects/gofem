@@ -183,7 +183,7 @@ func (o *SolidLiquidGas) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *SolidLiquidGas) SetEleConds(key string, f fun.Func, extra string) (err error) {
+func (o *SolidLiquidGas) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
 	err = o.U.SetEleConds(key, f, extra)
 	if err != nil {
 		return

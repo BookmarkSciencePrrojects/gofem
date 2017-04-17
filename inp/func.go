@@ -36,7 +36,7 @@ type FuncData struct {
 type FuncsData []*FuncData
 
 // Get returns function by name
-func (o FuncsData) Get(name string) (fcn fun.Func, err error) {
+func (o FuncsData) Get(name string) (fcn fun.TimeSpace, err error) {
 	if name == "zero" || name == "none" {
 		fcn = &fun.Zero
 		return
