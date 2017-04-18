@@ -21,7 +21,7 @@ type PltEntity struct {
 	Y     []float64 // y-values
 	Xlbl  string    // horizontal axis label (raw; e.g. "t")
 	Ylbl  string    // vertical axis label (raw; e.g. "pl")
-	Style plt.Fmt   // style
+	Style plt.A     // style
 }
 
 // SplotDat stores all data for one subplot
@@ -67,7 +67,7 @@ func SplotConfig(xunit, yunit string, xscale, yscale float64) {
 //  alias   -- alias such as "centre"
 //  fm      -- formatting codes; e.g. plt.Fmt{C:"blue", L:"label"}
 //  idxI    -- index of time; use -1 for all times
-func Plot(xHandle, yHandle interface{}, alias string, fm plt.Fmt, idxI int) {
+func Plot(xHandle, yHandle interface{}, alias string, fm plt.A, idxI int) {
 	var e PltEntity
 	e.Alias = alias
 	e.Style = fm
@@ -125,7 +125,7 @@ func Draw(dirout, fname string, nr, nc int, split bool, extra func(id string)) {
 				y = make([]float64, len(d.Y))
 				la.VecCopy(y, spl.Yscale, d.Y)
 			}
-			plt.Plot(x, y, d.Style.GetArgs(""))
+			plt.Plot(x, y, d.Style.String(""))
 		}
 		plt.Gll(spl.Xlbl, spl.Ylbl, spl.GllArgs)
 		if len(spl.Xrange) == 2 {

@@ -30,7 +30,7 @@ func main() {
 	// plot uy along y for selected times
 	out.Splot("y-uy", "rod displacements")
 	for i, _ := range out.TimeInds {
-		out.Plot("y", "uy", "rod", plt.Fmt{}, i)
+		out.Plot("y", "uy", "rod", plt.A{}, i)
 	}
 	for _, d := range rcmp_nod {
 		plt.Plot(d.Y, d.Uy, "'k+', ms=5")

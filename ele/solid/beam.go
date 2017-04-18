@@ -887,5 +887,5 @@ func (o *Beam) PlotDiagMoment(M []float64, withtext bool, numfmt string, tolM, s
 	}
 
 	// draw polyline
-	plt.DrawPolyline(pts, &plt.Sty{Ec: "k", Fc: "none", Lw: 1}, "")
+	plt.DrawPolyline(pts, &plt.S{Ec: "k", Fc: "none", Lw: 1}, "")
 }

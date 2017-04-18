@@ -38,6 +38,6 @@ func main() {
 
 	// save
 	plt.SetForPng(0.8, 400, 200)
-	out.Plot("uy", "t", "A", plt.Fmt{C: "r", M: "o"}, -1)
+	out.Plot("uy", "t", "A", plt.A{C: "r", M: "o"}, -1)
 	out.Draw("/tmp", "spo754.png", -1, -1, false, nil)
 }
