@@ -57,18 +57,18 @@ func Test_colpresfluid01(tst *testing.T) {
 
 	if chk.Verbose {
 
-		plt.SetForEps(1.2, 400)
+		plt.SetForEps(1.2, 400, nil)
 		plt.Subplot(2, 1, 1)
-		plt.Plot(P_num, Z, "'r-', label='num'")
-		plt.Plot(P_ana, Z, "'b.', label='ana', clip_on=0, markevery=10")
-		plt.Plot([]float64{p0, pMaxLin}, []float64{H, 0}, "'k--'")
-		plt.Gll("$p$", "$z$", "")
+		plt.Plot(P_num, Z, &plt.A{C: "r", Ls: "-", L: "num"})
+		plt.Plot(P_ana, Z, &plt.A{C: "b", Ls: ".", L: "ana", Me: 20})
+		plt.Plot([]float64{p0, pMaxLin}, []float64{H, 0}, &plt.A{C: "k", Ls: "--"})
+		plt.Gll("$p$", "$z$", nil)
 
 		plt.Subplot(2, 1, 2)
-		plt.Plot(R_num, Z, "'r-', label='num'")
-		plt.Plot(R_ana, Z, "'b.', label='ana', clip_on=0, markevery=10")
-		plt.Plot([]float64{R0, R0 + C*pMaxLin}, []float64{H, 0}, "'k--'")
-		plt.Gll("$\\rho$", "$z$", "")
+		plt.Plot(R_num, Z, &plt.A{C: "r", Ls: "-", L: "num"})
+		plt.Plot(R_ana, Z, &plt.A{C: "b", Ls: ".", L: "ana", Me: 20})
+		plt.Plot([]float64{R0, R0 + C*pMaxLin}, []float64{H, 0}, &plt.A{C: "k", Ls: "--"})
+		plt.Gll("$\\rho$", "$z$", nil)
 
 		plt.SaveD("/tmp/gofem", "fig_colpresfluid01.eps")
 	}

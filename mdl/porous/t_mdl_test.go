@@ -102,12 +102,13 @@ func Test_mdl01(tst *testing.T) {
 		tst.Errorf("NewState failed: %v\n", err)
 		return
 	}
+	_ = B
 
 	// plot A and B points
-	if doplot {
-		plt.PlotOne(pcA, A.A_sl, "'gs', clip_on=0, label='A', ms=10")
-		plt.PlotOne(pcB, B.A_sl, "'ks', clip_on=0, label='B'")
-	}
+	//if doplot {
+	//plt.PlotOne(pcA, A.A_sl, "'gs', clip_on=0, label='A', ms=10")
+	//plt.PlotOne(pcB, B.A_sl, "'ks', clip_on=0, label='B'")
+	//}
 
 	// incremental update
 	test := 0
@@ -145,8 +146,8 @@ func Test_mdl01(tst *testing.T) {
 	}
 
 	// show graph
-	if doplot {
-		plt.Plot(Pc, Sl, "'ro-', clip_on=0, label='update'")
-		retention.PlotEnd(true)
-	}
+	//if doplot {
+	//plt.Plot(Pc, Sl, "'ro-', clip_on=0, label='update'")
+	//retention.PlotEnd(true)
+	//}
 }

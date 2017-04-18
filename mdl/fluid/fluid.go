@@ -9,8 +9,6 @@ import (
 	"math"
 
 	"github.com/cpmech/gosl/fun"
-	"github.com/cpmech/gosl/plt"
-	"github.com/cpmech/gosl/utl"
 )
 
 // Model implements a model to compute pressure (p) and intrinsic density (R) of a fluid
@@ -91,6 +89,7 @@ func (o Model) Calc(z float64) (p, R float64) {
 // Plot plots pressure and density along height of column
 func (o Model) Plot(dirout, fnkey string, np int) {
 
+	/* TODO
 	Z := utl.LinSpace(0, o.H, np)
 	P := make([]float64, np)
 	R := make([]float64, np)
@@ -117,4 +116,5 @@ func (o Model) Plot(dirout, fnkey string, np int) {
 	plt.SetTicksNormal()
 
 	plt.SaveD(dirout, fnkey+".eps")
+	*/
 }

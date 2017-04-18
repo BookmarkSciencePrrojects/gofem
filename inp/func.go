@@ -69,18 +69,20 @@ func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
 			if pd.WithTxt {
 				x := pd.Ti
 				y := ff.F(x, nil)
-				plt.Text(x, y, io.Sf("%g", y), "fontsize=8")
+				plt.Text(x, y, io.Sf("%g", y), nil)
 				x = pd.Tf
 				y = ff.F(x, nil)
-				plt.Text(x, y, io.Sf("%g", y), "fontsize=8, ha='right'")
+				plt.Text(x, y, io.Sf("%g", y), nil)
 			}
 			if f.ArgsG != "" || f.ArgsH != "" {
-				plt.SetForEps(1.2, 350)
+				plt.SetForEps(1.2, 350, nil)
 			} else {
-				plt.SetForEps(0.75, 250)
+				plt.SetForEps(0.75, 250, nil)
 			}
+			/* TODO
 			fun.PlotT(ff, "", "", pd.Ti, pd.Tf, nil, pd.Np,
 				f.LabelT, f.LabelF, f.LabelG, f.LabelH, f.ArgsF, f.ArgsG, f.ArgsH)
+			*/
 			plt.SaveD(dirout, io.Sf("functions-%s-%s.eps", fnkey, f.Name))
 		}
 	}

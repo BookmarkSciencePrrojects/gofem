@@ -132,9 +132,9 @@ func (o *Plotter) SetFig(split, epsfig bool, prop, width float64, savedir, savef
 	o.Split = split
 	o.UseEps = epsfig
 	if o.UseEps {
-		plt.SetForEps(prop, width)
+		plt.SetForEps(prop, width, nil)
 	} else {
-		plt.SetForPng(prop, width, o.PngRes)
+		plt.SetForPng(prop, width, o.PngRes, nil)
 	}
 	o.SaveDir = savedir
 	o.SaveFnk = io.FnKey(savefnk)
@@ -152,7 +152,7 @@ func (o *Plotter) SetModel(m EPmodel) {
 
 // Title addes title to plot
 func (o *Plotter) Title(text string) {
-	plt.SupTitle(text, "size=10")
+	plt.SupTitle(text, &plt.A{Fsz: 10})
 }
 
 // Plot runs the plot generation (basic set)
@@ -295,15 +295,15 @@ func (o *Plotter) Plot_ed_q(x, y []float64, res []*State, sts [][]float64, last 
 			y[i] *= fun.Sign(o.W[i])
 		}
 	}
-	plt.Plot(x, y, io.Sf("'r.', ls='%s', clip_on=0, color='%s', marker='%s', label=r'%s'", o.Ls, o.Clr, o.Mrk, o.Lbl))
-	plt.PlotOne(x[0], y[0], io.Sf("'bo', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.SpMrk, o.SpMs))
-	plt.PlotOne(x[k], y[k], io.Sf("'bs', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.EpMrk, o.EpMs))
+	plt.Plot(x, y, &plt.A{C: o.Clr, M: o.Mrk, Ls: o.Ls, L: o.Lbl})
+	plt.PlotOne(x[0], y[0], &plt.A{C: o.SpClr, M: o.SpMrk, Ms: o.SpMs})
+	plt.PlotOne(x[k], y[k], &plt.A{C: o.SpClr, M: o.SpMrk, Ms: o.EpMs})
 	if last {
 		ylbl := "$q$"
 		if o.QdivP {
 			ylbl = "$q/p$"
 		}
-		plt.Gll("$\\varepsilon_d\\;[\\%]$", ylbl, "leg_out=1, leg_ncol=4, leg_hlen=1.5")
+		plt.Gll("$\\varepsilon_d\\;[\\%]$", ylbl, &plt.A{LegOut: true, LegNcol: 4, LegHlen: 1.5})
 		if lims, ok := o.Lims["ed,q"]; ok {
 			plt.AxisLims(lims)
 		}
@@ -316,11 +316,11 @@ func (o *Plotter) Plot_ed_ev(x, y []float64, res []*State, sts [][]float64, last
 	for i := 0; i < nr; i++ {
 		x[i], y[i] = o.Ed[i]*100.0, o.Ev[i]*100.0
 	}
-	plt.Plot(x, y, io.Sf("'r.', ls='%s', clip_on=0, color='%s', marker='%s', label=r'%s'", o.Ls, o.Clr, o.Mrk, o.Lbl))
-	plt.PlotOne(x[0], y[0], io.Sf("'bo', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.SpMrk, o.SpMs))
-	plt.PlotOne(x[k], y[k], io.Sf("'bs', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.EpMrk, o.EpMs))
+	plt.Plot(x, y, &plt.A{C: o.Clr, M: o.Mrk, Ls: o.Ls, L: o.Lbl})
+	plt.PlotOne(x[0], y[0], &plt.A{C: o.SpClr, M: o.SpMrk, Ms: o.SpMs})
+	plt.PlotOne(x[k], y[k], &plt.A{C: o.SpClr, M: o.SpMrk, Ms: o.EpMs})
 	if last {
-		plt.Gll("$\\varepsilon_d\\;[\\%]$", "$\\varepsilon_v\\;[\\%]$", "leg_out=1, leg_ncol=4, leg_hlen=1.5")
+		plt.Gll("$\\varepsilon_d\\;[\\%]$", "$\\varepsilon_v\\;[\\%]$", &plt.A{LegOut: true, LegNcol: 4, LegHlen: 1.5})
 		if lims, ok := o.Lims["ed,ev"]; ok {
 			plt.AxisLims(lims)
 		}
@@ -370,20 +370,20 @@ func (o *Plotter) Plot_p_ev(x, y []float64, res []*State, sts [][]float64, last 
 		}
 	}
 	if withα {
-		plt.Plot(x0, y, io.Sf("'r-', ls='--', lw=3, clip_on=0, color='grey', label=r'%s'", o.Lbl+" $\\alpha_0$"))
+		plt.Plot(x0, y, &plt.A{C: "grey", Ls: "--", Lw: 3, L: o.Lbl + " $\\alpha_0$"})
 		if o.nsurf > 1 {
-			plt.Plot(x1, y, io.Sf("'r-', ls=':', lw=3, clip_on=0, color='grey', label=r'%s'", o.Lbl+" $\\alpha_1$"))
+			plt.Plot(x1, y, &plt.A{C: "grey", Ls: ":", Lw: 3, L: o.Lbl + " $\\alpha_1$"})
 		}
 	}
-	plt.Plot(x, y, io.Sf("'r.', ls='-', clip_on=0, color='%s', marker='%s', label=r'%s'", o.Clr, o.Mrk, o.Lbl))
-	plt.PlotOne(x[0], y[0], io.Sf("'bo', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.SpMrk, o.SpMs))
-	plt.PlotOne(x[k], y[k], io.Sf("'bs', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.EpMrk, o.EpMs))
+	plt.Plot(x, y, &plt.A{C: o.Clr, M: o.Mrk, Ls: o.Ls, L: o.Lbl})
+	plt.PlotOne(x[0], y[0], &plt.A{C: o.SpClr, M: o.SpMrk, Ms: o.SpMs})
+	plt.PlotOne(x[k], y[k], &plt.A{C: o.SpClr, M: o.SpMrk, Ms: o.SpMs})
 	if last {
 		xlbl := "$p$"
 		if o.LogP {
 			xlbl = "$\\log{[1+(p+p_t)/p_r]}$"
 		}
-		plt.Gll(xlbl, "$\\varepsilon_v\\;[\\%]$", "leg_out=1, leg_ncol=4, leg_hlen=2")
+		plt.Gll(xlbl, "$\\varepsilon_v\\;[\\%]$", &plt.A{LegOut: true, LegNcol: 4, LegHlen: 2})
 		if lims, ok := o.Lims["p,ev"]; ok {
 			plt.AxisLims(lims)
 		}
@@ -408,14 +408,12 @@ func (o *Plotter) Plot_i_f(x, y []float64, res []*State, sts [][]float64, last b
 		}
 		x[i] = float64(i)
 	}
-	lbl := "f " + o.Lbl
-	plt.Plot(x, y, io.Sf("'r.', ls='-', clip_on=0, color='%s', marker='%s', label=r'%s'", o.Clr, o.Mrk, lbl))
+	plt.Plot(x, y, &plt.A{C: o.Clr, M: o.Mrk, Ls: o.Ls, L: o.Lbl})
 	if o.nsurf > 1 {
-		lbl = "F " + o.Lbl
-		plt.Plot(x, y2, io.Sf("'b+', ls=':', lw=2, clip_on=0, color='%s', marker='%s', label=r'%s'", o.Clr, o.Mrk, lbl))
+		plt.Plot(x, y2, &plt.A{C: o.Clr, M: o.Mrk, Ls: o.Ls, L: o.Lbl})
 	}
 	if last {
-		plt.Gll("$i$", "$f,\\;F$", "leg_out=1, leg_ncol=4, leg_hlen=2")
+		plt.Gll("$i$", "$f,\\;F$", &plt.A{LegOut: true, LegNcol: 4, LegHlen: 2})
 		if lims, ok := o.Lims["i,f"]; ok {
 			plt.AxisLims(lims)
 		}
@@ -437,11 +435,12 @@ func (o *Plotter) Plot_i_alp(x, y []float64, res []*State, sts [][]float64, last
 		}
 	}
 	for j := 0; j < nα; j++ {
-		lbl := io.Sf("$\\alpha_%d$ "+o.Lbl, j)
-		plt.Plot(x, yy[j], io.Sf("'r-', ls='-', clip_on=0, color='%s', marker='%s', label=r'%s'", o.Clr, o.Mrk, lbl))
+		/* TODO
+		plt.Plot(x, yy[j], &plt.A{C: o.Clr, M: o.Mrk, Ls: o.Ls, L: io.Sf("$\\alpha_%d$ "+o.Lbl, j)})
+		*/
 	}
 	if last {
-		plt.Gll("$i$", "$\\alpha_k$", "leg_out=1, leg_ncol=4, leg_hlen=2")
+		plt.Gll("$i$", "$\\alpha_k$", &plt.A{LegOut: true, LegNcol: 4, LegHlen: 2})
 		if lims, ok := o.Lims["i,alp"]; ok {
 			plt.AxisLims(lims)
 		}
@@ -458,7 +457,7 @@ func (o *Plotter) Plot_Dgam_f(x, y []float64, res []*State, sts [][]float64, las
 		return
 	}
 	nr := len(res)
-	k := nr - 1
+	//k := nr - 1
 	ys := o.m.YieldFuncs(res[0])
 	fc0 := ys[0]
 	xmi, xma, ymi, yma := res[0].Dgam, res[0].Dgam, fc0, fc0
@@ -472,11 +471,13 @@ func (o *Plotter) Plot_Dgam_f(x, y []float64, res []*State, sts [][]float64, las
 		yma = utl.Max(yma, y[i])
 	}
 	//o.DrawRamp(xmi, xma, ymi, yma)
+	/* TODO
 	plt.Plot(x, y, io.Sf("'r.', ls='%s', clip_on=0, color='%s', marker='%s', label=r'%s'", o.Ls, o.Clr, o.Mrk, o.Lbl))
 	plt.PlotOne(x[0], y[0], io.Sf("'bo', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.SpMrk, o.SpMs))
 	plt.PlotOne(x[k], y[k], io.Sf("'bs', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.EpMrk, o.EpMs))
+	*/
 	if last {
-		plt.Gll("$\\Delta\\gamma$", "$f$", "")
+		plt.Gll("$\\Delta\\gamma$", "$f$", nil)
 		if lims, ok := o.Lims["Dgam,f"]; ok {
 			plt.AxisLims(lims)
 		}
@@ -486,7 +487,7 @@ func (o *Plotter) Plot_Dgam_f(x, y []float64, res []*State, sts [][]float64, las
 func (o *Plotter) Plot_p_q(x, y []float64, res []*State, sts [][]float64, last bool) {
 	// stress path
 	nr := len(res)
-	k := nr - 1
+	//k := nr - 1
 	var xmi, xma, ymi, yma float64
 	for i := 0; i < nr; i++ {
 		x[i], y[i] = o.P[i], o.Q[i]
@@ -511,9 +512,11 @@ func (o *Plotter) Plot_p_q(x, y []float64, res []*State, sts [][]float64, last b
 			x[i], y[i], _ = tsr.M_pq_smp(res[i].Sig, o.SMPa, o.SMPb, o.SMPβ, o.SMPϵ)
 		}
 	}
+	/* TODO
 	plt.Plot(x, y, io.Sf("'r.', ls='%s', clip_on=0, color='%s', marker='%s', label=r'%s'", o.Ls, o.Clr, o.Mrk, o.Lbl))
 	plt.PlotOne(x[0], y[0], io.Sf("'bo', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.SpMrk, o.SpMs))
 	plt.PlotOne(x[k], y[k], io.Sf("'bs', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.EpMrk, o.EpMs))
+	*/
 	// yield surface
 	if o.WithYs && o.m != nil {
 		mx, my := 1.0, 1.0
@@ -565,10 +568,12 @@ func (o *Plotter) Plot_p_q(x, y []float64, res []*State, sts [][]float64, last b
 					}
 				}
 			}
+			/* TODO
 			plt.ContourSimple(xx, yy, za, false, 8, io.Sf("colors=['%s'], levels=[0], linestyles=['%s'], linewidths=[%g], clip_on=0", o.YsClr0, o.YsLs0, o.YsLw0)+o.ArgsYs)
 			if o.nsurf > 1 {
 				plt.ContourSimple(xx, yy, zb, false, 8, io.Sf("colors=['%s'], levels=[0], linestyles=['%s'], linewidths=[%g], clip_on=0", o.YsClr1, o.YsLs1, o.YsLw1)+o.ArgsYs)
 			}
+			*/
 		}
 	}
 	// predictor-corrector
@@ -590,27 +595,33 @@ func (o *Plotter) Plot_p_q(x, y []float64, res []*State, sts [][]float64, last b
 				pnew, qnew, _ = tsr.M_pq_smp(o.PreCor[i], o.SMPa, o.SMPb, o.SMPβ, o.SMPϵ)
 			}
 			if math.Abs(pnew-p) > 1e-10 || math.Abs(qnew-q) > 1e-10 {
+				/* TODO
 				plt.Arrow(p, q, pnew, qnew, io.Sf("sc=%d, fc='%s', ec='%s'", o.ArrWid, o.ClrPC, o.ClrPC))
+				*/
 			}
 		}
 	}
 	// settings
 	if last {
 		plt.Equal()
-		xl, yl := "$p_{cam}$", "$q_{cam}$"
-		if o.UseOct {
-			xl, yl = "$p_{oct}$", "$q_{oct}$"
-		}
-		if o.SMPon {
-			xl, yl = "$p_{smp}$", "$q_{smp}$"
-		}
-		if o.AxLblX != "" {
-			xl = o.AxLblX
-		}
-		if o.AxLblY != "" {
-			yl = o.AxLblY
-		}
+		/*
+			xl, yl := "$p_{cam}$", "$q_{cam}$"
+			if o.UseOct {
+				xl, yl = "$p_{oct}$", "$q_{oct}$"
+			}
+			if o.SMPon {
+				xl, yl = "$p_{smp}$", "$q_{smp}$"
+			}
+			if o.AxLblX != "" {
+				xl = o.AxLblX
+			}
+			if o.AxLblY != "" {
+				yl = o.AxLblY
+			}
+		*/
+		/* TODO
 		plt.Gll(xl, yl, "leg_out=1, leg_ncol=4, leg_hlen=1.5")
+		*/
 		if lims, ok := o.Lims["p,q"]; ok {
 			plt.AxisLims(lims)
 		}
@@ -623,7 +634,7 @@ func (o *Plotter) Plot_p_q(x, y []float64, res []*State, sts [][]float64, last b
 func (o *Plotter) Plot_oct(x, y []float64, res []*State, sts [][]float64, last bool) {
 	// stress path
 	nr := len(res)
-	k := nr - 1
+	//k := nr - 1
 	var σa, σb, xmi, xma, ymi, yma float64
 	for i := 0; i < nr; i++ {
 		σa, σb, _ = tsr.PQW2O(o.P[i], o.Q[i], o.W[i])
@@ -639,9 +650,11 @@ func (o *Plotter) Plot_oct(x, y []float64, res []*State, sts [][]float64, last b
 			yma = utl.Max(yma, y[i])
 		}
 	}
+	/*TODO
 	plt.Plot(x, y, io.Sf("'r.', ls='%s', clip_on=0, color='%s', marker='%s', label=r'%s'", o.Ls, o.Clr, o.Mrk, o.Lbl))
 	plt.PlotOne(x[0], y[0], io.Sf("'bo', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.SpMrk, o.SpMs))
 	plt.PlotOne(x[k], y[k], io.Sf("'bs', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.EpMrk, o.EpMs))
+	*/
 	// fix range and max radius
 	xmi, xma, ymi, yma = o.fix_range(0, xmi, xma, ymi, yma)
 	rr := math.Sqrt((xma-xmi)*(xma-xmi) + (yma-ymi)*(yma-ymi))
@@ -685,7 +698,9 @@ func (o *Plotter) Plot_oct(x, y []float64, res []*State, sts [][]float64, last b
 					zz[i][j] = ys[0]
 				}
 			}
+			/*TODO
 			plt.ContourSimple(xx, yy, zz, false, 8, io.Sf("colors=['%s'], levels=[0], linestyles=['%s'], linewidths=[%g], clip_on=0", o.YsClr0, o.YsLs0, o.YsLw0)+o.ArgsYs)
+			*/
 
 		}
 	}
@@ -696,8 +711,9 @@ func (o *Plotter) Plot_oct(x, y []float64, res []*State, sts [][]float64, last b
 			σa, σb, _ = tsr.M_oct(o.PreCor[i-1])
 			σanew, σbnew, _ = tsr.M_oct(o.PreCor[i])
 			if math.Abs(σanew-σa) > 1e-7 || math.Abs(σbnew-σb) > 1e-7 {
-				//plt.Plot([]float64{σa,σanew}, []float64{σb,σbnew}, "'k+', ms=3, color='k'")
+				/*TODO
 				plt.Arrow(σa, σb, σanew, σbnew, io.Sf("sc=%d, fc='%s', ec='%s'", o.ArrWid, o.ClrPC, o.ClrPC))
+				*/
 			}
 			o.maxR = utl.Max(o.maxR, math.Sqrt(σa*σa+σb*σb))
 			o.maxR = utl.Max(o.maxR, math.Sqrt(σanew*σanew+σbnew*σbnew))
@@ -710,7 +726,7 @@ func (o *Plotter) Plot_oct(x, y []float64, res []*State, sts [][]float64, last b
 		if o.OctAxOff {
 			plt.AxisOff()
 		}
-		plt.Gll("$\\sigma_a$", "$\\sigma_b$", "")
+		plt.Gll("$\\sigma_a$", "$\\sigma_b$", nil)
 		if lims, ok := o.Lims["oct"]; ok {
 			plt.AxisLims(lims)
 		}
@@ -723,7 +739,7 @@ func (o *Plotter) Plot_oct(x, y []float64, res []*State, sts [][]float64, last b
 func (o *Plotter) Plot_s3_s1(x, y []float64, res []*State, sts [][]float64, last bool) {
 	// stress path
 	nr := len(res)
-	k := nr - 1
+	//k := nr - 1
 	x2 := make([]float64, nr)
 	var xmi, xma, ymi, yma float64
 	for i := 0; i < nr; i++ {
@@ -743,10 +759,12 @@ func (o *Plotter) Plot_s3_s1(x, y []float64, res []*State, sts [][]float64, last
 			yma = utl.Max(yma, y[i])
 		}
 	}
+	/*TODO
 	plt.Plot(x, y, io.Sf("'r.', ls='%s', clip_on=0, color='%s', marker='%s', label=r'$\\sigma_3$ %s'", o.Ls, o.Clr, o.Mrk, o.Lbl))
 	plt.Plot(x2, y, io.Sf("'r.', ls='%s', clip_on=0, color='%s', marker='%s', label=r'$\\sigma_2$ %s'", o.LsAlt, o.Clr, o.Mrk, o.Lbl))
 	plt.PlotOne(x[0], y[0], io.Sf("'bo', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.SpMrk, o.SpMs))
 	plt.PlotOne(x[k], y[k], io.Sf("'bs', clip_on=0, color='%s', marker='%s', ms=%d", o.SpClr, o.EpMrk, o.EpMs))
+	*/
 	// yield surface
 	if o.WithYs && o.m != nil {
 		if o.UsePmin {
@@ -780,7 +798,9 @@ func (o *Plotter) Plot_s3_s1(x, y []float64, res []*State, sts [][]float64, last
 					zz[i][j] = ys[0]
 				}
 			}
+			/*TODO
 			plt.ContourSimple(xx, yy, zz, false, 8, io.Sf("colors=['%s'], levels=[0], linestyles=['%s'], linewidths=[%g], clip_on=0", o.YsClr0, o.YsLs0, o.YsLw0)+o.ArgsYs)
+			*/
 		}
 	}
 	// predictor-corrector
@@ -790,14 +810,18 @@ func (o *Plotter) Plot_s3_s1(x, y []float64, res []*State, sts [][]float64, last
 			σ1, _, σ3, _ = tsr.M_PrincValsNum(o.PreCor[i-1])
 			σ1new, _, σ3new, _ = tsr.M_PrincValsNum(o.PreCor[i])
 			if math.Abs(σ3new-σ3) > 1e-7 || math.Abs(σ1new-σ1) > 1e-7 {
+				/* TODO
 				plt.Arrow(-σ3*tsr.SQ2, -σ1, -σ3new*tsr.SQ2, -σ1new, io.Sf("sc=%d, fc='%s', ec='%s'", o.ArrWid, o.ClrPC, o.ClrPC))
+				*/
 			}
 		}
 	}
 	// settings
 	if last {
 		plt.Equal()
+		/* TODO
 		plt.Gll("$-\\sqrt{2}\\sigma_3$", "$-\\sigma_1$", "leg=1, leg_out=1, leg_ncol=4, leg_hlen=2")
+		*/
 		if lims, ok := o.Lims["s3,s1"]; ok {
 			plt.AxisLims(lims)
 		}
@@ -834,7 +858,9 @@ func (o *Plotter) DrawRamp(xmi, xma, ymi, yma float64) {
 			zz[i][j] = xx[i][j] - o.Rmpf(xx[i][j]+yy[i][j])
 		}
 	}
+	/*TODO
 	plt.ContourSimple(xx, yy, zz, false, 8, "colors=['blue'], linewidths=[2], levels=[0]")
+	*/
 }
 
 // Save saves figure

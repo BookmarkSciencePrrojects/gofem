@@ -5,13 +5,9 @@
 package out
 
 import (
-	"math"
-
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
-	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/plt"
-	"github.com/cpmech/gosl/utl"
 )
 
 // PltEntity stores all data for a plot entity (X vs Y)
@@ -91,60 +87,62 @@ func Plot(xHandle, yHandle interface{}, alias string, fm plt.A, idxI int) {
 //  split  -- split subplots into separated figures
 //  extra  -- is called just after Subplot command and before any plotting
 func Draw(dirout, fname string, nr, nc int, split bool, extra func(id string)) {
-	var fnk string // filename key
-	var ext string // extension
-	if fname != "" {
-		fnk = io.FnKey(fname)
-		ext = io.FnExt(fname)
-	}
-	nplots := len(Splots)
-	if nr < 0 || nc < 0 {
-		nr, nc = utl.BestSquare(nplots)
-	}
-	for k := 0; k < nplots; k++ {
-		spl := Splots[k]
-		if !split {
-			plt.Subplot(nr, nc, k+1)
+	/*
+		var fnk string // filename key
+		var ext string // extension
+		if fname != "" {
+			fnk = io.FnKey(fname)
+			ext = io.FnExt(fname)
 		}
-		if extra != nil {
-			extra(spl.Id)
+		nplots := len(Splots)
+		if nr < 0 || nc < 0 {
+			nr, nc = utl.BestSquare(nplots)
 		}
-		if spl.Title != "" {
-			plt.Title(spl.Title, spl.Topts)
-		}
-		for _, d := range spl.Data {
-			if d.Style.L == "" {
-				d.Style.L = d.Alias
+			for k := 0; k < nplots; k++ {
+				spl := Splots[k]
+				if !split {
+					plt.Subplot(nr, nc, k+1)
+				}
+				if extra != nil {
+					extra(spl.Id)
+				}
+				if spl.Title != "" {
+					plt.Title(spl.Title, spl.Topts)
+				}
+				for _, d := range spl.Data {
+					if d.Style.L == "" {
+						d.Style.L = d.Alias
+					}
+					x, y := d.X, d.Y
+					if math.Abs(spl.Xscale) > 0 {
+						x = make([]float64, len(d.X))
+						la.VecCopy(x, spl.Xscale, d.X)
+					}
+					if math.Abs(spl.Yscale) > 0 {
+						y = make([]float64, len(d.Y))
+						la.VecCopy(y, spl.Yscale, d.Y)
+					}
+					plt.Plot(x, y, d.Style.String(""))
+				}
+				plt.Gll(spl.Xlbl, spl.Ylbl, spl.GllArgs)
+				if len(spl.Xrange) == 2 {
+					plt.AxisXrange(spl.Xrange[0], spl.Xrange[1])
+				}
+				if len(spl.Yrange) == 2 {
+					plt.AxisYrange(spl.Yrange[0], spl.Yrange[1])
+				}
+				if split {
+					savefig(dirout, fnk, ext, spl.Id)
+					plt.Clf()
+				}
 			}
-			x, y := d.X, d.Y
-			if math.Abs(spl.Xscale) > 0 {
-				x = make([]float64, len(d.X))
-				la.VecCopy(x, spl.Xscale, d.X)
+			if !split && fname != "" {
+				savefig(dirout, fnk, ext, "")
 			}
-			if math.Abs(spl.Yscale) > 0 {
-				y = make([]float64, len(d.Y))
-				la.VecCopy(y, spl.Yscale, d.Y)
+			if fname == "" {
+				plt.Show()
 			}
-			plt.Plot(x, y, d.Style.String(""))
-		}
-		plt.Gll(spl.Xlbl, spl.Ylbl, spl.GllArgs)
-		if len(spl.Xrange) == 2 {
-			plt.AxisXrange(spl.Xrange[0], spl.Xrange[1])
-		}
-		if len(spl.Yrange) == 2 {
-			plt.AxisYrange(spl.Yrange[0], spl.Yrange[1])
-		}
-		if split {
-			savefig(dirout, fnk, ext, spl.Id)
-			plt.Clf()
-		}
-	}
-	if !split && fname != "" {
-		savefig(dirout, fnk, ext, "")
-	}
-	if fname == "" {
-		plt.Show()
-	}
+	*/
 }
 
 // auxiliary /////////////////////////////////////////////////////////////////////////////////////////

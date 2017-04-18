@@ -93,7 +93,7 @@ func Test_derivs01(tst *testing.T) {
 		for i, s := range drv.Res {
 			Sl[i] = s.A_sl
 		}
-		plt.Plot(Pc, Sl, "'ko--', clip_on=0")
+		//plt.Plot(Pc, Sl, "'ko--', clip_on=0")
 		retention.PlotEnd(true)
 	}
 }

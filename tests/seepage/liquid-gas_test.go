@@ -10,12 +10,9 @@ import (
 
 	"github.com/cpmech/gofem/ele/seepage"
 	"github.com/cpmech/gofem/fem"
-	"github.com/cpmech/gofem/mdl/conduct"
-	"github.com/cpmech/gofem/mdl/porous"
 	"github.com/cpmech/gofem/tests"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
-	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -204,18 +201,18 @@ func Test_pp01b(tst *testing.T) {
 
 	// plot
 	if chk.Verbose {
-		dom := main.Domains[0]
-		ele := dom.Elems[0].(*seepage.LiquidGas)
-		mdl := ele.Mdl
-		Cnd := ele.Mdl.Cnd
+		//dom := main.Domains[0]
+		//ele := dom.Elems[0].(*seepage.LiquidGas)
+		//mdl := ele.Mdl
+		//Cnd := ele.Mdl.Cnd
 		if true {
-			plt.SetForEps(1.2, 350)
-			porous.PlotLrm(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true, "", "", "", "", "")
-			plt.SetForEps(1.2, 350)
-			conduct.Plot(Cnd, "/tmp/gofem", "fig_pp01b_liq.eps", 101, false, true, true)
+			//plt.SetForEps(1.2, 350)
+			//porous.PlotLrm(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true, "", "", "", "", "")
+			//plt.SetForEps(1.2, 350)
+			//conduct.Plot(Cnd, "/tmp/gofem", "fig_pp01b_liq.eps", 101, false, true, true)
 		}
-		plt.SetForEps(1.2, 350)
-		conduct.Plot(Cnd, "/tmp/gofem", "fig_pp01b_gas.eps", 101, true, true, true)
+		//plt.SetForEps(1.2, 350)
+		//conduct.Plot(Cnd, "/tmp/gofem", "fig_pp01b_gas.eps", 101, true, true, true)
 	}
 
 	// TODO: add check here

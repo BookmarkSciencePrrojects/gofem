@@ -90,16 +90,16 @@ func (o ColumnFluidPressure) Plot(dirout, fnkey, subscript string, np int) {
 
 	pMaxLin := o.R0 * o.Grav * o.H
 
-	plt.SetForEps(1.2, 400)
+	plt.SetForEps(1.2, 400, nil)
 	plt.Subplot(2, 1, 1)
-	plt.Plot(P, Z, "'b-', clip_on=0")
-	plt.Plot([]float64{o.P0, pMaxLin}, []float64{o.H, 0}, "'k--', color='gray'")
-	plt.Gll("$p_{"+subscript+"}$", "$z$", "")
+	plt.Plot(P, Z, &plt.A{C: "k", Ls: "-"})
+	plt.Plot([]float64{o.P0, pMaxLin}, []float64{o.H, 0}, &plt.A{C: "grey", Ls: "--"})
+	plt.Gll("$p_{"+subscript+"}$", "$z$", nil)
 
 	plt.Subplot(2, 1, 2)
-	plt.Plot(R, Z, "'r-', clip_on=0")
-	plt.Plot([]float64{o.R0, o.R0 + o.C*pMaxLin}, []float64{o.H, 0}, "'k--', color='gray'")
-	plt.Gll("$\\rho_{"+subscript+"}$", "$z$", "")
+	plt.Plot(R, Z, &plt.A{C: "r", Ls: "-"})
+	plt.Plot([]float64{o.R0, o.R0 + o.C*pMaxLin}, []float64{o.H, 0}, &plt.A{C: "grey", Ls: "--"})
+	plt.Gll("$\\rho_{"+subscript+"}$", "$z$", nil)
 	plt.SetTicksNormal()
 
 	plt.SaveD(dirout, fnkey+".eps")

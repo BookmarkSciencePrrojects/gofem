@@ -6,7 +6,6 @@ package porous
 
 import (
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
@@ -67,16 +66,16 @@ func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
 	if argsWet == "" {
 		argsWet = "'b-', clip_on=0, label='wetting', color='#0397dc'"
 	}
-	if returnTo0 {
-		plt.Plot(X[:np], Y[:np], argsDry)
-		plt.Plot(X[np:], Y[np:], argsWet)
-	} else {
-		plt.Plot(X, Y, argsDry)
-	}
+	//if returnTo0 {
+	//plt.Plot(X[:np], Y[:np], argsDry)
+	//plt.Plot(X[np:], Y[np:], argsWet)
+	//} else {
+	//plt.Plot(X, Y, argsDry)
+	//}
 
 	// add text
 	if withText {
-		l := np - 1
+		//l := np - 1
 		if argsTxtMin == "" {
 			argsTxtMin = "ha='left',  color='red', size=8"
 		}
@@ -86,26 +85,26 @@ func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
 		if txtFmt == "" {
 			txtFmt = "%g"
 		}
-		plt.Text(X[0], Y[0], io.Sf("(%g, %g)", X[0], Y[0]), argsTxtMin)
-		plt.Text(X[l], Y[l], io.Sf("(%g, "+txtFmt+")", X[l], Y[l]), argsTxtMax)
+		//plt.Text(X[0], Y[0], io.Sf("(%g, %g)", X[0], Y[0]), argsTxtMin)
+		//plt.Text(X[l], Y[l], io.Sf("(%g, "+txtFmt+")", X[l], Y[l]), argsTxtMax)
 	}
-	plt.Gll("$p_c$", "$s_{\\ell}$", "")
+	//plt.Gll("$p_c$", "$s_{\\ell}$", "")
 
 	// plot deriatives
 	if deriv {
 		plt.Subplot(2, 1, 2)
-		if returnTo0 {
-			plt.Plot(X[:np], Z[:np], "'b-', clip_on=0, color='#0397dc'")
-			plt.Plot(X[np:], Z[np:], "'b-', clip_on=0")
-		} else {
-			plt.Plot(X, Y, "'b-', clip_on=0")
-		}
-		if withText {
-			l := np - 1
-			plt.Text(X[0], Z[0], io.Sf("(%g, %g)", X[0], Z[0]), "ha='left',  color='red', size=8")
-			plt.Text(X[l], Z[l], io.Sf("(%g, %g)", X[l], Z[l]), "ha='right', color='red', size=8")
-		}
-		plt.Gll("$p_c$", "$\\bar{C}_c=\\mathrm{d}s_{\\ell}/\\mathrm{d}p_c$", "")
+		//if returnTo0 {
+		//plt.Plot(X[:np], Z[:np], "'b-', clip_on=0, color='#0397dc'")
+		//plt.Plot(X[np:], Z[np:], "'b-', clip_on=0")
+		//} else {
+		//plt.Plot(X, Y, "'b-', clip_on=0")
+		//}
+		//if withText {
+		//l := np - 1
+		//plt.Text(X[0], Z[0], io.Sf("(%g, %g)", X[0], Z[0]), "ha='left',  color='red', size=8")
+		//plt.Text(X[l], Z[l], io.Sf("(%g, %g)", X[l], Z[l]), "ha='right', color='red', size=8")
+		//}
+		//plt.Gll("$p_c$", "$\\bar{C}_c=\\mathrm{d}s_{\\ell}/\\mathrm{d}p_c$", "")
 	}
 
 	// save figure

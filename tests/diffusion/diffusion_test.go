@@ -14,7 +14,6 @@ import (
 	"github.com/cpmech/gofem/tests"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
-	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -272,15 +271,15 @@ func Test_diffu02b(tst *testing.T) {
 		}
 	}
 	if doplot {
-		_, Y, Unum, Uana, err = utl.SortQuadruples(nil, Y, Unum, Uana, "x")
-		if err != nil {
-			tst.Errorf("cannot sort arrays: %v\n", err)
-			return
-		}
-		plt.Plot(Y, Unum, "'ks', label='numerical'")
-		plt.Plot(Y, Uana, "'r-', label='analytical'")
-		plt.Gll("y", "u", "")
-		plt.SaveD("/tmp/gofem", "test_diffu01b.png")
+		//_, Y, Unum, Uana, err = utl.SortQuadruples(nil, Y, Unum, Uana, "x")
+		//if err != nil {
+		//tst.Errorf("cannot sort arrays: %v\n", err)
+		//return
+		//}
+		//plt.Plot(Y, Unum, "'ks', label='numerical'")
+		//plt.Plot(Y, Uana, "'r-', label='analytical'")
+		//plt.Gll("y", "u", "")
+		//plt.SaveD("/tmp/gofem", "test_diffu01b.png")
 	}
 }
 

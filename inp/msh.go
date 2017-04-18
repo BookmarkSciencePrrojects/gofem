@@ -520,34 +520,36 @@ func (o *Mesh) Draw2d(onlyLin, setup bool, lwds map[int]float64, ms int) {
 					x[1] = o.Verts[tri.b].C[0]
 					y[1] = o.Verts[tri.b].C[1]
 				}
-				plt.Plot(x, y, io.Sf("'k-o', ms=%d, clip_on=0", ms))
+				//plt.Plot(x, y, io.Sf("'k-o', ms=%d, clip_on=0", ms))
 				edgesdrawn[tri] = true
 			}
 		}
 
 		// add middle node
-		if cell.Type == "qua9" {
-			vid := cell.Verts[8]
-			x := o.Verts[vid].C[0]
-			y := o.Verts[vid].C[1]
-			plt.PlotOne(x, y, io.Sf("'ko', ms=%d, clip_on=0", ms))
-		}
+		//if cell.Type == "qua9" {
+		//vid := cell.Verts[8]
+		//x := o.Verts[vid].C[0]
+		//y := o.Verts[vid].C[1]
+		//plt.PlotOne(x, y, io.Sf("'ko', ms=%d, clip_on=0", ms))
+		//}
 
 		// linear cells
-		if lincell {
-			nv := len(cell.Verts)
-			x := make([]float64, nv)
-			y := make([]float64, nv)
-			for i, vid := range cell.Verts {
-				x[i] = o.Verts[vid].C[0]
-				y[i] = o.Verts[vid].C[1]
+		/*
+			if lincell {
+				nv := len(cell.Verts)
+				x := make([]float64, nv)
+				y := make([]float64, nv)
+				for i, vid := range cell.Verts {
+					x[i] = o.Verts[vid].C[0]
+					y[i] = o.Verts[vid].C[1]
+				}
+				lw := 2.0
+				if lwd, ok := lwds[cell.Id]; ok {
+					lw = lwd
+				}
+				plt.Plot(x, y, io.Sf("'-o', ms=%d, clip_on=0, color='#41045a', lw=%g", ms, lw))
 			}
-			lw := 2.0
-			if lwd, ok := lwds[cell.Id]; ok {
-				lw = lwd
-			}
-			plt.Plot(x, y, io.Sf("'-o', ms=%d, clip_on=0, color='#41045a', lw=%g", ms, lw))
-		}
+		*/
 	}
 
 	// set up

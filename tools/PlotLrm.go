@@ -14,7 +14,6 @@ import (
 	"github.com/cpmech/gofem/inp"
 	"github.com/cpmech/gofem/mdl/retention"
 	"github.com/cpmech/gosl/io"
-	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -72,7 +71,7 @@ func main() {
 			return
 		}
 	}
-	plt.Plot(d_Pc, d_Sl, io.Sf("'b-', label='%s (dry)', clip_on=0", matname))
+	//plt.Plot(d_Pc, d_Sl, io.Sf("'b-', label='%s (dry)', clip_on=0", matname))
 
 	// plot wetting path
 	w_Pc := utl.LinSpace(pcmax, 0, npts)
@@ -85,7 +84,7 @@ func main() {
 			return
 		}
 	}
-	plt.Plot(w_Pc, w_Sl, io.Sf("'c-', label='%s (wet)', clip_on=0", matname))
+	//plt.Plot(w_Pc, w_Sl, io.Sf("'c-', label='%s (wet)', clip_on=0", matname))
 
 	// save results
 	type Results struct{ Pc, Sl []float64 }
@@ -102,8 +101,8 @@ func main() {
 	io.Pf("file <[1;34m%s[0m> written\n", fn)
 
 	// show figure
-	plt.AxisYrange(0, 1)
-	plt.Cross("")
-	plt.Gll("$p_c$", "$s_{\\ell}$", "")
-	plt.Show()
+	//plt.AxisYrange(0, 1)
+	//plt.Cross("")
+	//plt.Gll("$p_c$", "$s_{\\ell}$", "")
+	//plt.Show()
 }

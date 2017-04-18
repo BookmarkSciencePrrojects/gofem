@@ -15,7 +15,6 @@ import (
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
-	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -828,7 +827,7 @@ func (o *Beam) PlotDiagMoment(M []float64, withtext bool, numfmt string, tolM, s
 	// draw text function
 	draw_text := func(mom float64) {
 		if math.Abs(mom) > tolM {
-			α := math.Atan2(-n[1], -n[0]) * 180.0 / math.Pi
+			//α := math.Atan2(-n[1], -n[0]) * 180.0 / math.Pi
 			str := io.Sf("%g", mom)
 			if numfmt != "" {
 				str = io.Sf(numfmt, mom)
@@ -838,7 +837,7 @@ func (o *Beam) PlotDiagMoment(M []float64, withtext bool, numfmt string, tolM, s
 					str = io.Sf("%g", io.Atof(str))
 				}
 			}
-			plt.Text(c[0], c[1], str, io.Sf("ha='center', size=7, rotation=%g, clip_on=0", α))
+			//plt.Text(c[0], c[1], str, io.Sf("ha='center', size=7, rotation=%g, clip_on=0", α))
 		}
 	}
 
@@ -865,16 +864,16 @@ func (o *Beam) PlotDiagMoment(M []float64, withtext bool, numfmt string, tolM, s
 		yy[0], yy[1] = x[1], m[1]
 
 		// draw
-		clr, lw := "#919191", 1.0
-		if i == imin || i == imax {
-			lw = 2
-			if M[i] < 0 {
-				clr = "#9f0000"
-			} else {
-				clr = "#109f24"
-			}
-		}
-		plt.Plot(xx, yy, io.Sf("'-', color='%s', lw=%g, clip_on=0", clr, lw))
+		//clr, lw := "#919191", 1.0
+		//if i == imin || i == imax {
+		//lw = 2
+		//if M[i] < 0 {
+		//clr = "#9f0000"
+		//} else {
+		//clr = "#109f24"
+		//}
+		//}
+		//plt.Plot(xx, yy, io.Sf("'-', color='%s', lw=%g, clip_on=0", clr, lw))
 		if withtext {
 			if i == imin || i == imax { // draw text @ min/max
 				draw_text(M[i])
@@ -887,5 +886,5 @@ func (o *Beam) PlotDiagMoment(M []float64, withtext bool, numfmt string, tolM, s
 	}
 
 	// draw polyline
-	plt.DrawPolyline(pts, &plt.S{Ec: "k", Fc: "none", Lw: 1}, "")
+	//plt.DrawPolyline(pts, &plt.S{Ec: "k", Fc: "none", Lw: 1}, "")
 }

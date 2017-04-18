@@ -7,8 +7,6 @@ package retention
 import (
 	"math"
 
-	"github.com/cpmech/gosl/io"
-	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -37,7 +35,7 @@ func Plot(mdl Model, pc0, sl0, pcf float64, npts int, useLog bool, args1, args2,
 				X[i] = Pc[i]
 			}
 		}
-		plt.Plot(X, Sl, io.Sf("%s, label='%s', clip_on=0", args1, label))
+		//plt.Plot(X, Sl, io.Sf("%s, label='%s', clip_on=0", args1, label))
 	}
 
 	// plot using Sl function
@@ -53,7 +51,7 @@ func Plot(mdl Model, pc0, sl0, pcf float64, npts int, useLog bool, args1, args2,
 					X[i] = pc
 				}
 			}
-			plt.Plot(X, Sl, io.Sf("%s, label='%s_direct', clip_on=0", args2, label))
+			//plt.Plot(X, Sl, io.Sf("%s, label='%s_direct', clip_on=0", args2, label))
 		}
 	}
 	return
@@ -61,10 +59,12 @@ func Plot(mdl Model, pc0, sl0, pcf float64, npts int, useLog bool, args1, args2,
 
 // PlotEnd ends plot and show figure, if show==true
 func PlotEnd(show bool) {
-	plt.AxisYrange(0, 1)
-	plt.Cross("")
-	plt.Gll("$p_c$", "$s_{\\ell}$", "")
-	if show {
-		plt.Show()
-	}
+	/*
+		plt.AxisYrange(0, 1)
+		plt.Cross("")
+		plt.Gll("$p_c$", "$s_{\\ell}$", "")
+		if show {
+			plt.Show()
+		}
+	*/
 }

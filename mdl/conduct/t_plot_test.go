@@ -35,11 +35,11 @@ func Test_plot01(tst *testing.T) {
 	}
 
 	if chk.Verbose {
-		plt.SetForEps(1.2, 350)
+		plt.SetForEps(1.2, 350, nil)
 		gas := false
 		Plot(mdl, "/tmp/gofem", "cnd_plot01_liq.eps", 101, gas, true, true)
 
-		plt.SetForEps(1.2, 350)
+		plt.SetForEps(1.2, 350, nil)
 		gas = true
 		Plot(mdl, "/tmp/gofem", "cnd_plot01_gas.eps", 101, gas, true, true)
 	}

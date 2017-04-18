@@ -139,17 +139,17 @@ func (o *PlateHole) PlotStress(t, L float64, npts int) {
 	for i := 0; i < npts; i++ {
 		Sx[i], Sy[i], _, Sxy[i] = o.Stress(t, []float64{d[i], 0}) // y=0
 	}
-	plt.Plot(d, Sx, "color='r',label='$\\sigma_x$ @ $y=0$'")
-	plt.Plot(d, Sy, "color='g',label='$\\sigma_y$ @ $y=0$'")
-	plt.Plot(d, Sxy, "color='b',label='$\\sigma_{xy}$ @ $y=0$'")
-	plt.Gll("$x$", "stresses", "")
+	plt.Plot(d, Sx, &plt.A{C: "r", L: "$\\sigma_x$ @ $y=0$"})
+	plt.Plot(d, Sy, &plt.A{C: "g", L: "$\\sigma_y$ @ $y=0$"})
+	plt.Plot(d, Sxy, &plt.A{C: "b", L: "$\\sigma_{xy}$ @ $y=0$"})
+	plt.Gll("$x$", "stresses", nil)
 
 	plt.Subplot(2, 1, 2)
 	for i := 0; i < npts; i++ {
 		Sx[i], Sy[i], _, Sxy[i] = o.Stress(t, []float64{0, d[i]}) // x=0
 	}
-	plt.Plot(Sx, d, "color='r',label='$\\sigma_x$ @ $x=0$'")
-	plt.Plot(Sy, d, "color='g',label='$\\sigma_y$ @ $x=0$'")
-	plt.Plot(Sxy, d, "color='b',label='$\\sigma_{xy}$ @ $x=0$'")
-	plt.Gll("stresses", "$y$", "")
+	plt.Plot(Sx, d, &plt.A{C: "r", L: "$\\sigma_x$ @ $x=0$"})
+	plt.Plot(Sy, d, &plt.A{C: "g", L: "$\\sigma_y$ @ $x=0$"})
+	plt.Plot(Sxy, d, &plt.A{C: "b", L: "$\\sigma_{xy}$ @ $x=0$"})
+	plt.Gll("stresses", "$y$", nil)
 }

@@ -15,7 +15,6 @@ import (
 	"github.com/cpmech/gofem/tests"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
-	"github.com/cpmech/gosl/plt"
 )
 
 func Test_beam01a(tst *testing.T) {
@@ -209,12 +208,12 @@ func Test_beam03(tst *testing.T) {
 	check_M(2, 0, 0, 1e-13)
 	check_M(2, 1, -54.4, 1e-13)
 
-	nstations, withtext, numfmt, tol, coef, sf, onlyLin := 11, true, "", 1e-10, 0.2, 0.0, false
+	//nstations, withtext, numfmt, tol, coef, sf, onlyLin := 11, true, "", 1e-10, 0.2, 0.0, false
 	if chk.Verbose {
-		plt.SetForPng(1, 600, 150)
-		dom.Msh.Draw2d(onlyLin, true, nil, 3)
-		fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
-		plt.SaveD("/tmp/gofem", "test_beam03_prob1.png")
+		//plt.SetForPng(1, 600, 150)
+		//dom.Msh.Draw2d(onlyLin, true, nil, 3)
+		//fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
+		//plt.SaveD("/tmp/gofem", "test_beam03_prob1.png")
 	}
 
 	// problem # 2
@@ -227,10 +226,10 @@ func Test_beam03(tst *testing.T) {
 	check_M(2, 1, 0, 1e-13)
 
 	if chk.Verbose {
-		plt.SetForPng(1, 600, 150)
-		dom.Msh.Draw2d(onlyLin, true, nil, 3)
-		fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
-		plt.SaveD("/tmp/gofem", "test_beam03_prob2.png")
+		//plt.SetForPng(1, 600, 150)
+		//dom.Msh.Draw2d(onlyLin, true, nil, 3)
+		//fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
+		//plt.SaveD("/tmp/gofem", "test_beam03_prob2.png")
 	}
 
 	// problem # 3
@@ -243,10 +242,10 @@ func Test_beam03(tst *testing.T) {
 	check_M(2, 1, 0, 1e-13)
 
 	if chk.Verbose {
-		plt.SetForPng(1, 600, 150)
-		dom.Msh.Draw2d(onlyLin, true, nil, 3)
-		fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
-		plt.SaveD("/tmp/gofem", "test_beam03_prob3.png")
+		//plt.SetForPng(1, 600, 150)
+		//dom.Msh.Draw2d(onlyLin, true, nil, 3)
+		//fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
+		//plt.SaveD("/tmp/gofem", "test_beam03_prob3.png")
 	}
 
 	// problem # 4
@@ -263,10 +262,10 @@ func Test_beam03(tst *testing.T) {
 	check_M(2, 1, 0, 1e-13)
 
 	if chk.Verbose {
-		plt.SetForPng(1, 600, 150)
-		dom.Msh.Draw2d(onlyLin, true, nil, 3)
-		fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
-		plt.SaveD("/tmp/gofem", "test_beam03_prob4.png")
+		//plt.SetForPng(1, 600, 150)
+		//dom.Msh.Draw2d(onlyLin, true, nil, 3)
+		//fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
+		//plt.SaveD("/tmp/gofem", "test_beam03_prob4.png")
 	}
 }
 

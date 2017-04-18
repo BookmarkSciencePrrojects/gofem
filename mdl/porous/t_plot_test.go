@@ -12,7 +12,6 @@ import (
 	"github.com/cpmech/gofem/mdl/retention"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
-	"github.com/cpmech/gosl/plt"
 )
 
 func Test_plot01(tst *testing.T) {
@@ -76,9 +75,9 @@ func Test_plot01(tst *testing.T) {
 	mdl.ShowR = true
 
 	// plot
-	if chk.Verbose {
-		np := 61
-		plt.SetForEps(1.2, 350)
-		PlotLrm(mdl, "/tmp/gofem", "fig_por_plot01.eps", 20, np, true, true, true, "", "", "", "", "")
-	}
+	//if chk.Verbose {
+	//np := 61
+	//plt.SetForEps(1.2, 350)
+	//PlotLrm(mdl, "/tmp/gofem", "fig_por_plot01.eps", 20, np, true, true, true, "", "", "", "", "")
+	//}
 }

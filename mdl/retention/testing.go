@@ -11,7 +11,6 @@ import (
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/num"
-	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -35,9 +34,9 @@ func Check(tst *testing.T, mdl Model, pc0, sl0, pcf float64, npts int, tolCc, to
 			tst.Errorf("Update failed: %v\n", err)
 			return
 		}
-		if doplot {
-			plt.PlotOne(Pc[i], Sl[i], "'ko', clip_on=0")
-		}
+		//if doplot {
+		//plt.PlotOne(Pc[i], Sl[i], "'ko', clip_on=0")
+		//}
 
 		// skip point on checking of derivatives
 		if doskip(Pc[i], pcSkip, tolSkip) {
