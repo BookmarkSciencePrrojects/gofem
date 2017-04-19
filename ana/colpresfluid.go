@@ -101,5 +101,5 @@ func (o ColumnFluidPressure) Plot(dirout, fnkey, subscript string, np int) {
 	plt.Gll("$\\rho_{"+subscript+"}$", "$z$", nil)
 	plt.SetTicksNormal()
 
-	plt.SaveD(dirout, fnkey+".eps")
+	plt.Save(dirout, fnkey)
 }

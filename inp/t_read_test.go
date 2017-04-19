@@ -33,7 +33,7 @@ func Test_msh01(tst *testing.T) {
 
 	if chk.Verbose {
 		msh.Draw2d(false, true, nil, 3)
-		plt.SaveD("/tmp/gofem", "test_msh01.png")
+		plt.Save("/tmp/gofem", "test_msh01")
 	}
 }
 

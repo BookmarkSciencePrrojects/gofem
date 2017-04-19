@@ -520,7 +520,7 @@ func (o *PrincStrainsUp) dbg_plot(eid, ipid int, time float64) {
 
 		// plot
 		var plr Plotter
-		plr.SetFig(false, false, 1.5, 400, "/tmp", io.Sf("fig_stress_eid%d_ipid%d", eid, ipid))
+		plr.SetFig(false, 1.5, 400, "/tmp", io.Sf("fig_stress_eid%d_ipid%d", eid, ipid))
 		plr.SetModel(o.Mdl)
 		plr.PreCor = o.DbgPco
 		plr.Plot([]string{"p,q,ys", "oct,ys"}, o.DbgRes, o.DbgSts, true, true)

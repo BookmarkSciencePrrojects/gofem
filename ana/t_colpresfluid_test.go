@@ -57,6 +57,7 @@ func Test_colpresfluid01(tst *testing.T) {
 
 	if chk.Verbose {
 
+		plt.Reset(false, nil)
 		plt.Subplot(2, 1, 1)
 		plt.Plot(P_num, Z, &plt.A{C: "r", Ls: "-", L: "num"})
 		plt.Plot(P_ana, Z, &plt.A{C: "b", Ls: ".", L: "ana", Me: 20})
@@ -69,6 +70,6 @@ func Test_colpresfluid01(tst *testing.T) {
 		plt.Plot([]float64{R0, R0 + C*pMaxLin}, []float64{H, 0}, &plt.A{C: "k", Ls: "--"})
 		plt.Gll("$\\rho$", "$z$", nil)
 
-		plt.SaveD("/tmp/gofem", "fig_colpresfluid01.eps")
+		plt.Save("/tmp/gofem", "fig_colpresfluid01")
 	}
 }

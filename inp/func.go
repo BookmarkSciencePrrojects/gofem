@@ -65,7 +65,7 @@ func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
 			chk.Panic("%v", err)
 		}
 		if ff != nil {
-			plt.Reset()
+			plt.Reset(false, nil)
 			if pd.WithTxt {
 				x := pd.Ti
 				y := ff.F(x, nil)
@@ -78,7 +78,7 @@ func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
 			fun.PlotT(ff, "", "", pd.Ti, pd.Tf, nil, pd.Np,
 				f.LabelT, f.LabelF, f.LabelG, f.LabelH, f.ArgsF, f.ArgsG, f.ArgsH)
 			*/
-			plt.SaveD(dirout, io.Sf("functions-%s-%s.eps", fnkey, f.Name))
+			plt.Save(dirout, io.Sf("functions-%s-%s", fnkey, f.Name))
 		}
 	}
 }

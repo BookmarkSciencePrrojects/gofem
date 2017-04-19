@@ -131,7 +131,7 @@ func main() {
 	// plot radial stresses
 	if true {
 		//if false {
-		plt.Reset()
+		plt.Reset(false, nil)
 		for i, Pval := range Psel {
 			plt.Plot(R_ana, Sr_ana[i], &plt.A{C: "b"})
 			for k := 0; k < nips; k++ {
@@ -156,7 +156,7 @@ func main() {
 	// plot tangential stresses
 	if true {
 		//if false {
-		plt.Reset()
+		plt.Reset(false, nil)
 		for i, Pval := range Psel {
 			plt.Plot(R_ana, St_ana[i], &plt.A{C: "b"})
 			for k := 0; k < nips; k++ {

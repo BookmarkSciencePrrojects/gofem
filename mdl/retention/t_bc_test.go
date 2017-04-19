@@ -29,7 +29,7 @@ func Test_bc01(tst *testing.T) {
 	nptsB := 11
 
 	if chk.Verbose {
-		plt.Reset()
+		plt.Reset(false, nil)
 		Plot(mdl, pc0, sl0, pcf, nptsA, false, "'b.-'", "'r+-'", "bc")
 	}
 

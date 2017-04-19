@@ -31,7 +31,7 @@ func Test_refm1a(tst *testing.T) {
 	nptsB := 21
 
 	if chk.Verbose {
-		plt.Reset()
+		plt.Reset(false, nil)
 		Plot(mdl, pc0, sl0, pcf, nptsA, false, "'b.-',markevery=10", "'r+-'", "ref-m1_drying")
 	}
 
@@ -56,6 +56,6 @@ func Test_refm1a(tst *testing.T) {
 
 	if chk.Verbose {
 		PlotEnd(false)
-		plt.SaveD("/tmp/gofem", "fig_refm1a.eps")
+		plt.Save("/tmp/gofem", "fig_refm1a")
 	}
 }

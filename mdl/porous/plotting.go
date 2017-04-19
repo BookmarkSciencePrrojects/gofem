@@ -10,11 +10,11 @@ import (
 	"github.com/cpmech/gosl/utl"
 )
 
-// PlotLrm plots retention. If fname!="", figure is saved; otherwise it is not
+// PlotLrm plots retention. If fnkey!="", figure is saved; otherwise it is not
 //  Output:
 //   X -- pc values
 //   Y -- sl values
-func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
+func PlotLrm(o *Model, dirout, fnkey string, pcmax float64, np int,
 	returnTo0, withText, deriv bool,
 	argsDry, argsWet, argsTxtMin, argsTxtMax, txtFmt string) (X, Y []float64) {
 
@@ -108,8 +108,8 @@ func PlotLrm(o *Model, dirout, fname string, pcmax float64, np int,
 	}
 
 	// save figure
-	if fname != "" {
-		plt.SaveD(dirout, fname)
+	if fnkey != "" {
+		plt.Save(dirout, fnkey)
 	}
 	return
 }

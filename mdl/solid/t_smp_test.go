@@ -103,7 +103,7 @@ func Test_smp01(tst *testing.T) {
 	if false {
 		var plr Plotter
 		prop := 2.0
-		plr.SetFig(false, false, prop, 400, "/tmp", "test_smp01")
+		plr.SetFig(false, prop, 400, "/tmp", "test_smp01")
 		plr.SetModel(smp)
 		//n := len(drv.Res)
 		plr.Pmin = -smp.HE.pt

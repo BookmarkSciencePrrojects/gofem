@@ -23,7 +23,6 @@ type Input struct {
 	MatName string
 	PathFn  string
 	PlotSet []string
-	FigEps  bool
 	FigProp float64
 	FigWid  float64
 
@@ -51,7 +50,6 @@ func (o Input) String() (l string) {
 		"material name", "MatName", o.MatName,
 		"path filename", "PathFn", o.PathFn,
 		"plot set", "PlotSet", io.Sf("%v", o.PlotSet),
-		"fig: generate .eps instead of .png", "FigEps", o.FigEps,
 		"fig: proportion of figure", "FigProp", o.FigProp,
 		"fig: width  of figure", "FigWid", o.FigWid,
 	)
@@ -132,7 +130,7 @@ func main() {
 	//if false {
 	if true {
 		var plr solid.Plotter
-		plr.SetFig(false, in.FigEps, in.FigProp, in.FigWid, "/tmp", "cmd_"+in.SimFn)
+		plr.SetFig(false, in.FigProp, in.FigWid, "/tmp", "cmd_"+in.SimFn)
 		var epm solid.EPmodel
 		if m, ok := mdl.(solid.EPmodel); ok {
 			plr.SetModel(m)
@@ -153,7 +151,7 @@ func main() {
 	// plot ys
 	if false {
 		//if true {
-		plt.Reset()
+		plt.Reset(false, nil)
 		m := mdl.(*solid.SmpInvs)
 		φ := m.Get_phi()
 		σcCte := 10.0

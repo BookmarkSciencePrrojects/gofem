@@ -86,7 +86,7 @@ func Test_derivs01(tst *testing.T) {
 	// plot
 	if doplot {
 		npts := 41
-		plt.Reset()
+		plt.Reset(false, nil)
 		retention.Plot(mdl.Lrm, pc0, 1.0, pcf, npts, false, "'b.-'", "'r+-'", lrm_name)
 		n := len(drv.Res)
 		Sl := make([]float64, n)

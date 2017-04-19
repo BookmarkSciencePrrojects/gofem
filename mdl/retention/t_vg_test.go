@@ -40,7 +40,7 @@ func Test_vg01(tst *testing.T) {
 	nptsB := 11
 
 	if chk.Verbose {
-		plt.Reset()
+		plt.Reset(false, nil)
 		Plot(ref, pc0, sl0, pcf, nptsA, false, "'k--'", "'k--'", "ref-m1")
 		Plot(mdl, pc0, sl0, pcf, nptsA, false, "'b.-'", "'r+-'", "vg")
 	}

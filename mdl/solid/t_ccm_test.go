@@ -95,7 +95,7 @@ func Test_ccm01(tst *testing.T) {
 		var plr Plotter
 		plr.Pr = pr
 		prop := 2.0
-		plr.SetFig(false, false, prop, 400, "/tmp", "test_ccm01")
+		plr.SetFig(false, prop, 400, "/tmp", "test_ccm01")
 		plr.SetModel(ccm)
 		n := len(drv.Res)
 		plr.Pmin = -ccm.HE.pt

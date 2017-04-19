@@ -32,8 +32,9 @@ func Test_platehole01(tst *testing.T) {
 		L := 4.0
 		npts := 101
 
+		plt.Reset(false, nil)
 		sol.PlotStress(1, L, npts)
-		plt.SaveD("/tmp/gofem", "ana_platehole01.eps")
+		plt.Save("/tmp/gofem", "ana_platehole01")
 	}
 }
 

@@ -46,7 +46,6 @@ type Plotter struct {
 	Rmpf     RampFcn_t // ramp function
 	SaveDir  string    // directory to put figure
 	SaveFnk  string    // save figure after plot (filename)
-	UseEps   bool      // save eps figure instead of png
 	QdivP    bool      // q/p in ed, q plot?
 	LogP     bool      // use log(p) in εv,log(p) plot
 	WithYs   bool      // with yield surface (if model != nil)
@@ -124,13 +123,12 @@ type Plotter struct {
 
 // SetFig sets figure space for plotting
 // Note: this method is optional
-func (o *Plotter) SetFig(split, epsfig bool, prop, width float64, savedir, savefnk string) {
-	plt.Reset()
+func (o *Plotter) SetFig(split bool, prop, width float64, savedir, savefnk string) {
+	plt.Reset(false, nil)
 	if o.PngRes < 150 {
 		o.PngRes = 150
 	}
 	o.Split = split
-	o.UseEps = epsfig
 	o.SaveDir = savedir
 	o.SaveFnk = io.FnKey(savefnk)
 	o.maxR = -1
@@ -863,16 +861,8 @@ func (o *Plotter) Save(typ, num string) {
 	if o.PlotFcn != nil {
 		o.PlotFcn()
 	}
-	ext := ".png"
-	if o.UseEps {
-		ext = ".eps"
-	}
-	if o.SaveFnk != "" {
-		if o.SaveDir != "" {
-			plt.SaveD(o.SaveDir, o.SaveFnk+typ+num+ext)
-			return
-		}
-		plt.Save(o.SaveFnk + typ + num + ext)
+	if o.SaveFnk != "" && o.SaveDir != "" {
+		plt.Save(o.SaveDir, o.SaveFnk+typ+num)
 	}
 }
 

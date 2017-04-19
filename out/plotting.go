@@ -148,15 +148,7 @@ func Draw(dirout, fname string, nr, nc int, split bool, extra func(id string)) {
 // auxiliary /////////////////////////////////////////////////////////////////////////////////////////
 
 func savefig(dirout, fnk, ext, id string) {
-	fn := fnk + ext
-	if id != "" {
-		fn = fnk + "_" + id + ext
-	}
-	if dirout == "" {
-		plt.Save(fn)
-	} else {
-		plt.SaveD(dirout, fn)
-	}
+	plt.Save(dirout, fnk+"-"+id)
 }
 
 func get_vals_and_labels(handle, otherHandle interface{}, alias string, idxI int) ([]float64, string) {
