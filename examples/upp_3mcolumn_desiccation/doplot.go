@@ -47,12 +47,12 @@ func main() {
 
 	// styles
 	me := 10
-	S := []plt.Fmt{
-		plt.Fmt{C: "g", M: "o", Me: me},
-		plt.Fmt{C: "b", M: "*", Me: me},
-		plt.Fmt{C: "m", M: "x", Me: me},
-		plt.Fmt{C: "orange", M: "+", Me: me},
-		plt.Fmt{C: "r", M: "^", Me: me},
+	S := []*plt.A{
+		&plt.A{C: "g", M: "o", Me: me},
+		&plt.A{C: "b", M: "*", Me: me},
+		&plt.A{C: "m", M: "x", Me: me},
+		&plt.A{C: "orange", M: "+", Me: me},
+		&plt.A{C: "r", M: "^", Me: me},
 	}
 
 	// time outputs
@@ -69,7 +69,7 @@ func main() {
 		out.Splot("pl-y", "liquid pressure along column")
 		for _, i := range I {
 			t := out.Times[i]
-			out.Plot("pl", "y", "left-side", plt.Fmt{L: io.Sf("t=%g", t)}, i)
+			out.Plot("pl", "y", "left-side", &plt.A{L: io.Sf("t=%g", t)}, i)
 		}
 
 		// pg versus y
@@ -79,7 +79,7 @@ func main() {
 			out.Splot("pg-y", "gas pressure along column")
 			for _, i := range I {
 				t := out.Times[i]
-				out.Plot("pg", "y", "left-side", plt.Fmt{L: io.Sf("t=%g", t)}, i)
+				out.Plot("pg", "y", "left-side", &plt.A{L: io.Sf("t=%g", t)}, i)
 			}
 		}
 
@@ -143,9 +143,6 @@ func main() {
 
 	// save
 	sim := out.Dom.Sim
-	if onlyLRM {
-	} else {
-	}
 	out.Draw("/tmp/gofem", "fig_"+fnkey+".png", -1, -1, false, func(id string) {
 		if id == "lrm" {
 			mat := sim.MatModels.Get("lreten1")

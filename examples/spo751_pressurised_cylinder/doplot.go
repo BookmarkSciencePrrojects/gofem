@@ -122,9 +122,9 @@ func main() {
 	// plot load displacements
 	if true {
 		//if false {
-		plt.Plot(Ub_ana, P_ana, "'b-', ms=2, label='solution', clip_on=0")
-		plt.Plot(Ub, P, "'r.--', label='fem: outer', clip_on=0")
-		plt.Gll("$u_x\\;\\mathrm{[mm]}$", "$P\\;\\mathrm{[MPa]}$", "")
+		plt.Plot(Ub_ana, P_ana, &plt.A{C: "b", Ms: 2, L: "solution"})
+		plt.Plot(Ub, P, &plt.A{C: "r", M: ".", Ls: "--", L: "fem: outer"})
+		plt.Gll("$u_x\\;\\mathrm{[mm]}$", "$P\\;\\mathrm{[MPa]}$", nil)
 		plt.SaveD("/tmp", io.Sf("gofem_%s_disp.png", fnkey))
 	}
 
@@ -133,21 +133,22 @@ func main() {
 		//if false {
 		plt.Reset()
 		for i, Pval := range Psel {
-			plt.Plot(R_ana, Sr_ana[i], "'b-'")
+			plt.Plot(R_ana, Sr_ana[i], &plt.A{C: "b"})
 			for k := 0; k < nips; k++ {
 				for j := 0; j < nels; j++ {
-					args := io.Sf("'%s%s'", colors[i], markers1[i])
+					args := &plt.A{C: colors[i], M: markers1[i]}
 					if k > 1 {
-						args = io.Sf("'k%s', ms=10", markers2[i])
+						args.C = "k"
+						args.M = markers2[i]
 					}
 					if k == 0 && j == 0 {
-						args += io.Sf(", label='P=%g'", Pval)
+						args.L = io.Sf("P=%g", Pval)
 					}
 					plt.PlotOne(R[i][j][k], Sr[i][j][k], args)
 				}
 			}
 		}
-		plt.Gll("$r\\;\\mathrm{[mm]}$", "$\\sigma_r\\;\\mathrm{[MPa]}$", "leg_loc='lower right'")
+		plt.Gll("$r\\;\\mathrm{[mm]}$", "$\\sigma_r\\;\\mathrm{[MPa]}$", &plt.A{LegLoc: "lower right"})
 		plt.AxisXrange(a, b)
 		plt.SaveD("/tmp", io.Sf("gofem_%s_sr.png", fnkey))
 	}
@@ -157,21 +158,22 @@ func main() {
 		//if false {
 		plt.Reset()
 		for i, Pval := range Psel {
-			plt.Plot(R_ana, St_ana[i], "'b-'")
+			plt.Plot(R_ana, St_ana[i], &plt.A{C: "b"})
 			for k := 0; k < nips; k++ {
 				for j := 0; j < nels; j++ {
-					args := io.Sf("'%s%s'", colors[i], markers1[i])
+					args := &plt.A{C: colors[i], M: markers1[i]}
 					if k > 1 {
-						args = io.Sf("'k%s', ms=10", markers2[i])
+						args.C = "k"
+						args.M = markers2[i]
 					}
 					if k == 0 && j == 0 {
-						args += io.Sf(", label='P=%g'", Pval)
+						args.L = io.Sf("P=%g", Pval)
 					}
 					plt.PlotOne(R[i][j][k], St[i][j][k], args)
 				}
 			}
 		}
-		plt.Gll("$r\\;\\mathrm{[mm]}$", "$\\sigma_t\\;\\mathrm{[MPa]}$", "leg_loc='upper left'")
+		plt.Gll("$r\\;\\mathrm{[mm]}$", "$\\sigma_t\\;\\mathrm{[MPa]}$", &plt.A{LegLoc: "upper left"})
 		plt.SaveD("/tmp", io.Sf("gofem_%s_st.png", fnkey))
 	}
 }

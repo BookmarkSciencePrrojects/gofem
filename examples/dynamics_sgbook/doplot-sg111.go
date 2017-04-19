@@ -33,7 +33,7 @@ func main() {
 	out.LoadResults(nil)
 
 	// plot FEM results
-	out.Plot("t", "uy", "tip", plt.Fmt{C: "r", Ls: "None", M: ".", L: "gofem"}, -1)
+	out.Plot("t", "uy", "tip", &plt.A{C: "r", Ls: "None", M: ".", L: "gofem"}, -1)
 
 	// analytical solution
 	tAna := utl.LinSpace(0, 5, 101)
@@ -44,6 +44,6 @@ func main() {
 
 	// save
 	out.Draw("/tmp", fnkey+".png", -1, -1, false, func(id string) {
-		plt.Plot(tAna, uyAna, "'g-', clip_on=0, label='analytical'")
+		plt.Plot(tAna, uyAna, &plt.A{C: "g", L: "analytical"})
 	})
 }

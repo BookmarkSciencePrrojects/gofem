@@ -37,6 +37,6 @@ func main() {
 	tests.CompareResults(&tst, "spo754.sim", "spo754.cmp", "", tolK, tolu, tols, skipK, verbose, nil)
 
 	// save
-	out.Plot("uy", "t", "A", plt.A{C: "r", M: "o"}, -1)
+	out.Plot("uy", "t", "A", &plt.A{C: "r", M: "o"}, -1)
 	out.Draw("/tmp", "spo754.png", -1, -1, false, nil)
 }

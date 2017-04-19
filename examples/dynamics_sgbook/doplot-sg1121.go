@@ -25,7 +25,7 @@ func main() {
 	out.LoadResults(nil)
 
 	// plot FEM results
-	out.Plot("t", "uy", "A", plt.Fmt{C: "k", Ls: "-", L: "gofem"}, -1)
+	out.Plot("t", "uy", "A", &plt.A{C: "k", Ls: "-", L: "gofem"}, -1)
 
 	// old results
 	b, err := io.ReadFile("cmp/sg1121gofemold.json")
@@ -51,7 +51,8 @@ func main() {
 
 	// save
 	out.Draw("/tmp", fnkey+".png", -1, -1, false, func(id string) {
-		plt.Plot(gofemold.Time, gofemold.Uy30, "'r-', lw=2, label='gofemOld'")
-		plt.Plot(res["Time"], res["uy"], "'b-', label='mechsys'")
+		plt.Plot(gofemold.Time, gofemold.Uy30, &plt.A{C: "r", M: ".", L: "gofemOld"})
+		plt.Plot(res["Time"], res["uy"], &plt.A{C: "b", M: "+", L: "mechsys"})
+
 	})
 }

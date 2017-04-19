@@ -33,9 +33,9 @@ func main() {
 	}
 
 	// plot FEM results
-	out.Plot("ompb", mtau0, "p0", plt.Fmt{C: "r", Ls: "-", M: "."}, -1)
-	out.Plot("ompb", mtau1, "p1", plt.Fmt{C: "g", Ls: "-", M: "."}, -1)
-	out.Plot("ompb", mtau2, "p2", plt.Fmt{C: "b", Ls: "-", M: "."}, -1)
+	out.Plot("ompb", mtau0, "p0", &plt.A{C: "r", Ls: "-", M: "."}, -1)
+	out.Plot("ompb", mtau1, "p1", &plt.A{C: "g", Ls: "-", M: "."}, -1)
+	out.Plot("ompb", mtau2, "p2", &plt.A{C: "b", Ls: "-", M: "."}, -1)
 	out.Csplot.Ylbl = "$-\\tau$"
 
 	// save

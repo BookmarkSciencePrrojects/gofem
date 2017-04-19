@@ -35,19 +35,19 @@ func main() {
 	// plot
 	kt := len(out.Times) - 1
 	out.Splot("pl-y", "")
-	out.Plot("pl", "y", "section-A", plt.A{L: "t=0"}, 0)
-	out.Plot("pl", "y", "section-A", plt.A{L: io.Sf("t=%g", out.Times[kt])}, kt)
+	out.Plot("pl", "y", "section-A", &plt.A{L: "t=0"}, 0)
+	out.Plot("pl", "y", "section-A", &plt.A{L: io.Sf("t=%g", out.Times[kt])}, kt)
 	out.Splot("x-pl", "")
-	out.Plot("x", "pl", "section-B", plt.A{L: "t=0"}, 0)
-	out.Plot("x", "pl", "section-B", plt.A{L: io.Sf("t=%g", out.Times[kt])}, kt)
+	out.Plot("x", "pl", "section-B", &plt.A{L: "t=0"}, 0)
+	out.Plot("x", "pl", "section-B", &plt.A{L: io.Sf("t=%g", out.Times[kt])}, kt)
 	out.Splot("nwlx", "")
-	out.Plot("t", nwlx_TM, "top-middle", plt.A{}, -1)
+	out.Plot("t", nwlx_TM, "top-middle", &plt.A{}, -1)
 	out.Csplot.Ylbl = "$n_{\\ell}\\cdot w_{\\ell x}$"
 
 	// save
 	out.Draw("/tmp", "seep_simple_flux_"+fnkey+".png", -1, -1, false, func(id string) {
 		if id == "x-pl" {
-			plt.Plot([]float64{0, 10}, []float64{10, 9}, "'k--'")
+			plt.Plot([]float64{0, 10}, []float64{10, 9}, &plt.A{C: "k", Ls: "--"})
 		}
 	})
 }
