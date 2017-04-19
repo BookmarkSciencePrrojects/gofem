@@ -17,7 +17,7 @@ type PltEntity struct {
 	Y     []float64 // y-values
 	Xlbl  string    // horizontal axis label (raw; e.g. "t")
 	Ylbl  string    // vertical axis label (raw; e.g. "pl")
-	Style plt.A     // style
+	Args  *plt.A    // plot arguments
 }
 
 // SplotDat stores all data for one subplot
@@ -61,12 +61,12 @@ func SplotConfig(xunit, yunit string, xscale, yscale float64) {
 //  xHandle -- can be a string, e.g. "t" or a slice, e.g. pc = []float64{0, 1, 2}
 //  yHandle -- can be a string, e.g. "pl" or a slice, e.g. sl = []float64{0, 1, 2}
 //  alias   -- alias such as "centre"
-//  fm      -- formatting codes; e.g. plt.Fmt{C:"blue", L:"label"}
+//  args    -- plotting arguments; e.g. &plt.A{C:"blue", L:"label"}
 //  idxI    -- index of time; use -1 for all times
-func Plot(xHandle, yHandle interface{}, alias string, fm plt.A, idxI int) {
+func Plot(xHandle, yHandle interface{}, alias string, args *plt.A, idxI int) {
 	var e PltEntity
 	e.Alias = alias
-	e.Style = fm
+	e.Args = args
 	e.X, e.Xlbl = get_vals_and_labels(xHandle, yHandle, alias, idxI)
 	e.Y, e.Ylbl = get_vals_and_labels(yHandle, xHandle, alias, idxI)
 	if len(e.X) != len(e.Y) {
@@ -110,7 +110,7 @@ func Draw(dirout, fname string, nr, nc int, split bool, extra func(id string)) {
 					plt.Title(spl.Title, spl.Topts)
 				}
 				for _, d := range spl.Data {
-					if d.Style.L == "" {
+					if d.Args.L == "" {
 						d.Style.L = d.Alias
 					}
 					x, y := d.X, d.Y

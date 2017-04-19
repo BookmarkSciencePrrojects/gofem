@@ -44,21 +44,21 @@ func Test_plot01(tst *testing.T) {
 	plA := GetRes("pl", "A", 0)
 
 	Splot("t-pl", "liquid pressure")
-	Plot("t", "pl", "B", plt.A{C: "b", M: "."}, -1)
-	Plot("t", plA, "A", plt.A{C: "r", M: "."}, -1)
+	Plot("t", "pl", "B", &plt.A{C: "b", M: "."}, -1)
+	Plot("t", plA, "A", &plt.A{C: "r", M: "."}, -1)
 
 	Splot("pl-pl", "")
-	Plot("pl", "pl", "A", plt.A{C: "k", M: "o"}, -1)
+	Plot("pl", "pl", "A", &plt.A{C: "k", M: "o"}, -1)
 
 	Splot("pl-y", "")
-	Plot("pl", "y", "left", plt.A{C: "b", M: "o"}, 0)
-	Plot("pl", "y", "left", plt.A{C: "g", M: "o"}, -1)
+	Plot("pl", "y", "left", &plt.A{C: "b", M: "o"}, 0)
+	Plot("pl", "y", "left", &plt.A{C: "g", M: "o"}, -1)
 
 	Splot("y-pl", "")
 	io.Pforan("T = %v\n", Times)
 	last := len(Times) - 1
-	Plot("y", "pl", "left", plt.A{C: "b", M: "o", L: io.Sf("t=%g", Times[0])}, 0)
-	Plot("y", "pl", "left", plt.A{C: "m", M: "*", Lw: 2, L: io.Sf("t=%g", Times[last])}, -1)
+	Plot("y", "pl", "left", &plt.A{C: "b", M: "o", L: io.Sf("t=%g", Times[0])}, 0)
+	Plot("y", "pl", "left", &plt.A{C: "m", M: "*", Lw: 2, L: io.Sf("t=%g", Times[last])}, -1)
 
 	if chk.Verbose {
 		Draw("", "", -1, -1, false, nil)

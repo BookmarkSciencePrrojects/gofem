@@ -66,12 +66,12 @@ func Test_topo01(tst *testing.T) {
 
 	// displacements
 	Splot("t-uz", "displacements")
-	Plot("t", "uz", "A", plt.A{C: "b", M: "o"}, -1)
+	Plot("t", "uz", "A", &plt.A{C: "b", M: "o"}, -1)
 
 	// stresses on surface
 	V := IntegOnPlane("sz", "surf")
 	Splot("int", "integral of stresses")
-	Plot(Times, V, "surf", plt.A{C: "r", M: "o"}, -1)
+	Plot(Times, V, "surf", &plt.A{C: "r", M: "o"}, -1)
 	Csplot.Xlbl = "time"
 	Csplot.Ylbl = "integ(sz)"
 
