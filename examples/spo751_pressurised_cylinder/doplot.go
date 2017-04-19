@@ -125,7 +125,7 @@ func main() {
 		plt.Plot(Ub_ana, P_ana, &plt.A{C: "b", Ms: 2, L: "solution"})
 		plt.Plot(Ub, P, &plt.A{C: "r", M: ".", Ls: "--", L: "fem: outer"})
 		plt.Gll("$u_x\\;\\mathrm{[mm]}$", "$P\\;\\mathrm{[MPa]}$", nil)
-		plt.SaveD("/tmp", io.Sf("gofem_%s_disp.png", fnkey))
+		plt.Save("/tmp", io.Sf("gofem_%s_disp", fnkey))
 	}
 
 	// plot radial stresses
@@ -150,7 +150,7 @@ func main() {
 		}
 		plt.Gll("$r\\;\\mathrm{[mm]}$", "$\\sigma_r\\;\\mathrm{[MPa]}$", &plt.A{LegLoc: "lower right"})
 		plt.AxisXrange(a, b)
-		plt.SaveD("/tmp", io.Sf("gofem_%s_sr.png", fnkey))
+		plt.Save("/tmp", io.Sf("gofem_%s_sr", fnkey))
 	}
 
 	// plot tangential stresses
@@ -174,7 +174,7 @@ func main() {
 			}
 		}
 		plt.Gll("$r\\;\\mathrm{[mm]}$", "$\\sigma_t\\;\\mathrm{[MPa]}$", &plt.A{LegLoc: "upper left"})
-		plt.SaveD("/tmp", io.Sf("gofem_%s_st.png", fnkey))
+		plt.Save("/tmp", io.Sf("gofem_%s_st", fnkey))
 	}
 }
 
