@@ -111,7 +111,7 @@ use 'godoc cmd/github.com/cpmech/gofem/ele/thermomech' for documentation on the 
 					<dd>&nbsp; &nbsp; <a href="#SolidThermal.RestoreIvs">func (o *SolidThermal) RestoreIvs(aux bool) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#SolidThermal.SetEleConds">func (o *SolidThermal) SetEleConds(key string, f fun.Func, extra string) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#SolidThermal.SetEleConds">func (o *SolidThermal) SetEleConds(key string, f fun.TimeSpace, extra string) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#SolidThermal.SetEqs">func (o *SolidThermal) SetEqs(eqs [][]int, mixedform_eqs []int) (err error)</a></dd>
@@ -188,7 +188,7 @@ use 'godoc cmd/github.com/cpmech/gofem/ele/thermomech' for documentation on the 
 		
 			
 			
-			<h2 id="SolidThermal">type <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=673:4524#L15">SolidThermal</a></h2>
+			<h2 id="SolidThermal">type <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=674:4250#L16">SolidThermal</a></h2>
 			<pre>type SolidThermal struct {
 
     <span class="comment">// basic data</span>
@@ -202,8 +202,8 @@ use 'godoc cmd/github.com/cpmech/gofem/ele/thermomech' for documentation on the 
     Nc      <a href="/pkg/builtin/#int">int</a>           <span class="comment">// if mixed formulation is used, number of fl variables</span>
 
     <span class="comment">// variables for dynamics</span>
-    Cdam <a href="/pkg/builtin/#float64">float64</a>  <span class="comment">// coefficient for damping // TODO: read this value</span>
-    Gfcn <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// gravity function</span>
+    Cdam <a href="/pkg/builtin/#float64">float64</a>       <span class="comment">// coefficient for damping // TODO: read this value</span>
+    Gfcn <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#TimeSpace">TimeSpace</a> <span class="comment">// gravity function</span>
 
     <span class="comment">// optional data</span>
     UseB      <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// use B matrix</span>
@@ -235,7 +235,7 @@ use 'godoc cmd/github.com/cpmech/gofem/ele/thermomech' for documentation on the 
     B [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nsig][nu] B matrix for axisymetric case</span>
     D [][]<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// [nsig][nsig] constitutive consistent tangent matrix</span>
 
-    Sfun <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// s(x) function for temperature element</span>
+    Sfun <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#TimeSpace">TimeSpace</a> <span class="comment">// s(x) function for temperature element</span>
 
     Δε []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// incremental strains leading to updated strains</span>
 
@@ -273,7 +273,7 @@ ElemUT implements the solid-thermal coupling
 
 			
 				
-				<h3 id="SolidThermal.AddToExt">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=21449:21511#L776">AddToExt</a></h3>
+				<h3 id="SolidThermal.AddToExt">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=21165:21227#L778">AddToExt</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) AddToExt(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 AddToExt extrapolates stresses at integration points to nodes
@@ -284,7 +284,7 @@ AddToExt extrapolates stresses at integration points to nodes
 				
 			
 				
-				<h3 id="SolidThermal.AddToKb">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=13874:13965#L478">AddToKb</a></h3>
+				<h3 id="SolidThermal.AddToKb">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=13598:13689#L479">AddToKb</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) AddToKb(Kb *<a href="/pkg/github.com/cpmech/gosl/la/">la</a>.<a href="/pkg/github.com/cpmech/gosl/la/#Triplet">Triplet</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds element K to global Jacobian matrix Kb
@@ -295,7 +295,7 @@ adds element K to global Jacobian matrix Kb
 				
 			
 				
-				<h3 id="SolidThermal.AddToRhs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=11026:11102#L366">AddToRhs</a></h3>
+				<h3 id="SolidThermal.AddToRhs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=10754:10830#L367">AddToRhs</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) AddToRhs(fb []<a href="/pkg/builtin/#float64">float64</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 adds -R to global residual vector fb
@@ -306,7 +306,7 @@ adds -R to global residual vector fb
 				
 			
 				
-				<h3 id="SolidThermal.BackupIvs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=19151:19205#L686">BackupIvs</a></h3>
+				<h3 id="SolidThermal.BackupIvs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=18866:18920#L687">BackupIvs</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) BackupIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 BackupIvs create copy of internal variables
@@ -317,7 +317,7 @@ BackupIvs create copy of internal variables
 				
 			
 				
-				<h3 id="SolidThermal.Decode">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20182:20240#L732">Decode</a></h3>
+				<h3 id="SolidThermal.Decode">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=19897:19955#L733">Decode</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) Decode(dec <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Decoder">Decoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Decode decodes internal variables
@@ -328,7 +328,7 @@ Decode decodes internal variables
 				
 			
 				
-				<h3 id="SolidThermal.Encode">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20052:20110#L727">Encode</a></h3>
+				<h3 id="SolidThermal.Encode">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=19767:19825#L728">Encode</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) Encode(enc <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#Encoder">Encoder</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Encode encodes internal variables
@@ -339,7 +339,7 @@ Encode encodes internal variables
 				
 			
 				
-				<h3 id="SolidThermal.Id">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=9140:9171#L277">Id</a></h3>
+				<h3 id="SolidThermal.Id">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=8864:8895#L278">Id</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) Id() <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 Id returns the cell Id
@@ -350,7 +350,7 @@ Id returns the cell Id
 				
 			
 				
-				<h3 id="SolidThermal.InterpStarVars">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=10005:10073#L319">InterpStarVars</a></h3>
+				<h3 id="SolidThermal.InterpStarVars">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=9732:9800#L320">InterpStarVars</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) InterpStarVars(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InterpStarVars interpolates star variables to integration points
@@ -361,7 +361,7 @@ InterpStarVars interpolates star variables to integration points
 				
 			
 				
-				<h3 id="SolidThermal.OutIpCoords">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20392:20444#L741">OutIpCoords</a></h3>
+				<h3 id="SolidThermal.OutIpCoords">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20107:20159#L742">OutIpCoords</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) OutIpCoords() (C [][]<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 OutIpCoords returns the coordinates of integration points
@@ -372,7 +372,7 @@ OutIpCoords returns the coordinates of integration points
 				
 			
 				
-				<h3 id="SolidThermal.OutIpKeys">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20628:20671#L750">OutIpKeys</a></h3>
+				<h3 id="SolidThermal.OutIpKeys">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20343:20386#L751">OutIpKeys</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) OutIpKeys() []<a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 OutIpKeys returns the integration points&#39; keys
@@ -383,7 +383,7 @@ OutIpKeys returns the integration points&#39; keys
 				
 			
 				
-				<h3 id="SolidThermal.OutIpVals">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20890:20956#L759">OutIpVals</a></h3>
+				<h3 id="SolidThermal.OutIpVals">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=20605:20671#L760">OutIpVals</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) OutIpVals(M *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#IpsMap">IpsMap</a>, sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>)</pre>
 				<p>
 OutIpVals returns the integration points&#39; values corresponding to keys
@@ -394,7 +394,7 @@ OutIpVals returns the integration points&#39; values corresponding to keys
 				
 			
 				
-				<h3 id="SolidThermal.RestoreIvs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=19411:19466#L700">RestoreIvs</a></h3>
+				<h3 id="SolidThermal.RestoreIvs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=19126:19181#L701">RestoreIvs</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) RestoreIvs(aux <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 RestoreIvs restore internal variables from copies
@@ -405,8 +405,8 @@ RestoreIvs restore internal variables from copies
 				
 			
 				
-				<h3 id="SolidThermal.SetEleConds">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=9735:9819#L305">SetEleConds</a></h3>
-				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="SolidThermal.SetEleConds">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=9459:9548#L306">SetEleConds</a></h3>
+				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#TimeSpace">TimeSpace</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEleConds set element conditions
 </p>
@@ -416,7 +416,7 @@ SetEleConds set element conditions
 				
 			
 				
-				<h3 id="SolidThermal.SetEqs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=9218:9293#L280">SetEqs</a></h3>
+				<h3 id="SolidThermal.SetEqs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=8942:9017#L281">SetEqs</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetEqs set equations
@@ -427,7 +427,7 @@ SetEqs set equations
 				
 			
 				
-				<h3 id="SolidThermal.SetIniIvs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=18455:18544#L659">SetIniIvs</a></h3>
+				<h3 id="SolidThermal.SetIniIvs">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=18170:18259#L660">SetIniIvs</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) SetIniIvs(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SetIniIvs sets initial ivs for given values in sol and ivs map
@@ -438,7 +438,7 @@ SetIniIvs sets initial ivs for given values in sol and ivs map
 				
 			
 				
-				<h3 id="SolidThermal.Update">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=17344:17404#L622">Update</a></h3>
+				<h3 id="SolidThermal.Update">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=17059:17119#L623">Update</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) Update(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update perform (tangent) update
@@ -449,7 +449,7 @@ Update perform (tangent) update
 				
 			
 				
-				<h3 id="SolidThermal.Ureset">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=19695:19755#L714">Ureset</a></h3>
+				<h3 id="SolidThermal.Ureset">func (*SolidThermal) <a href="https://github.com/cpmech/gofem/blob/master/ele/thermomech/solid-thermal.go?s=19410:19470#L715">Ureset</a></h3>
 				<pre>func (o *<a href="#SolidThermal">SolidThermal</a>) Ureset(sol *<a href="/pkg/github.com/cpmech/gofem/ele/">ele</a>.<a href="/pkg/github.com/cpmech/gofem/ele/#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Ureset fixes internal variables after u (displacements) have been zeroed

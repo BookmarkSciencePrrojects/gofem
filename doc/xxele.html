@@ -364,7 +364,7 @@ GetAllocator gets callback function to allocate an element
 		
 			
 			
-			<h2 id="CanExtrapolate">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2355:2469#L44">CanExtrapolate</a></h2>
+			<h2 id="CanExtrapolate">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2360:2474#L44">CanExtrapolate</a></h2>
 			<pre>type CanExtrapolate interface {
     AddToExt(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// adds extrapolated values to global array</span>
 }</pre>
@@ -387,7 +387,7 @@ CanExtrapolate defines elements with functions to extrapolate internal values
 		
 			
 			
-			<h2 id="CanOutputIps">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2547:2883#L49">CanOutputIps</a></h2>
+			<h2 id="CanOutputIps">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2552:2888#L49">CanOutputIps</a></h2>
 			<pre>type CanOutputIps interface {
     Id() <a href="/pkg/builtin/#int">int</a>                            <span class="comment">// returns the cell Id</span>
     OutIpCoords() [][]<a href="/pkg/builtin/#float64">float64</a>           <span class="comment">// coordinates of integration points</span>
@@ -413,7 +413,7 @@ CanOutputIps defines elements that can output integration points&#39; values
 		
 			
 			
-			<h2 id="Connector">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2019:2272#L38">Connector</a></h2>
+			<h2 id="Connector">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2024:2277#L38">Connector</a></h2>
 			<pre>type Connector interface {
     Id() <a href="/pkg/builtin/#int">int</a>                                                       <span class="comment">// returns the cell Id</span>
     Connect(cid2elem []<a href="#Element">Element</a>, c *<a href="/pkg/github.com/cpmech/gofem/inp/">inp</a>.<a href="/pkg/github.com/cpmech/gofem/inp/#Cell">Cell</a>) (nnzK <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// connect multiple elements; e.g.: connect rod/solid elements in Rjoints</span>
@@ -614,7 +614,7 @@ Print prints coefficients
 		
 			
 			
-			<h2 id="Element">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=403:1297#L7">Element</a></h2>
+			<h2 id="Element">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=403:1302#L7">Element</a></h2>
 			<pre>type Element interface {
 
     <span class="comment">// information and initialisation</span>
@@ -622,7 +622,7 @@ Print prints coefficients
     SetEqs(eqs [][]<a href="/pkg/builtin/#int">int</a>, mixedform_eqs []<a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// set equations</span>
 
     <span class="comment">// conditions (natural BCs and element&#39;s)</span>
-    SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// set element conditions</span>
+    SetEleConds(key <a href="/pkg/builtin/#string">string</a>, f <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#TimeSpace">TimeSpace</a>, extra <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// set element conditions</span>
 
     <span class="comment">// called for each time step</span>
     InterpStarVars(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// interpolate star variables to integration points</span>
@@ -801,12 +801,12 @@ Set sets item in map by key and ip-index. The slice is resized with nip in case 
 		
 			
 			
-			<h2 id="NaturalBc">type <a href="https://github.com/cpmech/gofem/blob/master/ele/naturalbcs.go?s=334:545#L1">NaturalBc</a></h2>
+			<h2 id="NaturalBc">type <a href="https://github.com/cpmech/gofem/blob/master/ele/naturalbcs.go?s=334:565#L1">NaturalBc</a></h2>
 			<pre>type NaturalBc struct {
-    Key     <a href="/pkg/builtin/#string">string</a>   <span class="comment">// key such as qn, qn0, ql, seepH, seepP, etc...</span>
-    IdxFace <a href="/pkg/builtin/#int">int</a>      <span class="comment">// local index of face</span>
-    Fcn     <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Func">Func</a> <span class="comment">// function callback</span>
-    Extra   <a href="/pkg/builtin/#string">string</a>   <span class="comment">// extra information</span>
+    Key     <a href="/pkg/builtin/#string">string</a>        <span class="comment">// key such as qn, qn0, ql, seepH, seepP, etc...</span>
+    IdxFace <a href="/pkg/builtin/#int">int</a>           <span class="comment">// local index of face</span>
+    Fcn     <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#TimeSpace">TimeSpace</a> <span class="comment">// function callback</span>
+    Extra   <a href="/pkg/builtin/#string">string</a>        <span class="comment">// extra information</span>
 }</pre>
 			<p>
 NaturalBc holds information on natural boundary conditioins such as
@@ -891,7 +891,7 @@ Reset clear values
 		
 			
 			
-			<h2 id="WithFixedKM">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2979:3053#L57">WithFixedKM</a></h2>
+			<h2 id="WithFixedKM">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=2984:3058#L57">WithFixedKM</a></h2>
 			<pre>type WithFixedKM interface {
     Recompute(withM <a href="/pkg/builtin/#bool">bool</a>) <span class="comment">// recompute K and M</span>
 }</pre>
@@ -914,7 +914,7 @@ WithFixedKM defines elements with fixed K,M matrices; to be recomputed if prms a
 		
 			
 			
-			<h2 id="WithIntVars">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=1361:1943#L29">WithIntVars</a></h2>
+			<h2 id="WithIntVars">type <a href="https://github.com/cpmech/gofem/blob/master/ele/element.go?s=1366:1948#L29">WithIntVars</a></h2>
 			<pre>type WithIntVars interface {
     Update(sol *<a href="#Solution">Solution</a>) (err <a href="/pkg/builtin/#error">error</a>)                              <span class="comment">// perform (tangent) update</span>
     SetIniIvs(sol *<a href="#Solution">Solution</a>, ivs map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>) <span class="comment">// sets initial ivs for given values in sol and ivs map</span>

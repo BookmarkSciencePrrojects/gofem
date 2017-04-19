@@ -127,7 +127,7 @@ package out implements FE simulation output handling for analyses and plotting
 				<dd><a href="#ParseKey">func ParseKey(key string) (string, int)</a></dd>
 			
 				
-				<dd><a href="#Plot">func Plot(xHandle, yHandle interface{}, alias string, fm plt.Fmt, idxI int)</a></dd>
+				<dd><a href="#Plot">func Plot(xHandle, yHandle interface{}, alias string, args *plt.A, idxI int)</a></dd>
 			
 				
 				<dd><a href="#Splot">func Splot(id, splotTitle string)</a></dd>
@@ -502,7 +502,7 @@ DefineBeams define aliases for beams; e.g. &#34;beam0&#34;, &#34;beam1&#34;, etc
 		
 			
 			
-			<h2 id="Draw">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=3100:3178#L83">Draw</a></h2>
+			<h2 id="Draw">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=3044:3122#L79">Draw</a></h2>
 			<pre>func Draw(dirout, fname <a href="/pkg/builtin/#string">string</a>, nr, nc <a href="/pkg/builtin/#int">int</a>, split <a href="/pkg/builtin/#bool">bool</a>, extra func(id <a href="/pkg/builtin/#string">string</a>))</pre>
 			<p>
 Draw draws or save figure with plot
@@ -576,7 +576,7 @@ for a single point or set of points.
 		
 			
 			
-			<h2 id="GetTexLabel">func <a href="https://github.com/cpmech/gofem/blob/master/out/styles.go?s=432:473#L13">GetTexLabel</a></h2>
+			<h2 id="GetTexLabel">func <a href="https://github.com/cpmech/gofem/blob/master/out/styles.go?s=428:469#L13">GetTexLabel</a></h2>
 			<pre>func GetTexLabel(key, unit <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
 			
 			
@@ -669,15 +669,15 @@ Examples:  &#34;ux&#34;      =&gt; &#34;ux&#34;, 0
 		
 			
 			
-			<h2 id="Plot">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=2142:2217#L60">Plot</a></h2>
-			<pre>func Plot(xHandle, yHandle interface{}, alias <a href="/pkg/builtin/#string">string</a>, fm <a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#Fmt">Fmt</a>, idxI <a href="/pkg/builtin/#int">int</a>)</pre>
+			<h2 id="Plot">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=2084:2160#L56">Plot</a></h2>
+			<pre>func Plot(xHandle, yHandle interface{}, alias <a href="/pkg/builtin/#string">string</a>, args *<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#A">A</a>, idxI <a href="/pkg/builtin/#int">int</a>)</pre>
 			<p>
 Plot plots data
 </p>
 <pre>xHandle -- can be a string, e.g. &#34;t&#34; or a slice, e.g. pc = []float64{0, 1, 2}
 yHandle -- can be a string, e.g. &#34;pl&#34; or a slice, e.g. sl = []float64{0, 1, 2}
 alias   -- alias such as &#34;centre&#34;
-fm      -- formatting codes; e.g. plt.Fmt{C:&#34;blue&#34;, L:&#34;label&#34;}
+args    -- plotting arguments; e.g. &amp;plt.A{C:&#34;blue&#34;, L:&#34;label&#34;}
 idxI    -- index of time; use -1 for all times
 </pre>
 
@@ -687,7 +687,7 @@ idxI    -- index of time; use -1 for all times
 		
 			
 			
-			<h2 id="Splot">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=1279:1312#L33">Splot</a></h2>
+			<h2 id="Splot">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=1220:1253#L29">Splot</a></h2>
 			<pre>func Splot(id, splotTitle <a href="/pkg/builtin/#string">string</a>)</pre>
 			<p>
 Splot activates a new subplot window
@@ -699,7 +699,7 @@ Splot activates a new subplot window
 		
 			
 			
-			<h2 id="SplotConfig">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=1452:1513#L40">SplotConfig</a></h2>
+			<h2 id="SplotConfig">func <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=1393:1454#L36">SplotConfig</a></h2>
 			<pre>func SplotConfig(xunit, yunit <a href="/pkg/builtin/#string">string</a>, xscale, yscale <a href="/pkg/builtin/#float64">float64</a>)</pre>
 			<p>
 SplotConfig configures units and scales of axes
@@ -1170,14 +1170,14 @@ Locate finds points on plane =&gt; implement the Locator interface
 		
 			
 			
-			<h2 id="PltEntity">type <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=400:650#L8">PltEntity</a></h2>
+			<h2 id="PltEntity">type <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=332:591#L4">PltEntity</a></h2>
 			<pre>type PltEntity struct {
     Alias <a href="/pkg/builtin/#string">string</a>    <span class="comment">// alias</span>
     X     []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// x-values</span>
     Y     []<a href="/pkg/builtin/#float64">float64</a> <span class="comment">// y-values</span>
     Xlbl  <a href="/pkg/builtin/#string">string</a>    <span class="comment">// horizontal axis label (raw; e.g. &#34;t&#34;)</span>
     Ylbl  <a href="/pkg/builtin/#string">string</a>    <span class="comment">// vertical axis label (raw; e.g. &#34;pl&#34;)</span>
-    Style <a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#Fmt">Fmt</a>   <span class="comment">// style</span>
+    Args  *<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#A">A</a>    <span class="comment">// plot arguments</span>
 }</pre>
 			<p>
 PltEntity stores all data for a plot entity (X vs Y)
@@ -1324,7 +1324,7 @@ ResultsMap maps aliases to points
 		
 			
 			
-			<h2 id="SplotDat">type <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=696:1237#L18">SplotDat</a></h2>
+			<h2 id="SplotDat">type <a href="https://github.com/cpmech/gofem/blob/master/out/plotting.go?s=637:1178#L14">SplotDat</a></h2>
 			<pre>type SplotDat struct {
     Id      <a href="/pkg/builtin/#string">string</a>       <span class="comment">// unique identifier</span>
     Title   <a href="/pkg/builtin/#string">string</a>       <span class="comment">// title of subplot</span>
@@ -1357,8 +1357,8 @@ SplotDat stores all data for one subplot
 		
 			
 			
-			<h2 id="Styles">type <a href="https://github.com/cpmech/gofem/blob/master/out/styles.go?s=257:278#L3">Styles</a></h2>
-			<pre>type Styles []<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#Fmt">Fmt</a></pre>
+			<h2 id="Styles">type <a href="https://github.com/cpmech/gofem/blob/master/out/styles.go?s=257:276#L3">Styles</a></h2>
+			<pre>type Styles []<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#A">A</a></pre>
 			<p>
 Styles
 </p>
@@ -1374,7 +1374,7 @@ Styles
 
 			
 				
-				<h3 id="GetDefaultStyles">func <a href="https://github.com/cpmech/gofem/blob/master/out/styles.go?s=280:320#L5">GetDefaultStyles</a></h3>
+				<h3 id="GetDefaultStyles">func <a href="https://github.com/cpmech/gofem/blob/master/out/styles.go?s=278:318#L5">GetDefaultStyles</a></h3>
 				<pre>func GetDefaultStyles(qts <a href="#Points">Points</a>) <a href="#Styles">Styles</a></pre>
 				
 				
