@@ -43,7 +43,6 @@ func main() {
 	}
 
 	// save
-	plt.SetForPng(0.8, 400, 200)
 	out.Draw("/tmp", fnkey+".png", -1, -1, false, func(id string) {
 		plt.Plot(tAna, uyAna, "'g-', clip_on=0, label='analytical'")
 	})

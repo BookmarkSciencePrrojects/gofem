@@ -45,7 +45,6 @@ func main() {
 	out.Csplot.Ylbl = "$n_{\\ell}\\cdot w_{\\ell x}$"
 
 	// save
-	plt.SetForPng(1.5, 400, 200)
 	out.Draw("/tmp", "seep_simple_flux_"+fnkey+".png", -1, -1, false, func(id string) {
 		if id == "x-pl" {
 			plt.Plot([]float64{0, 10}, []float64{10, 9}, "'k--'")

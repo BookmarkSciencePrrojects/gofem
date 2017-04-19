@@ -144,9 +144,7 @@ func main() {
 	// save
 	sim := out.Dom.Sim
 	if onlyLRM {
-		plt.SetForPng(0.75, 400, 200)
 	} else {
-		plt.SetForPng(1.8, 600, 200)
 	}
 	out.Draw("/tmp/gofem", "fig_"+fnkey+".png", -1, -1, false, func(id string) {
 		if id == "lrm" {

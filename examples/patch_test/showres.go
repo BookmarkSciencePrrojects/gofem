@@ -27,7 +27,7 @@ func main() {
 	out.Define("p6", out.N{-106}) // -106=tag
 	out.Define("p7", out.N{-107}) // -107=tag
 	out.LoadResults(nil)
-	
+
 	time := 1
 	ux0 := out.GetRes("ux", "p0", -1)[time]
 	ux1 := out.GetRes("ux", "p1", -1)[time]

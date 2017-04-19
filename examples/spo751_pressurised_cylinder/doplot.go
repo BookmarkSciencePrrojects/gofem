@@ -120,7 +120,6 @@ func main() {
 	markers2 := []string{"+", "+", "+", "+", "+", "+", "+", "+"}
 
 	// plot load displacements
-	plt.SetForPng(0.8, 400, 200)
 	if true {
 		//if false {
 		plt.Plot(Ub_ana, P_ana, "'b-', ms=2, label='solution', clip_on=0")

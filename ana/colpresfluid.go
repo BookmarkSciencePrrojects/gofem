@@ -90,7 +90,6 @@ func (o ColumnFluidPressure) Plot(dirout, fnkey, subscript string, np int) {
 
 	pMaxLin := o.R0 * o.Grav * o.H
 
-	plt.SetForEps(1.2, 400, nil)
 	plt.Subplot(2, 1, 1)
 	plt.Plot(P, Z, &plt.A{C: "k", Ls: "-"})
 	plt.Plot([]float64{o.P0, pMaxLin}, []float64{o.H, 0}, &plt.A{C: "grey", Ls: "--"})

@@ -57,7 +57,6 @@ func Test_colpresfluid01(tst *testing.T) {
 
 	if chk.Verbose {
 
-		plt.SetForEps(1.2, 400, nil)
 		plt.Subplot(2, 1, 1)
 		plt.Plot(P_num, Z, &plt.A{C: "r", Ls: "-", L: "num"})
 		plt.Plot(P_ana, Z, &plt.A{C: "b", Ls: ".", L: "ana", Me: 20})

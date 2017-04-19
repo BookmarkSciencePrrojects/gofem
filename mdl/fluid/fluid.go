@@ -103,7 +103,6 @@ func (o Model) Plot(dirout, fnkey string, np int) {
 		subscript = "g"
 	}
 
-	plt.SetForEps(1.2, 400)
 	plt.Subplot(2, 1, 1)
 	plt.Plot(P, Z, "'b-', clip_on=0")
 	plt.Plot([]float64{o.P0, pMaxLin}, []float64{o.H, 0}, "'k--', color='gray'")

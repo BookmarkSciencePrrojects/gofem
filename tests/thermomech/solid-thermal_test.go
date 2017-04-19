@@ -7,6 +7,7 @@ package main
 import (
 	"sort"
 	"testing"
+
 	"github.com/cpmech/gofem/ele/thermomech"
 	"github.com/cpmech/gofem/fem"
 	"github.com/cpmech/gofem/tests"
@@ -132,7 +133,7 @@ func Test_ut01a(tst *testing.T) {
 		chk.IntAssert(len(dom.EssenBcs.Bcs), 3+5+5)
 		var ct_ux_eqs []int // equations with ux prescribed [sorted]
 		var ct_uy_eqs []int // equations with uy prescribed [sorted]
-		var ct_t_eqs []int // equations with t prescribed [sorted]
+		var ct_t_eqs []int  // equations with t prescribed [sorted]
 		for _, c := range dom.EssenBcs.Bcs {
 			chk.IntAssert(len(c.Eqs), 1)
 			eq := c.Eqs[0]

@@ -210,7 +210,6 @@ func Test_beam03(tst *testing.T) {
 
 	//nstations, withtext, numfmt, tol, coef, sf, onlyLin := 11, true, "", 1e-10, 0.2, 0.0, false
 	if chk.Verbose {
-		//plt.SetForPng(1, 600, 150)
 		//dom.Msh.Draw2d(onlyLin, true, nil, 3)
 		//fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
 		//plt.SaveD("/tmp/gofem", "test_beam03_prob1.png")
@@ -226,7 +225,6 @@ func Test_beam03(tst *testing.T) {
 	check_M(2, 1, 0, 1e-13)
 
 	if chk.Verbose {
-		//plt.SetForPng(1, 600, 150)
 		//dom.Msh.Draw2d(onlyLin, true, nil, 3)
 		//fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
 		//plt.SaveD("/tmp/gofem", "test_beam03_prob2.png")
@@ -242,7 +240,6 @@ func Test_beam03(tst *testing.T) {
 	check_M(2, 1, 0, 1e-13)
 
 	if chk.Verbose {
-		//plt.SetForPng(1, 600, 150)
 		//dom.Msh.Draw2d(onlyLin, true, nil, 3)
 		//fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
 		//plt.SaveD("/tmp/gofem", "test_beam03_prob3.png")
@@ -262,7 +259,6 @@ func Test_beam03(tst *testing.T) {
 	check_M(2, 1, 0, 1e-13)
 
 	if chk.Verbose {
-		//plt.SetForPng(1, 600, 150)
 		//dom.Msh.Draw2d(onlyLin, true, nil, 3)
 		//fem.PlotAllBendingMom2d(dom, nstations, withtext, numfmt, tol, coef, sf)
 		//plt.SaveD("/tmp/gofem", "test_beam03_prob4.png")

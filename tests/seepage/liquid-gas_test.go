@@ -206,12 +206,9 @@ func Test_pp01b(tst *testing.T) {
 		//mdl := ele.Mdl
 		//Cnd := ele.Mdl.Cnd
 		if true {
-			//plt.SetForEps(1.2, 350)
 			//porous.PlotLrm(mdl, "/tmp/gofem", "fig_pp01b_lrm.eps", 30, 101, true, true, true, "", "", "", "", "")
-			//plt.SetForEps(1.2, 350)
 			//conduct.Plot(Cnd, "/tmp/gofem", "fig_pp01b_liq.eps", 101, false, true, true)
 		}
-		//plt.SetForEps(1.2, 350)
 		//conduct.Plot(Cnd, "/tmp/gofem", "fig_pp01b_gas.eps", 101, true, true, true)
 	}
 

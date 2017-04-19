@@ -144,7 +144,6 @@ func Test_mat02(tst *testing.T) {
 	mat := mdb.Get("porous1")
 	io.Pforan("Porous = %v\n", mat.Por)
 	if chk.Verbose {
-		//plt.SetForEps(1.2, 400)
 		porous.PlotLrm(mat.Por, "/tmp/gofem", "fig_mat02_retention.eps", 20, 101, true, true, true, "", "", "", "", "")
 	}
 }

@@ -18,9 +18,9 @@ import (
 //   kval = a0  +  a1 u  +  a2 u² +  a3 u³
 //
 type Thermomech struct {
-	a0, a1, a2, a3, Cp, H, Re, Sb, T0 	float64
-	Acte			[]float64
-	Kcte			[][]float64
+	a0, a1, a2, a3, Cp, H, Re, Sb, T0 float64
+	Acte                              []float64
+	Kcte                              [][]float64
 }
 
 // add model to factory

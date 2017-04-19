@@ -328,7 +328,6 @@ func Test_up01b(tst *testing.T) {
 		}
 
 		// plot
-		//plt.SetForEps(0.75, 400)
 		//Lrm := e.P.Mdl.Lrm
 		//retention.Plot(Lrm, 0, Lrm.SlMax(), 30, 101, false, "'k-^', markerfacecolor='white', ms=5, markevery=10", "", "model")
 		//M := []string{".", "+", "x", "1", "2", "3", "4", "|", "_"}

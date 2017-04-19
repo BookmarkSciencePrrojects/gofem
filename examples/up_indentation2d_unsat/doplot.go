@@ -60,6 +60,5 @@ func main() {
 	}
 
 	// show
-	plt.SetForPng(1, 500, 200)
 	out.Draw("/tmp", "up_indentation2d_unsat_"+fnkey+".png", -1, -1, false, nil)
 }

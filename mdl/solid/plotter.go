@@ -131,11 +131,6 @@ func (o *Plotter) SetFig(split, epsfig bool, prop, width float64, savedir, savef
 	}
 	o.Split = split
 	o.UseEps = epsfig
-	if o.UseEps {
-		plt.SetForEps(prop, width, nil)
-	} else {
-		plt.SetForPng(prop, width, o.PngRes, nil)
-	}
 	o.SaveDir = savedir
 	o.SaveFnk = io.FnKey(savefnk)
 	o.maxR = -1

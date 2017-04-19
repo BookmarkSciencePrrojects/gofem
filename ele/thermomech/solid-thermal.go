@@ -7,6 +7,8 @@ package thermomech
 import (
 	"github.com/cpmech/gofem/inp"
 
+	"math"
+
 	"github.com/cpmech/gofem/ele"
 	elesolid "github.com/cpmech/gofem/ele/solid"
 	mdlsolid "github.com/cpmech/gofem/mdl/solid"
@@ -18,7 +20,6 @@ import (
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
 	"github.com/cpmech/gosl/utl"
-	"math"
 )
 
 // ElemUT implements the solid-thermal coupling

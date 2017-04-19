@@ -39,6 +39,5 @@ func main() {
 	out.Csplot.Ylbl = "$-\\tau$"
 
 	// save
-	plt.SetForPng(0.8, 400, 200)
 	out.Draw("/tmp", fnkey+".png", -1, -1, false, nil)
 }

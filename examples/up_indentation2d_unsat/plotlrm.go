@@ -45,6 +45,5 @@ func main() {
 	out.Csplot.Ylbl = "$n_f$"
 
 	// show
-	plt.SetForPng(1.2, 500, 200)
 	out.Draw("/tmp", "up_indentation2d_unsat_lrm_"+fnkey+".png", -1, -1, false, nil)
 }
