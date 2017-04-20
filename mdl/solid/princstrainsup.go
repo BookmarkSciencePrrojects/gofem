@@ -477,11 +477,11 @@ func (o *PrincStrainsUp) dbg_init(s *State, ε, Δε []float64, eid, ipid int) {
 
 func (o *PrincStrainsUp) dbg_end(s *State, ε []float64, eid, ipid int) func() {
 	if eid == o.DbgEid && ipid == o.DbgIpId {
-		o.DbgPco = append(o.DbgPco, utl.DblCopy(s.Sig))
+		o.DbgPco = append(o.DbgPco, utl.GetCopy(s.Sig))
 		return func() {
 			o.DbgRes = append(o.DbgRes, s.GetCopy())
 			o.DbgSts = append(o.DbgSts, ε)
-			o.DbgPco = append(o.DbgPco, utl.DblCopy(s.Sig))
+			o.DbgPco = append(o.DbgPco, utl.GetCopy(s.Sig))
 		}
 	}
 	return func() {}

@@ -822,7 +822,7 @@ func (o *Beam) PlotDiagMoment(M []float64, withtext bool, numfmt string, tolM, s
 	x := make([]float64, o.Ndim) // station
 	m := make([]float64, o.Ndim) // vector pointing to other side
 	c := make([]float64, o.Ndim) // centre
-	imin, imax := utl.DblArgMinMax(M)
+	imin, imax := utl.ArgMinMax(M)
 
 	// draw text function
 	draw_text := func(mom float64) {
@@ -842,7 +842,7 @@ func (o *Beam) PlotDiagMoment(M []float64, withtext bool, numfmt string, tolM, s
 	}
 
 	// draw
-	pts := utl.DblsAlloc(nstations, 2)
+	pts := utl.Alloc(nstations, 2)
 	xx, yy := make([]float64, 2), make([]float64, 2)
 	for i := 0; i < nstations; i++ {
 

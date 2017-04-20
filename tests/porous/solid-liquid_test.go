@@ -310,7 +310,7 @@ func Test_up01b(tst *testing.T) {
 		// for each output time
 		nip := len(e.OutIpCoords())
 		ntout := len(sum.OutTimes)
-		Pc, Sl := utl.DblsAlloc(nip, ntout), utl.DblsAlloc(nip, ntout)
+		Pc, Sl := utl.Alloc(nip, ntout), utl.Alloc(nip, ntout)
 		for tidx, _ := range sum.OutTimes {
 
 			// input results into domain

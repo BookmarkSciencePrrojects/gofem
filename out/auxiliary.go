@@ -8,7 +8,7 @@ import "github.com/cpmech/gosl/utl"
 
 // CombineEidIps combines eids and ips(ids)
 func CombineEidIps(eids, ips []int) (eids_ips [][]int) {
-	eids_ips = utl.IntsAlloc(len(eids)*len(ips), 2)
+	eids_ips = utl.IntAlloc(len(eids)*len(ips), 2)
 	k := 0
 	for _, eid := range eids {
 		for _, ip := range ips {

@@ -212,7 +212,7 @@ func Test_nurbs04(tst *testing.T) {
 
 func get_nurbs_xmat(nurbs *gm.Nurbs, ibasis []int) (xmat [][]float64) {
 	nd := nurbs.Gnd()
-	xmat = utl.DblsAlloc(nd, len(ibasis))
+	xmat = utl.Alloc(nd, len(ibasis))
 	for k, l := range ibasis {
 		q := nurbs.GetQl(l)
 		for j := 0; j < nd; j++ {

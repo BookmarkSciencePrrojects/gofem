@@ -47,7 +47,7 @@ func (o *M1) Init(ndim int, prms fun.Prms) (err error) {
 	// kcte parameters
 	var kx, ky, kz float64
 	k_values, k_found := prms.GetValues(keys)
-	if !utl.BoolAllTrue(k_found) {
+	if !utl.AllTrue(k_found) {
 		p := prms.Find("k")
 		if p == nil {
 			return chk.Err("M1 model: either 'k' (isotropic) or ['kx', 'ky', 'kz'] must be given in database of material parameters")

@@ -94,13 +94,13 @@ func (o Shape) GetCopy() *Shape {
 	// face data
 	p.FaceFunc = o.FaceFunc
 	p.FaceNvertsMax = o.FaceNvertsMax
-	p.FaceLocalVerts = utl.IntsClone(o.FaceLocalVerts)
+	p.FaceLocalVerts = utl.IntClone(o.FaceLocalVerts)
 	p.FaceFlip = make([]bool, len(o.FaceFlip))
 	copy(p.FaceFlip, o.FaceFlip)
 
 	// geometry: for seams (3D-edges)
 	p.SeamType = o.SeamType
-	p.SeamLocalVerts = utl.IntsClone(o.SeamLocalVerts)
+	p.SeamLocalVerts = utl.IntClone(o.SeamLocalVerts)
 
 	// scratchpad: volume
 	p.S = la.VecClone(o.S)

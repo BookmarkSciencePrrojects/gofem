@@ -51,7 +51,7 @@ func (o *Thermomech) Init(ndim int, prms fun.Prms) (err error) {
 	// acte parameters
 	var ax, ay, az float64
 	a_values, a_found := prms.GetValues(a_keys)
-	if !utl.BoolAllTrue(a_found) {
+	if !utl.AllTrue(a_found) {
 		p := prms.Find("a")
 		if p == nil {
 			return chk.Err("Thermomech model: either 'a' (isotropic) or ['ax', 'ay', 'az'] must be given in database of material parameters")
@@ -81,7 +81,7 @@ func (o *Thermomech) Init(ndim int, prms fun.Prms) (err error) {
 	// kcte parameters
 	var kx, ky, kz float64
 	k_values, k_found := prms.GetValues(k_keys)
-	if !utl.BoolAllTrue(k_found) {
+	if !utl.AllTrue(k_found) {
 		p := prms.Find("k")
 		if p == nil {
 			return chk.Err("Thermomech model: either 'k' (isotropic) or ['kx', 'ky', 'kz'] must be given in database of material parameters")

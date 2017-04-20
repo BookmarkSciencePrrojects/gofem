@@ -12,7 +12,7 @@ import (
 	"github.com/cpmech/gosl/utl"
 )
 
-func read_summary(simfn string) (*utl.DblSlist, string) {
+func read_summary(simfn string) (*utl.SerialList, string) {
 	if simfn == "" {
 		return nil, ""
 	}
@@ -23,7 +23,7 @@ func read_summary(simfn string) (*utl.DblSlist, string) {
 	return &out.Sum.Resids, io.FnKey(simfn)
 }
 
-func count_iters(resid *utl.DblSlist) (N []float64) {
+func count_iters(resid *utl.SerialList) (N []float64) {
 	P := resid.Ptrs
 	for i := 0; i < len(P)-1; i++ {
 		n := P[i+1] - P[i]
@@ -98,7 +98,7 @@ func main() {
 	//plt.SaveD("/tmp", "gofem_residplot_"+fnkA+"_"+fnkB+"_hist.eps")
 }
 
-func plot_conv_curve(fnk string, skip int, resid *utl.DblSlist) {
+func plot_conv_curve(fnk string, skip int, resid *utl.SerialList) {
 	/*
 		R := resid.Vals
 		P := resid.Ptrs

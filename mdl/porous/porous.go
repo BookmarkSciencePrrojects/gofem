@@ -96,7 +96,7 @@ func (o *Model) Init(prms fun.Prms, Cnd conduct.Model, Lrm retention.Model, Liq 
 	// liquid conductivity
 	var klx, kly, klz float64
 	kl_values, kl_found := prms.GetValues([]string{"klx", "kly", "klz"})
-	if !utl.BoolAllTrue(kl_found) {
+	if !utl.AllTrue(kl_found) {
 		p := prms.Find("kl")
 		if p == nil {
 			return chk.Err("porous model: either 'kl' (isotropic) or ['klx', 'kly', 'klz'] must be given in database of material parameters")
@@ -109,7 +109,7 @@ func (o *Model) Init(prms fun.Prms, Cnd conduct.Model, Lrm retention.Model, Liq 
 	// gas conductivity
 	var kgx, kgy, kgz float64
 	kg_values, kg_found := prms.GetValues([]string{"kgx", "kgy", "kgz"})
-	if !utl.BoolAllTrue(kg_found) {
+	if !utl.AllTrue(kg_found) {
 		p := prms.Find("kg")
 		if p == nil {
 			return chk.Err("porous model: either 'kg' (isotropic) or ['kgx', 'kgy', 'kgz'] must be given in database of material parameters")

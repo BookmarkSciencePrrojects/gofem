@@ -19,11 +19,11 @@ import (
 type Summary struct {
 
 	// main data
-	Dirout   string       // directory where results are stored
-	Fnkey    string       // filename key of simulation
-	Nproc    int          // number of processors
-	OutTimes []float64    // [nOutTimes] output times
-	Resids   utl.DblSlist // residuals (if Stat is on; includes all stages)
+	Dirout   string         // directory where results are stored
+	Fnkey    string         // filename key of simulation
+	Nproc    int            // number of processors
+	OutTimes []float64      // [nOutTimes] output times
+	Resids   utl.SerialList // residuals (if Stat is on; includes all stages)
 
 	// auxiliary
 	tidx int // time output index

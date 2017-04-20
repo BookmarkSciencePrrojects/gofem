@@ -206,7 +206,7 @@ func (o *ElastRod) Decode(dec utl.Decoder) (err error) {
 
 // OutIpCoords returns the coordinates of integration points
 func (o *ElastRod) OutIpCoords() (C [][]float64) {
-	C = utl.DblsAlloc(1, o.Ndim) // centroid only
+	C = utl.Alloc(1, o.Ndim) // centroid only
 	for i := 0; i < o.Ndim; i++ {
 		C[0][i] = (o.X[i][0] + o.X[i][1]) / 2.0 // centroid
 	}
