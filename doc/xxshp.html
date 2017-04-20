@@ -716,7 +716,7 @@ Shape holds geometry data
 
 			
 				
-				<h3 id="Get">func <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5058:5106#L129">Get</a></h3>
+				<h3 id="Get">func <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5056:5104#L129">Get</a></h3>
 				<pre>func Get(geoType <a href="/pkg/builtin/#string">string</a>, goroutineId <a href="/pkg/builtin/#int">int</a>) *<a href="#Shape">Shape</a></pre>
 				<p>
 Get returns an existent Shape structure
@@ -744,7 +744,7 @@ Note: FaceLocalVerts does not work for internal surfaces; only those @ boundarie
 
 			
 				
-				<h3 id="Shape.AxisymGetRadius">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=9115:9178#L288">AxisymGetRadius</a></h3>
+				<h3 id="Shape.AxisymGetRadius">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=9113:9176#L288">AxisymGetRadius</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) AxisymGetRadius(x [][]<a href="/pkg/builtin/#float64">float64</a>) (radius <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 AxisymGetRadius returns the x0 == radius for axisymmetric computations
@@ -757,7 +757,7 @@ AxisymGetRadius returns the x0 == radius for axisymmetric computations
 				
 			
 				
-				<h3 id="Shape.AxisymGetRadiusF">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=9383:9460#L297">AxisymGetRadiusF</a></h3>
+				<h3 id="Shape.AxisymGetRadiusF">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=9381:9458#L297">AxisymGetRadiusF</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) AxisymGetRadiusF(x [][]<a href="/pkg/builtin/#float64">float64</a>, idxface <a href="/pkg/builtin/#int">int</a>) (radius <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 AxisymGetRadiusF (face) returns the x0 == radius for axisymmetric computations
@@ -770,7 +770,7 @@ AxisymGetRadiusF (face) returns the x0 == radius for axisymmetric computations
 				
 			
 				
-				<h3 id="Shape.CalcAtFaceIp">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=8016:8096#L245">CalcAtFaceIp</a></h3>
+				<h3 id="Shape.CalcAtFaceIp">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=8014:8094#L245">CalcAtFaceIp</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) CalcAtFaceIp(x [][]<a href="/pkg/builtin/#float64">float64</a>, ipf <a href="#Ipoint">Ipoint</a>, idxface <a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcAtFaceIp calculates face data such as Sf and Fnvec
@@ -788,7 +788,7 @@ Output:
 				
 			
 				
-				<h3 id="Shape.CalcAtIp">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=6359:6434#L179">CalcAtIp</a></h3>
+				<h3 id="Shape.CalcAtIp">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=6357:6432#L179">CalcAtIp</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) CalcAtIp(x [][]<a href="/pkg/builtin/#float64">float64</a>, ip <a href="#Ipoint">Ipoint</a>, derivs <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcAtIp calculates volume data such as S and G at natural coordinate r
@@ -805,7 +805,7 @@ Output:
 				
 			
 				
-				<h3 id="Shape.CalcAtR">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=7634:7710#L234">CalcAtR</a></h3>
+				<h3 id="Shape.CalcAtR">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=7632:7708#L234">CalcAtR</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) CalcAtR(x [][]<a href="/pkg/builtin/#float64">float64</a>, R []<a href="/pkg/builtin/#float64">float64</a>, derivs <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcAtR calculates volume data such as S and G at natural coordinate r
@@ -855,7 +855,7 @@ Extrapolator computes the extrapolation matrix for this Shape with a combination
 				
 			
 				
-				<h3 id="Shape.FaceIpRealCoords">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5815:5901#L161">FaceIpRealCoords</a></h3>
+				<h3 id="Shape.FaceIpRealCoords">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5813:5899#L161">FaceIpRealCoords</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) FaceIpRealCoords(x [][]<a href="/pkg/builtin/#float64">float64</a>, ipf <a href="#Ipoint">Ipoint</a>, idxface <a href="/pkg/builtin/#int">int</a>) (y []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 FaceIpRealCoords returns the real coordinates (y) of an integration point @ face
@@ -944,7 +944,7 @@ Output:
 				
 			
 				
-				<h3 id="Shape.IpRealCoords">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5443:5511#L147">IpRealCoords</a></h3>
+				<h3 id="Shape.IpRealCoords">func (*Shape) <a href="https://github.com/cpmech/gofem/blob/master/shp/shp.go?s=5441:5509#L147">IpRealCoords</a></h3>
 				<pre>func (o *<a href="#Shape">Shape</a>) IpRealCoords(x [][]<a href="/pkg/builtin/#float64">float64</a>, ip <a href="#Ipoint">Ipoint</a>) (y []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 IpRealCoords returns the real coordinates (y) of an integration point

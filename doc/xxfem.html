@@ -1533,15 +1533,15 @@ Solver implements the actual solver (time loop)
 		
 			
 			
-			<h2 id="Summary">type <a href="https://github.com/cpmech/gofem/blob/master/fem/summary.go?s=369:738#L9">Summary</a></h2>
+			<h2 id="Summary">type <a href="https://github.com/cpmech/gofem/blob/master/fem/summary.go?s=369:748#L9">Summary</a></h2>
 			<pre>type Summary struct {
 
     <span class="comment">// main data</span>
-    Dirout   <a href="/pkg/builtin/#string">string</a>       <span class="comment">// directory where results are stored</span>
-    Fnkey    <a href="/pkg/builtin/#string">string</a>       <span class="comment">// filename key of simulation</span>
-    Nproc    <a href="/pkg/builtin/#int">int</a>          <span class="comment">// number of processors</span>
-    OutTimes []<a href="/pkg/builtin/#float64">float64</a>    <span class="comment">// [nOutTimes] output times</span>
-    Resids   <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#DblSlist">DblSlist</a> <span class="comment">// residuals (if Stat is on; includes all stages)</span>
+    Dirout   <a href="/pkg/builtin/#string">string</a>         <span class="comment">// directory where results are stored</span>
+    Fnkey    <a href="/pkg/builtin/#string">string</a>         <span class="comment">// filename key of simulation</span>
+    Nproc    <a href="/pkg/builtin/#int">int</a>            <span class="comment">// number of processors</span>
+    OutTimes []<a href="/pkg/builtin/#float64">float64</a>      <span class="comment">// [nOutTimes] output times</span>
+    Resids   <a href="/pkg/github.com/cpmech/gosl/utl/">utl</a>.<a href="/pkg/github.com/cpmech/gosl/utl/#SerialList">SerialList</a> <span class="comment">// residuals (if Stat is on; includes all stages)</span>
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
 			<p>
@@ -1561,7 +1561,7 @@ Summary records summary of outputs
 
 			
 				
-				<h3 id="Summary.Read">func (*Summary) <a href="https://github.com/cpmech/gofem/blob/master/fem/summary.go?s=1782:1844#L71">Read</a></h3>
+				<h3 id="Summary.Read">func (*Summary) <a href="https://github.com/cpmech/gofem/blob/master/fem/summary.go?s=1792:1854#L71">Read</a></h3>
 				<pre>func (o *<a href="#Summary">Summary</a>) Read(dir, fnkey, enctype <a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Read reads summary back
@@ -1572,7 +1572,7 @@ Read reads summary back
 				
 			
 				
-				<h3 id="Summary.Save">func (Summary) <a href="https://github.com/cpmech/gofem/blob/master/fem/summary.go?s=1233:1328#L43">Save</a></h3>
+				<h3 id="Summary.Save">func (Summary) <a href="https://github.com/cpmech/gofem/blob/master/fem/summary.go?s=1243:1338#L43">Save</a></h3>
 				<pre>func (o <a href="#Summary">Summary</a>) Save(dirout, fnkey, enctype <a href="/pkg/builtin/#string">string</a>, nproc, proc <a href="/pkg/builtin/#int">int</a>, verbose <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SaveSums saves summary to disc
@@ -1583,7 +1583,7 @@ SaveSums saves summary to disc
 				
 			
 				
-				<h3 id="Summary.SaveDomains">func (*Summary) <a href="https://github.com/cpmech/gofem/blob/master/fem/summary.go?s=810:895#L23">SaveDomains</a></h3>
+				<h3 id="Summary.SaveDomains">func (*Summary) <a href="https://github.com/cpmech/gofem/blob/master/fem/summary.go?s=820:905#L23">SaveDomains</a></h3>
 				<pre>func (o *<a href="#Summary">Summary</a>) SaveDomains(time <a href="/pkg/builtin/#float64">float64</a>, doms []*<a href="#Domain">Domain</a>, verbose <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 SaveDomains save the results from all domains (nodes and elements)

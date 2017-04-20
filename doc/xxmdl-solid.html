@@ -527,7 +527,7 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#Plotter.Save">func (o *Plotter) Save(typ, num string)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Plotter.SetFig">func (o *Plotter) SetFig(split, epsfig bool, prop, width float64, savedir, savefnk string)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Plotter.SetFig">func (o *Plotter) SetFig(split bool, prop, width float64, savedir, savefnk string)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Plotter.SetModel">func (o *Plotter) SetModel(m EPmodel)</a></dd>
@@ -2579,7 +2579,7 @@ Size returns the number of path components
 		
 			
 			
-			<h2 id="Plotter">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=1141:5241#L25">Plotter</a></h2>
+			<h2 id="Plotter">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=1141:5187#L25">Plotter</a></h2>
 			<pre>type Plotter struct {
 
     <span class="comment">// optional variables</span>
@@ -2594,7 +2594,6 @@ Size returns the number of path components
     Rmpf     <a href="#RampFcn_t">RampFcn_t</a> <span class="comment">// ramp function</span>
     SaveDir  <a href="/pkg/builtin/#string">string</a>    <span class="comment">// directory to put figure</span>
     SaveFnk  <a href="/pkg/builtin/#string">string</a>    <span class="comment">// save figure after plot (filename)</span>
-    UseEps   <a href="/pkg/builtin/#bool">bool</a>      <span class="comment">// save eps figure instead of png</span>
     QdivP    <a href="/pkg/builtin/#bool">bool</a>      <span class="comment">// q/p in ed, q plot?</span>
     LogP     <a href="/pkg/builtin/#bool">bool</a>      <span class="comment">// use log(p) in εv,log(p) plot</span>
     WithYs   <a href="/pkg/builtin/#bool">bool</a>      <span class="comment">// with yield surface (if model != nil)</span>
@@ -2680,7 +2679,7 @@ Plotter assists on plotting numerical results
 
 			
 				
-				<h3 id="Plotter.DrawRamp">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=24310:24364#L820">DrawRamp</a></h3>
+				<h3 id="Plotter.DrawRamp">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=24239:24293#L818">DrawRamp</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) DrawRamp(xmi, xma, ymi, yma <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 PlotRamp plots the ramp function (contour)
@@ -2691,7 +2690,7 @@ PlotRamp plots the ramp function (contour)
 				
 			
 				
-				<h3 id="Plotter.Plot">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=5926:6012#L144">Plot</a></h3>
+				<h3 id="Plotter.Plot">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=5855:5941#L142">Plot</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Plot(keys []<a href="/pkg/builtin/#string">string</a>, res []*<a href="#State">State</a>, sts [][]<a href="/pkg/builtin/#float64">float64</a>, first, last <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				<p>
 Plot runs the plot generation (basic set)
@@ -2702,7 +2701,7 @@ Plot runs the plot generation (basic set)
 				
 			
 				
-				<h3 id="Plotter.Plot_Dgam_f">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=12707:12794#L439">Plot_Dgam_f</a></h3>
+				<h3 id="Plotter.Plot_Dgam_f">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=12636:12723#L437">Plot_Dgam_f</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Plot_Dgam_f(x, y []<a href="/pkg/builtin/#float64">float64</a>, res []*<a href="#State">State</a>, sts [][]<a href="/pkg/builtin/#float64">float64</a>, last <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				
 				
@@ -2710,7 +2709,7 @@ Plot runs the plot generation (basic set)
 				
 			
 				
-				<h3 id="Plotter.Plot_ed_ev">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=9219:9305#L298">Plot_ed_ev</a></h3>
+				<h3 id="Plotter.Plot_ed_ev">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=9148:9234#L296">Plot_ed_ev</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Plot_ed_ev(x, y []<a href="/pkg/builtin/#float64">float64</a>, res []*<a href="#State">State</a>, sts [][]<a href="/pkg/builtin/#float64">float64</a>, last <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				
 				
@@ -2718,7 +2717,7 @@ Plot runs the plot generation (basic set)
 				
 			
 				
-				<h3 id="Plotter.Plot_ed_q">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=8466:8551#L266">Plot_ed_q</a></h3>
+				<h3 id="Plotter.Plot_ed_q">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=8395:8480#L264">Plot_ed_q</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Plot_ed_q(x, y []<a href="/pkg/builtin/#float64">float64</a>, res []*<a href="#State">State</a>, sts [][]<a href="/pkg/builtin/#float64">float64</a>, last <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				
 				
@@ -2726,7 +2725,7 @@ Plot runs the plot generation (basic set)
 				
 			
 				
-				<h3 id="Plotter.Plot_i_alp">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=12045:12131#L408">Plot_i_alp</a></h3>
+				<h3 id="Plotter.Plot_i_alp">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=11974:12060#L406">Plot_i_alp</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Plot_i_alp(x, y []<a href="/pkg/builtin/#float64">float64</a>, res []*<a href="#State">State</a>, sts [][]<a href="/pkg/builtin/#float64">float64</a>, last <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				
 				
@@ -2734,7 +2733,7 @@ Plot runs the plot generation (basic set)
 				
 			
 				
-				<h3 id="Plotter.Plot_i_f">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=11389:11473#L378">Plot_i_f</a></h3>
+				<h3 id="Plotter.Plot_i_f">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=11318:11402#L376">Plot_i_f</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Plot_i_f(x, y []<a href="/pkg/builtin/#float64">float64</a>, res []*<a href="#State">State</a>, sts [][]<a href="/pkg/builtin/#float64">float64</a>, last <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				
 				
@@ -2742,7 +2741,7 @@ Plot runs the plot generation (basic set)
 				
 			
 				
-				<h3 id="Plotter.Plot_oct">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=17799:17883#L619">Plot_oct</a></h3>
+				<h3 id="Plotter.Plot_oct">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=17728:17812#L617">Plot_oct</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Plot_oct(x, y []<a href="/pkg/builtin/#float64">float64</a>, res []*<a href="#State">State</a>, sts [][]<a href="/pkg/builtin/#float64">float64</a>, last <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				
 				
@@ -2750,7 +2749,7 @@ Plot runs the plot generation (basic set)
 				
 			
 				
-				<h3 id="Plotter.Plot_p_ev">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=9809:9894#L315">Plot_p_ev</a></h3>
+				<h3 id="Plotter.Plot_p_ev">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=9738:9823#L313">Plot_p_ev</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Plot_p_ev(x, y []<a href="/pkg/builtin/#float64">float64</a>, res []*<a href="#State">State</a>, sts [][]<a href="/pkg/builtin/#float64">float64</a>, last <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				
 				
@@ -2758,7 +2757,7 @@ Plot runs the plot generation (basic set)
 				
 			
 				
-				<h3 id="Plotter.Plot_p_q">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=13685:13769#L472">Plot_p_q</a></h3>
+				<h3 id="Plotter.Plot_p_q">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=13614:13698#L470">Plot_p_q</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Plot_p_q(x, y []<a href="/pkg/builtin/#float64">float64</a>, res []*<a href="#State">State</a>, sts [][]<a href="/pkg/builtin/#float64">float64</a>, last <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				
 				
@@ -2766,7 +2765,7 @@ Plot runs the plot generation (basic set)
 				
 			
 				
-				<h3 id="Plotter.Plot_s3_s1">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=21081:21167#L724">Plot_s3_s1</a></h3>
+				<h3 id="Plotter.Plot_s3_s1">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=21010:21096#L722">Plot_s3_s1</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Plot_s3_s1(x, y []<a href="/pkg/builtin/#float64">float64</a>, res []*<a href="#State">State</a>, sts [][]<a href="/pkg/builtin/#float64">float64</a>, last <a href="/pkg/builtin/#bool">bool</a>)</pre>
 				
 				
@@ -2774,7 +2773,7 @@ Plot runs the plot generation (basic set)
 				
 			
 				
-				<h3 id="Plotter.Save">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=25096:25135#L852">Save</a></h3>
+				<h3 id="Plotter.Save">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=25025:25064#L850">Save</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Save(typ, num <a href="/pkg/builtin/#string">string</a>)</pre>
 				<p>
 Save saves figure
@@ -2785,8 +2784,8 @@ Save saves figure
 				
 			
 				
-				<h3 id="Plotter.SetFig">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=5317:5407#L117">SetFig</a></h3>
-				<pre>func (o *<a href="#Plotter">Plotter</a>) SetFig(split, epsfig <a href="/pkg/builtin/#bool">bool</a>, prop, width <a href="/pkg/builtin/#float64">float64</a>, savedir, savefnk <a href="/pkg/builtin/#string">string</a>)</pre>
+				<h3 id="Plotter.SetFig">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=5263:5345#L116">SetFig</a></h3>
+				<pre>func (o *<a href="#Plotter">Plotter</a>) SetFig(split <a href="/pkg/builtin/#bool">bool</a>, prop, width <a href="/pkg/builtin/#float64">float64</a>, savedir, savefnk <a href="/pkg/builtin/#string">string</a>)</pre>
 				<p>
 SetFig sets figure space for plotting
 Note: this method is optional
@@ -2797,7 +2796,7 @@ Note: this method is optional
 				
 			
 				
-				<h3 id="Plotter.SetModel">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=5691:5728#L133">SetModel</a></h3>
+				<h3 id="Plotter.SetModel">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=5620:5657#L131">SetModel</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) SetModel(m <a href="#EPmodel">EPmodel</a>)</pre>
 				<p>
 SetModel sets a solid model in Plotter
@@ -2809,7 +2808,7 @@ Note: this method is optional
 				
 			
 				
-				<h3 id="Plotter.Subplot">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=25402:25429#L870">Subplot</a></h3>
+				<h3 id="Plotter.Subplot">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=25219:25246#L860">Subplot</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Subplot()</pre>
 				<p>
 subplot sets subplot
@@ -2820,7 +2819,7 @@ subplot sets subplot
 				
 			
 				
-				<h3 id="Plotter.Title">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=5802:5838#L139">Title</a></h3>
+				<h3 id="Plotter.Title">func (*Plotter) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/plotter.go?s=5731:5767#L137">Title</a></h3>
 				<pre>func (o *<a href="#Plotter">Plotter</a>) Title(text <a href="/pkg/builtin/#string">string</a>)</pre>
 				<p>
 Title addes title to plot
