@@ -105,5 +105,59 @@ for pkg in pkgs:
     Cmd("sed -i -e 's@/src/target@https://github.com/cpmech/gofem/blob/master/"+pkg[0]+"@g' "+fn+"")
     Cmd("sed -i -e 's@/src/github.com/cpmech/gofem/@https://github.com/cpmech/gofem/blob/master/@g' "+fn+"")
 
+    # fix links to subdirectories (harder to automate)
+    subdirs = []
+    if pkg[0] == "mdl/solid":
+        subdirs = ["data"]
+
+    if pkg[0] == "mdl/porous":
+        subdirs = ["data"]
+
+    if pkg[0] == "inp":
+        subdirs = ["data"]
+
+    if pkg[0] == "ele":
+        subdirs = ["diffusion", "porous", "seepage", "solid", "thermomech"]
+
+    if pkg[0] == "ele/solid":
+        subdirs = ["data"]
+
+    if pkg[0] == "ele/seepage":
+        subdirs = ["data"]
+
+    if pkg[0] == "ele/porous":
+        subdirs = ["data"]
+
+    if pkg[0] == "fem":
+        subdirs = ["data"]
+
+    if pkg[0] == "tests":
+        subdirs = ["data"]
+
+    if pkg[0] == "tests/solid":
+        subdirs = ["cmp", "data"]
+
+    if pkg[0] == "tests/seepage":
+        subdirs = ["data"]
+
+    if pkg[0] == "tests/diffusion":
+        subdirs = ["data"]
+
+    if pkg[0] == "tests/thermomech":
+        subdirs = ["data"]
+
+    if pkg[0] == "tests/porous":
+        subdirs = ["data"]
+
+    if pkg[0] == "out":
+        subdirs = ["cmp", "data"]
+
+    for subdir in subdirs:
+        Cmd("sed -i -e 's@<a href=\""+subdir+"/\">@<a href=\"https://github.com/cpmech/gofem/tree/master/"+pkg[0]+"/"+subdir+"\">@g' "+fn)
+
+
+    # remove link to parent directory
+    Cmd("sed -i -e 's@<td colspan=\"2\"><a href=\"..\">..</a></td>@<td></td>@g' "+fn)
+
 Cmd('echo "</dl>\n</div><!-- manual-nav -->" >> '+idxfn)
 Cmd('echo "'+footer()+'" >> '+idxfn)
