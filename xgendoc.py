@@ -135,7 +135,7 @@ for pkg in pkgs:
         subdirs = ["data"]
 
     if pkg[0] == "tests":
-        subdirs = ["data"]
+        subdirs = ["data", "diffusion", "porous", "seepage", "solid", "thermomech"]
 
     if pkg[0] == "tests/solid":
         subdirs = ["cmp", "data"]
