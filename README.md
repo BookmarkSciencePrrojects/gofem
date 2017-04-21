@@ -40,7 +40,6 @@ developed for obtaining the results presented in a number of journal papers, inc
 25. out              &ndash; output routines (post-processing and plotting)
 
 
-
 ## Examples
 
 See examples here: https://github.com/cpmech/gofem/blob/master/examples/README.md
@@ -57,23 +56,20 @@ cd gofem
 ./all.bash
 ```
 
-The documentation for developers is available here: http://rawgit.com/cpmech/gofem/master/doc/index.html
+Check the **[developer's documentation](http://rawgit.com/cpmech/gofem/master/doc/index.html)** to
+see what's available and how to call functions and methods.
 
 
 
 ## References
 
-1. Pedroso DM (2015) A consistent u-p formulation for porous media with hysteresis. Int Journal for Numerical Methods in Engineering, 101(8) 606-634 http://dx.doi.org/10.1002/nme.4808
-2. Pedroso DM (2015) A solution to transient seepage in unsaturated porous media. Computer Methods in Applied Mechanics and Engineering, 285 791-816 http://dx.doi.org/10.1016/j.cma.2014.12.009
-3. Pedroso DM, Sheng D and Zhao, J (2009) The concept of reference curves for constitutive modelling in soil mechanics, Computers and Geotechnics, 36(1-2), 149-165, http://dx.doi.org/10.1016/j.compgeo.2008.01.009
-4. Pedroso DM and Williams DJ (2010) A novel approach for modelling soil-water characteristic curves with hysteresis, Computers and Geotechnics, 37(3), 374-380, http://dx.doi.org/10.1016/j.compgeo.2009.12.004
-5. Pedroso DM and Williams DJ (2011) Automatic Calibration of soil-water characteristic curves using genetic algorithms. Computers and Geotechnics, 38(3), 330-340, http://dx.doi.org/10.1016/j.compgeo.2010.12.004
-
-
-
-## Acknowledgements
-
-Funding from the Australian Research Council is gratefully acknowledged.
+1. Pedroso DM (2017) FORM reliability analysis using a parallel evolutionary algorithm. Structural Safety, 65:84-99
+2. Pedroso DM, Zhang Y, Ehlers W (2017) Solution of liquid-gas-solid coupled equations for porous media considering dynamics and hysteretic behavior. Journal of Engineering Mechanics, 04017021 http://ascelibrary.org/doi/abs/10.1061/(ASCE)EM.1943-7889.0001208
+3. Pedroso DM (2015) A consistent u-p formulation for porous media with hysteresis. Int Journal for Numerical Methods in Engineering, 101(8) 606-634 http://dx.doi.org/10.1002/nme.4808
+4. Pedroso DM (2015) A solution to transient seepage in unsaturated porous media. Computer Methods in Applied Mechanics and Engineering, 285 791-816 http://dx.doi.org/10.1016/j.cma.2014.12.009
+5. Pedroso DM, Sheng D and Zhao, J (2009) The concept of reference curves for constitutive modelling in soil mechanics, Computers and Geotechnics, 36(1-2), 149-165, http://dx.doi.org/10.1016/j.compgeo.2008.01.009
+6. Pedroso DM and Williams DJ (2010) A novel approach for modelling soil-water characteristic curves with hysteresis, Computers and Geotechnics, 37(3), 374-380, http://dx.doi.org/10.1016/j.compgeo.2009.12.004
+7. Pedroso DM and Williams DJ (2011) Automatic Calibration of soil-water characteristic curves using genetic algorithms. Computers and Geotechnics, 38(3), 330-340, http://dx.doi.org/10.1016/j.compgeo.2010.12.004
 
 
 
