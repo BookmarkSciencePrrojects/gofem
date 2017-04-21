@@ -42,7 +42,7 @@ developed for obtaining the results presented in a number of journal papers, inc
 
 ## Examples
 
-See examples here: https://github.com/cpmech/gofem/blob/master/examples/README.md
+[Check out examples here](https://github.com/cpmech/gofem/blob/master/examples/README.md)
 
 
 
