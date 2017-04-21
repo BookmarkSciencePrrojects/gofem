@@ -125,6 +125,9 @@ for pkg in pkgs:
     if pkg[0] == "ele/seepage":
         subdirs = ["data"]
 
+    if pkg[0] == "ele/diffusion":
+        subdirs = ["data"]
+
     if pkg[0] == "ele/porous":
         subdirs = ["data"]
 
