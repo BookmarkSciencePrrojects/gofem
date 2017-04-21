@@ -103,6 +103,7 @@ for pkg in pkgs:
 
     # fix links
     Cmd("sed -i -e 's@/src/target@https://github.com/cpmech/gofem/blob/master/"+pkg[0]+"@g' "+fn+"")
+    Cmd("sed -i -e 's@/src/github.com/cpmech/gofem/@https://github.com/cpmech/gofem/blob/master/@g' "+fn+"")
 
 Cmd('echo "</dl>\n</div><!-- manual-nav -->" >> '+idxfn)
 Cmd('echo "'+footer()+'" >> '+idxfn)
