@@ -32,7 +32,7 @@ func Test_msh01(tst *testing.T) {
 	chk.Scalar(tst, "ymax", 1e-17, msh.Ymax, 1)
 
 	if chk.Verbose {
-		msh.Draw2d(false, true, nil, 3)
+		msh.Draw2d(false, true, true, nil, nil, nil)
 		plt.Save("/tmp/gofem", "test_msh01")
 	}
 }
@@ -98,6 +98,22 @@ func Test_msh03(tst *testing.T) {
 
 	io.Pforan("MaxElev = %v\n", msh.MaxElev)
 	chk.Scalar(tst, "MaxElev", 1e-17, msh.MaxElev, 1)
+}
+
+func Test_msh04(tst *testing.T) {
+
+	//verbose()
+	chk.PrintTitle("msh04")
+
+	if chk.Verbose {
+		msh, err := ReadMsh("data", "frame2d.msh", 0)
+		if err != nil {
+			tst.Errorf("test failed:\n%v", err)
+			return
+		}
+		msh.Draw2d(false, true, true, nil, nil, nil)
+		plt.Save("/tmp/gofem", "test_msh04")
+	}
 }
 
 func Test_mat01(tst *testing.T) {

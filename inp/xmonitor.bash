@@ -6,5 +6,5 @@ while true; do
     inotifywait -q -e modify $FILES
     echo
     echo
-    go test -test.run="sim03"
+    go test -test.run="msh04"
 done
