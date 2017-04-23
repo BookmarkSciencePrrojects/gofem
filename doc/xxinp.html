@@ -234,7 +234,7 @@ package inp implements the input data read from a (.sim) JSON file
 					<dd>&nbsp; &nbsp; <a href="#Mesh.CalcDerived">func (o *Mesh) CalcDerived(goroutineId int) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Mesh.Draw2d">func (o *Mesh) Draw2d(onlyLin, setup bool, lwds map[int]float64, ms int)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Mesh.Draw2d">func (o *Mesh) Draw2d(onlyLin, setup, withNodes bool, argsCells map[int]*plt.A, argsLins map[int]*plt.A, argsNodes map[int]*plt.A)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Mesh.String">func (o Mesh) String() string</a></dd>
@@ -1239,13 +1239,20 @@ CalcDerived computes derived quantities
 				
 			
 				
-				<h3 id="Mesh.Draw2d">func (*Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=11309:11381#L460">Draw2d</a></h3>
-				<pre>func (o *<a href="#Mesh">Mesh</a>) Draw2d(onlyLin, setup <a href="/pkg/builtin/#bool">bool</a>, lwds map[<a href="/pkg/builtin/#int">int</a>]<a href="/pkg/builtin/#float64">float64</a>, ms <a href="/pkg/builtin/#int">int</a>)</pre>
+				<h3 id="Mesh.Draw2d">func (*Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=11779:11909#L467">Draw2d</a></h3>
+				<pre>func (o *<a href="#Mesh">Mesh</a>) Draw2d(onlyLin, setup, withNodes <a href="/pkg/builtin/#bool">bool</a>, argsCells map[<a href="/pkg/builtin/#int">int</a>]*<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#A">A</a>, argsLins map[<a href="/pkg/builtin/#int">int</a>]*<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#A">A</a>, argsNodes map[<a href="/pkg/builtin/#int">int</a>]*<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#A">A</a>)</pre>
 				<p>
 Draw2d draws 2D mesh
 </p>
-<pre>lwds -- linewidths: maps cid =&gt; lwd. Use &lt;nil&gt; for default lwd
-ms   -- markersize for nodes
+<pre>onlyLin -- show only linear cells
+setup -- setup axis with equal scales and fix range
+withNodes -- draw nodes
+argsCells -- arguments for drawing cells. maps cid =&gt; *plt.A
+             if the cid is -1, use the same *plt.A to all cells. may be nil
+argsLins -- arguments for drawing linear cells. maps cid =&gt; *plt.A
+            if the cid is -1, use the same *plt.A to all lins. may be nil
+argsNodes -- arguments for drawing nodes. maps nid =&gt; *plt.A
+             if the nid is -1, use the same *plt.A to all nodes. may be nil
 </pre>
 
 				
