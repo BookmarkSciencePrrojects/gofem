@@ -104,7 +104,8 @@ func Test_nurbs01(tst *testing.T) {
 	chk.Ints(tst, "1: ibasis", shape1.Ibasis, []int{1, 2, 3, 5, 6, 7})
 
 	if chk.Verbose {
-		gm.PlotNurbs("/tmp/gofem", "tst_nurbs01", nurbs, 21, false, nil)
+		ndim := 2
+		gm.PlotNurbs("/tmp/gofem", "tst_nurbs01", nurbs, ndim, 21, false, false, nil, nil, nil, nil)
 	}
 }
 
@@ -183,8 +184,9 @@ func Test_nurbs03(tst *testing.T) {
 	x = []float64{7, 12}
 	CheckDSdx(tst, shape1, X1, x, tol, verb)
 
-	if false {
-		gm.PlotNurbs("/tmp/gofem", "tst_nurbs03", nurbs, 21, false, nil)
+	if chk.Verbose {
+		ndim := 2
+		gm.PlotNurbs("/tmp/gofem", "tst_nurbs03", nurbs, ndim, 21, false, false, nil, nil, nil, nil)
 	}
 }
 
@@ -196,8 +198,9 @@ func Test_nurbs04(tst *testing.T) {
 	ori := get_nurbs_A()
 	nurbs := ori.KrefineN(3, false)
 
-	if false {
-		gm.PlotNurbs("/tmp/gofem", "tst_nurbs04", nurbs, 21, false, nil)
+	if chk.Verbose {
+		ndim := 2
+		gm.PlotNurbs("/tmp/gofem", "tst_nurbs04", nurbs, ndim, 21, false, false, nil, nil, nil, nil)
 	}
 
 	faces := nurbs.ExtractSurfaces()

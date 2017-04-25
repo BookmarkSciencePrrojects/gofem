@@ -58,9 +58,10 @@ func Test_nurbs01(tst *testing.T) {
 	dom := main.Domains[0]
 
 	// draw NURBS
-	if false {
+	if chk.Verbose {
+		ndim := 2
 		nurbs := dom.Msh.Cells[0].Shp.Nurbs
-		gm.PlotNurbs("/tmp/gofem", "test_nurbs01.png", nurbs, 21, false, nil)
+		gm.PlotNurbs("/tmp/gofem", "test_nurbs01.png", nurbs, ndim, 21, false, false, nil, nil, nil, nil)
 	}
 
 	// nodes and elements
