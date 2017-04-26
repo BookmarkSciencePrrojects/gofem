@@ -14,7 +14,9 @@ import (
 func Test_nurbs01(tst *testing.T) {
 
 	//verbose()
-	chk.PrintTitle("nurbs01")
+	chk.PrintTitle("nurbs01. TEST DISABLED")
+
+	return
 
 	msh, err := ReadMsh("data", "nurbs01.msh", 0)
 	if err != nil {

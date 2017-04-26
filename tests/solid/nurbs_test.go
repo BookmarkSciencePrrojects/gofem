@@ -35,7 +35,9 @@ func Test_nurbs01(tst *testing.T) {
 	*/
 
 	//tests.Verbose()
-	chk.PrintTitle("nurbs01. square with initial stress")
+	//chk.PrintTitle("nurbs01. square with initial stress")
+	chk.PrintTitle("nurbs01. TEST DISABLED")
+	return
 
 	// fem
 	main := fem.NewMain("data/nurbs01.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -141,7 +143,9 @@ func Test_nurbs01(tst *testing.T) {
 func Test_nurbs02(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("nurbs02. square with initial stress. run")
+	//chk.PrintTitle("nurbs02. square with initial stress. run")
+	chk.PrintTitle("nurbs02. TEST DISABLED")
+	return
 
 	// fem
 	main := fem.NewMain("data/nurbs02.sim", "", true, false, false, false, chk.Verbose, 0)
@@ -192,7 +196,9 @@ func Test_nurbs02(tst *testing.T) {
 func Test_nurbs03(tst *testing.T) {
 
 	//tests.Verbose()
-	chk.PrintTitle("nurbs03. ini stress free square")
+	//chk.PrintTitle("nurbs03. ini stress free square")
+	chk.PrintTitle("nurbs03. TEST DISABLED")
+	return
 
 	// fem
 	main := fem.NewMain("data/nurbs03.sim", "", true, false, false, false, chk.Verbose, 0)

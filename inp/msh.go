@@ -105,9 +105,9 @@ type Mesh struct {
 	Part2cells    map[int][]*Cell      // partition number => set of cells
 
 	// NURBS
-	Nurbss   []gm.NurbsD   // all NURBS' data (read from file)
-	PtNurbs  []*gm.Nurbs   // all NURBS' structures (allocated here)
-	NrbFaces [][]*gm.Nurbs // all NURBS' faces
+	Nurbss   []gm.NurbsExchangeData // all NURBS' data (read from file)
+	PtNurbs  []*gm.Nurbs            // all NURBS' structures (allocated here)
+	NrbFaces [][]*gm.Nurbs          // all NURBS' faces
 }
 
 // ReadMsh reads a mesh for FE analyses
