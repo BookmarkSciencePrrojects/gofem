@@ -218,7 +218,7 @@ func NodesOnPlane(ftag int) *PlaneData {
 		for j := 0; j < 2; j++ {
 			u[j] = x[dat.Iu[j]]
 		}
-		err := dat.Ubins.Append(u, vid)
+		err := dat.Ubins.Append(u, vid, nil)
 		if err != nil {
 			chk.Panic("cannot append {u,v} coordinate to bins. u=%v", u)
 		}

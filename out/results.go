@@ -283,7 +283,7 @@ func IntegOnPlane(key, alias string) (res []float64) {
 			u[1] = plane.Umin[1] + float64(j)*plane.Du[1]
 			for i := 0; i < plane.Nu[0]; i++ {
 				u[0] = plane.Umin[0] + float64(i)*plane.Du[0]
-				id := plane.Ubins.Find(u)
+				id, _ := plane.Ubins.FindClosest(u)
 				if id < 0 {
 					chk.Panic("IntegOnPlane with key=%q and alias=%q\nError: cannot find {u,v} coordinate in any bin. u=%v vid/ipid=%d", key, alias, u, id)
 				}

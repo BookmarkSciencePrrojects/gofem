@@ -55,7 +55,7 @@ type OnZplane []float64
 func (o At) Locate() Points {
 
 	// node
-	vid := NodBins.Find(o)
+	vid, _ := NodBins.FindClosest(o)
 	if vid >= 0 {
 		q := get_nod_point(vid, nil)
 		if q != nil {
@@ -64,7 +64,7 @@ func (o At) Locate() Points {
 	}
 
 	// integration point
-	ipid := IpsBins.Find(o)
+	ipid, _ := IpsBins.FindClosest(o)
 	if ipid >= 0 {
 		q := get_ip_point(ipid, nil)
 		if q != nil {
@@ -76,7 +76,7 @@ func (o At) Locate() Points {
 
 // Locate finds integration points
 func (o AtIp) Locate() Points {
-	ipid := IpsBins.Find(o)
+	ipid, _ := IpsBins.FindClosest(o)
 	if ipid >= 0 {
 		q := get_ip_point(ipid, nil)
 		if q != nil {

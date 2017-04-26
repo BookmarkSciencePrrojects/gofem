@@ -117,7 +117,7 @@ func Start(simfnpath string, stageIdx, regionIdx int) {
 
 	// add nodes to bins
 	for _, nod := range Dom.Nodes {
-		err := NodBins.Append(nod.Vert.C, nod.Vert.Id)
+		err := NodBins.Append(nod.Vert.C, nod.Vert.Id, nil)
 		if err != nil {
 			return
 		}
@@ -147,7 +147,7 @@ func Start(simfnpath string, stageIdx, regionIdx int) {
 				ipid := len(Ipoints)
 				ids[i] = ipid
 				Ipoints = append(Ipoints, &IpData_t{cid, coords[i], make(map[string]float64)})
-				err = IpsBins.Append(coords[i], ipid)
+				err = IpsBins.Append(coords[i], ipid, nil)
 				if err != nil {
 					chk.Panic("cannot append to bins of integration points: %v", err)
 				}
