@@ -99,6 +99,7 @@ func main() {
 			{0, 0, 0, -13},     //  7
 			{0, -11, 0, 0},     //  8
 		},
+		nil,
 	}
 	dat.Sregs.Draw(".", "indentD2_blocks")
 
@@ -184,6 +185,7 @@ func main() {
 			{0.00, 3.00},
 		},
 		[]float64{tol, tol, tol, tol, tol, tol, tol, tol, tol, tol, tol, tol, tol, tol, tol, tol, tol, tol, tol, tol},
+		nil,
 	}
 
 	fnk := "square"

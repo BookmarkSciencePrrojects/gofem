@@ -132,7 +132,7 @@ func Test_mat01(tst *testing.T) {
 	io.Pforan("bh.mat just read:\n%v\n", mdb1)
 
 	fn := "test_bh.mat"
-	io.WriteFileSD("/tmp/gofem/inp", fn, mdb1.String())
+	io.WriteStringToFileD("/tmp/gofem/inp", fn, mdb1.String())
 
 	mdb2, err := ReadMat("/tmp/gofem/inp/", fn, 2, false, H, grav)
 	if err != nil {
