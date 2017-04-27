@@ -745,7 +745,7 @@ Along implements locator along line =&gt; LineLocator
 
 			
 				
-				<h3 id="Along.Locate">func (Along) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=3765:3801#L167">Locate</a></h3>
+				<h3 id="Along.Locate">func (Along) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=3795:3831#L167">Locate</a></h3>
 				<pre>func (o <a href="#Along">Along</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points
@@ -777,7 +777,7 @@ AlongX implements LineLocator with []float64{y_cte} or []float64{y_cte, z_cte}
 
 			
 				
-				<h3 id="AlongX.Locate">func (AlongX) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4287:4324#L198">Locate</a></h3>
+				<h3 id="AlongX.Locate">func (AlongX) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4317:4354#L198">Locate</a></h3>
 				<pre>func (o <a href="#AlongX">AlongX</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points
@@ -809,7 +809,7 @@ AlongY implements LineLocator with []float64{x_cte} or []float64{x_cte, z_cte}
 
 			
 				
-				<h3 id="AlongY.Locate">func (AlongY) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4498:4535#L207">Locate</a></h3>
+				<h3 id="AlongY.Locate">func (AlongY) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4528:4565#L207">Locate</a></h3>
 				<pre>func (o <a href="#AlongY">AlongY</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points
@@ -841,7 +841,7 @@ AlongZ implements LineLocator with []float64{x_cte, y_cte}
 
 			
 				
-				<h3 id="AlongZ.Locate">func (AlongZ) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4709:4746#L216">Locate</a></h3>
+				<h3 id="AlongZ.Locate">func (AlongZ) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4739:4776#L216">Locate</a></h3>
 				<pre>func (o <a href="#AlongZ">AlongZ</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points
@@ -907,7 +907,7 @@ AtIp implements locator at integration point =&gt; PointLocator
 
 			
 				
-				<h3 id="AtIp.Locate">func (AtIp) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=1994:2023#L68">Locate</a></h3>
+				<h3 id="AtIp.Locate">func (AtIp) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=2014:2043#L68">Locate</a></h3>
 				<pre>func (o <a href="#AtIp">AtIp</a>) Locate() <a href="#Points">Points</a></pre>
 				<p>
 Locate finds integration points
@@ -986,7 +986,7 @@ Ids or tags of vertices can be stored in Verts
 
 			
 				
-				<h3 id="AllNodes">func <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=5319:5336#L246">AllNodes</a></h3>
+				<h3 id="AllNodes">func <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=5349:5366#L246">AllNodes</a></h3>
 				<pre>func AllNodes() <a href="#N">N</a></pre>
 				<p>
 AllNodes returns all nodes
@@ -998,7 +998,7 @@ AllNodes returns all nodes
 
 			
 				
-				<h3 id="N.Locate">func (N) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=2178:2210#L80">Locate</a></h3>
+				<h3 id="N.Locate">func (N) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=2208:2240#L80">Locate</a></h3>
 				<pre>func (o <a href="#N">N</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds nodes
@@ -1033,7 +1033,7 @@ OnZplane implements locator for nodes/ips on plane perpendicular to z-axis
 
 			
 				
-				<h3 id="OnZplane.Locate">func (OnZplane) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4932:4971#L222">Locate</a></h3>
+				<h3 id="OnZplane.Locate">func (OnZplane) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=4962:5001#L222">Locate</a></h3>
 				<pre>func (o <a href="#OnZplane">OnZplane</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points on z-plane. TODO: use bins to optimise search
@@ -1067,7 +1067,7 @@ Pairs of ids or tags of cells and integration points indices can be stored in Ce
 
 			
 				
-				<h3 id="AllIps">func <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=5149:5164#L235">AllIps</a></h3>
+				<h3 id="AllIps">func <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=5179:5194#L235">AllIps</a></h3>
 				<pre>func AllIps() <a href="#P">P</a></pre>
 				<p>
 AllIps returns all cell/ip indices
@@ -1079,7 +1079,7 @@ AllIps returns all cell/ip indices
 
 			
 				
-				<h3 id="P.Locate">func (P) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=2769:2801#L113">Locate</a></h3>
+				<h3 id="P.Locate">func (P) <a href="https://github.com/cpmech/gofem/blob/master/out/filtering.go?s=2799:2831#L113">Locate</a></h3>
 				<pre>func (o <a href="#P">P</a>) Locate() (res <a href="#Points">Points</a>)</pre>
 				<p>
 Locate finds points

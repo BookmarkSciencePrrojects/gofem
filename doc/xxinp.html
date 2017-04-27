@@ -454,7 +454,7 @@ Cell holds cell data
 
 			
 				
-				<h3 id="Cell.GetNverts">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9081:9119#L353">GetNverts</a></h3>
+				<h3 id="Cell.GetNverts">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9108:9146#L353">GetNverts</a></h3>
 				<pre>func (o *<a href="#Cell">Cell</a>) GetNverts(lbb <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/builtin/#int">int</a></pre>
 				<p>
 GetNverts returns the number of vertices, whether LBB condition is on or not
@@ -465,7 +465,7 @@ GetNverts returns the number of vertices, whether LBB condition is on or not
 				
 			
 				
-				<h3 id="Cell.GetSimilar">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9899:9950#L391">GetSimilar</a></h3>
+				<h3 id="Cell.GetSimilar">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9926:9977#L391">GetSimilar</a></h3>
 				<pre>func (o *<a href="#Cell">Cell</a>) GetSimilar(lbb <a href="/pkg/builtin/#bool">bool</a>) (newcell *<a href="#Cell">Cell</a>)</pre>
 				<p>
 GetSimilar allocates a copy of this cell
@@ -478,7 +478,7 @@ GetSimilar allocates a copy of this cell
 				
 			
 				
-				<h3 id="Cell.GetVtkInfo">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9310:9378#L364">GetVtkInfo</a></h3>
+				<h3 id="Cell.GetVtkInfo">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=9337:9405#L364">GetVtkInfo</a></h3>
 				<pre>func (o *<a href="#Cell">Cell</a>) GetVtkInfo(lbb, v3beam <a href="/pkg/builtin/#bool">bool</a>) (nvtkverts, vtkcode <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 GetVtkInfo returns information about this cell for generating VTK files
@@ -500,7 +500,7 @@ SetFaceConds sets face boundary conditions map in cell
 				
 			
 				
-				<h3 id="Cell.String">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=8646:8676#L333">String</a></h3>
+				<h3 id="Cell.String">func (*Cell) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=8673:8703#L333">String</a></h3>
 				<pre>func (o *<a href="#Cell">Cell</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String returns a JSON representation of *Cell
@@ -1170,7 +1170,7 @@ String prints materials
 		
 			
 			
-			<h2 id="Mesh">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=2284:3347#L74">Mesh</a></h2>
+			<h2 id="Mesh">type <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=2284:3374#L74">Mesh</a></h2>
 			<pre>type Mesh struct {
 
     <span class="comment">// from JSON</span>
@@ -1195,9 +1195,9 @@ String prints materials
     Part2cells    map[<a href="/pkg/builtin/#int">int</a>][]*<a href="#Cell">Cell</a>      <span class="comment">// partition number =&gt; set of cells</span>
 
     <span class="comment">// NURBS</span>
-    Nurbss   []<a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#NurbsD">NurbsD</a>   <span class="comment">// all NURBS&#39; data (read from file)</span>
-    PtNurbs  []*<a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Nurbs">Nurbs</a>   <span class="comment">// all NURBS&#39; structures (allocated here)</span>
-    NrbFaces [][]*<a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Nurbs">Nurbs</a> <span class="comment">// all NURBS&#39; faces</span>
+    Nurbss   []<a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#NurbsExchangeData">NurbsExchangeData</a> <span class="comment">// all NURBS&#39; data (read from file)</span>
+    PtNurbs  []*<a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Nurbs">Nurbs</a>            <span class="comment">// all NURBS&#39; structures (allocated here)</span>
+    NrbFaces [][]*<a href="/pkg/github.com/cpmech/gosl/gm/">gm</a>.<a href="/pkg/github.com/cpmech/gosl/gm/#Nurbs">Nurbs</a>          <span class="comment">// all NURBS&#39; faces</span>
 }</pre>
 			<p>
 Mesh holds a mesh for FE analyses
@@ -1214,7 +1214,7 @@ Mesh holds a mesh for FE analyses
 
 			
 				
-				<h3 id="ReadMsh">func <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=3421:3487#L105">ReadMsh</a></h3>
+				<h3 id="ReadMsh">func <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=3448:3514#L105">ReadMsh</a></h3>
 				<pre>func ReadMsh(dir, fn <a href="/pkg/builtin/#string">string</a>, goroutineId <a href="/pkg/builtin/#int">int</a>) (o *<a href="#Mesh">Mesh</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ReadMsh reads a mesh for FE analyses
@@ -1228,7 +1228,7 @@ ReadMsh reads a mesh for FE analyses
 
 			
 				
-				<h3 id="Mesh.CalcDerived">func (*Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=3827:3882#L129">CalcDerived</a></h3>
+				<h3 id="Mesh.CalcDerived">func (*Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=3854:3909#L129">CalcDerived</a></h3>
 				<pre>func (o *<a href="#Mesh">Mesh</a>) CalcDerived(goroutineId <a href="/pkg/builtin/#int">int</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcDerived computes derived quantities
@@ -1239,7 +1239,7 @@ CalcDerived computes derived quantities
 				
 			
 				
-				<h3 id="Mesh.Draw2d">func (*Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=11779:11909#L467">Draw2d</a></h3>
+				<h3 id="Mesh.Draw2d">func (*Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=11806:11936#L467">Draw2d</a></h3>
 				<pre>func (o *<a href="#Mesh">Mesh</a>) Draw2d(onlyLin, setup, withNodes <a href="/pkg/builtin/#bool">bool</a>, argsCells map[<a href="/pkg/builtin/#int">int</a>]*<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#A">A</a>, argsLins map[<a href="/pkg/builtin/#int">int</a>]*<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#A">A</a>, argsNodes map[<a href="/pkg/builtin/#int">int</a>]*<a href="/pkg/github.com/cpmech/gosl/plt/">plt</a>.<a href="/pkg/github.com/cpmech/gosl/plt/#A">A</a>)</pre>
 				<p>
 Draw2d draws 2D mesh
@@ -1260,7 +1260,7 @@ argsNodes -- arguments for drawing nodes. maps nid =&gt; *plt.A
 				
 			
 				
-				<h3 id="Mesh.String">func (Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=10882:10911#L438">String</a></h3>
+				<h3 id="Mesh.String">func (Mesh) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=10909:10938#L438">String</a></h3>
 				<pre>func (o <a href="#Mesh">Mesh</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String returns a JSON representation of *Mesh
@@ -1725,7 +1725,7 @@ Vert holds vertex data
 
 			
 				
-				<h3 id="Vert.String">func (*Vert) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=8392:8422#L320">String</a></h3>
+				<h3 id="Vert.String">func (*Vert) <a href="https://github.com/cpmech/gofem/blob/master/inp/msh.go?s=8419:8449#L320">String</a></h3>
 				<pre>func (o *<a href="#Vert">Vert</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
 				<p>
 String returns a JSON representation of *Vert
