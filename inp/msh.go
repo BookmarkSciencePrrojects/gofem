@@ -278,7 +278,7 @@ func (o *Mesh) CalcDerived(goroutineId int) (err error) {
 				pairs := o.FaceTag2cells[ftag]
 				o.FaceTag2cells[ftag] = append(pairs, CellFaceId{c, i})
 				for _, l := range c.Shp.FaceLocalVerts[i] {
-					utl.IntIntsMapAppend(&o.FaceTag2verts, ftag, o.Verts[c.Verts[l]].Id)
+					utl.IntIntsMapAppend(o.FaceTag2verts, ftag, o.Verts[c.Verts[l]].Id)
 				}
 			}
 		}
