@@ -34,6 +34,9 @@ type ColumnFluidPressure struct {
 	Grav float64    // gravity acceleration (positive constant)
 	H    float64    // elevation where (R0,p0) is known
 	sol  ode.Solver // ODE solver
+
+	// auxiliary (mutable) variable
+	delz float64 // Δz
 }
 
 // Init initialises this structure
@@ -48,14 +51,13 @@ func (o *ColumnFluidPressure) Init(R0, p0, C, g, H float64, withNum bool) {
 
 	// numerical solver with ξ := {p, R}
 	if withNum {
-		silent := true
-		o.sol.Init("Radau5", 2, func(f []float64, dT, T float64, ξ []float64, args ...interface{}) error {
-			Δz := args[0].(float64)
+		o.sol.Init("Radau5", 2, func(f []float64, dT, T float64, ξ []float64) error {
+			Δz := o.delz
 			R := ξ[1]
 			f[0] = R * o.Grav * Δz // dp/dT
 			f[1] = o.C * f[0]      // dR/dT
 			return nil
-		}, nil, nil, nil, silent)
+		}, nil, nil, nil)
 		o.sol.Distr = false // must be sure to disable this; otherwise it causes problems in parallel runs
 	}
 }
@@ -68,10 +70,10 @@ func (o ColumnFluidPressure) Calc(z float64) (p, R float64) {
 }
 
 // CalcNum computes pressure and density using numerical method
-func (o ColumnFluidPressure) CalcNum(z float64) (p, R float64) {
-	Δz := o.H - z
+func (o *ColumnFluidPressure) CalcNum(z float64) (p, R float64) {
+	o.delz = o.H - z
 	ξ := []float64{o.P0, o.R0}
-	err := o.sol.Solve(ξ, 0, 1, 1, false, Δz)
+	err := o.sol.Solve(ξ, 0, 1, 1, false)
 	if err != nil {
 		chk.Panic("ColumnFluidPressure failed when calculating pressure using ODE solver: %v", err)
 	}
