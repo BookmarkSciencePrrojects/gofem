@@ -154,7 +154,7 @@ func Start(simfnpath string, stageIdx, regionIdx int) {
 
 				// set auxiliary map
 				for _, key := range keys {
-					utl.StrIntsMapAppend(&Ipkey2ips, key, ipid)
+					utl.StrIntsMapAppend(Ipkey2ips, key, ipid)
 					Ipkeys[key] = true
 				}
 

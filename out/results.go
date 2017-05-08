@@ -110,14 +110,14 @@ func LoadResults(times []float64) {
 					nod := Dom.Vid2node[vid]
 					for _, dof := range nod.Dofs {
 						if dof != nil {
-							utl.StrFltsMapAppend(&p.Vals, dof.Key, Dom.Sol.Y[dof.Eq])
+							utl.StrFltsMapAppend(p.Vals, dof.Key, Dom.Sol.Y[dof.Eq])
 						}
 					}
 
 					// add extrapolated values to results map
 					if ExVals != nil {
 						for key, val := range ExVals[vid] {
-							utl.StrFltsMapAppend(&p.Vals, key, val)
+							utl.StrFltsMapAppend(p.Vals, key, val)
 						}
 					}
 				}
@@ -126,7 +126,7 @@ func LoadResults(times []float64) {
 				if pid >= 0 {
 					dat := Ipoints[pid]
 					for key, val := range dat.Vals {
-						utl.StrFltsMapAppend(&p.Vals, key, val)
+						utl.StrFltsMapAppend(p.Vals, key, val)
 					}
 				}
 			}
