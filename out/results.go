@@ -256,7 +256,7 @@ func Integrate(key, alias, along string, idxI int) float64 {
 	if err != nil {
 		chk.Panic("%q: cannot integrate %q along %q:\n%v\n", alias, key, along, err)
 	}
-	return num.Trapz(x, y)
+	return num.QuadDiscreteTrapzXY(x, y)
 }
 
 // IntegOnPlane integrates the results of nodes located on a plane perpedicular to either {x,y,z}
