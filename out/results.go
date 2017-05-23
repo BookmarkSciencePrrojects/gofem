@@ -294,7 +294,7 @@ func IntegOnPlane(key, alias string) (res []float64) {
 				plane.F[i][j] = vals[idxI]
 			}
 		}
-		res[k] = num.Simps2D(plane.Du[0], plane.Du[1], plane.F)
+		res[k] = num.QuadDiscreteSimps2d(plane.Du[0], plane.Du[1], plane.F)
 	}
 	return
 }
