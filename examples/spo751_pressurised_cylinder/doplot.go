@@ -51,10 +51,10 @@ func main() {
 
 	// analytical solution
 	var sol ana.PressCylin
-	sol.Init([]*fun.Prm{
-		&fun.Prm{N: "a", V: a}, &fun.Prm{N: "b", V: b},
-		&fun.Prm{N: "E", V: E}, &fun.Prm{N: "ν", V: ν},
-		&fun.Prm{N: "σy", V: σy},
+	sol.Init([]*fun.P{
+		&fun.P{N: "a", V: a}, &fun.P{N: "b", V: b},
+		&fun.P{N: "E", V: E}, &fun.P{N: "ν", V: ν},
+		&fun.P{N: "σy", V: σy},
 	})
 	np := 41
 	P_ana, Ub_ana := sol.CalcPressDisp(np)
