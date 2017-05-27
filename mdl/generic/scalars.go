@@ -19,7 +19,7 @@ func init() {
 }
 
 // Init initialises this structure
-func (o *Scalars) Init(ndim int, prms fun.Prms) (err error) {
+func (o *Scalars) Init(ndim int, prms fun.Params) (err error) {
 
 	// parameters
 	prms.Connect(&o.A, "A", "A parameter. Scalars model")

@@ -129,9 +129,9 @@ func Test_contact01b(tst *testing.T) {
 
 		// solution
 		var sol ana.CteStressPstrain
-		sol.Init(fun.Prms{
-			&fun.Prm{N: "qnH", V: 0},
-			&fun.Prm{N: "qnV", V: -100},
+		sol.Init(fun.Params{
+			&fun.P{N: "qnH", V: 0},
+			&fun.P{N: "qnV", V: -100},
 		})
 
 		// check displacements

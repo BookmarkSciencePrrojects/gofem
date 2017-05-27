@@ -29,7 +29,7 @@ func init() {
 }
 
 // Init initialises this structure
-func (o *Thermomech) Init(ndim int, prms fun.Prms) (err error) {
+func (o *Thermomech) Init(ndim int, prms fun.Params) (err error) {
 
 	// a[i] parameters
 	prms.Connect(&o.a0, "a0", "a0 Thermomech model")

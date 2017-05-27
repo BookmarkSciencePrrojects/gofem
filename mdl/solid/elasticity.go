@@ -14,7 +14,7 @@ import (
 
 // KGcalculator defines calculators of elasticity coefficients K and G
 type KGcalculator interface {
-	Init(prms fun.Prms) (err error)
+	Init(prms fun.Params) (err error)
 	Calc(s *State) (K, G float64)
 }
 
@@ -23,7 +23,7 @@ var kgcfactory = map[string]func() KGcalculator{}
 
 // GetKgc returns a KG calculator
 // It returns nil on errors
-func GetKgc(name string, prms fun.Prms) KGcalculator {
+func GetKgc(name string, prms fun.Params) KGcalculator {
 	allocator, ok := kgcfactory[name]
 	if !ok {
 		return nil
@@ -53,7 +53,7 @@ func (o *SmallElasticity) GetRho() float64 {
 }
 
 // Init initialises this structure
-func (o *SmallElasticity) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
+func (o *SmallElasticity) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 	o.Nsig = 2 * ndim
 	o.Pse = pstress
 	var has_E, has_ν, has_l, has_G, has_K bool
@@ -107,10 +107,10 @@ func (o *SmallElasticity) Init(ndim int, pstress bool, prms fun.Prms) (err error
 }
 
 // GetPrms gets (an example) of parameters
-func (o SmallElasticity) GetPrms() fun.Prms {
-	return []*fun.Prm{
-		&fun.Prm{N: "E", V: o.E},
-		&fun.Prm{N: "nu", V: o.Nu},
+func (o SmallElasticity) GetPrms() fun.Params {
+	return []*fun.P{
+		&fun.P{N: "E", V: o.E},
+		&fun.P{N: "nu", V: o.Nu},
 	}
 }
 

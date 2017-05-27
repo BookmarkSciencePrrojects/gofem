@@ -258,10 +258,10 @@ type Simulation struct {
 	GasMdl      *fluid.Model // gas model to use when computing density and pressure along column; from stage #0
 
 	// adjustable parameters
-	Adjustable   fun.Prms         // adjustable parameters (not dependent)
-	AdjRandom    rnd.Variables    // adjustable parameters that are random variables (not dependent)
-	AdjDependent fun.Prms         // adjustable parameters that depend on other adjustable parameters
-	adjmap       map[int]*fun.Prm // auxiliary map with adjustable (not dependent)
+	Adjustable   fun.Params     // adjustable parameters (not dependent)
+	AdjRandom    rnd.Variables  // adjustable parameters that are random variables (not dependent)
+	AdjDependent fun.Params     // adjustable parameters that depend on other adjustable parameters
+	adjmap       map[int]*fun.P // auxiliary map with adjustable (not dependent)
 }
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
@@ -436,7 +436,7 @@ func ReadSim(simfilepath, alias string, erasePrev, createDirOut bool, goroutineI
 	}
 
 	// adjustable and random parameters
-	o.adjmap = make(map[int]*fun.Prm)
+	o.adjmap = make(map[int]*fun.P)
 	for _, mat := range o.MatModels.Materials {
 		for _, prm := range mat.Prms {
 			o.append_adjustable_parameter(prm)
@@ -648,7 +648,7 @@ func (o *Simulation) PrmGetAdj(adj int) (val float64) {
 }
 
 // append_adjustable_parameter add prm to lists
-func (o *Simulation) append_adjustable_parameter(prm *fun.Prm) {
+func (o *Simulation) append_adjustable_parameter(prm *fun.P) {
 
 	// adjustable parameter
 	if prm.Adj > 0 {

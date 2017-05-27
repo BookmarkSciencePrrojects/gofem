@@ -36,7 +36,7 @@ func (o *DruckerPrager) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *DruckerPrager) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
+func (o *DruckerPrager) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 
 	// parse parameters
 	err = o.SmallElasticity.Init(ndim, pstress, prms)
@@ -89,12 +89,12 @@ func (o *DruckerPrager) Init(ndim int, pstress bool, prms fun.Prms) (err error) 
 }
 
 // GetPrms gets (an example) of parameters
-func (o DruckerPrager) GetPrms() fun.Prms {
-	return []*fun.Prm{
-		&fun.Prm{N: "M", V: 1},
-		&fun.Prm{N: "Mb", V: 1},
-		&fun.Prm{N: "qy0", V: 0.5},
-		&fun.Prm{N: "H", V: 0},
+func (o DruckerPrager) GetPrms() fun.Params {
+	return []*fun.P{
+		&fun.P{N: "M", V: 1},
+		&fun.P{N: "Mb", V: 1},
+		&fun.P{N: "qy0", V: 0.5},
+		&fun.P{N: "H", V: 0},
 	}
 }
 

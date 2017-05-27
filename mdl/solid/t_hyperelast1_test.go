@@ -20,12 +20,12 @@ func Test_hyperelast01(tst *testing.T) {
 	chk.PrintTitle("hyperelast01")
 
 	var m HyperElast1
-	m.Init(2, false, []*fun.Prm{
-		&fun.Prm{N: "kap", V: 0.05},
-		&fun.Prm{N: "kapb", V: 20.0},
-		&fun.Prm{N: "G0", V: 10000},
-		&fun.Prm{N: "pr", V: 2.0},
-		&fun.Prm{N: "pt", V: 10.0},
+	m.Init(2, false, []*fun.P{
+		&fun.P{N: "kap", V: 0.05},
+		&fun.P{N: "kapb", V: 20.0},
+		&fun.P{N: "G0", V: 10000},
+		&fun.P{N: "pr", V: 2.0},
+		&fun.P{N: "pt", V: 10.0},
 	})
 	io.Pforan("m = %+v\n", m)
 	/*
@@ -110,10 +110,10 @@ func Test_hyperelast02(tst *testing.T) {
 	io.Pforan("G = %v\n", G)
 
 	var m HyperElast1
-	m.Init(2, false, []*fun.Prm{
-		&fun.Prm{N: "K0", V: K},
-		&fun.Prm{N: "G0", V: G},
-		&fun.Prm{N: "le", V: 1},
+	m.Init(2, false, []*fun.P{
+		&fun.P{N: "K0", V: K},
+		&fun.P{N: "G0", V: G},
+		&fun.P{N: "le", V: 1},
 	})
 	io.Pforan("m = %+v\n", m)
 
@@ -150,12 +150,12 @@ func Test_hyperelast03(tst *testing.T) {
 	chk.PrintTitle("hyperelast03 (nonlinear)")
 
 	var m HyperElast1
-	m.Init(2, false, []*fun.Prm{
-		&fun.Prm{N: "kap", V: 0.05},
-		&fun.Prm{N: "kapb", V: 20.0},
-		&fun.Prm{N: "G0", V: 1500},
-		&fun.Prm{N: "pr", V: 2.2},
-		&fun.Prm{N: "pt", V: 11.0},
+	m.Init(2, false, []*fun.P{
+		&fun.P{N: "kap", V: 0.05},
+		&fun.P{N: "kapb", V: 20.0},
+		&fun.P{N: "G0", V: 1500},
+		&fun.P{N: "pr", V: 2.2},
+		&fun.P{N: "pt", V: 11.0},
 	})
 	io.Pforan("m = %+v\n", m)
 

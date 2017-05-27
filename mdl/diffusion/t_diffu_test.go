@@ -25,13 +25,13 @@ func Test_m1(tst *testing.T) {
 		return
 	}
 
-	prms := []*fun.Prm{
-		&fun.Prm{N: "a0", V: 1.0},
-		&fun.Prm{N: "a1", V: 2.0},
-		&fun.Prm{N: "a2", V: 3.0},
-		&fun.Prm{N: "a3", V: 4.0},
-		&fun.Prm{N: "rho", V: 3.3},
-		&fun.Prm{N: "k", V: 0.1},
+	prms := []*fun.P{
+		&fun.P{N: "a0", V: 1.0},
+		&fun.P{N: "a1", V: 2.0},
+		&fun.P{N: "a2", V: 3.0},
+		&fun.P{N: "a3", V: 4.0},
+		&fun.P{N: "rho", V: 3.3},
+		&fun.P{N: "k", V: 0.1},
 	}
 
 	ndim := 3

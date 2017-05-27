@@ -36,7 +36,7 @@ type ConfinedSelfWeight struct {
 }
 
 // Init initialises this structure
-func (o *ConfinedSelfWeight) Init(prms fun.Prms) {
+func (o *ConfinedSelfWeight) Init(prms fun.Params) {
 
 	// default values
 	o.E = 1000.0

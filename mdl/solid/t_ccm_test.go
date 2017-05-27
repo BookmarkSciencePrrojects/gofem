@@ -28,18 +28,18 @@ func Test_ccm01(tst *testing.T) {
 	ndim, pstress := 2, false
 	simfnk, modelname := "test", "ccm"
 	var drv Driver
-	err := drv.Init(simfnk, modelname, ndim, pstress, []*fun.Prm{
-		&fun.Prm{N: "phi", V: 25},
-		&fun.Prm{N: "Mfix", V: 1},
-		&fun.Prm{N: "c", V: 1},
-		&fun.Prm{N: "lam", V: 0.1},
-		&fun.Prm{N: "ocr", V: 1},
-		&fun.Prm{N: "kap", V: 0.05},
-		&fun.Prm{N: "kapb", V: 0.01},
-		&fun.Prm{N: "G0", V: G},
-		&fun.Prm{N: "pr", V: pr},
-		&fun.Prm{N: "le", V: 0},
-		&fun.Prm{N: "K0", V: K},
+	err := drv.Init(simfnk, modelname, ndim, pstress, []*fun.P{
+		&fun.P{N: "phi", V: 25},
+		&fun.P{N: "Mfix", V: 1},
+		&fun.P{N: "c", V: 1},
+		&fun.P{N: "lam", V: 0.1},
+		&fun.P{N: "ocr", V: 1},
+		&fun.P{N: "kap", V: 0.05},
+		&fun.P{N: "kapb", V: 0.01},
+		&fun.P{N: "G0", V: G},
+		&fun.P{N: "pr", V: pr},
+		&fun.P{N: "le", V: 0},
+		&fun.P{N: "K0", V: K},
 	})
 	drv.CheckD = true
 	//drv.CheckD = false

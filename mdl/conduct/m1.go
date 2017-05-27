@@ -35,21 +35,21 @@ func init() {
 }
 
 // GetPrms gets (an example) of parameters
-func (o M1) GetPrms(example bool) fun.Prms {
-	return fun.Prms{
-		&fun.Prm{N: "lam0l", V: 0.001},
-		&fun.Prm{N: "lam1l", V: 1.2},
-		&fun.Prm{N: "alpl", V: 0.01},
-		&fun.Prm{N: "betl", V: 10},
-		&fun.Prm{N: "lam0g", V: 2.0},
-		&fun.Prm{N: "lam1g", V: 0.001},
-		&fun.Prm{N: "alpg", V: 0.01},
-		&fun.Prm{N: "betg", V: 10},
+func (o M1) GetPrms(example bool) fun.Params {
+	return fun.Params{
+		&fun.P{N: "lam0l", V: 0.001},
+		&fun.P{N: "lam1l", V: 1.2},
+		&fun.P{N: "alpl", V: 0.01},
+		&fun.P{N: "betl", V: 10},
+		&fun.P{N: "lam0g", V: 2.0},
+		&fun.P{N: "lam1g", V: 0.001},
+		&fun.P{N: "alpg", V: 0.01},
+		&fun.P{N: "betg", V: 10},
 	}
 }
 
 // Init initialises this structure
-func (o *M1) Init(prms fun.Prms) (err error) {
+func (o *M1) Init(prms fun.Params) (err error) {
 	for _, p := range prms {
 		switch p.N {
 		case "lam0l":
@@ -72,20 +72,20 @@ func (o *M1) Init(prms fun.Prms) (err error) {
 			return chk.Err("parameter named %q is incorrect\n", p.N)
 		}
 	}
-	err = o.klr.Init(fun.Prms{
-		&fun.Prm{N: "lam0", V: o.λ0l},
-		&fun.Prm{N: "lam1", V: o.λ1l},
-		&fun.Prm{N: "alp", V: o.αl},
-		&fun.Prm{N: "bet", V: o.βl},
+	err = o.klr.Init(fun.Params{
+		&fun.P{N: "lam0", V: o.λ0l},
+		&fun.P{N: "lam1", V: o.λ1l},
+		&fun.P{N: "alp", V: o.αl},
+		&fun.P{N: "bet", V: o.βl},
 	})
 	if err != nil {
 		return
 	}
-	err = o.kgr.Init(fun.Prms{
-		&fun.Prm{N: "lam0", V: o.λ0g},
-		&fun.Prm{N: "lam1", V: o.λ1g},
-		&fun.Prm{N: "alp", V: o.αg},
-		&fun.Prm{N: "bet", V: o.βg},
+	err = o.kgr.Init(fun.Params{
+		&fun.P{N: "lam0", V: o.λ0g},
+		&fun.P{N: "lam1", V: o.λ1g},
+		&fun.P{N: "alp", V: o.αg},
+		&fun.P{N: "bet", V: o.βg},
 	})
 	return
 }

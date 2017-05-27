@@ -23,10 +23,10 @@ type PlotFdata struct {
 
 // FuncData holds function definition
 type FuncData struct {
-	Name     string   `json:"name"`     // name of function. ex: zero, load, myfunction1, etc.
-	Type     string   `json:"type"`     // type of function. ex: cte, rmp
-	Prms     fun.Prms `json:"prms"`     // parameters
-	PltExtra string   `json:"pltextra"` // extra arguments for plotting
+	Name     string     `json:"name"`     // name of function. ex: zero, load, myfunction1, etc.
+	Type     string     `json:"type"`     // type of function. ex: cte, rmp
+	Prms     fun.Params `json:"prms"`     // parameters
+	PltExtra string     `json:"pltextra"` // extra arguments for plotting
 
 	// extra data for plotting
 	LabelT, LabelF, LabelG, LabelH, ArgsF, ArgsG, ArgsH string

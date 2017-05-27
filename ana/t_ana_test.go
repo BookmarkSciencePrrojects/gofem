@@ -21,12 +21,12 @@ func Test_platehole01(tst *testing.T) {
 	if chk.Verbose {
 
 		var sol PlateHole
-		sol.Init([]*fun.Prm{
-			&fun.Prm{N: "r", V: 1.0},
-			&fun.Prm{N: "E", V: 1e3},
-			&fun.Prm{N: "nu", V: 0.3},
-			&fun.Prm{N: "qnV", V: 0.0},
-			&fun.Prm{N: "qnH", V: 10.0},
+		sol.Init([]*fun.P{
+			&fun.P{N: "r", V: 1.0},
+			&fun.P{N: "E", V: 1e3},
+			&fun.P{N: "nu", V: 0.3},
+			&fun.P{N: "qnV", V: 0.0},
+			&fun.P{N: "qnH", V: 10.0},
 		})
 
 		L := 4.0
@@ -44,13 +44,13 @@ func Test_selfweight01(tst *testing.T) {
 	chk.PrintTitle("selfweight01")
 
 	var sol ConfinedSelfWeight
-	sol.Init([]*fun.Prm{
-		&fun.Prm{N: "E", V: 1e3},
-		&fun.Prm{N: "nu", V: 0.25},
-		&fun.Prm{N: "rho", V: 2.0},
-		&fun.Prm{N: "g", V: 10.0},
-		&fun.Prm{N: "h", V: 3.0},
-		&fun.Prm{N: "w", V: 1.0},
+	sol.Init([]*fun.P{
+		&fun.P{N: "E", V: 1e3},
+		&fun.P{N: "nu", V: 0.25},
+		&fun.P{N: "rho", V: 2.0},
+		&fun.P{N: "g", V: 10.0},
+		&fun.P{N: "h", V: 3.0},
+		&fun.P{N: "w", V: 1.0},
 	})
 
 	x := []float64{0, 0, 0}

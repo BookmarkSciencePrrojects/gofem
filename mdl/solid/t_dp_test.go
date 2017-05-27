@@ -20,13 +20,13 @@ func Test_dp01(tst *testing.T) {
 	ndim, pstress := 2, false
 	simfnk, modelname := "test", "dp"
 	var drv Driver
-	err := drv.Init(simfnk, modelname, ndim, pstress, []*fun.Prm{
-		&fun.Prm{N: "K", V: 1.5},
-		&fun.Prm{N: "G", V: 1},
-		&fun.Prm{N: "M", V: 0},
-		&fun.Prm{N: "Mb", V: 0},
-		&fun.Prm{N: "qy0", V: 2},
-		&fun.Prm{N: "H", V: 0.5},
+	err := drv.Init(simfnk, modelname, ndim, pstress, []*fun.P{
+		&fun.P{N: "K", V: 1.5},
+		&fun.P{N: "G", V: 1},
+		&fun.P{N: "M", V: 0},
+		&fun.P{N: "Mb", V: 0},
+		&fun.P{N: "qy0", V: 2},
+		&fun.P{N: "H", V: 0.5},
 	})
 	drv.CheckD = true
 	drv.VerD = false // verbose

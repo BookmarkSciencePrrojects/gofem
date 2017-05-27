@@ -165,11 +165,11 @@ func Test_nurbs02(tst *testing.T) {
 
 	// solution
 	var sol ana.CteStressPstrain
-	sol.Init(fun.Prms{
-		&fun.Prm{N: "qnH0", V: -20},
-		&fun.Prm{N: "qnV0", V: -20},
-		&fun.Prm{N: "qnH", V: -50},
-		&fun.Prm{N: "qnV", V: -100},
+	sol.Init(fun.Params{
+		&fun.P{N: "qnH0", V: -20},
+		&fun.P{N: "qnV0", V: -20},
+		&fun.P{N: "qnH", V: -50},
+		&fun.P{N: "qnV", V: -100},
 	})
 
 	// check displacements
@@ -219,9 +219,9 @@ func Test_nurbs03(tst *testing.T) {
 
 	// solution
 	var sol ana.CteStressPstrain
-	sol.Init(fun.Prms{
-		&fun.Prm{N: "qnH", V: -50},
-		&fun.Prm{N: "qnV", V: -100},
+	sol.Init(fun.Params{
+		&fun.P{N: "qnH", V: -50},
+		&fun.P{N: "qnV", V: -100},
 	})
 
 	// check displacements

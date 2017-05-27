@@ -42,7 +42,7 @@ func (o *RjointM1) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *RjointM1) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
+func (o *RjointM1) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 	for _, p := range prms {
 		switch p.N {
 		case "ks":
@@ -67,14 +67,14 @@ func (o *RjointM1) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o RjointM1) GetPrms() fun.Prms {
-	return []*fun.Prm{
-		&fun.Prm{N: "ks", V: 1e4},
-		&fun.Prm{N: "tauy0", V: 20},
-		&fun.Prm{N: "kh", V: 0},
-		&fun.Prm{N: "mu", V: 0.5},
-		&fun.Prm{N: "h", V: 0.1},
-		&fun.Prm{N: "kl", V: 1e4},
+func (o RjointM1) GetPrms() fun.Params {
+	return []*fun.P{
+		&fun.P{N: "ks", V: 1e4},
+		&fun.P{N: "tauy0", V: 20},
+		&fun.P{N: "kh", V: 0},
+		&fun.P{N: "mu", V: 0.5},
+		&fun.P{N: "h", V: 0.1},
+		&fun.P{N: "kl", V: 1e4},
 	}
 }
 

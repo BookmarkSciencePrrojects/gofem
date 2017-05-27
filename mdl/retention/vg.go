@@ -29,7 +29,7 @@ func init() {
 }
 
 // Init initialises model
-func (o *VanGen) Init(prms fun.Prms) (err error) {
+func (o *VanGen) Init(prms fun.Params) (err error) {
 	o.pcmin, o.slmax = 1e-3, 1.0
 	for _, p := range prms {
 		switch strings.ToLower(p.N) {
@@ -59,14 +59,14 @@ func (o *VanGen) Init(prms fun.Prms) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o VanGen) GetPrms(example bool) fun.Prms {
-	return []*fun.Prm{
-		&fun.Prm{N: "alp", V: 0.08},
-		&fun.Prm{N: "m", V: 4},
-		&fun.Prm{N: "n", V: 4},
-		&fun.Prm{N: "slmin", V: 0.01},
-		&fun.Prm{N: "slmax", V: 1.0},
-		&fun.Prm{N: "pcmin", V: 1e-3},
+func (o VanGen) GetPrms(example bool) fun.Params {
+	return []*fun.P{
+		&fun.P{N: "alp", V: 0.08},
+		&fun.P{N: "m", V: 4},
+		&fun.P{N: "n", V: 4},
+		&fun.P{N: "slmin", V: 0.01},
+		&fun.P{N: "slmax", V: 1.0},
+		&fun.P{N: "pcmin", V: 1e-3},
 	}
 }
 

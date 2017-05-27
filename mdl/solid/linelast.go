@@ -21,12 +21,12 @@ func (o *LinElast) Free() {
 }
 
 // Init initialises model
-func (o *LinElast) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
+func (o *LinElast) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 	return o.SmallElasticity.Init(ndim, pstress, prms)
 }
 
 // GetPrms gets (an example) of parameters
-func (o LinElast) GetPrms() fun.Prms {
+func (o LinElast) GetPrms() fun.Params {
 	return o.SmallElasticity.GetPrms()
 }
 

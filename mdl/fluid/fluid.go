@@ -28,7 +28,7 @@ type Model struct {
 }
 
 // Init initialises this structure
-func (o *Model) Init(prms fun.Prms, H, grav float64) {
+func (o *Model) Init(prms fun.Params, H, grav float64) {
 	for _, p := range prms {
 		switch p.N {
 		case "R0":
@@ -50,32 +50,32 @@ func (o *Model) Init(prms fun.Prms, H, grav float64) {
 //   example -- returns example of parameters; othewise returs current parameters
 //  Note:
 //   Gas variable is used to return dry air properties instead of water
-func (o Model) GetPrms(example bool) fun.Prms {
+func (o Model) GetPrms(example bool) fun.Params {
 	if example {
 		if o.Gas {
-			return fun.Prms{ // dry air
-				&fun.Prm{N: "R0", V: 0.0012}, // [Mg/m³]
-				&fun.Prm{N: "P0", V: 0.0},    // [kPa]
-				&fun.Prm{N: "C", V: 1.17e-5}, // [Mg/(m³・kPa)]
-				&fun.Prm{N: "Gas", V: 1},     // [-]
+			return fun.Params{ // dry air
+				&fun.P{N: "R0", V: 0.0012}, // [Mg/m³]
+				&fun.P{N: "P0", V: 0.0},    // [kPa]
+				&fun.P{N: "C", V: 1.17e-5}, // [Mg/(m³・kPa)]
+				&fun.P{N: "Gas", V: 1},     // [-]
 			}
 		}
-		return fun.Prms{ // water
-			&fun.Prm{N: "R0", V: 1.0},    // [Mg/m³]
-			&fun.Prm{N: "P0", V: 0.0},    // [kPa]
-			&fun.Prm{N: "C", V: 4.53e-7}, // [Mg/(m³・kPa)]
-			&fun.Prm{N: "Gas", V: 0},     // [-]
+		return fun.Params{ // water
+			&fun.P{N: "R0", V: 1.0},    // [Mg/m³]
+			&fun.P{N: "P0", V: 0.0},    // [kPa]
+			&fun.P{N: "C", V: 4.53e-7}, // [Mg/(m³・kPa)]
+			&fun.P{N: "Gas", V: 0},     // [-]
 		}
 	}
 	var gas float64
 	if o.Gas {
 		gas = 1
 	}
-	return fun.Prms{
-		&fun.Prm{N: "R0", V: o.R0},
-		&fun.Prm{N: "P0", V: o.P0},
-		&fun.Prm{N: "C", V: o.C},
-		&fun.Prm{N: "Gas", V: gas},
+	return fun.Params{
+		&fun.P{N: "R0", V: o.R0},
+		&fun.P{N: "P0", V: o.P0},
+		&fun.P{N: "C", V: o.C},
+		&fun.P{N: "Gas", V: gas},
 	}
 }
 

@@ -28,7 +28,7 @@ func init() {
 }
 
 // Init initialises model
-func (o *BrooksCorey) Init(prms fun.Prms) (err error) {
+func (o *BrooksCorey) Init(prms fun.Params) (err error) {
 	o.slmax = 1.0
 	for _, p := range prms {
 		switch strings.ToLower(p.N) {
@@ -48,12 +48,12 @@ func (o *BrooksCorey) Init(prms fun.Prms) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o BrooksCorey) GetPrms(example bool) fun.Prms {
-	return []*fun.Prm{
-		&fun.Prm{N: "lam", V: 0.5},
-		&fun.Prm{N: "pcae", V: 0.2},
-		&fun.Prm{N: "slmin", V: 0.1},
-		&fun.Prm{N: "slmax", V: 1.0},
+func (o BrooksCorey) GetPrms(example bool) fun.Params {
+	return []*fun.P{
+		&fun.P{N: "lam", V: 0.5},
+		&fun.P{N: "pcae", V: 0.2},
+		&fun.P{N: "slmin", V: 0.1},
+		&fun.P{N: "slmax", V: 1.0},
 	}
 }
 

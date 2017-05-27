@@ -27,22 +27,22 @@ func Test_smp01(tst *testing.T) {
 	ndim, pstress := 2, false
 	simfnk, modelname := "test", "smp"
 	var drv Driver
-	err := drv.Init(simfnk, modelname, ndim, pstress, []*fun.Prm{
-		&fun.Prm{N: "c", V: 1},
-		&fun.Prm{N: "phi", V: 20},
-		&fun.Prm{N: "a", V: -1},
-		&fun.Prm{N: "b", V: 0.0},
-		&fun.Prm{N: "bet", V: 1},
-		&fun.Prm{N: "eps", V: 1e-3},
-		&fun.Prm{N: "le", V: 1},
-		&fun.Prm{N: "pr", V: 1.0},
-		&fun.Prm{N: "G0", V: G},
-		&fun.Prm{N: "K0", V: K},
-		&fun.Prm{N: "p0", V: 0.0},
-		&fun.Prm{N: "ev0", V: 0.0},
-		&fun.Prm{N: "rtyp", V: 1.0},
-		&fun.Prm{N: "r", V: 1.0},
-		&fun.Prm{N: "pe", V: 10.0},
+	err := drv.Init(simfnk, modelname, ndim, pstress, []*fun.P{
+		&fun.P{N: "c", V: 1},
+		&fun.P{N: "phi", V: 20},
+		&fun.P{N: "a", V: -1},
+		&fun.P{N: "b", V: 0.0},
+		&fun.P{N: "bet", V: 1},
+		&fun.P{N: "eps", V: 1e-3},
+		&fun.P{N: "le", V: 1},
+		&fun.P{N: "pr", V: 1.0},
+		&fun.P{N: "G0", V: G},
+		&fun.P{N: "K0", V: K},
+		&fun.P{N: "p0", V: 0.0},
+		&fun.P{N: "ev0", V: 0.0},
+		&fun.P{N: "rtyp", V: 1.0},
+		&fun.P{N: "r", V: 1.0},
+		&fun.P{N: "pe", V: 10.0},
 	})
 
 	// set flags

@@ -50,7 +50,7 @@ func (o *Ogden) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *Ogden) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
+func (o *Ogden) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 
 	// basic data
 	o.Nsig = 2 * ndim
@@ -82,8 +82,8 @@ func (o *Ogden) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o Ogden) GetPrms() fun.Prms {
-	return []*fun.Prm{}
+func (o Ogden) GetPrms() fun.Params {
+	return []*fun.P{}
 }
 
 // InitIntVars initialises internal (secondary) variables

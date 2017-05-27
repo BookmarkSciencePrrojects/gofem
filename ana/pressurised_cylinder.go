@@ -47,7 +47,7 @@ type PressCylin struct {
 }
 
 // Init initialises this structure
-func (o *PressCylin) Init(prms fun.Prms) {
+func (o *PressCylin) Init(prms fun.Params) {
 
 	// default values
 	o.a = 100    // [mm]

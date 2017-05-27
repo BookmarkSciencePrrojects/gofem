@@ -12,7 +12,7 @@ import (
 
 // Model defines the interface for thermomech models
 type Model interface {
-	Init(ndim int, prms fun.Prms) error // initialises model
+	Init(ndim int, prms fun.Params) error // initialises model
 }
 
 // New thermomech model

@@ -25,11 +25,11 @@ import (
 type Material struct {
 
 	// input
-	Name  string   `json:"name"`  // name of material
-	Type  string   `json:"type"`  // type of material; e.g. "gen", "sld", "fld", "cnd", "lrm", "dif", "trm", "por"
-	Model string   `json:"model"` // name of model; e.g. "dp", "vm", "elast", etc.
-	Deps  []string `json:"deps"`  // dependencies; other material names. e.g. ["water", "dryair", "solid1", "conduct1", "lreten1"]
-	Prms  fun.Prms `json:"prms"`  // prms holds all model parameters for this material
+	Name  string     `json:"name"`  // name of material
+	Type  string     `json:"type"`  // type of material; e.g. "gen", "sld", "fld", "cnd", "lrm", "dif", "trm", "por"
+	Model string     `json:"model"` // name of model; e.g. "dp", "vm", "elast", etc.
+	Deps  []string   `json:"deps"`  // dependencies; other material names. e.g. ["water", "dryair", "solid1", "conduct1", "lreten1"]
+	Prms  fun.Params `json:"prms"`  // prms holds all model parameters for this material
 
 	// derived
 	Gen generic.Model    // pointer to generic model

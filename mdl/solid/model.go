@@ -29,11 +29,11 @@ import (
 
 // Model defines the interface for solid models
 type Model interface {
-	Init(ndim int, pstress bool, prms fun.Prms) error // initialises model
-	InitIntVars(σ []float64) (*State, error)          // initialises AND allocates internal (secondary) variables
-	GetPrms() fun.Prms                                // gets (an example) of parameters
-	GetRho() float64                                  // returns density
-	Free()                                            // free memory; e.g. when calling C code
+	Init(ndim int, pstress bool, prms fun.Params) error // initialises model
+	InitIntVars(σ []float64) (*State, error)            // initialises AND allocates internal (secondary) variables
+	GetPrms() fun.Params                                // gets (an example) of parameters
+	GetRho() float64                                    // returns density
+	Free()                                              // free memory; e.g. when calling C code
 }
 
 // Small defines rate type solid models for small strain analyses

@@ -41,7 +41,7 @@ type CteStressPstrain struct {
 }
 
 // Init initialises this structure
-func (o *CteStressPstrain) Init(prms fun.Prms) {
+func (o *CteStressPstrain) Init(prms fun.Params) {
 
 	// default values
 	o.qnV = -100.0

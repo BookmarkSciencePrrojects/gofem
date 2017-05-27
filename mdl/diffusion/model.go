@@ -12,7 +12,7 @@ import (
 
 // Model defines diffusion models
 type Model interface {
-	Init(ndim int, prms fun.Prms) error // Init initialises this structure
+	Init(ndim int, prms fun.Params) error // Init initialises this structure
 }
 
 // New diffusion model

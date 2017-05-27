@@ -80,7 +80,7 @@ func (o *PrincStrainsUp) Free() {
 }
 
 // Init initialises this structure
-func (o *PrincStrainsUp) Init(ndim int, prms fun.Prms, mdl EPmodel) (err error) {
+func (o *PrincStrainsUp) Init(ndim int, prms fun.Params, mdl EPmodel) (err error) {
 
 	// constants
 	o.Fzero = 1e-9

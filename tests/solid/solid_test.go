@@ -92,11 +92,11 @@ func Test_sigini02(tst *testing.T) {
 
 	// solution
 	var sol ana.CteStressPstrain
-	sol.Init(fun.Prms{
-		&fun.Prm{N: "qnH0", V: -20},
-		&fun.Prm{N: "qnV0", V: -20},
-		&fun.Prm{N: "qnH", V: -50},
-		&fun.Prm{N: "qnV", V: -100},
+	sol.Init(fun.Params{
+		&fun.P{N: "qnH0", V: -20},
+		&fun.P{N: "qnV0", V: -20},
+		&fun.P{N: "qnH", V: -50},
+		&fun.P{N: "qnV", V: -100},
 	})
 
 	// check displacements
@@ -143,9 +143,9 @@ func Test_square01(tst *testing.T) {
 
 	// solution
 	var sol ana.CteStressPstrain
-	sol.Init(fun.Prms{
-		&fun.Prm{N: "qnH", V: -50},
-		&fun.Prm{N: "qnV", V: -100},
+	sol.Init(fun.Params{
+		&fun.P{N: "qnH", V: -50},
+		&fun.P{N: "qnV", V: -100},
 	})
 
 	// check displacements
@@ -224,13 +224,13 @@ func Test_selfweight02(tst *testing.T) {
 
 	// solution
 	var sol ana.ConfinedSelfWeight
-	sol.Init(fun.Prms{
-		&fun.Prm{N: "E", V: 1e3},
-		&fun.Prm{N: "nu", V: 0.25},
-		&fun.Prm{N: "rho", V: 2.0},
-		&fun.Prm{N: "g", V: 10.0},
-		&fun.Prm{N: "h", V: 1.0},
-		&fun.Prm{N: "w", V: 1.0},
+	sol.Init(fun.Params{
+		&fun.P{N: "E", V: 1e3},
+		&fun.P{N: "nu", V: 0.25},
+		&fun.P{N: "rho", V: 2.0},
+		&fun.P{N: "g", V: 10.0},
+		&fun.P{N: "h", V: 1.0},
+		&fun.P{N: "w", V: 1.0},
 	})
 
 	// check displacements

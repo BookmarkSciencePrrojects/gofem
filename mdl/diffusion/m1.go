@@ -29,7 +29,7 @@ func init() {
 }
 
 // Init initialises this structure
-func (o *M1) Init(ndim int, prms fun.Prms) (err error) {
+func (o *M1) Init(ndim int, prms fun.Params) (err error) {
 
 	// a[i] parameters
 	prms.Connect(&o.a0, "a0", "a0 M1 model")

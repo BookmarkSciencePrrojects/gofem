@@ -34,7 +34,7 @@ func (o *VonMises) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *VonMises) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
+func (o *VonMises) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 
 	// parse parameters
 	err = o.SmallElasticity.Init(ndim, pstress, prms)
@@ -61,10 +61,10 @@ func (o *VonMises) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o VonMises) GetPrms() fun.Prms {
-	return []*fun.Prm{
-		&fun.Prm{N: "qy0", V: 0.5},
-		&fun.Prm{N: "H", V: 0},
+func (o VonMises) GetPrms() fun.Params {
+	return []*fun.P{
+		&fun.P{N: "qy0", V: 0.5},
+		&fun.P{N: "H", V: 0},
 	}
 }
 

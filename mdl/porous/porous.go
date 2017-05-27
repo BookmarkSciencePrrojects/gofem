@@ -63,7 +63,7 @@ type Model struct {
 }
 
 // Init initialises this structure
-func (o *Model) Init(prms fun.Prms, Cnd conduct.Model, Lrm retention.Model, Liq *fluid.Model, Gas *fluid.Model, grav float64) (err error) {
+func (o *Model) Init(prms fun.Params, Cnd conduct.Model, Lrm retention.Model, Liq *fluid.Model, Gas *fluid.Model, grav float64) (err error) {
 
 	// constants
 	o.NmaxIt = 20
@@ -182,18 +182,18 @@ func (o *Model) Init(prms fun.Prms, Cnd conduct.Model, Lrm retention.Model, Liq 
 }
 
 // GetPrms gets (an example) of parameters
-func (o Model) GetPrms(example bool) fun.Prms {
+func (o Model) GetPrms(example bool) fun.Params {
 	if example {
-		return fun.Prms{
-			&fun.Prm{N: "nf0", V: 0.3},   // [-]
-			&fun.Prm{N: "RhoS0", V: 2.7}, // [Mg/m³]
-			&fun.Prm{N: "kl", V: 1e-3},   // [m/s]
-			&fun.Prm{N: "kg", V: 1e-2},   // [m/s]
+		return fun.Params{
+			&fun.P{N: "nf0", V: 0.3},   // [-]
+			&fun.P{N: "RhoS0", V: 2.7}, // [Mg/m³]
+			&fun.P{N: "kl", V: 1e-3},   // [m/s]
+			&fun.P{N: "kg", V: 1e-2},   // [m/s]
 		}
 	}
-	return fun.Prms{
-		&fun.Prm{N: "nf0", V: o.Nf0},
-		&fun.Prm{N: "RhoS0", V: o.RhoS0},
+	return fun.Params{
+		&fun.P{N: "nf0", V: o.Nf0},
+		&fun.P{N: "RhoS0", V: o.RhoS0},
 	}
 }
 

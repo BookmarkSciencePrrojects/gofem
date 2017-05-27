@@ -39,7 +39,7 @@ type Driver struct {
 }
 
 // Init initialises driver
-func (o *Driver) Init(simfnk, modelname string, ndim int, pstress bool, prms fun.Prms) (err error) {
+func (o *Driver) Init(simfnk, modelname string, ndim int, pstress bool, prms fun.Params) (err error) {
 	o.nsig = 2 * ndim
 	o.model, err = New(modelname)
 	if err != nil {

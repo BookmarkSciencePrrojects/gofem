@@ -50,7 +50,7 @@ func (o *CamClayMod) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *CamClayMod) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
+func (o *CamClayMod) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 
 	// basic data
 	o.Nsig = 2 * ndim
@@ -102,17 +102,17 @@ func (o *CamClayMod) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o *CamClayMod) GetPrms() fun.Prms {
-	return []*fun.Prm{
-		&fun.Prm{N: "phi", V: 25},
-		&fun.Prm{N: "Mfix", V: 1},
-		&fun.Prm{N: "c", V: 10},
-		&fun.Prm{N: "lam", V: 0.1},
-		&fun.Prm{N: "ocr", V: 1},
-		&fun.Prm{N: "kap", V: 0.05},
-		&fun.Prm{N: "kapb", V: 0},
-		&fun.Prm{N: "G0", V: 10000},
-		&fun.Prm{N: "pr", V: 1.0},
+func (o *CamClayMod) GetPrms() fun.Params {
+	return []*fun.P{
+		&fun.P{N: "phi", V: 25},
+		&fun.P{N: "Mfix", V: 1},
+		&fun.P{N: "c", V: 10},
+		&fun.P{N: "lam", V: 0.1},
+		&fun.P{N: "ocr", V: 1},
+		&fun.P{N: "kap", V: 0.05},
+		&fun.P{N: "kapb", V: 0},
+		&fun.P{N: "G0", V: 10000},
+		&fun.P{N: "pr", V: 1.0},
 	}
 }
 

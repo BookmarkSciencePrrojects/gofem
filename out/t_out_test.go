@@ -125,9 +125,9 @@ func Test_out01(tst *testing.T) {
 
 	// solution
 	var sol ana.CteStressPstrain
-	sol.Init(fun.Prms{
-		&fun.Prm{N: "qnH", V: -50},
-		&fun.Prm{N: "qnV", V: -100},
+	sol.Init(fun.Params{
+		&fun.P{N: "qnH", V: -50},
+		&fun.P{N: "qnV", V: -100},
 	})
 
 	// check displacements
@@ -198,9 +198,9 @@ func Test_out02(tst *testing.T) {
 
 	// solution
 	var sol ana.CteStressPstrain
-	sol.Init(fun.Prms{
-		&fun.Prm{N: "qnH", V: -50},
-		&fun.Prm{N: "qnV", V: -100},
+	sol.Init(fun.Params{
+		&fun.P{N: "qnH", V: -50},
+		&fun.P{N: "qnV", V: -100},
 	})
 
 	// check displacements

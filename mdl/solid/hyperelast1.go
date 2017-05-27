@@ -53,7 +53,7 @@ func (o *HyperElast1) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *HyperElast1) Init(ndim int, pstress bool, prms fun.Prms) (err error) {
+func (o *HyperElast1) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 
 	// constants
 	o.Nsig = 2 * ndim
@@ -97,13 +97,13 @@ func (o *HyperElast1) Set_pt(pt float64) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o *HyperElast1) GetPrms() fun.Prms {
-	return []*fun.Prm{
-		&fun.Prm{N: "kap", V: 0.05},
-		&fun.Prm{N: "kapb", V: 0.001},
-		&fun.Prm{N: "G0", V: 10000},
-		&fun.Prm{N: "pr", V: 2.0},
-		&fun.Prm{N: "pt", V: 1.0},
+func (o *HyperElast1) GetPrms() fun.Params {
+	return []*fun.P{
+		&fun.P{N: "kap", V: 0.05},
+		&fun.P{N: "kapb", V: 0.001},
+		&fun.P{N: "G0", V: 10000},
+		&fun.P{N: "pr", V: 2.0},
+		&fun.P{N: "pt", V: 1.0},
 	}
 }
 

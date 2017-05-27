@@ -38,7 +38,7 @@ type PlateHole struct {
 }
 
 // Init initialises this structure
-func (o *PlateHole) Init(prms fun.Prms) {
+func (o *PlateHole) Init(prms fun.Params) {
 
 	// default values
 	o.r = 1.0
