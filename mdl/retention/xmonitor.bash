@@ -6,5 +6,7 @@ while true; do
     inotifywait -q -e modify $FILES
     echo
     echo
+    echo
+    echo
     go test -test.run="refm1a"
 done

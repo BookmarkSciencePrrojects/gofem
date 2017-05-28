@@ -17,6 +17,9 @@ import (
 //           if args2 == "", plot is skiped
 func Plot(mdl Model, pc0, sl0, pcf float64, npts int, useLog bool, args1, args2, label string) (Pc, Sl, X []float64, err error) {
 
+	// TODO: fix plotting
+	return
+
 	// plot using Update
 	Pc = utl.LinSpace(pc0, pcf, npts)
 	Sl = make([]float64, npts)
@@ -55,16 +58,4 @@ func Plot(mdl Model, pc0, sl0, pcf float64, npts int, useLog bool, args1, args2,
 		}
 	}
 	return
-}
-
-// PlotEnd ends plot and show figure, if show==true
-func PlotEnd(show bool) {
-	/*
-		plt.AxisYrange(0, 1)
-		plt.Cross("")
-		plt.Gll("$p_c$", "$s_{\\ell}$", "")
-		if show {
-			plt.Show()
-		}
-	*/
 }

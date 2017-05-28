@@ -10,7 +10,6 @@ import (
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/la"
-	"github.com/cpmech/gosl/num"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -67,9 +66,8 @@ func Test_m1(tst *testing.T) {
 	U := utl.LinSpace(0, 2.0, 5)
 	for _, uval := range U {
 		dana := m.DkDu(uval)
-		dnum, _ := num.DerivCentral(func(x float64, args ...interface{}) (res float64) {
-			return m.Kval(x)
-		}, uval, 1e-3)
-		chk.Scalar(tst, "DkDu", 1e-9, dana, dnum)
+		chk.DerivScaSca(tst, "DkDu", 1e-9, dana, uval, 1e-3, chk.Verbose, func(x float64) (float64, error) {
+			return m.Kval(x), nil
+		})
 	}
 }

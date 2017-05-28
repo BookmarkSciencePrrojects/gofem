@@ -48,9 +48,5 @@ func Test_vg01(tst *testing.T) {
 	tolCc := 1e-10
 	tolD1a, tolD1b := 1e-10, 1e-17
 	tolD2a, tolD2b := 1e-10, 1e-17
-	Check(tst, mdl, pc0, sl0, pcf, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{}, 1e-7, chk.Verbose)
-
-	if chk.Verbose {
-		PlotEnd(true)
-	}
+	checkDerivs(tst, mdl, pc0, sl0, pcf, nptsB, tolCc, tolD1a, tolD1b, tolD2a, tolD2b, chk.Verbose, []float64{}, 1e-7, chk.Verbose)
 }
