@@ -18,7 +18,7 @@ func Test_shape01(tst *testing.T) {
 
 	r := []float64{0, 0, 0}
 
-	verb := true
+	verb := chk.Verbose
 	for name, shape := range factory {
 
 		io.Pfyel("--------------------------------- %-6s---------------------------------\n", name)
@@ -66,7 +66,7 @@ func Test_shape02(tst *testing.T) {
 	chk.Scalar(tst, "J", 1e-17, shape.J, (dx/dr)*(dy/ds))
 
 	tol := 1e-14
-	verb := true
+	verb := chk.Verbose
 	x := []float64{12.0, 8.5}
 	CheckDSdx(tst, shape, xmat, x, tol, verb)
 }

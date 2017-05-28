@@ -129,7 +129,7 @@ func Test_nurbs02(tst *testing.T) {
 
 	r := []float64{0.75, 0.75, 0}
 	tol := 1e-14
-	verb := true
+	verb := chk.Verbose
 	CheckIsop(tst, shape0, C0, Cnat)
 	CheckIsop(tst, shape1, C1, Cnat)
 	CheckDSdR(tst, shape0, r, tol, verb)
@@ -167,7 +167,7 @@ func Test_nurbs03(tst *testing.T) {
 
 	r := []float64{0.75, 0.75, 0}
 	tol := 1e-14
-	verb := true
+	verb := chk.Verbose
 	CheckIsop(tst, shape0, C0, Cnat)
 	CheckIsop(tst, shape1, C1, Cnat)
 	CheckDSdR(tst, shape0, r, tol, verb)

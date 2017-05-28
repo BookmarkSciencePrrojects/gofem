@@ -10,7 +10,6 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
-	"github.com/cpmech/gosl/num"
 )
 
 // CheckShape checks that shape functions evaluate to 1.0 @ nodes
@@ -127,32 +126,15 @@ func CheckIsop(tst *testing.T, shape *Shape, C [][]float64, Cnat [][]float64) {
 // CheckDSdR checks dSdR derivatives of shape structures
 func CheckDSdR(tst *testing.T, shape *Shape, r []float64, tol float64, verbose bool) {
 
-	// auxiliary
-	r_tmp := make([]float64, len(r))
-	S_tmp := make([]float64, shape.Nverts)
-
 	// analytical
 	shape.Func(shape.S, shape.DSdR, r, true, -1)
 
 	// numerical
-	for n := 0; n < shape.Nverts; n++ {
-		for i := 0; i < shape.Gndim; i++ {
-			dSndRi, _ := num.DerivCentral(func(t float64, args ...interface{}) (Sn float64) {
-				copy(r_tmp, r)
-				r_tmp[i] = t
-				shape.Func(S_tmp, nil, r_tmp, false, -1)
-				Sn = S_tmp[n]
-				return
-			}, r[i], 1e-1)
-			if verbose {
-				io.Pfgrey2("  dS%ddR%d @ %5.2f = %v (num: %v)\n", n, i, r, shape.DSdR[n][i], dSndRi)
-			}
-			if math.Abs(shape.DSdR[n][i]-dSndRi) > tol {
-				tst.Errorf("nurbs dS%ddR%d failed with err = %g\n", n, i, math.Abs(shape.DSdR[n][i]-dSndRi))
-				return
-			}
-		}
-	}
+	n := shape.Gndim
+	chk.DerivVecVec(tst, "dS/dR", tol, shape.DSdR, r[:n], 1e-1, verbose, func(f, x []float64) error {
+		shape.Func(f, nil, x, false, -1) // f := S
+		return nil
+	})
 }
 
 // CheckDSdx checks G=dSdx derivatives of shape structures
@@ -174,32 +156,13 @@ func CheckDSdx(tst *testing.T, shape *Shape, xmat [][]float64, x []float64, tol 
 	}
 
 	// numerical
-	x_tmp := make([]float64, len(x))
-	for n := 0; n < shape.Nverts; n++ {
-		for i := 0; i < shape.Gndim; i++ {
-			dSnDxi, _ := num.DerivCentral(func(t float64, args ...interface{}) (Sn float64) {
-				copy(x_tmp, x)
-				x_tmp[i] = t
-				err = shape.InvMap(r, x_tmp, xmat)
-				if err != nil {
-					tst.Errorf("InvMap failed:\n%v", err)
-					return
-				}
-				err = shape.CalcAtIp(xmat, r, false)
-				if err != nil {
-					tst.Errorf("CalcAtIp failed:\n%v", err)
-					return
-				}
-				Sn = shape.S[n]
-				return
-			}, x[i], 1e-1)
-			if verbose {
-				io.Pfgrey2("  dS%dDx%d @ %5.2f = %v (num: %v)\n", n, i, x, shape.G[n][i], dSnDxi)
-			}
-			if math.Abs(shape.G[n][i]-dSnDxi) > tol {
-				tst.Errorf("nurbs dS%dDx%d failed with err = %g\n", n, i, math.Abs(shape.G[n][i]-dSnDxi))
-				return
-			}
+	chk.DerivVecVec(tst, "dS/Dx", tol, shape.G, x, 1e-1, verbose, func(f, x []float64) error {
+		e := shape.InvMap(r, x, xmat)
+		if e != nil {
+			return e
 		}
-	}
+		e = shape.CalcAtIp(xmat, r, false)
+		copy(f, shape.S)
+		return e
+	})
 }
