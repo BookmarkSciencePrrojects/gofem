@@ -11,7 +11,6 @@ import (
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
-	"github.com/cpmech/gosl/num"
 )
 
 func Test_hyperelast01(tst *testing.T) {
@@ -127,21 +126,12 @@ func Test_hyperelast02(tst *testing.T) {
 	m.L_CalcD(D, ε)
 	la.PrintMat("D", D, "%14.6f", false)
 
-	tol := 1e-11
+	tol := 1e-12
 	verb := io.Verbose
-	var tmp float64
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
-			dnum := num.DerivCen(func(x float64, args ...interface{}) (res float64) {
-				tmp, ε[j] = ε[j], x
-				m.L_update(σ, ε)
-				res = σ[i]
-				ε[j] = tmp
-				return
-			}, ε[j])
-			chk.AnaNum(tst, io.Sf("D%d%d", i, j), tol, D[i][j], dnum, verb)
-		}
-	}
+	chk.DerivVecVec(tst, "D", tol, D, ε, 1e-1, verb, func(f, x []float64) error {
+		m.L_update(f, x)
+		return nil
+	})
 }
 
 func Test_hyperelast03(tst *testing.T) {
@@ -169,19 +159,10 @@ func Test_hyperelast03(tst *testing.T) {
 	m.L_CalcD(D, ε)
 	la.PrintMat("D", D, "%14.6f", false)
 
-	tol := 1e-7
+	tol := 1e-8
 	verb := io.Verbose
-	var tmp float64
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
-			dnum := num.DerivCen(func(x float64, args ...interface{}) (res float64) {
-				tmp, ε[j] = ε[j], x
-				m.L_update(σ, ε)
-				res = σ[i]
-				ε[j] = tmp
-				return
-			}, ε[j])
-			chk.AnaNum(tst, io.Sf("D%d%d", i, j), tol, D[i][j], dnum, verb)
-		}
-	}
+	chk.DerivVecVec(tst, "D", tol, D, ε, 1e-1, verb, func(f, x []float64) error {
+		m.L_update(f, x)
+		return nil
+	})
 }
