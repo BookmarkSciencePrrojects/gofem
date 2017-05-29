@@ -1346,16 +1346,17 @@ YieldFuncs computes yield function values
 		
 			
 			
-			<h2 id="Driver">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=400:1111#L6">Driver</a></h2>
+			<h2 id="Driver">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=382:1007#L7">Driver</a></h2>
 			<pre>type Driver struct {
 
     <span class="comment">// settings</span>
-    Silent  <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// do not show error messages</span>
-    CheckD  <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// do check consistent matrix</span>
-    UseDfwd <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// use DerivFwd (forward differences) instead of DerivCen (central differences) when checking D</span>
-    TolD    <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// tolerance to check consistent matrix</span>
-    VerD    <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// verbose check of D</span>
-    WithPC  <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// with predictor-corrector data</span>
+    Silent <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// do not show error messages</span>
+    TolD   <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// tolerance to check consistent matrix</span>
+    VerD   <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// verbose check of D</span>
+    WithPC <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// with predictor-corrector data</span>
+
+    <span class="comment">// check D matrix</span>
+    TstD *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a> <span class="comment">// if != nil, do check consistent matrix</span>
 
     <span class="comment">// results</span>
     Res []*<a href="#State">State</a>    <span class="comment">// stress/ivs results</span>
@@ -1385,7 +1386,7 @@ Driver run simulations with constitutive models for solids
 
 			
 				
-				<h3 id="Driver.Init">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1140:1240#L32">Init</a></h3>
+				<h3 id="Driver.Init">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1036:1136#L34">Init</a></h3>
 				<pre>func (o *<a href="#Driver">Driver</a>) Init(simfnk, modelname <a href="/pkg/builtin/#string">string</a>, ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises driver
@@ -1396,7 +1397,7 @@ Init initialises driver
 				
 			
 				
-				<h3 id="Driver.InitWithModel">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1531:1596#L49">InitWithModel</a></h3>
+				<h3 id="Driver.InitWithModel">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1427:1492#L51">InitWithModel</a></h3>
 				<pre>func (o *<a href="#Driver">Driver</a>) InitWithModel(ndim <a href="/pkg/builtin/#int">int</a>, model <a href="#Model">Model</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitWithModel initialises driver with existent model
@@ -1407,7 +1408,7 @@ InitWithModel initialises driver with existent model
 				
 			
 				
-				<h3 id="Driver.Run">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1741:1784#L59">Run</a></h3>
+				<h3 id="Driver.Run">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1637:1680#L61">Run</a></h3>
 				<pre>func (o *<a href="#Driver">Driver</a>) Run(pth *<a href="#Path">Path</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Run runs simulation

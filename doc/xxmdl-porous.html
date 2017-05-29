@@ -254,19 +254,20 @@ PlotLrm plots retention. If fnkey!=&#34;&#34;, figure is saved; otherwise it is 
 		
 			
 			
-			<h2 id="Driver">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/driver.go?s=335:780#L4">Driver</a></h2>
+			<h2 id="Driver">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/driver.go?s=317:676#L5">Driver</a></h2>
 			<pre>type Driver struct {
 
     <span class="comment">// input</span>
     Mdl *<a href="#Model">Model</a> <span class="comment">// porous model</span>
 
     <span class="comment">// settings</span>
-    Silent  <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// do not show error messages</span>
-    CheckD  <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// do check consistent matrix</span>
-    UseDfwd <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// use DerivFwd (forward differences) instead of DerivCen (central differences) when checking D</span>
-    TolCcb  <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// tolerance to check Ccb</span>
-    TolCcd  <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// tolerance to check Ccd</span>
-    VerD    <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// verbose check of D</span>
+    Silent <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// do not show error messages</span>
+    TolCcb <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// tolerance to check Ccb</span>
+    TolCcd <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// tolerance to check Ccd</span>
+    VerD   <a href="/pkg/builtin/#bool">bool</a>    <span class="comment">// verbose check of D</span>
+
+    <span class="comment">// check D matrix</span>
+    TstD *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a> <span class="comment">// if != nil, do check consistent matrix</span>
 
     <span class="comment">// results</span>
     Res []*<a href="#State">State</a> <span class="comment">// results</span>
@@ -288,7 +289,7 @@ Driver run simulations with models for porous media
 
 			
 				
-				<h3 id="Driver.Init">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/driver.go?s=809:854#L22">Init</a></h3>
+				<h3 id="Driver.Init">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/driver.go?s=705:750#L24">Init</a></h3>
 				<pre>func (o *<a href="#Driver">Driver</a>) Init(mdl *<a href="#Model">Model</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises driver
@@ -299,7 +300,7 @@ Init initialises driver
 				
 			
 				
-				<h3 id="Driver.Run">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/driver.go?s=977:1023#L32">Run</a></h3>
+				<h3 id="Driver.Run">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/driver.go?s=856:902#L33">Run</a></h3>
 				<pre>func (o *<a href="#Driver">Driver</a>) Run(Pc []<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Run runs simulation
