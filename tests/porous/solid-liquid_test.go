@@ -272,7 +272,7 @@ func Test_up01b(tst *testing.T) {
 
 	// for debugging Kb
 	if true {
-		tests.Liquid(main, &tests.Kb{
+		tests.SolidLiquid(main, &tests.Kb{
 			Tst: tst, Eid: 3, Tol: 1e-8, Tol2: 1e-5, Verb: chk.Verbose,
 			Ni: 1, Nj: 1, ItMin: 1, ItMax: -1, Tmin: -1, Tmax: -1,
 		})

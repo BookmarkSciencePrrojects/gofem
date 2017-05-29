@@ -233,9 +233,9 @@ func Test_diffu02b(tst *testing.T) {
 
 	// for debugging Kb
 	if true {
-		tests.Liquid(main, &tests.Kb{
+		tests.Diffusion(main, &tests.Kb{
 			Tst: tst, Eid: 3, Tol: 1e-6, Verb: chk.Verbose,
-			Ni: -1, Nj: -1, ItMin: -1, ItMax: -1,
+			Ni: -1, Nj: -1, ItMin: -1, ItMax: -1, Tmax: 2000,
 		})
 	}
 

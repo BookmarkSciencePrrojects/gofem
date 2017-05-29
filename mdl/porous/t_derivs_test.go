@@ -94,6 +94,5 @@ func Test_derivs01(tst *testing.T) {
 			Sl[i] = s.A_sl
 		}
 		//plt.Plot(Pc, Sl, "'ko--', clip_on=0")
-		retention.PlotEnd(true)
 	}
 }

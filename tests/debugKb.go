@@ -8,13 +8,13 @@ import (
 	"testing"
 
 	"github.com/cpmech/gofem/ele"
+	"github.com/cpmech/gofem/ele/diffusion"
 	"github.com/cpmech/gofem/ele/porous"
 	"github.com/cpmech/gofem/ele/seepage"
 	"github.com/cpmech/gofem/ele/solid"
 	"github.com/cpmech/gofem/fem"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
-	"github.com/cpmech/gosl/num"
 )
 
 // Kb helps on checking Kb matrices
@@ -38,6 +38,30 @@ type Kb struct {
 	Ybkp  []float64 // auxiliary array
 	ΔYbkp []float64 // auxiliary array
 	Yold  []float64 // auxiliary array
+}
+
+// Diffusion defines a global function to debug Kb for diffusion elements
+func Diffusion(main *fem.Main, o *Kb) {
+	main.DebugKb = func(d *fem.Domain, it int) {
+
+		elem := d.Elems[o.Eid]
+		if e, ok := elem.(*diffusion.Diffusion); ok {
+
+			// skip?
+			o.it = it
+			o.t = d.Sol.T
+			if o.skip() {
+				return
+			}
+
+			// backup and restore upon exit
+			o.aux_backup(d)
+			defer func() { o.aux_restore(d) }()
+
+			// check
+			o.check("K", d, e, e.Umap, e.Umap, e.K, o.Tol)
+		}
+	}
 }
 
 // Liquid defines a global function to debug Kb for p-elements
@@ -262,21 +286,33 @@ func Bjointcomp(main *fem.Main, o *Kb) {
 func (o *Kb) skip() bool {
 	if o.ItMin >= 0 {
 		if o.it < o.ItMin {
+			if o.Verb {
+				io.Pf(". . . skipping because it < ItMin\n")
+			}
 			return true // skip
 		}
 	}
 	if o.ItMax >= 0 {
 		if o.it > o.ItMax {
+			if o.Verb {
+				io.Pf(". . . skipping because it > ItMax\n")
+			}
 			return true // skip
 		}
 	}
 	if o.Tmin >= 0 {
 		if o.t < o.Tmin {
+			if o.Verb {
+				io.Pf(". . . skipping because t > Tmin\n")
+			}
 			return true // skip
 		}
 	}
 	if o.Tmax >= 0 {
 		if o.t > o.Tmax {
+			if o.Verb {
+				io.Pf(". . . skipping because t > Tmax\n")
+			}
 			return true // skip
 		}
 	}
@@ -332,13 +368,10 @@ func (o *Kb) check(label string, d *fem.Domain, e ele.Element, Imap, Jmap []int,
 	if o.Step < 1e-14 {
 		o.Step = 1e-6
 	}
-	//derivfcn := num.DerivForward
-	//derivfcn := num.DerivBackward
-	derivfcn := num.DerivCentral
 	var tmp float64
 	for i, I := range imap {
 		for j, J := range jmap {
-			dnum, _ := derivfcn(func(x float64, args ...interface{}) (res float64) {
+			chk.DerivScaSca(o.Tst, io.Sf(label+"%3d%3d", i, j), tol, Kana[i][j], d.Sol.Y[J], o.Step, o.Verb, func(x float64) (float64, error) {
 				tmp, d.Sol.Y[J] = d.Sol.Y[J], x
 				for k := 0; k < d.Ny; k++ {
 					o.Fbtmp[k] = 0
@@ -349,14 +382,12 @@ func (o *Kb) check(label string, d *fem.Domain, e ele.Element, Imap, Jmap []int,
 				}
 				err := d.UpdateElems()
 				if err != nil {
-					chk.Panic("testing: check: cannot update elements")
+					return 0, err
 				}
 				e.AddToRhs(o.Fbtmp, d.Sol)
-				res = -o.Fbtmp[I]
 				d.Sol.Y[J] = tmp
-				return res
-			}, d.Sol.Y[J], o.Step)
-			chk.AnaNum(o.Tst, io.Sf(label+"%3d%3d", i, j), tol, Kana[i][j], dnum, o.Verb)
+				return -o.Fbtmp[I], nil
+			})
 		}
 	}
 }
