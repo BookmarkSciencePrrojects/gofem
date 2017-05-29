@@ -84,13 +84,7 @@ package retention implements models for liquid retention curves
 			
 			
 				
-				<dd><a href="#Check">func Check(tst *testing.T, mdl Model, pc0, sl0, pcf float64, npts int, tolCc, tolD1a, tolD1b, tolD2a, tolD2b float64, verbose bool, pcSkip []float64, tolSkip float64, doplot bool)</a></dd>
-			
-				
 				<dd><a href="#Plot">func Plot(mdl Model, pc0, sl0, pcf float64, npts int, useLog bool, args1, args2, label string) (Pc, Sl, X []float64, err error)</a></dd>
-			
-				
-				<dd><a href="#PlotEnd">func PlotEnd(show bool)</a></dd>
 			
 				
 				<dd><a href="#Update">func Update(mdl Model, pc0, sl0, Δpc float64) (slNew float64, err error)</a></dd>
@@ -107,10 +101,10 @@ package retention implements models for liquid retention curves
 					<dd>&nbsp; &nbsp; <a href="#BrooksCorey.Derivs">func (o BrooksCorey) Derivs(pc, sl float64, wet bool) (L, Lx, J, Jx, Jy float64, err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#BrooksCorey.GetPrms">func (o BrooksCorey) GetPrms(example bool) fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#BrooksCorey.GetPrms">func (o BrooksCorey) GetPrms(example bool) fun.Params</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#BrooksCorey.Init">func (o *BrooksCorey) Init(prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#BrooksCorey.Init">func (o *BrooksCorey) Init(prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#BrooksCorey.J">func (o BrooksCorey) J(pc, sl float64, wet bool) (float64, error)</a></dd>
@@ -139,10 +133,10 @@ package retention implements models for liquid retention curves
 					<dd>&nbsp; &nbsp; <a href="#Lin.Derivs">func (o Lin) Derivs(pc, sl float64, wet bool) (L, Lx, J, Jx, Jy float64, err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Lin.GetPrms">func (o Lin) GetPrms(example bool) fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Lin.GetPrms">func (o Lin) GetPrms(example bool) fun.Params</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Lin.Init">func (o *Lin) Init(prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Lin.Init">func (o *Lin) Init(prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Lin.J">func (o Lin) J(pc, sl float64, wet bool) (float64, error)</a></dd>
@@ -184,10 +178,10 @@ package retention implements models for liquid retention curves
 					<dd>&nbsp; &nbsp; <a href="#RefM1.Derivs">func (o *RefM1) Derivs(pc, sl float64, wet bool) (L, Lx, J, Jx, Jy float64, err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#RefM1.GetPrms">func (o RefM1) GetPrms(example bool) fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#RefM1.GetPrms">func (o RefM1) GetPrms(example bool) fun.Params</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#RefM1.Init">func (o *RefM1) Init(prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#RefM1.Init">func (o *RefM1) Init(prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#RefM1.J">func (o RefM1) J(pc, sl float64, wet bool) (float64, error)</a></dd>
@@ -213,10 +207,10 @@ package retention implements models for liquid retention curves
 					<dd>&nbsp; &nbsp; <a href="#VanGen.Derivs">func (o VanGen) Derivs(pc, sl float64, wet bool) (L, Lx, J, Jx, Jy float64, err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#VanGen.GetPrms">func (o VanGen) GetPrms(example bool) fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#VanGen.GetPrms">func (o VanGen) GetPrms(example bool) fun.Params</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#VanGen.Init">func (o *VanGen) Init(prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#VanGen.Init">func (o *VanGen) Init(prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#VanGen.J">func (o VanGen) J(pc, sl float64, wet bool) (float64, error)</a></dd>
@@ -307,18 +301,6 @@ package retention implements models for liquid retention curves
 		
 			
 			
-			<h2 id="Check">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/testing.go?s=361:540#L8">Check</a></h2>
-			<pre>func Check(tst *<a href="/pkg/testing/">testing</a>.<a href="/pkg/testing/#T">T</a>, mdl <a href="#Model">Model</a>, pc0, sl0, pcf <a href="/pkg/builtin/#float64">float64</a>, npts <a href="/pkg/builtin/#int">int</a>, tolCc, tolD1a, tolD1b, tolD2a, tolD2b <a href="/pkg/builtin/#float64">float64</a>, verbose <a href="/pkg/builtin/#bool">bool</a>, pcSkip []<a href="/pkg/builtin/#float64">float64</a>, tolSkip <a href="/pkg/builtin/#float64">float64</a>, doplot <a href="/pkg/builtin/#bool">bool</a>)</pre>
-			<p>
-Check checks derivatives
-</p>
-
-			
-			
-
-		
-			
-			
 			<h2 id="Plot">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/plot.go?s=523:650#L8">Plot</a></h2>
 			<pre>func Plot(mdl <a href="#Model">Model</a>, pc0, sl0, pcf <a href="/pkg/builtin/#float64">float64</a>, npts <a href="/pkg/builtin/#int">int</a>, useLog <a href="/pkg/builtin/#bool">bool</a>, args1, args2, label <a href="/pkg/builtin/#string">string</a>) (Pc, Sl, X []<a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 			<p>
@@ -329,18 +311,6 @@ Plot plots retention model
 args2 -- arguments for model computed by directly calling sl(pc), if available
          if args2 == &#34;&#34;, plot is skiped
 </pre>
-
-			
-			
-
-		
-			
-			
-			<h2 id="PlotEnd">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/plot.go?s=1540:1563#L51">PlotEnd</a></h2>
-			<pre>func PlotEnd(show <a href="/pkg/builtin/#bool">bool</a>)</pre>
-			<p>
-PlotEnd ends plot and show figure, if show==true
-</p>
 
 			
 			
@@ -382,7 +352,7 @@ BrooksCorey implements Books and Corey&#39; model
 
 			
 				
-				<h3 id="BrooksCorey.Cc">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1632:1698#L69">Cc</a></h3>
+				<h3 id="BrooksCorey.Cc">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1626:1692#L69">Cc</a></h3>
 				<pre>func (o <a href="#BrooksCorey">BrooksCorey</a>) Cc(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Cc computes Cc(pc) := dsl/dpc
@@ -393,7 +363,7 @@ Cc computes Cc(pc) := dsl/dpc
 				
 			
 				
-				<h3 id="BrooksCorey.Derivs">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=2201:2292#L90">Derivs</a></h3>
+				<h3 id="BrooksCorey.Derivs">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=2195:2286#L90">Derivs</a></h3>
 				<pre>func (o <a href="#BrooksCorey">BrooksCorey</a>) Derivs(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (L, Lx, J, Jx, Jy <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Derivs computes all derivatives
@@ -404,8 +374,8 @@ Derivs computes all derivatives
 				
 			
 				
-				<h3 id="BrooksCorey.GetPrms">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1045:1096#L41">GetPrms</a></h3>
-				<pre>func (o <a href="#BrooksCorey">BrooksCorey</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="BrooksCorey.GetPrms">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1047:1100#L41">GetPrms</a></h3>
+				<pre>func (o <a href="#BrooksCorey">BrooksCorey</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -415,8 +385,8 @@ GetPrms gets (an example) of parameters
 				
 			
 				
-				<h3 id="BrooksCorey.Init">func (*BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=655:708#L21">Init</a></h3>
-				<pre>func (o *<a href="#BrooksCorey">BrooksCorey</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="BrooksCorey.Init">func (*BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=655:710#L21">Init</a></h3>
+				<pre>func (o *<a href="#BrooksCorey">BrooksCorey</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -426,7 +396,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="BrooksCorey.J">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=2080:2145#L85">J</a></h3>
+				<h3 id="BrooksCorey.J">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=2074:2139#L85">J</a></h3>
 				<pre>func (o <a href="#BrooksCorey">BrooksCorey</a>) J(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 J computes J = ∂Cc/∂sl
@@ -437,7 +407,7 @@ J computes J = ∂Cc/∂sl
 				
 			
 				
-				<h3 id="BrooksCorey.L">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1846:1911#L77">L</a></h3>
+				<h3 id="BrooksCorey.L">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1840:1905#L77">L</a></h3>
 				<pre>func (o <a href="#BrooksCorey">BrooksCorey</a>) L(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L computes L = ∂Cc/∂pc
@@ -448,7 +418,7 @@ L computes L = ∂Cc/∂pc
 				
 			
 				
-				<h3 id="BrooksCorey.Sl">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1449:1492#L61">Sl</a></h3>
+				<h3 id="BrooksCorey.Sl">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1443:1486#L61">Sl</a></h3>
 				<pre>func (o <a href="#BrooksCorey">BrooksCorey</a>) Sl(pc <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Sl computes sl directly from pc
@@ -459,7 +429,7 @@ Sl computes sl directly from pc
 				
 			
 				
-				<h3 id="BrooksCorey.SlMax">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1356:1392#L56">SlMax</a></h3>
+				<h3 id="BrooksCorey.SlMax">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1350:1386#L56">SlMax</a></h3>
 				<pre>func (o <a href="#BrooksCorey">BrooksCorey</a>) SlMax() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 SlMax returns sl_max
@@ -470,7 +440,7 @@ SlMax returns sl_max
 				
 			
 				
-				<h3 id="BrooksCorey.SlMin">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1274:1310#L51">SlMin</a></h3>
+				<h3 id="BrooksCorey.SlMin">func (BrooksCorey) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/bc.go?s=1268:1304#L51">SlMin</a></h3>
 				<pre>func (o <a href="#BrooksCorey">BrooksCorey</a>) SlMin() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 SlMin returns sl_min
@@ -504,7 +474,7 @@ Lin implements a linear retetion model: sl(pc) := 1 - λ*pc
 
 			
 				
-				<h3 id="Lin.Cc">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1786:1844#L81">Cc</a></h3>
+				<h3 id="Lin.Cc">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1780:1838#L81">Cc</a></h3>
 				<pre>func (o <a href="#Lin">Lin</a>) Cc(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Cc computes Cc(pc) := dsl/dpc
@@ -515,7 +485,7 @@ Cc computes Cc(pc) := dsl/dpc
 				
 			
 				
-				<h3 id="Lin.Derivs">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=2190:2273#L99">Derivs</a></h3>
+				<h3 id="Lin.Derivs">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=2184:2267#L99">Derivs</a></h3>
 				<pre>func (o <a href="#Lin">Lin</a>) Derivs(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (L, Lx, J, Jx, Jy <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Derivs compute ∂Cc/∂pc and ∂²Cc/∂pc²
@@ -526,8 +496,8 @@ Derivs compute ∂Cc/∂pc and ∂²Cc/∂pc²
 				
 			
 				
-				<h3 id="Lin.GetPrms">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1218:1261#L50">GetPrms</a></h3>
-				<pre>func (o <a href="#Lin">Lin</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="Lin.GetPrms">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1220:1265#L50">GetPrms</a></h3>
+				<pre>func (o <a href="#Lin">Lin</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -537,8 +507,8 @@ GetPrms gets (an example) of parameters
 				
 			
 				
-				<h3 id="Lin.Init">func (*Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=720:765#L24">Init</a></h3>
-				<pre>func (o *<a href="#Lin">Lin</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Lin.Init">func (*Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=720:767#L24">Init</a></h3>
+				<pre>func (o *<a href="#Lin">Lin</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -548,7 +518,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="Lin.J">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=2062:2119#L94">J</a></h3>
+				<h3 id="Lin.J">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=2056:2113#L94">J</a></h3>
 				<pre>func (o <a href="#Lin">Lin</a>) J(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 J computes J = ∂Cc/∂sl
@@ -559,7 +529,7 @@ J computes J = ∂Cc/∂sl
 				
 			
 				
-				<h3 id="Lin.L">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1954:2011#L89">L</a></h3>
+				<h3 id="Lin.L">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1948:2005#L89">L</a></h3>
 				<pre>func (o <a href="#Lin">Lin</a>) L(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L computes L = ∂Cc/∂pc
@@ -570,7 +540,7 @@ L computes L = ∂Cc/∂pc
 				
 			
 				
-				<h3 id="Lin.Sl">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1598:1633#L70">Sl</a></h3>
+				<h3 id="Lin.Sl">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1592:1627#L70">Sl</a></h3>
 				<pre>func (o <a href="#Lin">Lin</a>) Sl(pc <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Sl computes sl directly from pc
@@ -581,7 +551,7 @@ Sl computes sl directly from pc
 				
 			
 				
-				<h3 id="Lin.SlMax">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1513:1541#L65">SlMax</a></h3>
+				<h3 id="Lin.SlMax">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1507:1535#L65">SlMax</a></h3>
 				<pre>func (o <a href="#Lin">Lin</a>) SlMax() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 SlMax returns sl_max
@@ -592,7 +562,7 @@ SlMax returns sl_max
 				
 			
 				
-				<h3 id="Lin.SlMin">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1439:1467#L60">SlMin</a></h3>
+				<h3 id="Lin.SlMin">func (Lin) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/lin.go?s=1433:1461#L60">SlMin</a></h3>
 				<pre>func (o <a href="#Lin">Lin</a>) SlMin() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 SlMin returns sl_min
@@ -607,8 +577,8 @@ SlMin returns sl_min
 			
 			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/model.go?s=1552:2371#L26">Model</a></h2>
 			<pre>type Model interface {
-    Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) <a href="/pkg/builtin/#error">error</a>                                              <span class="comment">// initialises retention model</span>
-    GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>                                         <span class="comment">// gets (an example) of parameters</span>
+    Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) <a href="/pkg/builtin/#error">error</a>                                            <span class="comment">// initialises retention model</span>
+    GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>                                       <span class="comment">// gets (an example) of parameters</span>
     SlMin() <a href="/pkg/builtin/#float64">float64</a>                                                        <span class="comment">// returns sl_min</span>
     SlMax() <a href="/pkg/builtin/#float64">float64</a>                                                        <span class="comment">// returns sl_max</span>
     Cc(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)                          <span class="comment">// computes Cc = f = ∂sl/∂pc</span>
@@ -642,7 +612,7 @@ References:
 
 			
 				
-				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/model.go?s=3637:3683#L83">New</a></h3>
+				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/model.go?s=3589:3635#L83">New</a></h3>
 				<pre>func New(name <a href="/pkg/builtin/#string">string</a>) (model <a href="#Model">Model</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 New returns new liquid retention model
@@ -717,7 +687,7 @@ RefM1 implements a nonlinear liquid retention model based on the concept of refe
 
 			
 				
-				<h3 id="RefM1.Cc">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=3681:3752#L127">Cc</a></h3>
+				<h3 id="RefM1.Cc">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=3659:3730#L127">Cc</a></h3>
 				<pre>func (o *<a href="#RefM1">RefM1</a>) Cc(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (Ccval <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 compute Cc(pc,sl) := dsl/dpc
@@ -728,7 +698,7 @@ compute Cc(pc,sl) := dsl/dpc
 				
 			
 				
-				<h3 id="RefM1.Derivs">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=5196:5282#L199">Derivs</a></h3>
+				<h3 id="RefM1.Derivs">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=5174:5260#L199">Derivs</a></h3>
 				<pre>func (o *<a href="#RefM1">RefM1</a>) Derivs(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (L, Lx, J, Jx, Jy <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 derivatives
@@ -739,8 +709,8 @@ derivatives
 				
 			
 				
-				<h3 id="RefM1.GetPrms">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=3062:3107#L99">GetPrms</a></h3>
-				<pre>func (o <a href="#RefM1">RefM1</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="RefM1.GetPrms">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=3064:3111#L99">GetPrms</a></h3>
+				<pre>func (o <a href="#RefM1">RefM1</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -750,8 +720,8 @@ GetPrms gets (an example) of parameters
 				
 			
 				
-				<h3 id="RefM1.Init">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=1925:1972#L40">Init</a></h3>
-				<pre>func (o *<a href="#RefM1">RefM1</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="RefM1.Init">func (*RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=1925:1974#L40">Init</a></h3>
+				<pre>func (o *<a href="#RefM1">RefM1</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -761,7 +731,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="RefM1.J">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=4645:4704#L175">J</a></h3>
+				<h3 id="RefM1.J">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=4623:4682#L175">J</a></h3>
 				<pre>func (o <a href="#RefM1">RefM1</a>) J(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 J computes J = ∂Cc/∂sl
@@ -772,7 +742,7 @@ J computes J = ∂Cc/∂sl
 				
 			
 				
-				<h3 id="RefM1.L">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=4017:4076#L148">L</a></h3>
+				<h3 id="RefM1.L">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=3995:4054#L148">L</a></h3>
 				<pre>func (o <a href="#RefM1">RefM1</a>) L(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L computes L = ∂Cc/∂pc
@@ -783,7 +753,7 @@ L computes L = ∂Cc/∂pc
 				
 			
 				
-				<h3 id="RefM1.SlMax">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=3600:3630#L122">SlMax</a></h3>
+				<h3 id="RefM1.SlMax">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=3578:3608#L122">SlMax</a></h3>
 				<pre>func (o <a href="#RefM1">RefM1</a>) SlMax() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 SlMax returns sl_max
@@ -794,7 +764,7 @@ SlMax returns sl_max
 				
 			
 				
-				<h3 id="RefM1.SlMin">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=3527:3557#L117">SlMin</a></h3>
+				<h3 id="RefM1.SlMin">func (RefM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/refm1.go?s=3505:3535#L117">SlMin</a></h3>
 				<pre>func (o <a href="#RefM1">RefM1</a>) SlMin() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 SlMin returns sl_min
@@ -828,7 +798,7 @@ VanGen implements van Genuchten&#39;s model
 
 			
 				
-				<h3 id="VanGen.Cc">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=1985:2046#L87">Cc</a></h3>
+				<h3 id="VanGen.Cc">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=1975:2036#L87">Cc</a></h3>
 				<pre>func (o <a href="#VanGen">VanGen</a>) Cc(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Cc computes Cc(pc) := dsl/dpc
@@ -839,7 +809,7 @@ Cc computes Cc(pc) := dsl/dpc
 				
 			
 				
-				<h3 id="VanGen.Derivs">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=2706:2792#L113">Derivs</a></h3>
+				<h3 id="VanGen.Derivs">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=2696:2782#L113">Derivs</a></h3>
 				<pre>func (o <a href="#VanGen">VanGen</a>) Derivs(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (L, Lx, J, Jx, Jy <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Derivs compute ∂Cc/∂pc and ∂²Cc/∂pc²
@@ -850,8 +820,8 @@ Derivs compute ∂Cc/∂pc and ∂²Cc/∂pc²
 				
 			
 				
-				<h3 id="VanGen.GetPrms">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=1294:1340#L52">GetPrms</a></h3>
-				<pre>func (o <a href="#VanGen">VanGen</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="VanGen.GetPrms">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=1296:1344#L52">GetPrms</a></h3>
+				<pre>func (o <a href="#VanGen">VanGen</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -861,8 +831,8 @@ GetPrms gets (an example) of parameters
 				
 			
 				
-				<h3 id="VanGen.Init">func (*VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=678:726#L22">Init</a></h3>
-				<pre>func (o *<a href="#VanGen">VanGen</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="VanGen.Init">func (*VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=678:728#L22">Init</a></h3>
+				<pre>func (o *<a href="#VanGen">VanGen</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -872,7 +842,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="VanGen.J">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=2575:2635#L108">J</a></h3>
+				<h3 id="VanGen.J">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=2565:2625#L108">J</a></h3>
 				<pre>func (o <a href="#VanGen">VanGen</a>) J(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 J computes J = ∂Cc/∂sl
@@ -883,7 +853,7 @@ J computes J = ∂Cc/∂sl
 				
 			
 				
-				<h3 id="VanGen.L">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=2260:2320#L97">L</a></h3>
+				<h3 id="VanGen.L">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=2250:2310#L97">L</a></h3>
 				<pre>func (o <a href="#VanGen">VanGen</a>) L(pc, sl <a href="/pkg/builtin/#float64">float64</a>, wet <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L computes L = ∂Cc/∂pc
@@ -894,7 +864,7 @@ L computes L = ∂Cc/∂pc
 				
 			
 				
-				<h3 id="VanGen.Sl">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=1739:1777#L74">Sl</a></h3>
+				<h3 id="VanGen.Sl">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=1729:1767#L74">Sl</a></h3>
 				<pre>func (o <a href="#VanGen">VanGen</a>) Sl(pc <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Sl computes sl directly from pc
@@ -905,7 +875,7 @@ Sl computes sl directly from pc
 				
 			
 				
-				<h3 id="VanGen.SlMax">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=1651:1682#L69">SlMax</a></h3>
+				<h3 id="VanGen.SlMax">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=1641:1672#L69">SlMax</a></h3>
 				<pre>func (o <a href="#VanGen">VanGen</a>) SlMax() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 SlMax returns sl_max
@@ -916,7 +886,7 @@ SlMax returns sl_max
 				
 			
 				
-				<h3 id="VanGen.SlMin">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=1574:1605#L64">SlMin</a></h3>
+				<h3 id="VanGen.SlMin">func (VanGen) <a href="https://github.com/cpmech/gofem/blob/master/mdl/retention/vg.go?s=1564:1595#L64">SlMin</a></h3>
 				<pre>func (o <a href="#VanGen">VanGen</a>) SlMin() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 SlMin returns sl_min

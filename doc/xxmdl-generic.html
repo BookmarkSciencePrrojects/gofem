@@ -86,7 +86,7 @@ package generic implements a place holder for generic models
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Scalars.Init">func (o *Scalars) Init(ndim int, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Scalars.Init">func (o *Scalars) Init(ndim int, prms fun.Params) (err error)</a></dd>
 				
 			
 			
@@ -153,9 +153,9 @@ package generic implements a place holder for generic models
 		
 			
 			
-			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/generic.go?s=354:450#L4">Model</a></h2>
+			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/generic.go?s=354:452#L4">Model</a></h2>
 			<pre>type Model interface {
-    Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) <a href="/pkg/builtin/#error">error</a> <span class="comment">// Init initialises this structure</span>
+    Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) <a href="/pkg/builtin/#error">error</a> <span class="comment">// Init initialises this structure</span>
 }</pre>
 			<p>
 Model defines a generic model type
@@ -172,7 +172,7 @@ Model defines a generic model type
 
 			
 				
-				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/generic.go?s=473:519#L9">New</a></h3>
+				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/generic.go?s=475:521#L9">New</a></h3>
 				<pre>func New(name <a href="/pkg/builtin/#string">string</a>) (model <a href="#Model">Model</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 New generic model
@@ -209,8 +209,8 @@ Scalars is a placeholder model to collect scalar parameters
 
 			
 				
-				<h3 id="Scalars.Init">func (*Scalars) <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/scalars.go?s=548:607#L12">Init</a></h3>
-				<pre>func (o *<a href="#Scalars">Scalars</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Scalars.Init">func (*Scalars) <a href="https://github.com/cpmech/gofem/blob/master/mdl/generic/scalars.go?s=548:609#L12">Init</a></h3>
+				<pre>func (o *<a href="#Scalars">Scalars</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises this structure
 </p>

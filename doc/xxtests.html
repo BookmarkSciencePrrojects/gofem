@@ -81,6 +81,9 @@ package tests implements structures and functions to test elements and FE simula
 				<dd><a href="#CompareResults">func CompareResults(tst *testing.T, simfilepath, cmpfname, alias string, tolK, tolu, tols float64, skipK, verbose bool, extraAfterSetStage func(dom *fem.Domain))</a></dd>
 			
 				
+				<dd><a href="#Diffusion">func Diffusion(main *fem.Main, o *Kb)</a></dd>
+			
+				
 				<dd><a href="#GetNidsEqs">func GetNidsEqs(dom *fem.Domain) (nids, eqs []int)</a></dd>
 			
 				
@@ -190,7 +193,7 @@ package tests implements structures and functions to test elements and FE simula
 		
 			
 			
-			<h2 id="Bjointcomp">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=6354:6392#L222">Bjointcomp</a></h2>
+			<h2 id="Bjointcomp">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=6842:6880#L246">Bjointcomp</a></h2>
 			<pre>func Bjointcomp(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
 			<p>
 Bjointcomp defines a global function to debug Kb for bjoint-compatible elements
@@ -214,6 +217,18 @@ CompareResults performs comparison of results (gofem versus .cmp files)
 		
 			
 			
+			<h2 id="Diffusion">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=1418:1455#L34">Diffusion</a></h2>
+			<pre>func Diffusion(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
+			<p>
+Diffusion defines a global function to debug Kb for diffusion elements
+</p>
+
+			
+			
+
+		
+			
+			
 			<h2 id="GetNidsEqs">func <a href="https://github.com/cpmech/gofem/blob/master/tests/init.go?s=376:426#L12">GetNidsEqs</a></h2>
 			<pre>func GetNidsEqs(dom *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Domain">Domain</a>) (nids, eqs []<a href="/pkg/builtin/#int">int</a>)</pre>
 			
@@ -223,7 +238,7 @@ CompareResults performs comparison of results (gofem versus .cmp files)
 		
 			
 			
-			<h2 id="Liquid">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=1396:1430#L34">Liquid</a></h2>
+			<h2 id="Liquid">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=1884:1918#L58">Liquid</a></h2>
 			<pre>func Liquid(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
 			<p>
 Liquid defines a global function to debug Kb for p-elements
@@ -235,7 +250,7 @@ Liquid defines a global function to debug Kb for p-elements
 		
 			
 			
-			<h2 id="LiquidGas">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=2024:2061#L61">LiquidGas</a></h2>
+			<h2 id="LiquidGas">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=2512:2549#L85">LiquidGas</a></h2>
 			<pre>func LiquidGas(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
 			<p>
 LiquidGas defines a global function to debug Kb for pp-elements
@@ -247,7 +262,7 @@ LiquidGas defines a global function to debug Kb for pp-elements
 		
 			
 			
-			<h2 id="Rjoint">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=5583:5617#L192">Rjoint</a></h2>
+			<h2 id="Rjoint">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=6071:6105#L216">Rjoint</a></h2>
 			<pre>func Rjoint(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
 			<p>
 Rjoint defines a global function to debug Kb for rjoint-elements
@@ -259,7 +274,7 @@ Rjoint defines a global function to debug Kb for rjoint-elements
 		
 			
 			
-			<h2 id="Solid">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=2829:2862#L91">Solid</a></h2>
+			<h2 id="Solid">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=3317:3350#L115">Solid</a></h2>
 			<pre>func Solid(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
 			<p>
 Solid defines a global function to debug Kb for u-elements
@@ -271,7 +286,7 @@ Solid defines a global function to debug Kb for u-elements
 		
 			
 			
-			<h2 id="SolidLiquid">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=3488:3527#L121">SolidLiquid</a></h2>
+			<h2 id="SolidLiquid">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=3976:4015#L145">SolidLiquid</a></h2>
 			<pre>func SolidLiquid(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
 			<p>
 SolidLiquid defines a global function to debug Kb for up-elements
@@ -283,7 +298,7 @@ SolidLiquid defines a global function to debug Kb for up-elements
 		
 			
 			
-			<h2 id="SolidLiquidGas">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=4338:4380#L152">SolidLiquidGas</a></h2>
+			<h2 id="SolidLiquidGas">func <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=4826:4868#L176">SolidLiquidGas</a></h2>
 			<pre>func SolidLiquidGas(main *<a href="/pkg/github.com/cpmech/gofem/fem/">fem</a>.<a href="/pkg/github.com/cpmech/gofem/fem/#Main">Main</a>, o *<a href="#Kb">Kb</a>)</pre>
 			<p>
 SolidLiquidGas defines a global function to debug Kb for upp-elements
@@ -330,7 +345,7 @@ Iteration holds results from iterations
 		
 			
 			
-			<h2 id="Kb">type <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=503:1331#L11">Kb</a></h2>
+			<h2 id="Kb">type <a href="https://github.com/cpmech/gofem/blob/master/tests/debugKb.go?s=514:1342#L11">Kb</a></h2>
 			<pre>type Kb struct {
 
     <span class="comment">// input (must)</span>

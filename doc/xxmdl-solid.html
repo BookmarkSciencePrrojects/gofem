@@ -167,7 +167,7 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#CamClayMod.Free">func (o *CamClayMod) Free()</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#CamClayMod.GetPrms">func (o *CamClayMod) GetPrms() fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#CamClayMod.GetPrms">func (o *CamClayMod) GetPrms() fun.Params</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#CamClayMod.GetRho">func (o *CamClayMod) GetRho() float64</a></dd>
@@ -182,7 +182,7 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#CamClayMod.Info">func (o *CamClayMod) Info() (nalp, nsurf int)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#CamClayMod.Init">func (o *CamClayMod) Init(ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#CamClayMod.Init">func (o *CamClayMod) Init(ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#CamClayMod.InitIntVars">func (o *CamClayMod) InitIntVars(σ []float64) (s *State, err error)</a></dd>
@@ -211,7 +211,7 @@ package solid implements models for solids based on continuum mechanics
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Driver.Init">func (o *Driver) Init(simfnk, modelname string, ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Driver.Init">func (o *Driver) Init(simfnk, modelname string, ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Driver.InitWithModel">func (o *Driver) InitWithModel(ndim int, model Model) (err error)</a></dd>
@@ -246,7 +246,7 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#DruckerPrager.Free">func (o *DruckerPrager) Free()</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#DruckerPrager.GetPrms">func (o DruckerPrager) GetPrms() fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#DruckerPrager.GetPrms">func (o DruckerPrager) GetPrms() fun.Params</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#DruckerPrager.GetRho">func (o *DruckerPrager) GetRho() float64</a></dd>
@@ -261,7 +261,7 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#DruckerPrager.Info">func (o DruckerPrager) Info() (nalp, nsurf int)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#DruckerPrager.Init">func (o *DruckerPrager) Init(ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#DruckerPrager.Init">func (o *DruckerPrager) Init(ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#DruckerPrager.InitIntVars">func (o DruckerPrager) InitIntVars(σ []float64) (s *State, err error)</a></dd>
@@ -310,13 +310,13 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#HyperElast1.Free">func (o *HyperElast1) Free()</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#HyperElast1.GetPrms">func (o *HyperElast1) GetPrms() fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#HyperElast1.GetPrms">func (o *HyperElast1) GetPrms() fun.Params</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#HyperElast1.GetRho">func (o *HyperElast1) GetRho() float64</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#HyperElast1.Init">func (o *HyperElast1) Init(ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#HyperElast1.Init">func (o *HyperElast1) Init(ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#HyperElast1.InitIntVars">func (o *HyperElast1) InitIntVars(σ []float64) (s *State, err error)</a></dd>
@@ -338,7 +338,7 @@ package solid implements models for solids based on continuum mechanics
 				<dd><a href="#KGcalculator">type KGcalculator</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#GetKgc">func GetKgc(name string, prms fun.Prms) KGcalculator</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#GetKgc">func GetKgc(name string, prms fun.Params) KGcalculator</a></dd>
 				
 				
 			
@@ -361,10 +361,10 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#LinElast.Free">func (o *LinElast) Free()</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#LinElast.GetPrms">func (o LinElast) GetPrms() fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#LinElast.GetPrms">func (o LinElast) GetPrms() fun.Params</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#LinElast.Init">func (o *LinElast) Init(ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#LinElast.Init">func (o *LinElast) Init(ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#LinElast.InitIntVars">func (o LinElast) InitIntVars(σ []float64) (s *State, err error)</a></dd>
@@ -392,13 +392,13 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#Ogden.Free">func (o *Ogden) Free()</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Ogden.GetPrms">func (o Ogden) GetPrms() fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Ogden.GetPrms">func (o Ogden) GetPrms() fun.Params</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Ogden.GetRho">func (o *Ogden) GetRho() float64</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Ogden.Init">func (o *Ogden) Init(ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Ogden.Init">func (o *Ogden) Init(ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Ogden.InitIntVars">func (o Ogden) InitIntVars(σ []float64) (s *State, err error)</a></dd>
@@ -426,13 +426,13 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#OnedLinElast.GetA">func (o *OnedLinElast) GetA() float64</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#OnedLinElast.GetPrms">func (o OnedLinElast) GetPrms() fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#OnedLinElast.GetPrms">func (o OnedLinElast) GetPrms() fun.Params</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#OnedLinElast.GetRho">func (o *OnedLinElast) GetRho() float64</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#OnedLinElast.Init">func (o *OnedLinElast) Init(ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#OnedLinElast.Init">func (o *OnedLinElast) Init(ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#OnedLinElast.InitIntVars">func (o *OnedLinElast) InitIntVars(σ []float64) (s *State, err error)</a></dd>
@@ -550,7 +550,7 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#PrincStrainsUp.Free">func (o *PrincStrainsUp) Free()</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#PrincStrainsUp.Init">func (o *PrincStrainsUp) Init(ndim int, prms fun.Prms, mdl EPmodel) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#PrincStrainsUp.Init">func (o *PrincStrainsUp) Init(ndim int, prms fun.Params, mdl EPmodel) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#PrincStrainsUp.JfcnD">func (o *PrincStrainsUp) JfcnD(J [][]float64, x []float64) (err error)</a></dd>
@@ -575,13 +575,13 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#RjointM1.Free">func (o *RjointM1) Free()</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#RjointM1.GetPrms">func (o RjointM1) GetPrms() fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#RjointM1.GetPrms">func (o RjointM1) GetPrms() fun.Params</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#RjointM1.GetRho">func (o *RjointM1) GetRho() float64</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#RjointM1.Init">func (o *RjointM1) Init(ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#RjointM1.Init">func (o *RjointM1) Init(ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#RjointM1.InitIntVars">func (o *RjointM1) InitIntVars(σ []float64) (s *State, err error)</a></dd>
@@ -609,13 +609,13 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#SmallElasticity.CalcD">func (o SmallElasticity) CalcD(D [][]float64, s *State) (err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#SmallElasticity.GetPrms">func (o SmallElasticity) GetPrms() fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#SmallElasticity.GetPrms">func (o SmallElasticity) GetPrms() fun.Params</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#SmallElasticity.GetRho">func (o *SmallElasticity) GetRho() float64</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#SmallElasticity.Init">func (o *SmallElasticity) Init(ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#SmallElasticity.Init">func (o *SmallElasticity) Init(ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#SmallElasticity.Update">func (o SmallElasticity) Update(s *State, Δε []float64) (err error)</a></dd>
@@ -652,7 +652,7 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#SmpInvs.Free">func (o *SmpInvs) Free()</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#SmpInvs.GetPrms">func (o SmpInvs) GetPrms() fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#SmpInvs.GetPrms">func (o SmpInvs) GetPrms() fun.Params</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#SmpInvs.GetRho">func (o *SmpInvs) GetRho() float64</a></dd>
@@ -667,7 +667,7 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#SmpInvs.Info">func (o SmpInvs) Info() (nalp, nsurf int)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#SmpInvs.Init">func (o *SmpInvs) Init(ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#SmpInvs.Init">func (o *SmpInvs) Init(ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#SmpInvs.InitIntVars">func (o SmpInvs) InitIntVars(σ []float64) (s *State, err error)</a></dd>
@@ -731,7 +731,7 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#VonMises.Free">func (o *VonMises) Free()</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#VonMises.GetPrms">func (o VonMises) GetPrms() fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#VonMises.GetPrms">func (o VonMises) GetPrms() fun.Params</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#VonMises.GetRho">func (o *VonMises) GetRho() float64</a></dd>
@@ -746,7 +746,7 @@ package solid implements models for solids based on continuum mechanics
 					<dd>&nbsp; &nbsp; <a href="#VonMises.Info">func (o VonMises) Info() (nalp, nsurf int)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#VonMises.Init">func (o *VonMises) Init(ndim int, pstress bool, prms fun.Prms) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#VonMises.Init">func (o *VonMises) Init(ndim int, pstress bool, prms fun.Params) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#VonMises.InitIntVars">func (o VonMises) InitIntVars(σ []float64) (s *State, err error)</a></dd>
@@ -885,7 +885,7 @@ constants
 		
 			
 			
-			<h2 id="Calc_E_from_KG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5216:5257#L193">Calc_E_from_KG</a></h2>
+			<h2 id="Calc_E_from_KG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5218:5259#L193">Calc_E_from_KG</a></h2>
 			<pre>func Calc_E_from_KG(K, G <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_E_from_KG returns E given K and G
@@ -897,7 +897,7 @@ Calc_E_from_KG returns E given K and G
 		
 			
 			
-			<h2 id="Calc_E_from_Knu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5653:5696#L210">Calc_E_from_Knu</a></h2>
+			<h2 id="Calc_E_from_Knu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5655:5698#L210">Calc_E_from_Knu</a></h2>
 			<pre>func Calc_E_from_Knu(K, ν <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_E_from_Knu returns E given K and ν
@@ -909,7 +909,7 @@ Calc_E_from_Knu returns E given K and ν
 		
 			
 			
-			<h2 id="Calc_E_from_lG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=4794:4835#L176">Calc_E_from_lG</a></h2>
+			<h2 id="Calc_E_from_lG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=4796:4837#L176">Calc_E_from_lG</a></h2>
 			<pre>func Calc_E_from_lG(l, G <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_E_from_lG returns E given l and G
@@ -921,7 +921,7 @@ Calc_E_from_lG returns E given l and G
 		
 			
 			
-			<h2 id="Calc_G_from_Enu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=4478:4521#L164">Calc_G_from_Enu</a></h2>
+			<h2 id="Calc_G_from_Enu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=4480:4523#L164">Calc_G_from_Enu</a></h2>
 			<pre>func Calc_G_from_Enu(E, ν <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_G_from_Enu returns G given E and ν. NOTE: G == μ
@@ -933,7 +933,7 @@ Calc_G_from_Enu returns G given E and ν. NOTE: G == μ
 		
 			
 			
-			<h2 id="Calc_G_from_Knu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5779:5822#L215">Calc_G_from_Knu</a></h2>
+			<h2 id="Calc_G_from_Knu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5781:5824#L215">Calc_G_from_Knu</a></h2>
 			<pre>func Calc_G_from_Knu(K, ν <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_G_from_Kν returns G given K and ν
@@ -945,7 +945,7 @@ Calc_G_from_Kν returns G given K and ν
 		
 			
 			
-			<h2 id="Calc_K_from_Enu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=4602:4645#L169">Calc_K_from_Enu</a></h2>
+			<h2 id="Calc_K_from_Enu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=4604:4647#L169">Calc_K_from_Enu</a></h2>
 			<pre>func Calc_K_from_Enu(E, ν <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_K_from_Enu returns K given E and ν
@@ -957,7 +957,7 @@ Calc_K_from_Enu returns K given E and ν
 		
 			
 			
-			<h2 id="Calc_K_from_lG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5039:5080#L186">Calc_K_from_lG</a></h2>
+			<h2 id="Calc_K_from_lG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5041:5082#L186">Calc_K_from_lG</a></h2>
 			<pre>func Calc_K_from_lG(l, G <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_K_from_lG returns K given l and G
@@ -969,7 +969,7 @@ Calc_K_from_lG returns K given l and G
 		
 			
 			
-			<h2 id="Calc_l_from_Enu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=4323:4366#L159">Calc_l_from_Enu</a></h2>
+			<h2 id="Calc_l_from_Enu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=4325:4368#L159">Calc_l_from_Enu</a></h2>
 			<pre>func Calc_l_from_Enu(E, ν <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_l_from_Enu returns l given E and ν
@@ -981,7 +981,7 @@ Calc_l_from_Enu returns l given E and ν
 		
 			
 			
-			<h2 id="Calc_l_from_KG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5473:5514#L203">Calc_l_from_KG</a></h2>
+			<h2 id="Calc_l_from_KG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5475:5516#L203">Calc_l_from_KG</a></h2>
 			<pre>func Calc_l_from_KG(K, G <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_l_from_KG returns l given K and G
@@ -993,7 +993,7 @@ Calc_l_from_KG returns l given K and G
 		
 			
 			
-			<h2 id="Calc_l_from_Knu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5926:5969#L220">Calc_l_from_Knu</a></h2>
+			<h2 id="Calc_l_from_Knu">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5928:5971#L220">Calc_l_from_Knu</a></h2>
 			<pre>func Calc_l_from_Knu(K, ν <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_l_from_Kν returns l given K and ν
@@ -1005,7 +1005,7 @@ Calc_l_from_Kν returns l given K and ν
 		
 			
 			
-			<h2 id="Calc_nu_from_KG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5341:5383#L198">Calc_nu_from_KG</a></h2>
+			<h2 id="Calc_nu_from_KG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=5343:5385#L198">Calc_nu_from_KG</a></h2>
 			<pre>func Calc_nu_from_KG(K, G <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_nu_from_KG returns ν given K and G
@@ -1017,7 +1017,7 @@ Calc_nu_from_KG returns ν given K and G
 		
 			
 			
-			<h2 id="Calc_nu_from_lG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=4923:4965#L181">Calc_nu_from_lG</a></h2>
+			<h2 id="Calc_nu_from_lG">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=4925:4967#L181">Calc_nu_from_lG</a></h2>
 			<pre>func Calc_nu_from_lG(l, G <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 			<p>
 Calc_nu_from_lG returns ν given l and G
@@ -1115,7 +1115,7 @@ CamClayMod implements the modified CamClay model
 
 			
 				
-				<h3 id="CamClayMod.CalcD">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3138:3215#L140">CalcD</a></h3>
+				<h3 id="CamClayMod.CalcD">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3122:3199#L140">CalcD</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new consistent with StressUpdate
@@ -1126,7 +1126,7 @@ CalcD computes D = dσ_new/dε_new consistent with StressUpdate
 				
 			
 				
-				<h3 id="CamClayMod.ContD">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3295:3358#L145">ContD</a></h3>
+				<h3 id="CamClayMod.ContD">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3279:3342#L145">ContD</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) ContD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ContD computes D = dσ_new/dε_new continuous
@@ -1137,7 +1137,7 @@ ContD computes D = dσ_new/dε_new continuous
 				
 			
 				
-				<h3 id="CamClayMod.E_CalcDe">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4916:4976#L201">E_CalcDe</a></h3>
+				<h3 id="CamClayMod.E_CalcDe">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4900:4960#L201">E_CalcDe</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) E_CalcDe(De [][]<a href="/pkg/builtin/#float64">float64</a>, εe []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 E_CalcDe computes elastic modulus in principal components
@@ -1148,7 +1148,7 @@ E_CalcDe computes elastic modulus in principal components
 				
 			
 				
-				<h3 id="CamClayMod.E_CalcSig">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4776:4825#L196">E_CalcSig</a></h3>
+				<h3 id="CamClayMod.E_CalcSig">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4760:4809#L196">E_CalcSig</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) E_CalcSig(σ, εe []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 E_CalcSig computes principal stresses for given principal elastic strains
@@ -1159,7 +1159,7 @@ E_CalcSig computes principal stresses for given principal elastic strains
 				
 			
 				
-				<h3 id="CamClayMod.ElastD">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4616:4668#L191">ElastD</a></h3>
+				<h3 id="CamClayMod.ElastD">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4600:4652#L191">ElastD</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) ElastD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>)</pre>
 				<p>
 ElastD returns continuum elastic D
@@ -1170,7 +1170,7 @@ ElastD returns continuum elastic D
 				
 			
 				
-				<h3 id="CamClayMod.ElastUpdate">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4482:4538#L186">ElastUpdate</a></h3>
+				<h3 id="CamClayMod.ElastUpdate">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4466:4522#L186">ElastUpdate</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) ElastUpdate(s *<a href="#State">State</a>, ε []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 ElastUpdate updates state with an elastic response
@@ -1192,8 +1192,8 @@ Free frees memory
 				
 			
 				
-				<h3 id="CamClayMod.GetPrms">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=2024:2063#L95">GetPrms</a></h3>
-				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="CamClayMod.GetPrms">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=2026:2067#L95">GetPrms</a></h3>
+				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -1214,7 +1214,7 @@ GetRho returns density
 				
 			
 				
-				<h3 id="CamClayMod.Get_bsmp">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3780:3819#L161">Get_bsmp</a></h3>
+				<h3 id="CamClayMod.Get_bsmp">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3764:3803#L161">Get_bsmp</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) Get_bsmp() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Get_bsmp gets b coefficient if using SMP invariants
@@ -1225,7 +1225,7 @@ Get_bsmp gets b coefficient if using SMP invariants
 				
 			
 				
-				<h3 id="CamClayMod.Get_phi">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3672:3710#L158">Get_phi</a></h3>
+				<h3 id="CamClayMod.Get_phi">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3656:3694#L158">Get_phi</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) Get_phi() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Get_phi gets φ or returns 0
@@ -1236,7 +1236,7 @@ Get_phi gets φ or returns 0
 				
 			
 				
-				<h3 id="CamClayMod.Info">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3576:3621#L153">Info</a></h3>
+				<h3 id="CamClayMod.Info">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3560:3605#L153">Info</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) Info() (nalp, nsurf <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 Info returns some information and data from this model
@@ -1247,8 +1247,8 @@ Info returns some information and data from this model
 				
 			
 				
-				<h3 id="CamClayMod.Init">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=1142:1218#L43">Init</a></h3>
-				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="CamClayMod.Init">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=1142:1220#L43">Init</a></h3>
+				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -1258,7 +1258,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="CamClayMod.InitIntVars">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=2413:2481#L110">InitIntVars</a></h3>
+				<h3 id="CamClayMod.InitIntVars">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=2397:2465#L110">InitIntVars</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -1269,7 +1269,7 @@ InitIntVars initialises internal (secondary) variables
 				
 			
 				
-				<h3 id="CamClayMod.L_FlowHard">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=5070:5149#L206">L_FlowHard</a></h3>
+				<h3 id="CamClayMod.L_FlowHard">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=5054:5133#L206">L_FlowHard</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) L_FlowHard(Nb, h, σ, α []<a href="/pkg/builtin/#float64">float64</a>) (f <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L_FlowHard computes model variabes for given principal values
@@ -1280,7 +1280,7 @@ L_FlowHard computes model variabes for given principal values
 				
 			
 				
-				<h3 id="CamClayMod.L_SecondDerivs">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=5813:5926#L231">L_SecondDerivs</a></h3>
+				<h3 id="CamClayMod.L_SecondDerivs">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=5797:5910#L231">L_SecondDerivs</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) L_SecondDerivs(N, Nb, A, h []<a href="/pkg/builtin/#float64">float64</a>, Mb, a, b, c [][]<a href="/pkg/builtin/#float64">float64</a>, σ, α []<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L_SecondDerivs computes second order derivatives
@@ -1300,7 +1300,7 @@ c_ij -- ∂h_i/∂α_j [nalp][nalp]
 				
 			
 				
-				<h3 id="CamClayMod.L_YieldFunc">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4017:4075#L167">L_YieldFunc</a></h3>
+				<h3 id="CamClayMod.L_YieldFunc">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4001:4059#L167">L_YieldFunc</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) L_YieldFunc(σ, α []<a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 L_YieldFunc computes the yield function value for given principal stresses (σ)
@@ -1311,7 +1311,7 @@ L_YieldFunc computes the yield function value for given principal stresses (σ)
 				
 			
 				
-				<h3 id="CamClayMod.Set_bsmp">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3889:3929#L164">Set_bsmp</a></h3>
+				<h3 id="CamClayMod.Set_bsmp">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=3873:3913#L164">Set_bsmp</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) Set_bsmp(b <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Set_bsmp sets b coefficient if using SMP invariants
@@ -1322,7 +1322,7 @@ Set_bsmp sets b coefficient if using SMP invariants
 				
 			
 				
-				<h3 id="CamClayMod.Update">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=2917:3015#L135">Update</a></h3>
+				<h3 id="CamClayMod.Update">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=2901:2999#L135">Update</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) Update(s *<a href="#State">State</a>, ε, Δε []<a href="/pkg/builtin/#float64">float64</a>, eid, ipid <a href="/pkg/builtin/#int">int</a>, time <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
@@ -1333,7 +1333,7 @@ Update updates stresses for given strains
 				
 			
 				
-				<h3 id="CamClayMod.YieldFuncs">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4234:4285#L176">YieldFuncs</a></h3>
+				<h3 id="CamClayMod.YieldFuncs">func (*CamClayMod) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ccm.go?s=4218:4269#L176">YieldFuncs</a></h3>
 				<pre>func (o *<a href="#CamClayMod">CamClayMod</a>) YieldFuncs(s *<a href="#State">State</a>) []<a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 YieldFuncs computes yield function values
@@ -1385,8 +1385,8 @@ Driver run simulations with constitutive models for solids
 
 			
 				
-				<h3 id="Driver.Init">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1140:1238#L32">Init</a></h3>
-				<pre>func (o *<a href="#Driver">Driver</a>) Init(simfnk, modelname <a href="/pkg/builtin/#string">string</a>, ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Driver.Init">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1140:1240#L32">Init</a></h3>
+				<pre>func (o *<a href="#Driver">Driver</a>) Init(simfnk, modelname <a href="/pkg/builtin/#string">string</a>, ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises driver
 </p>
@@ -1396,7 +1396,7 @@ Init initialises driver
 				
 			
 				
-				<h3 id="Driver.InitWithModel">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1529:1594#L49">InitWithModel</a></h3>
+				<h3 id="Driver.InitWithModel">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1531:1596#L49">InitWithModel</a></h3>
 				<pre>func (o *<a href="#Driver">Driver</a>) InitWithModel(ndim <a href="/pkg/builtin/#int">int</a>, model <a href="#Model">Model</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitWithModel initialises driver with existent model
@@ -1407,7 +1407,7 @@ InitWithModel initialises driver with existent model
 				
 			
 				
-				<h3 id="Driver.Run">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1739:1782#L59">Run</a></h3>
+				<h3 id="Driver.Run">func (*Driver) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/driver.go?s=1741:1784#L59">Run</a></h3>
 				<pre>func (o *<a href="#Driver">Driver</a>) Run(pth *<a href="#Path">Path</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Run runs simulation
@@ -1446,7 +1446,7 @@ DruckerPrager implements Drucker-Prager plasticity model
 
 			
 				
-				<h3 id="DruckerPrager.CalcD">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=3785:3865#L159">CalcD</a></h3>
+				<h3 id="DruckerPrager.CalcD">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=3779:3859#L159">CalcD</a></h3>
 				<pre>func (o *<a href="#DruckerPrager">DruckerPrager</a>) CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new consistent with StressUpdate
@@ -1457,7 +1457,7 @@ CalcD computes D = dσ_new/dε_new consistent with StressUpdate
 				
 			
 				
-				<h3 id="DruckerPrager.ContD">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=4998:5064#L210">ContD</a></h3>
+				<h3 id="DruckerPrager.ContD">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=4992:5058#L210">ContD</a></h3>
 				<pre>func (o *<a href="#DruckerPrager">DruckerPrager</a>) ContD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ContD computes D = dσ_new/dε_new continuous
@@ -1468,7 +1468,7 @@ ContD computes D = dσ_new/dε_new continuous
 				
 			
 				
-				<h3 id="DruckerPrager.E_CalcDe">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=7222:7284#L290">E_CalcDe</a></h3>
+				<h3 id="DruckerPrager.E_CalcDe">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=7216:7278#L290">E_CalcDe</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) E_CalcDe(De [][]<a href="/pkg/builtin/#float64">float64</a>, εe []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 E_CalcDe computes elastic modulus in principal components
@@ -1479,7 +1479,7 @@ E_CalcDe computes elastic modulus in principal components
 				
 			
 				
-				<h3 id="DruckerPrager.E_CalcSig">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=7104:7155#L286">E_CalcSig</a></h3>
+				<h3 id="DruckerPrager.E_CalcSig">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=7098:7149#L286">E_CalcSig</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) E_CalcSig(σ, εe []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 E_CalcSig computes principal stresses for given principal elastic strains
@@ -1490,7 +1490,7 @@ E_CalcSig computes principal stresses for given principal elastic strains
 				
 			
 				
-				<h3 id="DruckerPrager.ElastD">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6967:7021#L282">ElastD</a></h3>
+				<h3 id="DruckerPrager.ElastD">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6961:7015#L282">ElastD</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) ElastD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>)</pre>
 				<p>
 ElastD returns continuum elastic D
@@ -1501,7 +1501,7 @@ ElastD returns continuum elastic D
 				
 			
 				
-				<h3 id="DruckerPrager.ElastUpdate">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6690:6748#L272">ElastUpdate</a></h3>
+				<h3 id="DruckerPrager.ElastUpdate">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6684:6742#L272">ElastUpdate</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) ElastUpdate(s *<a href="#State">State</a>, ε []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 ElastUpdate updates state with an elastic response
@@ -1523,8 +1523,8 @@ Free frees memory
 				
 			
 				
-				<h3 id="DruckerPrager.GetPrms">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=1913:1954#L82">GetPrms</a></h3>
-				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="DruckerPrager.GetPrms">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=1915:1958#L82">GetPrms</a></h3>
+				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -1545,7 +1545,7 @@ GetRho returns density
 				
 			
 				
-				<h3 id="DruckerPrager.Get_bsmp">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6050:6091#L253">Get_bsmp</a></h3>
+				<h3 id="DruckerPrager.Get_bsmp">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6044:6085#L253">Get_bsmp</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) Get_bsmp() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Get_bsmp gets b coefficient if using SMP invariants
@@ -1556,7 +1556,7 @@ Get_bsmp gets b coefficient if using SMP invariants
 				
 			
 				
-				<h3 id="DruckerPrager.Get_phi">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=5940:5980#L250">Get_phi</a></h3>
+				<h3 id="DruckerPrager.Get_phi">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=5934:5974#L250">Get_phi</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) Get_phi() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Get_phi gets φ or returns 0
@@ -1567,7 +1567,7 @@ Get_phi gets φ or returns 0
 				
 			
 				
-				<h3 id="DruckerPrager.Info">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=5842:5889#L245">Info</a></h3>
+				<h3 id="DruckerPrager.Info">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=5836:5883#L245">Info</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) Info() (nalp, nsurf <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 Info returns some information and data from this model
@@ -1578,8 +1578,8 @@ Info returns some information and data from this model
 				
 			
 				
-				<h3 id="DruckerPrager.Init">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=879:958#L29">Init</a></h3>
-				<pre>func (o *<a href="#DruckerPrager">DruckerPrager</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="DruckerPrager.Init">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=879:960#L29">Init</a></h3>
+				<pre>func (o *<a href="#DruckerPrager">DruckerPrager</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -1589,7 +1589,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="DruckerPrager.InitIntVars">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=2150:2220#L92">InitIntVars</a></h3>
+				<h3 id="DruckerPrager.InitIntVars">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=2144:2214#L92">InitIntVars</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -1600,7 +1600,7 @@ InitIntVars initialises internal (secondary) variables
 				
 			
 				
-				<h3 id="DruckerPrager.L_FlowHard">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=7355:7436#L294">L_FlowHard</a></h3>
+				<h3 id="DruckerPrager.L_FlowHard">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=7349:7430#L294">L_FlowHard</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) L_FlowHard(Nb, h, σ, α []<a href="/pkg/builtin/#float64">float64</a>) (f <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L_FlowHard computes model variabes for given principal values
@@ -1611,7 +1611,7 @@ L_FlowHard computes model variabes for given principal values
 				
 			
 				
-				<h3 id="DruckerPrager.L_SecondDerivs">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=7793:7908#L307">L_SecondDerivs</a></h3>
+				<h3 id="DruckerPrager.L_SecondDerivs">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=7787:7902#L307">L_SecondDerivs</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) L_SecondDerivs(N, Nb, A, h []<a href="/pkg/builtin/#float64">float64</a>, Mb, a, b, c [][]<a href="/pkg/builtin/#float64">float64</a>, σ, α []<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L_SecondDerivs computes second order derivatives
@@ -1631,7 +1631,7 @@ c_ij -- ∂h_i/∂α_j [nalp][nalp]
 				
 			
 				
-				<h3 id="DruckerPrager.L_YieldFunc">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6292:6353#L259">L_YieldFunc</a></h3>
+				<h3 id="DruckerPrager.L_YieldFunc">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6286:6347#L259">L_YieldFunc</a></h3>
 				<pre>func (o *<a href="#DruckerPrager">DruckerPrager</a>) L_YieldFunc(σ, α []<a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 L_YieldFunc computes the yield function value for given principal stresses (σ)
@@ -1642,7 +1642,7 @@ L_YieldFunc computes the yield function value for given principal stresses (σ)
 				
 			
 				
-				<h3 id="DruckerPrager.Set_bsmp">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6161:6204#L256">Set_bsmp</a></h3>
+				<h3 id="DruckerPrager.Set_bsmp">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6155:6198#L256">Set_bsmp</a></h3>
 				<pre>func (o *<a href="#DruckerPrager">DruckerPrager</a>) Set_bsmp(b <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Set_bsmp sets b coefficient if using SMP invariants
@@ -1653,7 +1653,7 @@ Set_bsmp sets b coefficient if using SMP invariants
 				
 			
 				
-				<h3 id="DruckerPrager.Update">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=2335:2436#L99">Update</a></h3>
+				<h3 id="DruckerPrager.Update">func (*DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=2329:2430#L99">Update</a></h3>
 				<pre>func (o *<a href="#DruckerPrager">DruckerPrager</a>) Update(s *<a href="#State">State</a>, ε, Δε []<a href="/pkg/builtin/#float64">float64</a>, eid, ipid <a href="/pkg/builtin/#int">int</a>, time <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
@@ -1664,7 +1664,7 @@ Update updates stresses for given strains
 				
 			
 				
-				<h3 id="DruckerPrager.YieldFuncs">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6473:6526#L265">YieldFuncs</a></h3>
+				<h3 id="DruckerPrager.YieldFuncs">func (DruckerPrager) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/dp.go?s=6467:6520#L265">YieldFuncs</a></h3>
 				<pre>func (o <a href="#DruckerPrager">DruckerPrager</a>) YieldFuncs(s *<a href="#State">State</a>) []<a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 YieldFs computes the yield functions
@@ -1765,7 +1765,7 @@ HyperElast1 implements a nonlinear hyperelastic model for powders and porous med
 
 			
 				
-				<h3 id="HyperElast1.CalcD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4098:4176#L174">CalcD</a></h3>
+				<h3 id="HyperElast1.CalcD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4090:4168#L174">CalcD</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new consistent with StressUpdate
@@ -1776,7 +1776,7 @@ CalcD computes D = dσ_new/dε_new consistent with StressUpdate
 				
 			
 				
-				<h3 id="HyperElast1.CalcEps0">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=2164:2204#L102">CalcEps0</a></h3>
+				<h3 id="HyperElast1.CalcEps0">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=2156:2196#L102">CalcEps0</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) CalcEps0(s *<a href="#State">State</a>)</pre>
 				<p>
 CalcEps0 computes initial strains from stresses (s.Sig)
@@ -1789,7 +1789,7 @@ CalcEps0 computes initial strains from stresses (s.Sig)
 				
 			
 				
-				<h3 id="HyperElast1.Calc_pq">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4519:4581#L188">Calc_pq</a></h3>
+				<h3 id="HyperElast1.Calc_pq">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4511:4573#L188">Calc_pq</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) Calc_pq(εv, εd <a href="/pkg/builtin/#float64">float64</a>) (p, q <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Calc_pq computes p and q for given elastic εv and εd
@@ -1800,7 +1800,7 @@ Calc_pq computes p and q for given elastic εv and εd
 				
 			
 				
-				<h3 id="HyperElast1.ContD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4261:4325#L180">ContD</a></h3>
+				<h3 id="HyperElast1.ContD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4253:4317#L180">ContD</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) ContD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ContD computes D = dσ_new/dε_new continuous
@@ -1822,8 +1822,8 @@ Free frees memory
 				
 			
 				
-				<h3 id="HyperElast1.GetPrms">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=1819:1859#L90">GetPrms</a></h3>
-				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="HyperElast1.GetPrms">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=1821:1863#L90">GetPrms</a></h3>
+				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -1844,8 +1844,8 @@ GetRho returns density
 				
 			
 				
-				<h3 id="HyperElast1.Init">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=1151:1228#L46">Init</a></h3>
-				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="HyperElast1.Init">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=1151:1230#L46">Init</a></h3>
+				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -1855,7 +1855,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="HyperElast1.InitIntVars">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=3467:3536#L150">InitIntVars</a></h3>
+				<h3 id="HyperElast1.InitIntVars">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=3459:3528#L150">InitIntVars</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -1866,7 +1866,7 @@ InitIntVars initialises internal (secondary) variables
 				
 			
 				
-				<h3 id="HyperElast1.L_CalcD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=5411:5469#L222">L_CalcD</a></h3>
+				<h3 id="HyperElast1.L_CalcD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=5403:5461#L222">L_CalcD</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) L_CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, ε []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 L_CalcD computes De in principal components for given principal elastic strains
@@ -1882,7 +1882,7 @@ Note: this method works also for non-principal components
 				
 			
 				
-				<h3 id="HyperElast1.L_update">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4838:4901#L201">L_update</a></h3>
+				<h3 id="HyperElast1.L_update">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4830:4893#L201">L_update</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) L_update(σ, ε []<a href="/pkg/builtin/#float64">float64</a>) (p, q <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 L_update computes principal stresses for given principal strains
@@ -1893,7 +1893,7 @@ L_update computes principal stresses for given principal strains
 				
 			
 				
-				<h3 id="HyperElast1.Set_pt">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=1699:1739#L84">Set_pt</a></h3>
+				<h3 id="HyperElast1.Set_pt">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=1701:1741#L84">Set_pt</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) Set_pt(pt <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Set_pt sets pt
@@ -1904,7 +1904,7 @@ Set_pt sets pt
 				
 			
 				
-				<h3 id="HyperElast1.Update">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=3665:3765#L158">Update</a></h3>
+				<h3 id="HyperElast1.Update">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=3657:3757#L158">Update</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) Update(s *<a href="#State">State</a>, ε, dummy []<a href="/pkg/builtin/#float64">float64</a>, eid, ipid <a href="/pkg/builtin/#int">int</a>, time <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
@@ -1917,9 +1917,9 @@ Update updates stresses for given strains
 		
 			
 			
-			<h2 id="KGcalculator">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=409:504#L6">KGcalculator</a></h2>
+			<h2 id="KGcalculator">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=409:506#L6">KGcalculator</a></h2>
 			<pre>type KGcalculator interface {
-    Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)
+    Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)
     Calc(s *<a href="#State">State</a>) (K, G <a href="/pkg/builtin/#float64">float64</a>)
 }</pre>
 			<p>
@@ -1937,8 +1937,8 @@ KGcalculator defines calculators of elasticity coefficients K and G
 
 			
 				
-				<h3 id="GetKgc">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=654:706#L16">GetKgc</a></h3>
-				<pre>func GetKgc(name <a href="/pkg/builtin/#string">string</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) <a href="#KGcalculator">KGcalculator</a></pre>
+				<h3 id="GetKgc">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=656:710#L16">GetKgc</a></h3>
+				<pre>func GetKgc(name <a href="/pkg/builtin/#string">string</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) <a href="#KGcalculator">KGcalculator</a></pre>
 				<p>
 GetKgc returns a KG calculator
 It returns nil on errors
@@ -1952,7 +1952,7 @@ It returns nil on errors
 		
 			
 			
-			<h2 id="Large">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=2047:2301#L42">Large</a></h2>
+			<h2 id="Large">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=2057:2311#L42">Large</a></h2>
 			<pre>type Large interface {
     Update(s *<a href="#State">State</a>, F, FΔ [][]<a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#error">error</a>              <span class="comment">// updates stresses for new deformation F and FΔ</span>
     CalcA(A [][][][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/builtin/#error">error</a> <span class="comment">// computes tangent modulus A = (2/J) * ∂τ/∂b . b - σ palm I</span>
@@ -1997,7 +1997,7 @@ LinElast implements a linear elastic model
 
 			
 				
-				<h3 id="LinElast.CalcD">func (LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=1189:1263#L36">CalcD</a></h3>
+				<h3 id="LinElast.CalcD">func (LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=1193:1267#L36">CalcD</a></h3>
 				<pre>func (o <a href="#LinElast">LinElast</a>) CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new consistent with StressUpdate
@@ -2008,7 +2008,7 @@ CalcD computes D = dσ_new/dε_new consistent with StressUpdate
 				
 			
 				
-				<h3 id="LinElast.ContD">func (LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=1356:1416#L41">ContD</a></h3>
+				<h3 id="LinElast.ContD">func (LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=1360:1420#L41">ContD</a></h3>
 				<pre>func (o <a href="#LinElast">LinElast</a>) ContD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ContD computes D = dσ_new/dε_new continuous
@@ -2030,8 +2030,8 @@ Free frees memory
 				
 			
 				
-				<h3 id="LinElast.GetPrms">func (LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=663:699#L19">GetPrms</a></h3>
-				<pre>func (o <a href="#LinElast">LinElast</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="LinElast.GetPrms">func (LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=665:703#L19">GetPrms</a></h3>
+				<pre>func (o <a href="#LinElast">LinElast</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -2041,8 +2041,8 @@ GetPrms gets (an example) of parameters
 				
 			
 				
-				<h3 id="LinElast.Init">func (*LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=488:562#L14">Init</a></h3>
-				<pre>func (o *<a href="#LinElast">LinElast</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="LinElast.Init">func (*LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=488:564#L14">Init</a></h3>
+				<pre>func (o *<a href="#LinElast">LinElast</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -2052,7 +2052,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="LinElast.InitIntVars">func (LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=799:864#L24">InitIntVars</a></h3>
+				<h3 id="LinElast.InitIntVars">func (LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=803:868#L24">InitIntVars</a></h3>
 				<pre>func (o <a href="#LinElast">LinElast</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -2063,7 +2063,7 @@ InitIntVars initialises internal (secondary) variables
 				
 			
 				
-				<h3 id="LinElast.Update">func (LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=979:1074#L31">Update</a></h3>
+				<h3 id="LinElast.Update">func (LinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/linelast.go?s=983:1078#L31">Update</a></h3>
 				<pre>func (o <a href="#LinElast">LinElast</a>) Update(s *<a href="#State">State</a>, ε, Δε []<a href="/pkg/builtin/#float64">float64</a>, eid, ipid <a href="/pkg/builtin/#int">int</a>, time <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
@@ -2076,13 +2076,13 @@ Update updates stresses for given strains
 		
 			
 			
-			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=828:1284#L21">Model</a></h2>
+			<h2 id="Model">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=828:1294#L21">Model</a></h2>
 			<pre>type Model interface {
-    Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) <a href="/pkg/builtin/#error">error</a> <span class="comment">// initialises model</span>
-    InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (*<a href="#State">State</a>, <a href="/pkg/builtin/#error">error</a>)          <span class="comment">// initialises AND allocates internal (secondary) variables</span>
-    GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>                                <span class="comment">// gets (an example) of parameters</span>
-    GetRho() <a href="/pkg/builtin/#float64">float64</a>                                  <span class="comment">// returns density</span>
-    Free()                                            <span class="comment">// free memory; e.g. when calling C code</span>
+    Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) <a href="/pkg/builtin/#error">error</a> <span class="comment">// initialises model</span>
+    InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (*<a href="#State">State</a>, <a href="/pkg/builtin/#error">error</a>)            <span class="comment">// initialises AND allocates internal (secondary) variables</span>
+    GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>                                <span class="comment">// gets (an example) of parameters</span>
+    GetRho() <a href="/pkg/builtin/#float64">float64</a>                                    <span class="comment">// returns density</span>
+    Free()                                              <span class="comment">// free memory; e.g. when calling C code</span>
 }</pre>
 			<p>
 Model defines the interface for solid models
@@ -2099,7 +2099,7 @@ Model defines the interface for solid models
 
 			
 				
-				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=2807:2853#L56">New</a></h3>
+				<h3 id="New">func <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=2817:2863#L56">New</a></h3>
 				<pre>func New(name <a href="/pkg/builtin/#string">string</a>) (model <a href="#Model">Model</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 New returns new solid model
@@ -2148,7 +2148,7 @@ Ogden implements a linear elastic model
 
 			
 				
-				<h3 id="Ogden.CalcA">func (*Ogden) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ogden.go?s=2865:2941#L116">CalcA</a></h3>
+				<h3 id="Ogden.CalcA">func (*Ogden) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ogden.go?s=2867:2943#L116">CalcA</a></h3>
 				<pre>func (o *<a href="#Ogden">Ogden</a>) CalcA(A [][][][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcA computes tangent modulus A = (2/J) * ∂τ/∂b . b - σ palm I
@@ -2170,8 +2170,8 @@ Free frees memory
 				
 			
 				
-				<h3 id="Ogden.GetPrms">func (Ogden) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ogden.go?s=1820:1853#L75">GetPrms</a></h3>
-				<pre>func (o <a href="#Ogden">Ogden</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="Ogden.GetPrms">func (Ogden) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ogden.go?s=1822:1857#L75">GetPrms</a></h3>
+				<pre>func (o <a href="#Ogden">Ogden</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -2192,8 +2192,8 @@ GetRho returns density
 				
 			
 				
-				<h3 id="Ogden.Init">func (*Ogden) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ogden.go?s=1153:1224#L43">Init</a></h3>
-				<pre>func (o *<a href="#Ogden">Ogden</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Ogden.Init">func (*Ogden) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ogden.go?s=1153:1226#L43">Init</a></h3>
+				<pre>func (o *<a href="#Ogden">Ogden</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -2203,7 +2203,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="Ogden.InitIntVars">func (Ogden) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ogden.go?s=1938:2000#L80">InitIntVars</a></h3>
+				<h3 id="Ogden.InitIntVars">func (Ogden) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ogden.go?s=1940:2002#L80">InitIntVars</a></h3>
 				<pre>func (o <a href="#Ogden">Ogden</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -2214,7 +2214,7 @@ InitIntVars initialises internal (secondary) variables
 				
 			
 				
-				<h3 id="Ogden.Update">func (*Ogden) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ogden.go?s=2114:2173#L87">Update</a></h3>
+				<h3 id="Ogden.Update">func (*Ogden) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/ogden.go?s=2116:2175#L87">Update</a></h3>
 				<pre>func (o *<a href="#Ogden">Ogden</a>) Update(s *<a href="#State">State</a>, F [][]<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
@@ -2227,7 +2227,7 @@ Update updates stresses for given strains
 		
 			
 			
-			<h2 id="OneD">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=2335:2774#L48">OneD</a></h2>
+			<h2 id="OneD">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=2345:2784#L48">OneD</a></h2>
 			<pre>type OneD interface {
     InitIntVars1D() (*<a href="#OnedState">OnedState</a>, <a href="/pkg/builtin/#error">error</a>)                         <span class="comment">// initialises AND allocates internal (secondary) variables</span>
     Update(s *<a href="#OnedState">OnedState</a>, ε, Δε, aux <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#error">error</a>              <span class="comment">// update state</span>
@@ -2280,7 +2280,7 @@ OnedLinElast implements a linear elastic model for 1D elements
 
 			
 				
-				<h3 id="OnedLinElast.CalcD">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=2247:2328#L72">CalcD</a></h3>
+				<h3 id="OnedLinElast.CalcD">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=2235:2316#L72">CalcD</a></h3>
 				<pre>func (o <a href="#OnedLinElast">OnedLinElast</a>) CalcD(s *<a href="#OnedState">OnedState</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (<a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#float64">float64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new consistent with StressUpdate
@@ -2313,8 +2313,8 @@ GetA returns cross-sectional area
 				
 			
 				
-				<h3 id="OnedLinElast.GetPrms">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=1542:1582#L47">GetPrms</a></h3>
-				<pre>func (o <a href="#OnedLinElast">OnedLinElast</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="OnedLinElast.GetPrms">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=1544:1586#L47">GetPrms</a></h3>
+				<pre>func (o <a href="#OnedLinElast">OnedLinElast</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -2335,8 +2335,8 @@ GetRho returns density
 				
 			
 				
-				<h3 id="OnedLinElast.Init">func (*OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=969:1047#L30">Init</a></h3>
-				<pre>func (o *<a href="#OnedLinElast">OnedLinElast</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="OnedLinElast.Init">func (*OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=969:1049#L30">Init</a></h3>
+				<pre>func (o *<a href="#OnedLinElast">OnedLinElast</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -2346,7 +2346,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="OnedLinElast.InitIntVars">func (*OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=1415:1485#L42">InitIntVars</a></h3>
+				<h3 id="OnedLinElast.InitIntVars">func (*OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=1417:1487#L42">InitIntVars</a></h3>
 				<pre>func (o *<a href="#OnedLinElast">OnedLinElast</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars: unused
@@ -2357,7 +2357,7 @@ InitIntVars: unused
 				
 			
 				
-				<h3 id="OnedLinElast.InitIntVars1D">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=1922:1985#L60">InitIntVars1D</a></h3>
+				<h3 id="OnedLinElast.InitIntVars1D">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=1910:1973#L60">InitIntVars1D</a></h3>
 				<pre>func (o <a href="#OnedLinElast">OnedLinElast</a>) InitIntVars1D() (s *<a href="#OnedState">OnedState</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -2368,7 +2368,7 @@ InitIntVars initialises internal (secondary) variables
 				
 			
 				
-				<h3 id="OnedLinElast.Update">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=2068:2145#L66">Update</a></h3>
+				<h3 id="OnedLinElast.Update">func (OnedLinElast) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/onedlinelast.go?s=2056:2133#L66">Update</a></h3>
 				<pre>func (o <a href="#OnedLinElast">OnedLinElast</a>) Update(s *<a href="#OnedState">OnedState</a>, ε, Δε, aux <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
@@ -2899,7 +2899,7 @@ PrincStrainsUp implements stress-update in principal strains space
 
 			
 				
-				<h3 id="PrincStrainsUp.CalcD">func (*PrincStrainsUp) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/princstrainsup.go?s=6817:6884#L267">CalcD</a></h3>
+				<h3 id="PrincStrainsUp.CalcD">func (*PrincStrainsUp) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/princstrainsup.go?s=6819:6886#L267">CalcD</a></h3>
 				<pre>func (o *<a href="#PrincStrainsUp">PrincStrainsUp</a>) CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes algorithmic tangent operator
@@ -2921,8 +2921,8 @@ Free frees memory
 				
 			
 				
-				<h3 id="PrincStrainsUp.Init">func (*PrincStrainsUp) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/princstrainsup.go?s=2795:2874#L73">Init</a></h3>
-				<pre>func (o *<a href="#PrincStrainsUp">PrincStrainsUp</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>, mdl <a href="#EPmodel">EPmodel</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="PrincStrainsUp.Init">func (*PrincStrainsUp) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/princstrainsup.go?s=2795:2876#L73">Init</a></h3>
+				<pre>func (o *<a href="#PrincStrainsUp">PrincStrainsUp</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>, mdl <a href="#EPmodel">EPmodel</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises this structure
 </p>
@@ -2932,7 +2932,7 @@ Init initialises this structure
 				
 			
 				
-				<h3 id="PrincStrainsUp.JfcnD">func (*PrincStrainsUp) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/princstrainsup.go?s=9388:9458#L380">JfcnD</a></h3>
+				<h3 id="PrincStrainsUp.JfcnD">func (*PrincStrainsUp) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/princstrainsup.go?s=9390:9460#L380">JfcnD</a></h3>
 				<pre>func (o *<a href="#PrincStrainsUp">PrincStrainsUp</a>) JfcnD(J [][]<a href="/pkg/builtin/#float64">float64</a>, x []<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 JfcnD is the nonlinear solver Jacobian: J = dfdx
@@ -2943,7 +2943,7 @@ JfcnD is the nonlinear solver Jacobian: J = dfdx
 				
 			
 				
-				<h3 id="PrincStrainsUp.Update">func (*PrincStrainsUp) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/princstrainsup.go?s=4685:4787#L168">Update</a></h3>
+				<h3 id="PrincStrainsUp.Update">func (*PrincStrainsUp) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/princstrainsup.go?s=4687:4789#L168">Update</a></h3>
 				<pre>func (o *<a href="#PrincStrainsUp">PrincStrainsUp</a>) Update(s *<a href="#State">State</a>, ε, Δε []<a href="/pkg/builtin/#float64">float64</a>, eid, ipid <a href="/pkg/builtin/#int">int</a>, time <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates state
@@ -3002,7 +3002,7 @@ RjointM1 implements a 1D plasticity model for rod-joints (links/interface)
 
 			
 				
-				<h3 id="RjointM1.CalcD">func (*RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=2837:2926#L115">CalcD</a></h3>
+				<h3 id="RjointM1.CalcD">func (*RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=2827:2916#L115">CalcD</a></h3>
 				<pre>func (o *<a href="#RjointM1">RjointM1</a>) CalcD(s *<a href="#OnedState">OnedState</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (DτDω, DτDσc <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new consistent with StressUpdate
@@ -3024,8 +3024,8 @@ Free frees memory
 				
 			
 				
-				<h3 id="RjointM1.GetPrms">func (RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=1610:1646#L60">GetPrms</a></h3>
-				<pre>func (o <a href="#RjointM1">RjointM1</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="RjointM1.GetPrms">func (RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=1612:1650#L60">GetPrms</a></h3>
+				<pre>func (o <a href="#RjointM1">RjointM1</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -3046,8 +3046,8 @@ GetRho returns density
 				
 			
 				
-				<h3 id="RjointM1.Init">func (*RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=1013:1087#L35">Init</a></h3>
-				<pre>func (o *<a href="#RjointM1">RjointM1</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="RjointM1.Init">func (*RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=1013:1089#L35">Init</a></h3>
+				<pre>func (o *<a href="#RjointM1">RjointM1</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -3057,7 +3057,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="RjointM1.InitIntVars">func (*RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=1871:1937#L72">InitIntVars</a></h3>
+				<h3 id="RjointM1.InitIntVars">func (*RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=1861:1927#L72">InitIntVars</a></h3>
 				<pre>func (o *<a href="#RjointM1">RjointM1</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars: unused
@@ -3068,7 +3068,7 @@ InitIntVars: unused
 				
 			
 				
-				<h3 id="RjointM1.InitIntVars1D">func (RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=2009:2068#L77">InitIntVars1D</a></h3>
+				<h3 id="RjointM1.InitIntVars1D">func (RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=1999:2058#L77">InitIntVars1D</a></h3>
 				<pre>func (o <a href="#RjointM1">RjointM1</a>) InitIntVars1D() (s *<a href="#OnedState">OnedState</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -3090,7 +3090,7 @@ Set_mu sets μ parameter
 				
 			
 				
-				<h3 id="RjointM1.Update">func (*RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=2245:2318#L84">Update</a></h3>
+				<h3 id="RjointM1.Update">func (*RjointM1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/rjointm1.go?s=2235:2308#L84">Update</a></h3>
 				<pre>func (o *<a href="#RjointM1">RjointM1</a>) Update(s *<a href="#OnedState">OnedState</a>, σcNew, Δω <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
@@ -3105,7 +3105,7 @@ Update updates stresses for given strains
 		
 			
 			
-			<h2 id="Small">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=1352:1731#L30">Small</a></h2>
+			<h2 id="Small">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=1362:1741#L30">Small</a></h2>
 			<pre>type Small interface {
     Update(s *<a href="#State">State</a>, ε, Δε []<a href="/pkg/builtin/#float64">float64</a>, eid, ipid <a href="/pkg/builtin/#int">int</a>, time <a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#error">error</a> <span class="comment">// updates stresses for given strains</span>
     CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/builtin/#error">error</a>                   <span class="comment">// computes D = dσ_new/dε_new consistent with StressUpdate</span>
@@ -3130,7 +3130,7 @@ Small defines rate type solid models for small strain analyses
 		
 			
 			
-			<h2 id="SmallElasticity">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=940:1315#L30">SmallElasticity</a></h2>
+			<h2 id="SmallElasticity">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=944:1319#L30">SmallElasticity</a></h2>
 			<pre>type SmallElasticity struct {
     Nsig  <a href="/pkg/builtin/#int">int</a>     <span class="comment">// number of stress components</span>
     E, Nu <a href="/pkg/builtin/#float64">float64</a> <span class="comment">// Young modulus and Poisson coefficient</span>
@@ -3158,7 +3158,7 @@ SmallElasticity implements linear/non-linear elasticity for small strain analyse
 
 			
 				
-				<h3 id="SmallElasticity.CalcD">func (SmallElasticity) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=3451:3518#L126">CalcD</a></h3>
+				<h3 id="SmallElasticity.CalcD">func (SmallElasticity) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=3453:3520#L126">CalcD</a></h3>
 				<pre>func (o <a href="#SmallElasticity">SmallElasticity</a>) CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new (consistent)
@@ -3169,8 +3169,8 @@ CalcD computes D = dσ_new/dε_new (consistent)
 				
 			
 				
-				<h3 id="SmallElasticity.GetPrms">func (SmallElasticity) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=2803:2846#L100">GetPrms</a></h3>
-				<pre>func (o <a href="#SmallElasticity">SmallElasticity</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="SmallElasticity.GetPrms">func (SmallElasticity) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=2809:2854#L100">GetPrms</a></h3>
+				<pre>func (o <a href="#SmallElasticity">SmallElasticity</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -3180,7 +3180,7 @@ GetPrms gets (an example) of parameters
 				
 			
 				
-				<h3 id="SmallElasticity.GetRho">func (*SmallElasticity) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=1343:1385#L41">GetRho</a></h3>
+				<h3 id="SmallElasticity.GetRho">func (*SmallElasticity) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=1347:1389#L41">GetRho</a></h3>
 				<pre>func (o *<a href="#SmallElasticity">SmallElasticity</a>) GetRho() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 GetRho returns density
@@ -3191,8 +3191,8 @@ GetRho returns density
 				
 			
 				
-				<h3 id="SmallElasticity.Init">func (*SmallElasticity) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=1440:1521#L46">Init</a></h3>
-				<pre>func (o *<a href="#SmallElasticity">SmallElasticity</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="SmallElasticity.Init">func (*SmallElasticity) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=1444:1527#L46">Init</a></h3>
+				<pre>func (o *<a href="#SmallElasticity">SmallElasticity</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises this structure
 </p>
@@ -3202,7 +3202,7 @@ Init initialises this structure
 				
 			
 				
-				<h3 id="SmallElasticity.Update">func (SmallElasticity) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=2995:3064#L108">Update</a></h3>
+				<h3 id="SmallElasticity.Update">func (SmallElasticity) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/elasticity.go?s=2997:3066#L108">Update</a></h3>
 				<pre>func (o <a href="#SmallElasticity">SmallElasticity</a>) Update(s *<a href="#State">State</a>, Δε []<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update computes new stresses for new strain increment Δε
@@ -3215,7 +3215,7 @@ Update computes new stresses for new strain increment Δε
 		
 			
 			
-			<h2 id="SmallStrainUpdater">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=1825:1974#L37">SmallStrainUpdater</a></h2>
+			<h2 id="SmallStrainUpdater">type <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/model.go?s=1835:1984#L37">SmallStrainUpdater</a></h2>
 			<pre>type SmallStrainUpdater interface {
     StrainUpdate(s *<a href="#State">State</a>, Δσ []<a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#error">error</a> <span class="comment">// updates strains for given stresses (small strains formulation)</span>
 }</pre>
@@ -3274,7 +3274,7 @@ SmpInvs implements a model with SMP invariants similar to Drucker-Prager model
 
 			
 				
-				<h3 id="SmpInvs.CalcD">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=3514:3588#L144">CalcD</a></h3>
+				<h3 id="SmpInvs.CalcD">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=3492:3566#L144">CalcD</a></h3>
 				<pre>func (o *<a href="#SmpInvs">SmpInvs</a>) CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new consistent with StressUpdate
@@ -3285,7 +3285,7 @@ CalcD computes D = dσ_new/dε_new consistent with StressUpdate
 				
 			
 				
-				<h3 id="SmpInvs.ContD">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=3668:3728#L149">ContD</a></h3>
+				<h3 id="SmpInvs.ContD">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=3646:3706#L149">ContD</a></h3>
 				<pre>func (o *<a href="#SmpInvs">SmpInvs</a>) ContD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ContD computes D = dσ_new/dε_new continuous
@@ -3296,7 +3296,7 @@ ContD computes D = dσ_new/dε_new continuous
 				
 			
 				
-				<h3 id="SmpInvs.E_CalcDe">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=5384:5440#L212">E_CalcDe</a></h3>
+				<h3 id="SmpInvs.E_CalcDe">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=5362:5418#L212">E_CalcDe</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) E_CalcDe(De [][]<a href="/pkg/builtin/#float64">float64</a>, εe []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 E_CalcDe computes elastic modulus in principal components
@@ -3307,7 +3307,7 @@ E_CalcDe computes elastic modulus in principal components
 				
 			
 				
-				<h3 id="SmpInvs.E_CalcSig">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=5248:5293#L207">E_CalcSig</a></h3>
+				<h3 id="SmpInvs.E_CalcSig">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=5226:5271#L207">E_CalcSig</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) E_CalcSig(σ, εe []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 E_CalcSig computes principal stresses for given principal elastic strains
@@ -3318,7 +3318,7 @@ E_CalcSig computes principal stresses for given principal elastic strains
 				
 			
 				
-				<h3 id="SmpInvs.ElastD">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=5092:5140#L202">ElastD</a></h3>
+				<h3 id="SmpInvs.ElastD">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=5070:5118#L202">ElastD</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) ElastD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>)</pre>
 				<p>
 ElastD returns continuum elastic D
@@ -3329,7 +3329,7 @@ ElastD returns continuum elastic D
 				
 			
 				
-				<h3 id="SmpInvs.ElastUpdate">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4962:5014#L197">ElastUpdate</a></h3>
+				<h3 id="SmpInvs.ElastUpdate">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4940:4992#L197">ElastUpdate</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) ElastUpdate(s *<a href="#State">State</a>, ε []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 ElastUpdate updates state with an elastic response
@@ -3351,8 +3351,8 @@ Free frees memory
 				
 			
 				
-				<h3 id="SmpInvs.GetPrms">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=2578:2613#L112">GetPrms</a></h3>
-				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="SmpInvs.GetPrms">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=2580:2617#L112">GetPrms</a></h3>
+				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -3373,7 +3373,7 @@ GetRho returns density
 				
 			
 				
-				<h3 id="SmpInvs.Get_bsmp">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4144:4179#L167">Get_bsmp</a></h3>
+				<h3 id="SmpInvs.Get_bsmp">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4122:4157#L167">Get_bsmp</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) Get_bsmp() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Get_bsmp gets b coefficient if using SMP invariants
@@ -3384,7 +3384,7 @@ Get_bsmp gets b coefficient if using SMP invariants
 				
 			
 				
-				<h3 id="SmpInvs.Get_phi">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4036:4070#L162">Get_phi</a></h3>
+				<h3 id="SmpInvs.Get_phi">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4014:4048#L162">Get_phi</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) Get_phi() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Get_phi returns φ or zero
@@ -3395,7 +3395,7 @@ Get_phi returns φ or zero
 				
 			
 				
-				<h3 id="SmpInvs.Info">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=3946:3987#L157">Info</a></h3>
+				<h3 id="SmpInvs.Info">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=3924:3965#L157">Info</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) Info() (nalp, nsurf <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 Info returns some information and data from this model
@@ -3406,8 +3406,8 @@ Info returns some information and data from this model
 				
 			
 				
-				<h3 id="SmpInvs.Init">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=1575:1648#L50">Init</a></h3>
-				<pre>func (o *<a href="#SmpInvs">SmpInvs</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="SmpInvs.Init">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=1575:1650#L50">Init</a></h3>
+				<pre>func (o *<a href="#SmpInvs">SmpInvs</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -3417,7 +3417,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="SmpInvs.InitIntVars">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=3046:3110#L130">InitIntVars</a></h3>
+				<h3 id="SmpInvs.InitIntVars">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=3024:3088#L130">InitIntVars</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -3428,7 +3428,7 @@ InitIntVars initialises internal (secondary) variables
 				
 			
 				
-				<h3 id="SmpInvs.L_FlowHard">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=5534:5609#L217">L_FlowHard</a></h3>
+				<h3 id="SmpInvs.L_FlowHard">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=5512:5587#L217">L_FlowHard</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) L_FlowHard(Nb, h, σ, α []<a href="/pkg/builtin/#float64">float64</a>) (f <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L_FlowHard computes model variabes for given principal values
@@ -3439,7 +3439,7 @@ L_FlowHard computes model variabes for given principal values
 				
 			
 				
-				<h3 id="SmpInvs.L_SecondDerivs">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=6098:6207#L238">L_SecondDerivs</a></h3>
+				<h3 id="SmpInvs.L_SecondDerivs">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=6076:6185#L238">L_SecondDerivs</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) L_SecondDerivs(N, Nb, A, h []<a href="/pkg/builtin/#float64">float64</a>, Mb, a, b, c [][]<a href="/pkg/builtin/#float64">float64</a>, σ, α []<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L_SecondDerivs computes second order derivatives
@@ -3459,7 +3459,7 @@ c_ij -- ∂h_i/∂α_j [nalp][nalp]
 				
 			
 				
-				<h3 id="SmpInvs.L_YieldFunc">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4481:4536#L179">L_YieldFunc</a></h3>
+				<h3 id="SmpInvs.L_YieldFunc">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4459:4514#L179">L_YieldFunc</a></h3>
 				<pre>func (o *<a href="#SmpInvs">SmpInvs</a>) L_YieldFunc(σ, α []<a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 L_YieldFunc computes the yield function value for given principal stresses (σ)
@@ -3470,7 +3470,7 @@ L_YieldFunc computes the yield function value for given principal stresses (σ)
 				
 			
 				
-				<h3 id="SmpInvs.Set_bsmp">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4252:4289#L172">Set_bsmp</a></h3>
+				<h3 id="SmpInvs.Set_bsmp">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4230:4267#L172">Set_bsmp</a></h3>
 				<pre>func (o *<a href="#SmpInvs">SmpInvs</a>) Set_bsmp(b <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Set_bsmp sets b coefficient if using SMP invariants
@@ -3481,7 +3481,7 @@ Set_bsmp sets b coefficient if using SMP invariants
 				
 			
 				
-				<h3 id="SmpInvs.Update">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=3296:3391#L139">Update</a></h3>
+				<h3 id="SmpInvs.Update">func (*SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=3274:3369#L139">Update</a></h3>
 				<pre>func (o *<a href="#SmpInvs">SmpInvs</a>) Update(s *<a href="#State">State</a>, ε, Δε []<a href="/pkg/builtin/#float64">float64</a>, eid, ipid <a href="/pkg/builtin/#int">int</a>, time <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
@@ -3492,7 +3492,7 @@ Update updates stresses for given strains
 				
 			
 				
-				<h3 id="SmpInvs.YieldFuncs">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4711:4758#L188">YieldFuncs</a></h3>
+				<h3 id="SmpInvs.YieldFuncs">func (SmpInvs) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/smp.go?s=4689:4736#L188">YieldFuncs</a></h3>
 				<pre>func (o <a href="#SmpInvs">SmpInvs</a>) YieldFuncs(s *<a href="#State">State</a>) []<a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 YieldFuncs computes yield function values
@@ -3603,7 +3603,7 @@ VonMises implements von Mises plasticity model
 
 			
 				
-				<h3 id="VonMises.CalcD">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=2707:2782#L114">CalcD</a></h3>
+				<h3 id="VonMises.CalcD">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=2705:2780#L114">CalcD</a></h3>
 				<pre>func (o *<a href="#VonMises">VonMises</a>) CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new consistent with StressUpdate
@@ -3614,7 +3614,7 @@ CalcD computes D = dσ_new/dε_new consistent with StressUpdate
 				
 			
 				
-				<h3 id="VonMises.ContD">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=3520:3581#L148">ContD</a></h3>
+				<h3 id="VonMises.ContD">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=3518:3579#L148">ContD</a></h3>
 				<pre>func (o *<a href="#VonMises">VonMises</a>) ContD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ContD computes D = dσ_new/dε_new continuous
@@ -3625,7 +3625,7 @@ ContD computes D = dσ_new/dε_new continuous
 				
 			
 				
-				<h3 id="VonMises.E_CalcDe">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=5450:5507#L222">E_CalcDe</a></h3>
+				<h3 id="VonMises.E_CalcDe">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=5448:5505#L222">E_CalcDe</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) E_CalcDe(De [][]<a href="/pkg/builtin/#float64">float64</a>, εe []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 E_CalcDe computes elastic modulus in principal components
@@ -3636,7 +3636,7 @@ E_CalcDe computes elastic modulus in principal components
 				
 			
 				
-				<h3 id="VonMises.E_CalcSig">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=5337:5383#L218">E_CalcSig</a></h3>
+				<h3 id="VonMises.E_CalcSig">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=5335:5381#L218">E_CalcSig</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) E_CalcSig(σ, εe []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 E_CalcSig computes principal stresses for given principal elastic strains
@@ -3647,7 +3647,7 @@ E_CalcSig computes principal stresses for given principal elastic strains
 				
 			
 				
-				<h3 id="VonMises.ElastD">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=5205:5254#L214">ElastD</a></h3>
+				<h3 id="VonMises.ElastD">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=5203:5252#L214">ElastD</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) ElastD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>)</pre>
 				<p>
 ElastD returns continuum elastic D
@@ -3658,7 +3658,7 @@ ElastD returns continuum elastic D
 				
 			
 				
-				<h3 id="VonMises.ElastUpdate">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4933:4986#L204">ElastUpdate</a></h3>
+				<h3 id="VonMises.ElastUpdate">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4931:4984#L204">ElastUpdate</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) ElastUpdate(s *<a href="#State">State</a>, ε []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 ElastUpdate updates state with an elastic response
@@ -3680,8 +3680,8 @@ Free frees memory
 				
 			
 				
-				<h3 id="VonMises.GetPrms">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=1289:1325#L54">GetPrms</a></h3>
-				<pre>func (o <a href="#VonMises">VonMises</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="VonMises.GetPrms">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=1291:1329#L54">GetPrms</a></h3>
+				<pre>func (o <a href="#VonMises">VonMises</a>) GetPrms() <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -3702,7 +3702,7 @@ GetRho returns density
 				
 			
 				
-				<h3 id="VonMises.Get_bsmp">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4345:4381#L185">Get_bsmp</a></h3>
+				<h3 id="VonMises.Get_bsmp">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4343:4379#L185">Get_bsmp</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) Get_bsmp() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Get_bsmp gets b coefficient if using SMP invariants
@@ -3713,7 +3713,7 @@ Get_bsmp gets b coefficient if using SMP invariants
 				
 			
 				
-				<h3 id="VonMises.Get_phi">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4240:4275#L182">Get_phi</a></h3>
+				<h3 id="VonMises.Get_phi">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4238:4273#L182">Get_phi</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) Get_phi() <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 Get_phi gets φ or returns 0
@@ -3724,7 +3724,7 @@ Get_phi gets φ or returns 0
 				
 			
 				
-				<h3 id="VonMises.Info">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4147:4189#L177">Info</a></h3>
+				<h3 id="VonMises.Info">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4145:4187#L177">Info</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) Info() (nalp, nsurf <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 Info returns some information and data from this model
@@ -3735,8 +3735,8 @@ Info returns some information and data from this model
 				
 			
 				
-				<h3 id="VonMises.Init">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=758:832#L27">Init</a></h3>
-				<pre>func (o *<a href="#VonMises">VonMises</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="VonMises.Init">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=758:834#L27">Init</a></h3>
+				<pre>func (o *<a href="#VonMises">VonMises</a>) Init(ndim <a href="/pkg/builtin/#int">int</a>, pstress <a href="/pkg/builtin/#bool">bool</a>, prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises model
 </p>
@@ -3746,7 +3746,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="VonMises.InitIntVars">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=1468:1533#L62">InitIntVars</a></h3>
+				<h3 id="VonMises.InitIntVars">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=1466:1531#L62">InitIntVars</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -3757,7 +3757,7 @@ InitIntVars initialises internal (secondary) variables
 				
 			
 				
-				<h3 id="VonMises.L_FlowHard">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=5578:5654#L226">L_FlowHard</a></h3>
+				<h3 id="VonMises.L_FlowHard">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=5576:5652#L226">L_FlowHard</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) L_FlowHard(Nb, h, σ, α []<a href="/pkg/builtin/#float64">float64</a>) (f <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L_FlowHard computes model variabes for given principal values
@@ -3768,7 +3768,7 @@ L_FlowHard computes model variabes for given principal values
 				
 			
 				
-				<h3 id="VonMises.L_SecondDerivs">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=6011:6121#L239">L_SecondDerivs</a></h3>
+				<h3 id="VonMises.L_SecondDerivs">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=6009:6119#L239">L_SecondDerivs</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) L_SecondDerivs(N, Nb, A, h []<a href="/pkg/builtin/#float64">float64</a>, Mb, a, b, c [][]<a href="/pkg/builtin/#float64">float64</a>, σ, α []<a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 L_SecondDerivs computes second order derivatives
@@ -3788,7 +3788,7 @@ c_ij -- ∂h_i/∂α_j [nalp][nalp]
 				
 			
 				
-				<h3 id="VonMises.L_YieldFunc">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4577:4633#L191">L_YieldFunc</a></h3>
+				<h3 id="VonMises.L_YieldFunc">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4575:4631#L191">L_YieldFunc</a></h3>
 				<pre>func (o *<a href="#VonMises">VonMises</a>) L_YieldFunc(σ, α []<a href="/pkg/builtin/#float64">float64</a>) <a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 L_YieldFunc computes the yield function value for given principal stresses (σ)
@@ -3799,7 +3799,7 @@ L_YieldFunc computes the yield function value for given principal stresses (σ)
 				
 			
 				
-				<h3 id="VonMises.Set_bsmp">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4451:4489#L188">Set_bsmp</a></h3>
+				<h3 id="VonMises.Set_bsmp">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4449:4487#L188">Set_bsmp</a></h3>
 				<pre>func (o *<a href="#VonMises">VonMises</a>) Set_bsmp(b <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Set_bsmp sets b coefficient if using SMP invariants
@@ -3810,7 +3810,7 @@ Set_bsmp sets b coefficient if using SMP invariants
 				
 			
 				
-				<h3 id="VonMises.Update">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=1648:1744#L69">Update</a></h3>
+				<h3 id="VonMises.Update">func (*VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=1646:1742#L69">Update</a></h3>
 				<pre>func (o *<a href="#VonMises">VonMises</a>) Update(s *<a href="#State">State</a>, ε, Δε []<a href="/pkg/builtin/#float64">float64</a>, eid, ipid <a href="/pkg/builtin/#int">int</a>, time <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
@@ -3821,7 +3821,7 @@ Update updates stresses for given strains
 				
 			
 				
-				<h3 id="VonMises.YieldFuncs">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4748:4796#L197">YieldFuncs</a></h3>
+				<h3 id="VonMises.YieldFuncs">func (VonMises) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/vm.go?s=4746:4794#L197">YieldFuncs</a></h3>
 				<pre>func (o <a href="#VonMises">VonMises</a>) YieldFuncs(s *<a href="#State">State</a>) []<a href="/pkg/builtin/#float64">float64</a></pre>
 				<p>
 YieldFs computes the yield functions

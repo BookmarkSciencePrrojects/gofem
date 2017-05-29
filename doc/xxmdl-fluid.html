@@ -81,10 +81,10 @@ package fluid implements models for fluid density
 					<dd>&nbsp; &nbsp; <a href="#Model.Calc">func (o Model) Calc(z float64) (p, R float64)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Model.GetPrms">func (o Model) GetPrms(example bool) fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Model.GetPrms">func (o Model) GetPrms(example bool) fun.Params</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Model.Init">func (o *Model) Init(prms fun.Prms, H, grav float64)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Model.Init">func (o *Model) Init(prms fun.Params, H, grav float64)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Model.Plot">func (o Model) Plot(dirout, fnkey string, np int)</a></dd>
@@ -185,7 +185,7 @@ along a column with gravity (g). The model is:
 
 			
 				
-				<h3 id="Model.Calc">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=2086:2131#L73">Calc</a></h3>
+				<h3 id="Model.Calc">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=2072:2117#L73">Calc</a></h3>
 				<pre>func (o <a href="#Model">Model</a>) Calc(z <a href="/pkg/builtin/#float64">float64</a>) (p, R <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Calc computes pressure and density
@@ -196,8 +196,8 @@ Calc computes pressure and density
 				
 			
 				
-				<h3 id="Model.GetPrms">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=1350:1395#L43">GetPrms</a></h3>
-				<pre>func (o <a href="#Model">Model</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="Model.GetPrms">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=1352:1399#L43">GetPrms</a></h3>
+				<pre>func (o <a href="#Model">Model</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example of) parameters
 </p>
@@ -212,8 +212,8 @@ Note:
 				
 			
 				
-				<h3 id="Model.Init">func (*Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=890:942#L21">Init</a></h3>
-				<pre>func (o *<a href="#Model">Model</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>, H, grav <a href="/pkg/builtin/#float64">float64</a>)</pre>
+				<h3 id="Model.Init">func (*Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=890:944#L21">Init</a></h3>
+				<pre>func (o *<a href="#Model">Model</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>, H, grav <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Init initialises this structure
 </p>
@@ -223,7 +223,7 @@ Init initialises this structure
 				
 			
 				
-				<h3 id="Model.Plot">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=2286:2335#L80">Plot</a></h3>
+				<h3 id="Model.Plot">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/fluid/fluid.go?s=2272:2321#L80">Plot</a></h3>
 				<pre>func (o <a href="#Model">Model</a>) Plot(dirout, fnkey <a href="/pkg/builtin/#string">string</a>, np <a href="/pkg/builtin/#int">int</a>)</pre>
 				<p>
 Plot plots pressure and density along height of column

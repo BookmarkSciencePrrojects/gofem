@@ -127,10 +127,10 @@ package porous implements models for porous media based on the Theory of Porous 
 					<dd>&nbsp; &nbsp; <a href="#Model.Ccd">func (o Model) Ccd(s *State, pc float64) (dCcdpc float64, err error)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Model.GetPrms">func (o Model) GetPrms(example bool) fun.Prms</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Model.GetPrms">func (o Model) GetPrms(example bool) fun.Params</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#Model.Init">func (o *Model) Init(prms fun.Prms, Cnd conduct.Model, Lrm retention.Model, Liq *fluid.Model, Gas *fluid.Model, grav float64) (err error)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#Model.Init">func (o *Model) Init(prms fun.Params, Cnd conduct.Model, Lrm retention.Model, Liq *fluid.Model, Gas *fluid.Model, grav float64) (err error)</a></dd>
 				
 					
 					<dd>&nbsp; &nbsp; <a href="#Model.NewState">func (o Model) NewState(ρL, ρG, pl, pg float64) (s *State, err error)</a></dd>
@@ -452,7 +452,7 @@ CalcLs calculates variables for liquid-solid simulations
 				
 			
 				
-				<h3 id="Model.Ccb">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=9245:9313#L321">Ccb</a></h3>
+				<h3 id="Model.Ccb">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=9241:9309#L321">Ccb</a></h3>
 				<pre>func (o <a href="#Model">Model</a>) Ccb(s *<a href="#State">State</a>, pc <a href="/pkg/builtin/#float64">float64</a>) (dsldpc <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Ccb (Cc-bar) returns dsl/dpc consistent with the update method
@@ -465,7 +465,7 @@ Ccb (Cc-bar) returns dsl/dpc consistent with the update method
 				
 			
 				
-				<h3 id="Model.Ccd">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=9795:9863#L347">Ccd</a></h3>
+				<h3 id="Model.Ccd">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=9791:9859#L347">Ccd</a></h3>
 				<pre>func (o <a href="#Model">Model</a>) Ccd(s *<a href="#State">State</a>, pc <a href="/pkg/builtin/#float64">float64</a>) (dCcdpc <a href="/pkg/builtin/#float64">float64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Ccd (Cc-dash) returns dCc/dpc consistent with the update method
@@ -478,8 +478,8 @@ Ccd (Cc-dash) returns dCc/dpc consistent with the update method
 				
 			
 				
-				<h3 id="Model.GetPrms">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=5680:5725#L175">GetPrms</a></h3>
-				<pre>func (o <a href="#Model">Model</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a></pre>
+				<h3 id="Model.GetPrms">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=5682:5729#L175">GetPrms</a></h3>
+				<pre>func (o <a href="#Model">Model</a>) GetPrms(example <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a></pre>
 				<p>
 GetPrms gets (an example) of parameters
 </p>
@@ -489,8 +489,8 @@ GetPrms gets (an example) of parameters
 				
 			
 				
-				<h3 id="Model.Init">func (*Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=2563:2700#L56">Init</a></h3>
-				<pre>func (o *<a href="#Model">Model</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Prms">Prms</a>, Cnd <a href="/pkg/github.com/cpmech/gofem/mdl/conduct/">conduct</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/conduct/#Model">Model</a>, Lrm <a href="/pkg/github.com/cpmech/gofem/mdl/retention/">retention</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/retention/#Model">Model</a>, Liq *<a href="/pkg/github.com/cpmech/gofem/mdl/fluid/">fluid</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/fluid/#Model">Model</a>, Gas *<a href="/pkg/github.com/cpmech/gofem/mdl/fluid/">fluid</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/fluid/#Model">Model</a>, grav <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<h3 id="Model.Init">func (*Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=2563:2702#L56">Init</a></h3>
+				<pre>func (o *<a href="#Model">Model</a>) Init(prms <a href="/pkg/github.com/cpmech/gosl/fun/">fun</a>.<a href="/pkg/github.com/cpmech/gosl/fun/#Params">Params</a>, Cnd <a href="/pkg/github.com/cpmech/gofem/mdl/conduct/">conduct</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/conduct/#Model">Model</a>, Lrm <a href="/pkg/github.com/cpmech/gofem/mdl/retention/">retention</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/retention/#Model">Model</a>, Liq *<a href="/pkg/github.com/cpmech/gofem/mdl/fluid/">fluid</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/fluid/#Model">Model</a>, Gas *<a href="/pkg/github.com/cpmech/gofem/mdl/fluid/">fluid</a>.<a href="/pkg/github.com/cpmech/gofem/mdl/fluid/#Model">Model</a>, grav <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Init initialises this structure
 </p>
@@ -500,7 +500,7 @@ Init initialises this structure
 				
 			
 				
-				<h3 id="Model.NewState">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=6119:6190#L192">NewState</a></h3>
+				<h3 id="Model.NewState">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=6115:6186#L192">NewState</a></h3>
 				<pre>func (o <a href="#Model">Model</a>) NewState(ρL, ρG, pl, pg <a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 NewState creates and initialises a new state structure
@@ -513,7 +513,7 @@ NewState creates and initialises a new state structure
 				
 			
 				
-				<h3 id="Model.Update">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=6472:6543#L209">Update</a></h3>
+				<h3 id="Model.Update">func (Model) <a href="https://github.com/cpmech/gofem/blob/master/mdl/porous/porous.go?s=6468:6539#L209">Update</a></h3>
 				<pre>func (o <a href="#Model">Model</a>) Update(s *<a href="#State">State</a>, Δpl, Δpg, pl, pg <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates state
