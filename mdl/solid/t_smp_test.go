@@ -46,11 +46,9 @@ func Test_smp01(tst *testing.T) {
 	})
 
 	// set flags
-	drv.CheckD = true
-	//drv.CheckD = false
+	drv.TstD = tst
 	drv.TolD = 1e-3
-	//drv.TolD = 10.0
-	drv.VerD = io.Verbose // verbose
+	drv.VerD = chk.Verbose // verbose
 	if err != nil {
 		tst.Errorf("test failed: %v\n", err)
 		return

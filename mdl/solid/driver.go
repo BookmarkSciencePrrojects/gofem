@@ -5,11 +5,12 @@
 package solid
 
 import (
+	"testing"
+
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
-	"github.com/cpmech/gosl/num"
 )
 
 // Driver run simulations with constitutive models for solids
@@ -20,12 +21,13 @@ type Driver struct {
 	model Model // solid model
 
 	// settings
-	Silent  bool    // do not show error messages
-	CheckD  bool    // do check consistent matrix
-	UseDfwd bool    // use DerivFwd (forward differences) instead of DerivCen (central differences) when checking D
-	TolD    float64 // tolerance to check consistent matrix
-	VerD    bool    // verbose check of D
-	WithPC  bool    // with predictor-corrector data
+	Silent bool    // do not show error messages
+	TolD   float64 // tolerance to check consistent matrix
+	VerD   bool    // verbose check of D
+	WithPC bool    // with predictor-corrector data
+
+	// check D matrix
+	TstD *testing.T // if != nil, do check consistent matrix
 
 	// results
 	Res []*State    // stress/ivs results
@@ -92,7 +94,7 @@ func (o *Driver) Run(pth *Path) (err error) {
 	// allocate results arrays
 	nr := 1 + (pth.Size()-1)*pth.Nincs
 	if nr < 2 {
-		return chk.Err(_driver_err04, pth.Size(), pth.Nincs)
+		return chk.Err("size of path is incorrect. Size=%d, Nincs=%d\n", pth.Size(), pth.Nincs)
 	}
 	o.Res = make([]*State, nr)
 	o.Eps = la.MatAlloc(nr, o.nsig)
@@ -111,20 +113,15 @@ func (o *Driver) Run(pth *Path) (err error) {
 	Δε := make([]float64, o.nsig)
 
 	// variables for checking D
-	var tmp float64
 	var εold, εnew, Δεtmp []float64
 	var stmp *State
-	derivfcn := num.DerivCen
-	if o.CheckD {
+	if o.TstD != nil {
 		εold = make([]float64, o.nsig)
 		εnew = make([]float64, o.nsig)
 		Δεtmp = make([]float64, o.nsig)
 		stmp, err = o.model.InitIntVars(σ0)
 		if err != nil {
 			return
-		}
-		if o.UseDfwd {
-			derivfcn = num.DerivFwd
 		}
 	}
 
@@ -150,7 +147,7 @@ func (o *Driver) Run(pth *Path) (err error) {
 				}
 				if err != nil {
 					if !o.Silent {
-						io.Pfred(_driver_err01, err)
+						io.Pfred("strain update failed\n%v\n", err)
 					}
 					return
 				}
@@ -173,56 +170,40 @@ func (o *Driver) Run(pth *Path) (err error) {
 				err = sml.Update(o.Res[k], o.Eps[k], Δε, 0, 0, 0)
 				if err != nil {
 					if !o.Silent {
-						io.Pfred(_driver_err02, err)
+						io.Pfred("stress update failed\n%v\n", err)
 					}
 					return
 				}
 				if epm != nil {
 					tmp := o.Res[k-1].GetCopy()
-					//s0 := make([]float64, o.nsig)
-					//_, p0, q0 := tsr.M_devσ(s0, o.Res[k-1].Sig)
-					//io.Pfblue2("p=%v q=%v\n", p0, q0)
 					epm.ElastUpdate(tmp, o.Eps[k])
 					o.PreCor = append(o.PreCor, tmp.Sig, o.Res[k].Sig)
 				}
 
 				// check consistent matrix
-				if o.CheckD {
+				if o.TstD != nil {
 					firstIt := false
 					err = sml.CalcD(o.D, o.Res[k], firstIt)
 					if err != nil {
-						return chk.Err(_driver_err03, err)
+						return chk.Err("check of consistent matrix failed:\n %v\n\n", err)
 					}
 					copy(εold, o.Eps[k-1])
 					copy(εnew, o.Eps[k])
-					has_error := false
 					if o.VerD {
 						io.Pf("\n")
 					}
-					for i := 0; i < o.nsig; i++ {
-						for j := 0; j < o.nsig; j++ {
-							dnum := derivfcn(func(x float64, args ...interface{}) (res float64) {
-								tmp, εnew[j] = εnew[j], x
-								for l := 0; l < o.nsig; l++ {
-									Δεtmp[l] = εnew[l] - εold[l]
-								}
-								stmp.Set(o.Res[k-1])
-								err = sml.Update(stmp, εnew, Δεtmp, 0, 0, 0)
-								if err != nil {
-									chk.Panic("cannot run Update for numerical derivative: %v", err)
-								}
-								res, εnew[j] = stmp.Sig[i], tmp
-								return
-							}, εnew[j])
-							err := chk.PrintAnaNum(io.Sf("D[%d][%d]", i, j), o.TolD, o.D[i][j], dnum, o.VerD)
-							if err != nil {
-								has_error = true
-							}
+					chk.DerivVecVec(o.TstD, "D", o.TolD, o.D, εnew, 1e-3, o.VerD, func(f, x []float64) error {
+						for l := 0; l < o.nsig; l++ {
+							Δεtmp[l] = x[l] - εold[l]
 						}
-					}
-					if has_error {
-						return chk.Err(_driver_err03, "ana-num comparison failed\n")
-					}
+						stmp.Set(o.Res[k-1])
+						err = sml.Update(stmp, x, Δεtmp, 0, 0, 0)
+						if err != nil {
+							return err
+						}
+						copy(f, stmp.Sig)
+						return nil
+					})
 				}
 				k += 1
 			}
@@ -230,11 +211,3 @@ func (o *Driver) Run(pth *Path) (err error) {
 	}
 	return
 }
-
-// error messages
-var (
-	_driver_err01 = "strain update failed\n%v\n"
-	_driver_err02 = "stress update failed\n%v\n"
-	_driver_err03 = "check of consistent matrix failed:\n %v\n\n"
-	_driver_err04 = "size of path is incorrect. Size=%d, Nincs=%d\n"
-)

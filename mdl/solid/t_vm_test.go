@@ -26,7 +26,7 @@ func Test_vm01(tst *testing.T) {
 		&fun.P{N: "qy0", V: 2},
 		&fun.P{N: "H", V: 0.5},
 	})
-	drv.CheckD = true
+	drv.TstD = tst
 	if err != nil {
 		tst.Errorf("test failed: %v\n", err)
 		return

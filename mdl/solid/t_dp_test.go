@@ -28,8 +28,8 @@ func Test_dp01(tst *testing.T) {
 		&fun.P{N: "qy0", V: 2},
 		&fun.P{N: "H", V: 0.5},
 	})
-	drv.CheckD = true
-	drv.VerD = false // verbose
+	drv.TstD = tst
+	drv.VerD = chk.Verbose // verbose
 	if err != nil {
 		tst.Errorf("test failed: %v\n", err)
 		return

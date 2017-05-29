@@ -41,10 +41,9 @@ func Test_ccm01(tst *testing.T) {
 		&fun.P{N: "le", V: 0},
 		&fun.P{N: "K0", V: K},
 	})
-	drv.CheckD = true
-	//drv.CheckD = false
+	drv.TstD = tst
 	drv.TolD = 1e-4
-	drv.VerD = io.Verbose // verbose
+	drv.VerD = chk.Verbose // verbose
 	if err != nil {
 		tst.Errorf("test failed: %v\n", err)
 		return
