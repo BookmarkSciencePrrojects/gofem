@@ -72,6 +72,7 @@ func Test_derivs01(tst *testing.T) {
 
 	// driver
 	var drv Driver
+	drv.TstD = tst
 	err = drv.Init(mdl)
 	if err != nil {
 		tst.Errorf("test failed: %v\n", err)

@@ -5,9 +5,10 @@
 package porous
 
 import (
+	"testing"
+
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/io"
-	"github.com/cpmech/gosl/num"
 )
 
 // Driver run simulations with models for porous media
@@ -17,12 +18,13 @@ type Driver struct {
 	Mdl *Model // porous model
 
 	// settings
-	Silent  bool    // do not show error messages
-	CheckD  bool    // do check consistent matrix
-	UseDfwd bool    // use DerivFwd (forward differences) instead of DerivCen (central differences) when checking D
-	TolCcb  float64 // tolerance to check Ccb
-	TolCcd  float64 // tolerance to check Ccd
-	VerD    bool    // verbose check of D
+	Silent bool    // do not show error messages
+	TolCcb float64 // tolerance to check Ccb
+	TolCcd float64 // tolerance to check Ccd
+	VerD   bool    // verbose check of D
+
+	// check D matrix
+	TstD *testing.T // if != nil, do check consistent matrix
 
 	// results
 	Res []*State // results
@@ -34,7 +36,6 @@ func (o *Driver) Init(mdl *Model) (err error) {
 	o.TolCcb = 1e-7
 	o.TolCcd = 1e-7
 	o.VerD = chk.Verbose
-	o.CheckD = true
 	return
 }
 
@@ -51,14 +52,8 @@ func (o *Driver) Run(Pc []float64) (err error) {
 		return
 	}
 
-	// auxiliary
-	derivfcn := num.DerivCen
-	if o.UseDfwd {
-		derivfcn = num.DerivFwd
-	}
-
 	// update states
-	var pcOld, pcNew, Δpc, tmp, Ccb, Ccbtmp, Ccd float64
+	var pcOld, pcNew, Δpc, Ccb, Ccbtmp, Ccd float64
 	var stmp State
 	for i := 1; i < np; i++ {
 
@@ -75,58 +70,35 @@ func (o *Driver) Run(Pc []float64) (err error) {
 		}
 
 		// check consistent moduli
-		if o.CheckD {
+		if o.TstD != nil {
 
 			// check Ccb
 			Ccb, err = o.Mdl.Ccb(o.Res[i], pcNew)
 			if err != nil {
 				return
 			}
-			var has_errors bool
-			dnum := derivfcn(func(x float64, args ...interface{}) (res float64) {
-				tmp, pcNew = pcNew, x
-				Δpc = pcNew - pcOld
+			chk.DerivScaSca(o.TstD, io.Sf("Ccb @ %.3f,%.4f", pcNew, o.Res[i].A_sl), o.TolCcb, Ccb, pcNew, 1e-3, o.VerD, func(x float64) (float64, error) {
+				Δpc = x - pcOld
 				stmp.Set(o.Res[i-1])
-				e := o.Mdl.Update(&stmp, -Δpc, 0, -pcNew, 0)
-				if e != nil {
-					has_errors = true
-				}
-				res, pcNew = stmp.A_sl, tmp
-				return
-			}, pcNew)
-			if has_errors {
-				return chk.Err("problems arised during update in numerical derivative for Ccb")
-			}
-			err = chk.PrintAnaNum(io.Sf("Ccb @ %.3f,%.4f", pcNew, o.Res[i].A_sl), o.TolCcb, Ccb, dnum, o.VerD)
-			if err != nil {
-				return
-			}
+				e := o.Mdl.Update(&stmp, -Δpc, 0, -x, 0)
+				return stmp.A_sl, e
+			})
 
 			// check Ccd
 			Ccd, err = o.Mdl.Ccd(o.Res[i], pcNew)
 			if err != nil {
 				return
 			}
-			has_errors = false
-			dnum = derivfcn(func(x float64, args ...interface{}) (res float64) {
-				tmp, pcNew = pcNew, x
-				Δpc = pcNew - pcOld
+			chk.DerivScaSca(o.TstD, io.Sf("Ccd @ %.3f,%.4f", pcNew, o.Res[i].A_sl), o.TolCcd, Ccd, pcNew, 1e-3, o.VerD, func(x float64) (float64, error) {
+				Δpc = x - pcOld
 				stmp.Set(o.Res[i-1])
-				e := o.Mdl.Update(&stmp, -Δpc, 0, -pcNew, 0)
+				e := o.Mdl.Update(&stmp, -Δpc, 0, -x, 0)
 				if e != nil {
-					has_errors = true
+					return 0, e
 				}
-				Ccbtmp, _ = o.Mdl.Ccb(&stmp, pcNew)
-				res, pcNew = Ccbtmp, tmp
-				return
-			}, pcNew)
-			if has_errors {
-				return chk.Err("problems arised during update in numerical derivative for Ccd")
-			}
-			err = chk.PrintAnaNum(io.Sf("Ccd @ %.3f,%.4f", pcNew, o.Res[i].A_sl), o.TolCcd, Ccd, dnum, o.VerD)
-			if err != nil {
-				return
-			}
+				Ccbtmp, e = o.Mdl.Ccb(&stmp, x)
+				return Ccbtmp, e
+			})
 		}
 	}
 	return

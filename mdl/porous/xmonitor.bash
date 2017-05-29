@@ -6,5 +6,7 @@ while true; do
     inotifywait -q -e modify $FILES
     echo
     echo
-    go test -test.run="plot01"
+    echo
+    echo
+    go test -test.run="derivs01"
 done
