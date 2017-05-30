@@ -1766,7 +1766,7 @@ HyperElast1 implements a nonlinear hyperelastic model for powders and porous med
 
 			
 				
-				<h3 id="HyperElast1.CalcD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4090:4168#L174">CalcD</a></h3>
+				<h3 id="HyperElast1.CalcD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4094:4172#L174">CalcD</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>, firstIt <a href="/pkg/builtin/#bool">bool</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 CalcD computes D = dσ_new/dε_new consistent with StressUpdate
@@ -1790,7 +1790,7 @@ CalcEps0 computes initial strains from stresses (s.Sig)
 				
 			
 				
-				<h3 id="HyperElast1.Calc_pq">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4511:4573#L188">Calc_pq</a></h3>
+				<h3 id="HyperElast1.Calc_pq">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4515:4577#L188">Calc_pq</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) Calc_pq(εv, εd <a href="/pkg/builtin/#float64">float64</a>) (p, q <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 Calc_pq computes p and q for given elastic εv and εd
@@ -1801,7 +1801,7 @@ Calc_pq computes p and q for given elastic εv and εd
 				
 			
 				
-				<h3 id="HyperElast1.ContD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4253:4317#L180">ContD</a></h3>
+				<h3 id="HyperElast1.ContD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4257:4321#L180">ContD</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) ContD(D [][]<a href="/pkg/builtin/#float64">float64</a>, s *<a href="#State">State</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 ContD computes D = dσ_new/dε_new continuous
@@ -1856,7 +1856,7 @@ Init initialises model
 				
 			
 				
-				<h3 id="HyperElast1.InitIntVars">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=3459:3528#L150">InitIntVars</a></h3>
+				<h3 id="HyperElast1.InitIntVars">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=3463:3532#L150">InitIntVars</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) InitIntVars(σ []<a href="/pkg/builtin/#float64">float64</a>) (s *<a href="#State">State</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 InitIntVars initialises internal (secondary) variables
@@ -1867,7 +1867,7 @@ InitIntVars initialises internal (secondary) variables
 				
 			
 				
-				<h3 id="HyperElast1.L_CalcD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=5403:5461#L222">L_CalcD</a></h3>
+				<h3 id="HyperElast1.L_CalcD">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=5407:5465#L222">L_CalcD</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) L_CalcD(D [][]<a href="/pkg/builtin/#float64">float64</a>, ε []<a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 L_CalcD computes De in principal components for given principal elastic strains
@@ -1883,7 +1883,7 @@ Note: this method works also for non-principal components
 				
 			
 				
-				<h3 id="HyperElast1.L_update">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4830:4893#L201">L_update</a></h3>
+				<h3 id="HyperElast1.L_update">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=4834:4897#L201">L_update</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) L_update(σ, ε []<a href="/pkg/builtin/#float64">float64</a>) (p, q <a href="/pkg/builtin/#float64">float64</a>)</pre>
 				<p>
 L_update computes principal stresses for given principal strains
@@ -1905,7 +1905,7 @@ Set_pt sets pt
 				
 			
 				
-				<h3 id="HyperElast1.Update">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=3657:3757#L158">Update</a></h3>
+				<h3 id="HyperElast1.Update">func (*HyperElast1) <a href="https://github.com/cpmech/gofem/blob/master/mdl/solid/hyperelast1.go?s=3661:3761#L158">Update</a></h3>
 				<pre>func (o *<a href="#HyperElast1">HyperElast1</a>) Update(s *<a href="#State">State</a>, ε, dummy []<a href="/pkg/builtin/#float64">float64</a>, eid, ipid <a href="/pkg/builtin/#int">int</a>, time <a href="/pkg/builtin/#float64">float64</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
 				<p>
 Update updates stresses for given strains
