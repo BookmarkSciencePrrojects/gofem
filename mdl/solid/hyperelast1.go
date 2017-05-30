@@ -135,7 +135,7 @@ func (o *HyperElast1) CalcEps0(s *State) {
 			return nil
 		}, true, false, map[string]float64{"lSearch": 0})
 		x := []float64{ev0, ed0}
-		nls.SetTols(1e-10, 1e-10, 1e-14, num.EPS)
+		nls.SetTols(1e-10, 1e-10, 1e-14, num.MACHEPS)
 		//nls.ChkConv = false
 		//nls.CheckJ(x, 1e-6, true, false)
 		silent := true
