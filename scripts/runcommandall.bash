@@ -36,12 +36,33 @@ if [[ $JOB == 0 ]]; then
     exit 0
 fi
 
-GEN="ana ele fem inp out shp tests tools"
-ELE="ele/diffusion ele/porous ele/seepage ele/solid ele/thermomech"
-MDL="mdl/conduct mdl/diffusion mdl/fluid mdl/generic mdl/porous mdl/retention mdl/solid mdl/thermomech"
-TST="tests/diffusion tests/porous tests/seepage tests/solid tests/thermomech"
-
-ALL="$GEN $ELE $MDL $TST"
+ALL=" \
+ana \
+shp \
+mdl/generic \
+mdl/solid \
+mdl/fluid \
+mdl/conduct \
+mdl/retention \
+mdl/diffusion \
+mdl/thermomech \
+mdl/porous \
+inp \
+ele \
+ele/solid \
+ele/seepage \
+ele/diffusion \
+ele/thermomech \
+ele/porous \
+fem \
+tests \
+tests/solid \
+tests/seepage \
+tests/diffusion \
+tests/thermomech \
+tests/porous \
+out \
+"
 
 EXA=" \
 examples/dynamics_sgbook \
