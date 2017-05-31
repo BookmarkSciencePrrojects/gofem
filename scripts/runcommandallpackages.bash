@@ -2,30 +2,110 @@
 
 set -e
 
+echo "usage:"
+echo "    $0 JOB"
+echo "where JOB is:"
+echo "    0 -- count lines [default]"
+echo "    1 -- execute goimports"
+echo "    2 -- generate depedency graphs"
+echo "    3 -- fix links in README files"
+
+JOB=0
+if [[ $# != 0 ]]; then
+    JOB=$1
+    if [[ $JOB -lt 0 || $JOB -gt 3 ]]; then
+        echo
+        echo "Job number $1 is invalid"
+        echo
+        exit 1
+    fi
+fi
+
+echo "current JOB = $JOB"
+
+if [[ $JOB == 0 ]]; then
+    totnfiles=0
+    totnlines=0
+    for f in `find . -iname "*.go"`; do
+        totnfiles=$(($totnfiles+1))
+        totnlines=$(($totnlines+`wc -l $f | awk '{print $1}'`))
+    done
+    echo
+    echo "Total number of files = $totnfiles"
+    echo "Total number of lines = $totnlines"
+    exit 0
+fi
+
 GEN="ana ele fem inp out shp tests tools"
 ELE="ele/diffusion ele/porous ele/seepage ele/solid ele/thermomech"
 MDL="mdl/conduct mdl/diffusion mdl/fluid mdl/generic mdl/porous mdl/retention mdl/solid mdl/thermomech"
 TST="tests/diffusion tests/porous tests/seepage tests/solid tests/thermomech"
-EXA="examples/dynamics_sgbook examples/patch_test examples/rjoint_ex01_curved examples/rjoint_ex06_pullout examples/seep_simple_flux examples/spo751_pressurised_cylinder examples/spo754_strip_footing_collapse examples/up_3mcolumn_desiccation examples/up_indentation2d_unsat examples/upp_3mcolumn_desiccation"
 
-ALL="$GEN $ELE $MDL $TST $EXA"
-#ALL="$EXA"
+ALL="$GEN $ELE $MDL $TST"
 
-runcommand() {
+EXA=" \
+examples/dynamics_sgbook \
+examples/patch_test \
+examples/rjoint_ex01_curved \
+examples/rjoint_ex06_pullout \
+examples/seep_ex01_freesurf \
+examples/seep_ex02_freesurf \
+examples/seep_simple_flux \
+examples/spo751_pressurised_cylinder \
+examples/spo754_strip_footing_collapse \
+examples/up_3mcolumn_desiccation \
+examples/up_indentation2d_unsat \
+examples/upp_3mcolumn_desiccation \
+"
+
+rungoimports() {
     pkg=$1
-    echo
-    echo
-    echo ">>>>>>>>>>>>>>>> $pkg <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
     for f in *.go; do
         echo $f
-        sed -i -e 's/plt.Reset()/plt.Reset(false,nil)/g' $f
         goimports -w $f
     done
 }
 
+depgraph(){
+    pkg=$1
+    fna="/tmp/gofem/depgraph-${pkg/\//_}-A.png"
+    fnb="/tmp/gofem/depgraph-${pkg/\//_}-B.svg"
+    godepgraph -s github.com/cpmech/gofem/$pkg | dot -Tpng -o $fna
+    graphpkg -stdout -match 'gofem' github.com/cpmech/gofem/$pkg > $fnb
+    echo "file <$fna> generated"
+    echo "file <$fnb> generated"
+}
+
+fixreadme() {
+    pkg=$1
+    old="http://rawgit.com/cpmech/gofem/master/doc/xx${pkg/\//-}.html"
+    new="https://godoc.org/github.com/cpmech/gofem/${pkg}"
+    sed -i 's,'"$old"','"$new"',' README.md
+}
+
+if [[ $JOB == 1 ]]; then
+    ALL="$ALL $EXA"
+fi
+
+if [[ $JOB == 2 ]]; then
+    mkdir -p /tmp/gofem
+fi
+
+idx=1
 for pkg in $ALL; do
     HERE=`pwd`
     cd $pkg
-    runcommand $pkg
+    echo
+    echo ">>> $idx $pkg <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+    if [[ $JOB == 1 ]]; then
+        rungoimports $pkg
+    fi
+    if [[ $JOB == 2 ]]; then
+        depgraph $pkg
+    fi
+    if [[ $JOB == 3 ]]; then
+        fixreadme $pkg
+    fi
     cd $HERE
+    (( idx++ ))
 done
