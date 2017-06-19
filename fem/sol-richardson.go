@@ -9,7 +9,7 @@ import (
 
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/utl"
@@ -77,7 +77,7 @@ func (o *RichardsonExtrap) Init() {
 	o.diverging = false
 }
 
-func (o *RichardsonExtrap) Run(tf float64, dtFunc, dtoFunc fun.TimeSpace, verbose bool, dbgKb DebugKb_t) (err error) {
+func (o *RichardsonExtrap) Run(tf float64, dtFunc, dtoFunc dbf.T, verbose bool, dbgKb DebugKb_t) (err error) {
 
 	// constants
 	dat := o.doms[0].Sim.Solver

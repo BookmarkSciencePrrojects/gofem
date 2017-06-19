@@ -6,7 +6,7 @@ package diffusion
 
 import (
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/utl"
 )
@@ -29,7 +29,7 @@ func init() {
 }
 
 // Init initialises this structure
-func (o *M1) Init(ndim int, prms fun.Params) (err error) {
+func (o *M1) Init(ndim int, prms dbf.Params) (err error) {
 
 	// a[i] parameters
 	prms.Connect(&o.a0, "a0", "a0 M1 model")

@@ -9,7 +9,7 @@ import (
 	"github.com/cpmech/gofem/inp"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 )
@@ -261,7 +261,7 @@ func (o *Domain) SetStage(stgidx int) (err error) {
 	o.PtNatBcs.Reset()
 
 	// element conditions
-	var fcn fun.TimeSpace
+	var fcn dbf.T
 	for _, ec := range stg.EleConds {
 		cells, ok := o.Msh.CellTag2cells[ec.Tag]
 		if !ok {

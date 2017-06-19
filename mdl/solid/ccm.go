@@ -8,7 +8,7 @@ import (
 	"math"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
 )
@@ -50,7 +50,7 @@ func (o *CamClayMod) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *CamClayMod) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *CamClayMod) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 
 	// basic data
 	o.Nsig = 2 * ndim
@@ -102,17 +102,17 @@ func (o *CamClayMod) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o *CamClayMod) GetPrms() fun.Params {
-	return []*fun.P{
-		&fun.P{N: "phi", V: 25},
-		&fun.P{N: "Mfix", V: 1},
-		&fun.P{N: "c", V: 10},
-		&fun.P{N: "lam", V: 0.1},
-		&fun.P{N: "ocr", V: 1},
-		&fun.P{N: "kap", V: 0.05},
-		&fun.P{N: "kapb", V: 0},
-		&fun.P{N: "G0", V: 10000},
-		&fun.P{N: "pr", V: 1.0},
+func (o *CamClayMod) GetPrms() dbf.Params {
+	return []*dbf.P{
+		&dbf.P{N: "phi", V: 25},
+		&dbf.P{N: "Mfix", V: 1},
+		&dbf.P{N: "c", V: 10},
+		&dbf.P{N: "lam", V: 0.1},
+		&dbf.P{N: "ocr", V: 1},
+		&dbf.P{N: "kap", V: 0.05},
+		&dbf.P{N: "kapb", V: 0},
+		&dbf.P{N: "G0", V: 10000},
+		&dbf.P{N: "pr", V: 1.0},
 	}
 }
 

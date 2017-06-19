@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // Lin implements a linear retetion model: sl(pc) := 1 - λ*pc
@@ -31,7 +31,7 @@ func init() {
 }
 
 // Init initialises model
-func (o *Lin) Init(prms fun.Params) (err error) {
+func (o *Lin) Init(prms dbf.Params) (err error) {
 	o.slmax = 1.0
 	for _, p := range prms {
 		switch strings.ToLower(p.N) {
@@ -57,12 +57,12 @@ func (o *Lin) Init(prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o Lin) GetPrms(example bool) fun.Params {
-	return []*fun.P{
-		&fun.P{N: "lam", V: 0.5},
-		&fun.P{N: "pcae", V: 0.2},
-		&fun.P{N: "slmin", V: 0.1},
-		&fun.P{N: "slmax", V: 1.0},
+func (o Lin) GetPrms(example bool) dbf.Params {
+	return []*dbf.P{
+		&dbf.P{N: "lam", V: 0.5},
+		&dbf.P{N: "pcae", V: 0.2},
+		&dbf.P{N: "slmin", V: 0.1},
+		&dbf.P{N: "slmax", V: 1.0},
 	}
 }
 

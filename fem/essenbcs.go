@@ -12,7 +12,7 @@ import (
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gofem/mdl/fluid"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 )
@@ -31,10 +31,10 @@ import (
 //         Kb       δyb          fb
 //
 type EssentialBc struct {
-	Key   string        // key such as 'ux', 'uy', 'rigid', 'incsup', 'hst'
-	Eqs   []int         // equations numbers; can be more than one e.g. for inclined support
-	ValsA []float64     // values for matrix A
-	Fcn   fun.TimeSpace // function that implements the "c" vector in  A・y = c
+	Key   string    // key such as 'ux', 'uy', 'rigid', 'incsup', 'hst'
+	Eqs   []int     // equations numbers; can be more than one e.g. for inclined support
+	ValsA []float64 // values for matrix A
+	Fcn   dbf.T     // function that implements the "c" vector in  A・y = c
 }
 
 // EbcArray is an array of EssentialBc's
@@ -126,7 +126,7 @@ func GetIsEssenKeyMap() map[string]bool {
 //   3) if the key as a suffix "_ini", the initial value of essential key will be multiplied
 //      by fcn==mult in order to define the boundary condition according to:
 //          y(t,z) = y(z)_ini・mult(t)
-func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.TimeSpace, extra string) (err error) {
+func (o *EssentialBcs) Set(key string, nodes []*Node, fcn dbf.T, extra string) (err error) {
 
 	// auxiliary
 	chk.IntAssertLessThan(0, len(nodes)) // 0 < len(nod)
@@ -140,7 +140,7 @@ func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.TimeSpace, extra s
 		a := nodes[0].Dofs
 		for i := 1; i < len(nodes); i++ {
 			for j, b := range nodes[i].Dofs {
-				o.set_eqs(key, []int{a[j].Eq, b.Eq}, []float64{1, -1}, &fun.Zero)
+				o.set_eqs(key, []int{a[j].Eq, b.Eq}, []float64{1, -1}, &dbf.Zero)
 			}
 		}
 		return // success
@@ -165,7 +165,7 @@ func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.TimeSpace, extra s
 		for _, nod := range nodes {
 			eqx := nod.Dofs[0].Eq
 			eqy := nod.Dofs[1].Eq
-			o.set_eqs(key, []int{eqx, eqy}, []float64{co, si}, &fun.Zero)
+			o.set_eqs(key, []int{eqx, eqy}, []float64{co, si}, &dbf.Zero)
 		}
 		return // success
 	}
@@ -193,8 +193,8 @@ func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.TimeSpace, extra s
 				z = nod.Vert.C[2] // 3D
 			}
 			plVal, _ := o.LiqMdl.Calc(z)
-			pl := fun.Add{
-				B: 1, Fb: &fun.Cte{C: plVal},
+			pl := dbf.Add{
+				B: 1, Fb: &dbf.Cte{C: plVal},
 				A: -1, Fa: fcn,
 			}
 
@@ -218,7 +218,7 @@ func (o *EssentialBcs) Set(key string, nodes []*Node, fcn fun.TimeSpace, extra s
 			}
 
 			// create function
-			f := fun.Mul{Fa: fcn, Fb: &fun.Cte{}}
+			f := dbf.Mul{Fa: fcn, Fb: &dbf.Cte{}}
 
 			// set constraint
 			o.set_eqs(kkey, []int{d.Eq}, []float64{1}, &f)
@@ -250,8 +250,8 @@ func (o *EssentialBcs) FixIniVals(sol *ele.Solution) {
 		for _, bc := range o.Bcs {
 			for _, eqOld := range bc.Eqs {
 				if eqOld == eq {
-					fcn := bc.Fcn.(*fun.Mul)
-					f := fcn.Fb.(*fun.Cte)
+					fcn := bc.Fcn.(*dbf.Mul)
+					f := fcn.Fb.(*dbf.Cte)
 					f.C = sol.Y[eq]
 				}
 			}
@@ -275,7 +275,7 @@ func (o *EssentialBcs) List(t float64) (l string) {
 // auxiliary /////////////////////////////////////////////////////////////////////////////////////////
 
 // set_eqs sets/replace constraint and equations
-func (o *EssentialBcs) set_eqs(key string, eqs []int, valsA []float64, fcn fun.TimeSpace) {
+func (o *EssentialBcs) set_eqs(key string, eqs []int, valsA []float64, fcn dbf.T) {
 
 	// replace existent
 	for _, eq := range eqs {

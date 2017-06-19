@@ -7,12 +7,12 @@ package generic
 
 import (
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // Model defines a generic model type
 type Model interface {
-	Init(ndim int, prms fun.Params) error // Init initialises this structure
+	Init(ndim int, prms dbf.Params) error // Init initialises this structure
 }
 
 // New generic model

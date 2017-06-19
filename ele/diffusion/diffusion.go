@@ -11,7 +11,7 @@ import (
 	"github.com/cpmech/gofem/mdl/diffusion"
 	"github.com/cpmech/gofem/shp"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/utl"
 )
@@ -30,7 +30,7 @@ type Diffusion struct {
 	Ndim int           // space dimension
 	Umap []int         // assembly map (location array/element equations)
 	Mdl  *diffusion.M1 // model
-	Sfun fun.TimeSpace // s(x) function
+	Sfun dbf.T         // s(x) function
 
 	// integration points
 	IpsElem []shp.Ipoint // integration points of element
@@ -134,7 +134,7 @@ func (o *Diffusion) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds sets element conditions
-func (o *Diffusion) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
+func (o *Diffusion) SetEleConds(key string, f dbf.T, extra string) (err error) {
 	o.Sfun = nil
 	if key == "s" {
 		o.Sfun = f

@@ -8,7 +8,7 @@ package ele
 import (
 	"github.com/cpmech/gofem/inp"
 
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/utl"
 )
@@ -21,7 +21,7 @@ type Element interface {
 	SetEqs(eqs [][]int, mixedform_eqs []int) (err error) // set equations
 
 	// conditions (natural BCs and element's)
-	SetEleConds(key string, f fun.TimeSpace, extra string) (err error) // set element conditions
+	SetEleConds(key string, f dbf.T, extra string) (err error) // set element conditions
 
 	// called for each time step
 	InterpStarVars(sol *Solution) (err error) // interpolate star variables to integration points

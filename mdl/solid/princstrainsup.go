@@ -7,7 +7,7 @@ package solid
 import (
 	"math"
 
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/num"
@@ -80,7 +80,7 @@ func (o *PrincStrainsUp) Free() {
 }
 
 // Init initialises this structure
-func (o *PrincStrainsUp) Init(ndim int, prms fun.Params, mdl EPmodel) (err error) {
+func (o *PrincStrainsUp) Init(ndim int, prms dbf.Params, mdl EPmodel) (err error) {
 
 	// constants
 	o.Fzero = 1e-9

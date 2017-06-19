@@ -7,7 +7,7 @@ package fem
 import (
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/mpi"
@@ -34,7 +34,7 @@ func init() {
 	}
 }
 
-func (o *LinearImplicit) Run(tf float64, dtFunc, dtoFunc fun.TimeSpace, verbose bool, notused DebugKb_t) (err error) {
+func (o *LinearImplicit) Run(tf float64, dtFunc, dtoFunc dbf.T, verbose bool, notused DebugKb_t) (err error) {
 
 	// control
 	t := o.dom.Sol.T

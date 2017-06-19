@@ -8,7 +8,7 @@ import (
 	"math"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/tsr"
 )
 
@@ -50,7 +50,7 @@ func (o *Ogden) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *Ogden) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *Ogden) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 
 	// basic data
 	o.Nsig = 2 * ndim
@@ -82,8 +82,8 @@ func (o *Ogden) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o Ogden) GetPrms() fun.Params {
-	return []*fun.P{}
+func (o Ogden) GetPrms() dbf.Params {
+	return []*dbf.P{}
 }
 
 // InitIntVars initialises internal (secondary) variables

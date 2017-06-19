@@ -8,7 +8,7 @@ import (
 	"math"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/num"
 	"github.com/cpmech/gosl/tsr"
 )
@@ -53,7 +53,7 @@ func (o *HyperElast1) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *HyperElast1) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *HyperElast1) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 
 	// constants
 	o.Nsig = 2 * ndim
@@ -97,13 +97,13 @@ func (o *HyperElast1) Set_pt(pt float64) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o *HyperElast1) GetPrms() fun.Params {
-	return []*fun.P{
-		&fun.P{N: "kap", V: 0.05},
-		&fun.P{N: "kapb", V: 0.001},
-		&fun.P{N: "G0", V: 10000},
-		&fun.P{N: "pr", V: 2.0},
-		&fun.P{N: "pt", V: 1.0},
+func (o *HyperElast1) GetPrms() dbf.Params {
+	return []*dbf.P{
+		&dbf.P{N: "kap", V: 0.05},
+		&dbf.P{N: "kapb", V: 0.001},
+		&dbf.P{N: "G0", V: 10000},
+		&dbf.P{N: "pr", V: 2.0},
+		&dbf.P{N: "pt", V: 1.0},
 	}
 }
 

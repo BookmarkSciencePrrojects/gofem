@@ -12,7 +12,7 @@ import (
 	"github.com/cpmech/gofem/inp"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
 	"github.com/cpmech/gosl/utl"
@@ -184,7 +184,7 @@ func (o *SolidLiquid) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *SolidLiquid) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
+func (o *SolidLiquid) SetEleConds(key string, f dbf.T, extra string) (err error) {
 	err = o.U.SetEleConds(key, f, extra)
 	if err != nil {
 		return

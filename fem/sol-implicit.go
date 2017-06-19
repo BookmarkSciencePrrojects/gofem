@@ -9,7 +9,7 @@ import (
 
 	"github.com/cpmech/gofem/ele"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/mpi"
@@ -33,7 +33,7 @@ func init() {
 	}
 }
 
-func (o *Implicit) Run(tf float64, dtFunc, dtoFunc fun.TimeSpace, verbose bool, dbgKb DebugKb_t) (err error) {
+func (o *Implicit) Run(tf float64, dtFunc, dtoFunc dbf.T, verbose bool, dbgKb DebugKb_t) (err error) {
 
 	// auxiliary
 	md := 1.0    // time step multiplier if divergence control is on

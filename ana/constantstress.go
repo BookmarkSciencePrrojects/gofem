@@ -8,9 +8,8 @@ package ana
 import (
 	"testing"
 
-	"github.com/cpmech/gosl/fun"
-
 	"github.com/cpmech/gosl/chk"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // CteStressPstrain computes the constant-stress solution to a simple
@@ -41,7 +40,7 @@ type CteStressPstrain struct {
 }
 
 // Init initialises this structure
-func (o *CteStressPstrain) Init(prms fun.Params) {
+func (o *CteStressPstrain) Init(prms dbf.Params) {
 
 	// default values
 	o.qnV = -100.0

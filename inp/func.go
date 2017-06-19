@@ -6,7 +6,7 @@ package inp
 
 import (
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
@@ -25,7 +25,7 @@ type PlotFdata struct {
 type FuncData struct {
 	Name     string     `json:"name"`     // name of function. ex: zero, load, myfunction1, etc.
 	Type     string     `json:"type"`     // type of function. ex: cte, rmp
-	Prms     fun.Params `json:"prms"`     // parameters
+	Prms     dbf.Params `json:"prms"`     // parameters
 	PltExtra string     `json:"pltextra"` // extra arguments for plotting
 
 	// extra data for plotting
@@ -36,14 +36,14 @@ type FuncData struct {
 type FuncsData []*FuncData
 
 // Get returns function by name
-func (o FuncsData) Get(name string) (fcn fun.TimeSpace, err error) {
+func (o FuncsData) Get(name string) (fcn dbf.T, err error) {
 	if name == "zero" || name == "none" {
-		fcn = &fun.Zero
+		fcn = &dbf.Zero
 		return
 	}
 	for _, f := range o {
 		if f.Name == name {
-			fcn, err = fun.New(f.Type, f.Prms)
+			fcn, err = dbf.New(f.Type, f.Prms)
 			if err != nil {
 				err = chk.Err("cannot get function named %q because of the following error:\n%v", name, err)
 			}
@@ -75,7 +75,7 @@ func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
 				plt.Text(x, y, io.Sf("%g", y), nil)
 			}
 			/* TODO
-			fun.PlotT(ff, "", "", pd.Ti, pd.Tf, nil, pd.Np,
+			dbf.PlotT(ff, "", "", pd.Ti, pd.Tf, nil, pd.Np,
 				f.LabelT, f.LabelF, f.LabelG, f.LabelH, f.ArgsF, f.ArgsG, f.ArgsH)
 			*/
 			plt.Save(dirout, io.Sf("functions-%s-%s", fnkey, f.Name))
@@ -87,7 +87,6 @@ func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
 
 // String prints one function
 func (o FuncData) String() string {
-	fun.G_extraindent = "        "
 	return io.Sf("    {\n      \"name\":%q, \"type\":%q, \"prms\" : [\n%v\n      ]\n    }", o.Name, o.Type, o.Prms)
 }
 

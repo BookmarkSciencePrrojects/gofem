@@ -9,6 +9,7 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // RjointM1 implements a 1D plasticity model for rod-joints (links/interface)
@@ -42,7 +43,7 @@ func (o *RjointM1) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *RjointM1) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *RjointM1) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 	for _, p := range prms {
 		switch p.N {
 		case "ks":
@@ -67,14 +68,14 @@ func (o *RjointM1) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o RjointM1) GetPrms() fun.Params {
-	return []*fun.P{
-		&fun.P{N: "ks", V: 1e4},
-		&fun.P{N: "tauy0", V: 20},
-		&fun.P{N: "kh", V: 0},
-		&fun.P{N: "mu", V: 0.5},
-		&fun.P{N: "h", V: 0.1},
-		&fun.P{N: "kl", V: 1e4},
+func (o RjointM1) GetPrms() dbf.Params {
+	return []*dbf.P{
+		&dbf.P{N: "ks", V: 1e4},
+		&dbf.P{N: "tauy0", V: 20},
+		&dbf.P{N: "kh", V: 0},
+		&dbf.P{N: "mu", V: 0.5},
+		&dbf.P{N: "h", V: 0.1},
+		&dbf.P{N: "kl", V: 1e4},
 	}
 }
 

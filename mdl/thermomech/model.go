@@ -7,12 +7,12 @@ package thermomech
 
 import (
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // Model defines the interface for thermomech models
 type Model interface {
-	Init(ndim int, prms fun.Params) error // initialises model
+	Init(ndim int, prms dbf.Params) error // initialises model
 }
 
 // New thermomech model

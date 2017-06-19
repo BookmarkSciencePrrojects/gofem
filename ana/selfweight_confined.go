@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // ConfinedSelfWeight computes the solution to a simple confined linear elastic domain under gravity
@@ -36,7 +36,7 @@ type ConfinedSelfWeight struct {
 }
 
 // Init initialises this structure
-func (o *ConfinedSelfWeight) Init(prms fun.Params) {
+func (o *ConfinedSelfWeight) Init(prms dbf.Params) {
 
 	// default values
 	o.E = 1000.0

@@ -12,7 +12,7 @@ import (
 	"github.com/cpmech/gofem/mdl/solid"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/utl"
@@ -62,7 +62,7 @@ type Beam struct {
 	Nstations int // number of points along beam to generate bending moment / shear force diagrams
 
 	// variables for dynamics
-	Gfcn fun.TimeSpace // gravity function
+	Gfcn dbf.T // gravity function
 
 	// unit vectors aligned with beam element
 	e0 []float64 // [3] unit vector aligned with y0-axis
@@ -78,15 +78,15 @@ type Beam struct {
 	Rus []float64   // residual: Rus = fi - fx
 
 	// problem variables
-	Umap []int         // assembly map (location array/element equations)
-	Hasq bool          // has distributed loads
-	QnL  fun.TimeSpace // distributed normal load functions: left
-	QnR  fun.TimeSpace // distributed normal load functions: right
-	Qt   fun.TimeSpace // distributed tangential load
-	Q1   fun.TimeSpace // 3D: load on plane s-t
-	Q2   fun.TimeSpace // 3D: load on plane r-t
-	Q1c  fun.TimeSpace // 3D: compressive load on plane s-t (will be multiplied by -1)
-	Q2c  fun.TimeSpace // 3D: compressive load on plane r-t (will be multiplied by -1)
+	Umap []int // assembly map (location array/element equations)
+	Hasq bool  // has distributed loads
+	QnL  dbf.T // distributed normal load functions: left
+	QnR  dbf.T // distributed normal load functions: right
+	Qt   dbf.T // distributed tangential load
+	Q1   dbf.T // 3D: load on plane s-t
+	Q2   dbf.T // 3D: load on plane r-t
+	Q1c  dbf.T // 3D: compressive load on plane s-t (will be multiplied by -1)
+	Q2c  dbf.T // 3D: compressive load on plane r-t (will be multiplied by -1)
 
 	// scratchpad. computed @ each ip
 	grav []float64 // [ndim] gravity vector
@@ -209,7 +209,7 @@ func (o *Beam) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *Beam) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
+func (o *Beam) SetEleConds(key string, f dbf.T, extra string) (err error) {
 
 	// gravity
 	if key == "g" {

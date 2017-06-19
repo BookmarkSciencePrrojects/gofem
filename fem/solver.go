@@ -6,12 +6,12 @@ package fem
 
 import (
 	"github.com/cpmech/gofem/ele"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // Solver implements the actual solver (time loop)
 type Solver interface {
-	Run(tf float64, dtFunc, dtoFunc fun.TimeSpace, verbose bool, dbgKb DebugKb_t) (err error)
+	Run(tf float64, dtFunc, dtoFunc dbf.T, verbose bool, dbgKb DebugKb_t) (err error)
 }
 
 // allocators holds all available solvers

@@ -17,7 +17,7 @@ import (
 	"github.com/cpmech/gofem/mdl/solid"
 	"github.com/cpmech/gofem/mdl/thermomech"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 )
 
@@ -29,7 +29,7 @@ type Material struct {
 	Type  string     `json:"type"`  // type of material; e.g. "gen", "sld", "fld", "cnd", "lrm", "dif", "trm", "por"
 	Model string     `json:"model"` // name of model; e.g. "dp", "vm", "elast", etc.
 	Deps  []string   `json:"deps"`  // dependencies; other material names. e.g. ["water", "dryair", "solid1", "conduct1", "lreten1"]
-	Prms  fun.Params `json:"prms"`  // prms holds all model parameters for this material
+	Prms  dbf.Params `json:"prms"`  // prms holds all model parameters for this material
 
 	// derived
 	Gen generic.Model    // pointer to generic model
@@ -288,7 +288,6 @@ func (o MatDb) Get(name string) *Material {
 
 // String prints one function
 func (o *Material) String() string {
-	fun.G_extraindent = "        "
 	return io.Sf("    {\n      \"name\"  : %q,\n      \"type\"  : %q,\n      \"model\" : %q,\n      \"deps\"  : %q,\n      \"prms\"  : [\n%v\n      ]\n    }", o.Name, o.Type, o.Model, o.Deps, o.Prms)
 }
 

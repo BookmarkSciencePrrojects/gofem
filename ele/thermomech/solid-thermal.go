@@ -15,7 +15,7 @@ import (
 	"github.com/cpmech/gofem/mdl/thermomech"
 	"github.com/cpmech/gofem/shp"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
@@ -36,8 +36,8 @@ type SolidThermal struct {
 	Nc      int           // if mixed formulation is used, number of fl variables
 
 	// variables for dynamics
-	Cdam float64       // coefficient for damping // TODO: read this value
-	Gfcn fun.TimeSpace // gravity function
+	Cdam float64 // coefficient for damping // TODO: read this value
+	Gfcn dbf.T   // gravity function
 
 	// optional data
 	UseB      bool    // use B matrix
@@ -79,13 +79,13 @@ type SolidThermal struct {
 	D    [][]float64 // [nsig][nsig] constitutive consistent tangent matrix
 
 	// scratchpad. computed @ each ip (temperature element)
-	tstar []float64     // [nip] ustar* = β1 u + β2 dudt
-	xip   []float64     // real coordinates of ip
-	tval  float64       // u(t,x) scalar field @ ip
-	gradu []float64     // [ndim] ∇u(t,x): gradient of u @ ip
-	wvec  []float64     // [ndim] w(t,x) vector @ ip
-	tmp   []float64     // auxiliary vector
-	Sfun  fun.TimeSpace // s(x) function for temperature element
+	tstar []float64 // [nip] ustar* = β1 u + β2 dudt
+	xip   []float64 // real coordinates of ip
+	tval  float64   // u(t,x) scalar field @ ip
+	gradu []float64 // [ndim] ∇u(t,x): gradient of u @ ip
+	wvec  []float64 // [ndim] w(t,x) vector @ ip
+	tmp   []float64 // auxiliary vector
+	Sfun  dbf.T     // s(x) function for temperature element
 
 	// strains
 	ε  []float64 // total (updated) strains
@@ -313,7 +313,7 @@ func (o *SolidThermal) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *SolidThermal) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
+func (o *SolidThermal) SetEleConds(key string, f dbf.T, extra string) (err error) {
 	o.Sfun = nil
 	switch key {
 

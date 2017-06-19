@@ -12,7 +12,7 @@ import (
 	"github.com/cpmech/gofem/fem"
 	"github.com/cpmech/gofem/tests"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 )
@@ -92,11 +92,11 @@ func Test_sigini02(tst *testing.T) {
 
 	// solution
 	var sol ana.CteStressPstrain
-	sol.Init(fun.Params{
-		&fun.P{N: "qnH0", V: -20},
-		&fun.P{N: "qnV0", V: -20},
-		&fun.P{N: "qnH", V: -50},
-		&fun.P{N: "qnV", V: -100},
+	sol.Init(dbf.Params{
+		&dbf.P{N: "qnH0", V: -20},
+		&dbf.P{N: "qnV0", V: -20},
+		&dbf.P{N: "qnH", V: -50},
+		&dbf.P{N: "qnV", V: -100},
 	})
 
 	// check displacements
@@ -143,9 +143,9 @@ func Test_square01(tst *testing.T) {
 
 	// solution
 	var sol ana.CteStressPstrain
-	sol.Init(fun.Params{
-		&fun.P{N: "qnH", V: -50},
-		&fun.P{N: "qnV", V: -100},
+	sol.Init(dbf.Params{
+		&dbf.P{N: "qnH", V: -50},
+		&dbf.P{N: "qnV", V: -100},
 	})
 
 	// check displacements
@@ -224,13 +224,13 @@ func Test_selfweight02(tst *testing.T) {
 
 	// solution
 	var sol ana.ConfinedSelfWeight
-	sol.Init(fun.Params{
-		&fun.P{N: "E", V: 1e3},
-		&fun.P{N: "nu", V: 0.25},
-		&fun.P{N: "rho", V: 2.0},
-		&fun.P{N: "g", V: 10.0},
-		&fun.P{N: "h", V: 1.0},
-		&fun.P{N: "w", V: 1.0},
+	sol.Init(dbf.Params{
+		&dbf.P{N: "E", V: 1e3},
+		&dbf.P{N: "nu", V: 0.25},
+		&dbf.P{N: "rho", V: 2.0},
+		&dbf.P{N: "g", V: 10.0},
+		&dbf.P{N: "h", V: 1.0},
+		&dbf.P{N: "w", V: 1.0},
 	})
 
 	// check displacements

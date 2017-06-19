@@ -7,7 +7,7 @@ package fem
 import (
 	"github.com/cpmech/gofem/inp"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // IniSetFileFunc sets initial state with values given in a file or by a function
@@ -24,7 +24,7 @@ func (o *Domain) IniSetFileFunc(stg *inp.Stage) (err error) {
 	}
 
 	// loop over functions
-	var fcn fun.TimeSpace
+	var fcn dbf.T
 	for i, fname := range stg.IniFcn.Fcns {
 
 		// get function

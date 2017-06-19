@@ -14,7 +14,7 @@ import (
 	"github.com/cpmech/gofem/ele/solid"
 	"github.com/cpmech/gofem/fem"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
@@ -51,10 +51,10 @@ func main() {
 
 	// analytical solution
 	var sol ana.PressCylin
-	sol.Init([]*fun.P{
-		&fun.P{N: "a", V: a}, &fun.P{N: "b", V: b},
-		&fun.P{N: "E", V: E}, &fun.P{N: "ν", V: ν},
-		&fun.P{N: "σy", V: σy},
+	sol.Init([]*dbf.P{
+		&dbf.P{N: "a", V: a}, &dbf.P{N: "b", V: b},
+		&dbf.P{N: "E", V: E}, &dbf.P{N: "ν", V: ν},
+		&dbf.P{N: "σy", V: σy},
 	})
 	np := 41
 	P_ana, Ub_ana := sol.CalcPressDisp(np)

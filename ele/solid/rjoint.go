@@ -10,7 +10,7 @@ import (
 	"github.com/cpmech/gofem/mdl/solid"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
@@ -334,7 +334,7 @@ func (o *Rjoint) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *Rjoint) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
+func (o *Rjoint) SetEleConds(key string, f dbf.T, extra string) (err error) {
 	return
 }
 

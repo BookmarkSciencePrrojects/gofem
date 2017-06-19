@@ -11,7 +11,7 @@ import (
 	"github.com/cpmech/gofem/shp"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/utl"
 )
@@ -26,7 +26,7 @@ type Rod struct {
 	Ndim int         // space dimension
 
 	// variables for dynamics
-	Gfcn fun.TimeSpace // gravity function
+	Gfcn dbf.T // gravity function
 
 	// integration points
 	IpsElem []shp.Ipoint // integration points of element
@@ -143,7 +143,7 @@ func (o *Rod) InterpStarVars(sol *ele.Solution) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *Rod) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
+func (o *Rod) SetEleConds(key string, f dbf.T, extra string) (err error) {
 	if key == "g" {
 		o.Gfcn = f
 	}

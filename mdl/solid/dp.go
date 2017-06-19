@@ -6,7 +6,7 @@ package solid
 
 import (
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/tsr"
 )
 
@@ -36,7 +36,7 @@ func (o *DruckerPrager) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *DruckerPrager) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *DruckerPrager) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 
 	// parse parameters
 	err = o.SmallElasticity.Init(ndim, pstress, prms)
@@ -89,12 +89,12 @@ func (o *DruckerPrager) Init(ndim int, pstress bool, prms fun.Params) (err error
 }
 
 // GetPrms gets (an example) of parameters
-func (o DruckerPrager) GetPrms() fun.Params {
-	return []*fun.P{
-		&fun.P{N: "M", V: 1},
-		&fun.P{N: "Mb", V: 1},
-		&fun.P{N: "qy0", V: 0.5},
-		&fun.P{N: "H", V: 0},
+func (o DruckerPrager) GetPrms() dbf.Params {
+	return []*dbf.P{
+		&dbf.P{N: "M", V: 1},
+		&dbf.P{N: "Mb", V: 1},
+		&dbf.P{N: "qy0", V: 0.5},
+		&dbf.P{N: "H", V: 0},
 	}
 }
 

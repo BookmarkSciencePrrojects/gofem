@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // VanGen implements van Genuchten's model
@@ -29,7 +29,7 @@ func init() {
 }
 
 // Init initialises model
-func (o *VanGen) Init(prms fun.Params) (err error) {
+func (o *VanGen) Init(prms dbf.Params) (err error) {
 	o.pcmin, o.slmax = 1e-3, 1.0
 	for _, p := range prms {
 		switch strings.ToLower(p.N) {
@@ -59,14 +59,14 @@ func (o *VanGen) Init(prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o VanGen) GetPrms(example bool) fun.Params {
-	return []*fun.P{
-		&fun.P{N: "alp", V: 0.08},
-		&fun.P{N: "m", V: 4},
-		&fun.P{N: "n", V: 4},
-		&fun.P{N: "slmin", V: 0.01},
-		&fun.P{N: "slmax", V: 1.0},
-		&fun.P{N: "pcmin", V: 1e-3},
+func (o VanGen) GetPrms(example bool) dbf.Params {
+	return []*dbf.P{
+		&dbf.P{N: "alp", V: 0.08},
+		&dbf.P{N: "m", V: 4},
+		&dbf.P{N: "n", V: 4},
+		&dbf.P{N: "slmin", V: 0.01},
+		&dbf.P{N: "slmax", V: 1.0},
+		&dbf.P{N: "pcmin", V: 1e-3},
 	}
 }
 

@@ -12,7 +12,7 @@ import (
 	"github.com/cpmech/gofem/shp"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
@@ -29,8 +29,8 @@ type Solid struct {
 	Ndim int         // space dimension
 
 	// variables for dynamics
-	Cdam float64       // coefficient for damping // TODO: read this value
-	Gfcn fun.TimeSpace // gravity function
+	Cdam float64 // coefficient for damping // TODO: read this value
+	Gfcn dbf.T   // gravity function
 
 	// optional data
 	UseB      bool    // use B matrix
@@ -268,7 +268,7 @@ func (o *Solid) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds set element conditions
-func (o *Solid) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
+func (o *Solid) SetEleConds(key string, f dbf.T, extra string) (err error) {
 	if key == "g" { // gravity
 		o.Gfcn = f
 	}

@@ -8,7 +8,7 @@ import (
 	"math"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/tsr"
 )
 
@@ -24,7 +24,7 @@ type SmpInvs struct {
 	HE   HyperElast1    // hyper elasticity
 	PU   PrincStrainsUp // stress updater
 	Isof tsr.IsoFun     // isotropic function structure
-	RM   fun.RefDecSp1  // reference model for smoothing
+	RM   dbf.RefDecSp1  // reference model for smoothing
 
 	// parameters
 	c, φ, rho                 float64 // cohesion, friction angle and density
@@ -57,7 +57,7 @@ func (o *SmpInvs) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *SmpInvs) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *SmpInvs) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 
 	// basic data
 	o.Nsig = 2 * ndim
@@ -119,20 +119,20 @@ func (o *SmpInvs) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o SmpInvs) GetPrms() fun.Params {
-	return []*fun.P{
-		&fun.P{N: "c", V: 1},
-		&fun.P{N: "phi", V: 20},
-		&fun.P{N: "a", V: -1},
-		&fun.P{N: "b", V: 0},
-		&fun.P{N: "eps1", V: 1e-3},
-		&fun.P{N: "eps2", V: 1e-3},
-		&fun.P{N: "le", V: 1},
-		&fun.P{N: "pr", V: 1.0},
-		&fun.P{N: "G0", V: 600},
-		&fun.P{N: "K0", V: 1000},
-		&fun.P{N: "p0", V: 0.0},
-		&fun.P{N: "ev0", V: 0.0},
+func (o SmpInvs) GetPrms() dbf.Params {
+	return []*dbf.P{
+		&dbf.P{N: "c", V: 1},
+		&dbf.P{N: "phi", V: 20},
+		&dbf.P{N: "a", V: -1},
+		&dbf.P{N: "b", V: 0},
+		&dbf.P{N: "eps1", V: 1e-3},
+		&dbf.P{N: "eps2", V: 1e-3},
+		&dbf.P{N: "le", V: 1},
+		&dbf.P{N: "pr", V: 1.0},
+		&dbf.P{N: "G0", V: 600},
+		&dbf.P{N: "K0", V: 1000},
+		&dbf.P{N: "p0", V: 0.0},
+		&dbf.P{N: "ev0", V: 0.0},
 	}
 }
 
@@ -374,11 +374,11 @@ func (o *SmpInvs) calc_auxiliary() {
 		pc := o.r / o.sα
 		pb := pc - o.r
 		pa := 0.0
-		o.RM.Init([]*fun.P{
-			&fun.P{N: "bet", V: o.βrm},
-			&fun.P{N: "lam1", V: 1.0 / o.M},
-			&fun.P{N: "ya", V: -pa},
-			&fun.P{N: "yb", V: -pb},
+		o.RM.Init([]*dbf.P{
+			&dbf.P{N: "bet", V: o.βrm},
+			&dbf.P{N: "lam1", V: 1.0 / o.M},
+			&dbf.P{N: "ya", V: -pa},
+			&dbf.P{N: "yb", V: -pb},
 		})
 	case 3: // o2 Bezier
 		pa := 0.0

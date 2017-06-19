@@ -14,7 +14,7 @@ import (
 
 	"github.com/cpmech/gofem/mdl/fluid"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/rnd"
 	"github.com/cpmech/gosl/utl"
@@ -169,8 +169,8 @@ type TimeControl struct {
 	DtoFcn string  `json:"dtofcn"` // time step size for output (function name)
 
 	// derived
-	DtFunc  fun.TimeSpace // time step function
-	DtoFunc fun.TimeSpace // output time step function
+	DtFunc  dbf.T // time step function
+	DtoFunc dbf.T // output time step function
 }
 
 // IniPorousData  holds data for setting initial porous media state (e.g. geostatic, hydrostatic)
@@ -258,10 +258,10 @@ type Simulation struct {
 	GasMdl      *fluid.Model // gas model to use when computing density and pressure along column; from stage #0
 
 	// adjustable parameters
-	Adjustable   fun.Params     // adjustable parameters (not dependent)
+	Adjustable   dbf.Params     // adjustable parameters (not dependent)
 	AdjRandom    rnd.Variables  // adjustable parameters that are random variables (not dependent)
-	AdjDependent fun.Params     // adjustable parameters that depend on other adjustable parameters
-	adjmap       map[int]*fun.P // auxiliary map with adjustable (not dependent)
+	AdjDependent dbf.Params     // adjustable parameters that depend on other adjustable parameters
+	adjmap       map[int]*dbf.P // auxiliary map with adjustable (not dependent)
 }
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
@@ -373,7 +373,7 @@ func ReadSim(simfilepath, alias string, erasePrev, createDirOut bool, goroutineI
 			if stg.Control.Dt < 1e-14 {
 				stg.Control.Dt = 1
 			}
-			stg.Control.DtFunc = &fun.Cte{C: stg.Control.Dt}
+			stg.Control.DtFunc = &dbf.Cte{C: stg.Control.Dt}
 		} else {
 			stg.Control.DtFunc, err = o.Functions.Get(stg.Control.DtFcn)
 			if err != nil {
@@ -391,7 +391,7 @@ func ReadSim(simfilepath, alias string, erasePrev, createDirOut bool, goroutineI
 				if stg.Control.DtOut < stg.Control.Dt {
 					stg.Control.DtOut = stg.Control.Dt
 				}
-				stg.Control.DtoFunc = &fun.Cte{C: stg.Control.DtOut}
+				stg.Control.DtoFunc = &dbf.Cte{C: stg.Control.DtOut}
 			}
 		} else {
 			stg.Control.DtoFunc, err = o.Functions.Get(stg.Control.DtoFcn)
@@ -436,7 +436,7 @@ func ReadSim(simfilepath, alias string, erasePrev, createDirOut bool, goroutineI
 	}
 
 	// adjustable and random parameters
-	o.adjmap = make(map[int]*fun.P)
+	o.adjmap = make(map[int]*dbf.P)
 	for _, mat := range o.MatModels.Materials {
 		for _, prm := range mat.Prms {
 			o.append_adjustable_parameter(prm)
@@ -648,7 +648,7 @@ func (o *Simulation) PrmGetAdj(adj int) (val float64) {
 }
 
 // append_adjustable_parameter add prm to lists
-func (o *Simulation) append_adjustable_parameter(prm *fun.P) {
+func (o *Simulation) append_adjustable_parameter(prm *dbf.P) {
 
 	// adjustable parameter
 	if prm.Adj > 0 {

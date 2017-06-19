@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 )
@@ -62,9 +62,9 @@ func Test_elast02(tst *testing.T) {
 
 	ndim, pstress := 2, false
 	var ec SmallElasticity
-	err := ec.Init(ndim, pstress, []*fun.P{
-		&fun.P{N: "K", V: K},
-		&fun.P{N: "G", V: G},
+	err := ec.Init(ndim, pstress, []*dbf.P{
+		&dbf.P{N: "K", V: K},
+		&dbf.P{N: "G", V: G},
 	})
 	io.Pforan("ec: %+v\n", &ec)
 	if err != nil {

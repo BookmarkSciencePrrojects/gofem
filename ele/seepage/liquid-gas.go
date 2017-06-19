@@ -14,6 +14,7 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/utl"
@@ -45,7 +46,7 @@ type LiquidGas struct {
 	StatesAux []*porous.State
 
 	// gravity
-	Gfcn fun.TimeSpace // gravity function
+	Gfcn dbf.T // gravity function
 
 	// natural boundary conditions
 	NatBcs []*ele.NaturalBc // natural boundary conditions
@@ -274,7 +275,7 @@ func (o *LiquidGas) SetEqs(eqs [][]int, mixedform_eqs []int) (err error) {
 }
 
 // SetEleConds sets element conditions
-func (o *LiquidGas) SetEleConds(key string, f fun.TimeSpace, extra string) (err error) {
+func (o *LiquidGas) SetEleConds(key string, f dbf.T, extra string) (err error) {
 	if key == "g" { // gravity
 		o.Gfcn = f
 	}
