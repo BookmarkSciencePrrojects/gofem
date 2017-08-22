@@ -115,8 +115,8 @@ func checkDerivs(tst *testing.T, mdl Model, pc0, sl0, pcf float64, npts int, tol
 		})
 
 		// check A and B derivatives
-		chk.Scalar(tst, "L_A == L_B", 1e-17, L_ana_A, L_ana_B)
-		chk.Scalar(tst, "J_A == J_B", 1e-17, J_ana_A, J_ana_B)
+		chk.Float64(tst, "L_A == L_B", 1e-17, L_ana_A, L_ana_B)
+		chk.Float64(tst, "J_A == J_B", 1e-17, J_ana_A, J_ana_B)
 	}
 }
 

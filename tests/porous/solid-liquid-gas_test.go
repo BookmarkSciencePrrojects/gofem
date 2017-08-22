@@ -179,15 +179,15 @@ func Test_upp01a(tst *testing.T) {
 			u := dom.Sol.Y[dof.Eq]
 			switch dof.Key {
 			case "ux":
-				chk.Scalar(tst, io.Sf("nod %3d : ux(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
+				chk.Float64(tst, io.Sf("nod %3d : ux(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
 			case "uy":
-				chk.Scalar(tst, io.Sf("nod %3d : uy(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
+				chk.Float64(tst, io.Sf("nod %3d : uy(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
 			case "pl":
 				plC, _ := dom.Sim.LiqMdl.Calc(z)
-				chk.Scalar(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-13, u, plC)
+				chk.Float64(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-13, u, plC)
 			case "pg":
 				pgC, _ := dom.Sim.GasMdl.Calc(z)
-				chk.Scalar(tst, io.Sf("nod %3d : pg(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-13, u, pgC)
+				chk.Float64(tst, io.Sf("nod %3d : pg(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-13, u, pgC)
 			}
 		}
 	}

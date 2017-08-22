@@ -166,11 +166,11 @@ func Test_ut01a(tst *testing.T) {
 			u := dom.Sol.Y[dof.Eq]
 			switch dof.Key {
 			case "ux":
-				chk.Scalar(tst, io.Sf("nod %3d : ux(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
+				chk.Float64(tst, io.Sf("nod %3d : ux(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
 			case "uy":
-				chk.Scalar(tst, io.Sf("nod %3d : uy(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
+				chk.Float64(tst, io.Sf("nod %3d : uy(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
 			case "temp":
-				chk.Scalar(tst, io.Sf("nod %3d : t(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
+				chk.Float64(tst, io.Sf("nod %3d : t(@ %4g)= %6g", nod.Vert.Id, z, u), 1e-17, u, 0)
 			}
 		}
 	}

@@ -56,12 +56,12 @@ func Test_selfweight01(tst *testing.T) {
 	x := []float64{0, 0, 0}
 	σ := sol.Stress(1, x)
 	io.Pforan("σ = %v\n", σ)
-	chk.Scalar(tst, "σz @ z=0", 1e-17, σ[2], -60.0)
+	chk.Float64(tst, "σz @ z=0", 1e-17, σ[2], -60.0)
 
 	x[2] = 1.5
 	σ = sol.Stress(1, x)
 	io.Pforan("σ = %v\n", σ)
-	chk.Scalar(tst, "σz @ z=1.5", 1e-17, σ[2], -30.0)
+	chk.Float64(tst, "σz @ z=1.5", 1e-17, σ[2], -30.0)
 
 	x[2] = 3.0
 	u := sol.Displ(1, x)

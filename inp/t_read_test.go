@@ -26,10 +26,10 @@ func Test_msh01(tst *testing.T) {
 	}
 	io.Pforan("%v\n", msh)
 	io.Pfcyan("lims = [%g, %g, %g, %g, %g, %g]\n", msh.Xmin, msh.Xmax, msh.Ymin, msh.Ymax, msh.Zmin, msh.Zmax)
-	chk.Scalar(tst, "xmin", 1e-17, msh.Xmin, 10)
-	chk.Scalar(tst, "xmax", 1e-17, msh.Xmax, 14)
-	chk.Scalar(tst, "ymin", 1e-17, msh.Ymin, -1)
-	chk.Scalar(tst, "ymax", 1e-17, msh.Ymax, 1)
+	chk.Float64(tst, "xmin", 1e-17, msh.Xmin, 10)
+	chk.Float64(tst, "xmax", 1e-17, msh.Xmax, 14)
+	chk.Float64(tst, "ymin", 1e-17, msh.Ymin, -1)
+	chk.Float64(tst, "ymax", 1e-17, msh.Ymax, 1)
 
 	if chk.Verbose {
 		msh.Draw2d(false, true, true, nil, nil, nil)
@@ -61,7 +61,7 @@ func Test_msh02(tst *testing.T) {
 	chk.Ints(tst, "cids connected to joint 15", msh.Cells[15].JntConCells, []int{4, 5, 6, 7, 8, 9, 10, 11})
 
 	io.Pforan("MaxElev = %v\n", msh.MaxElev)
-	chk.Scalar(tst, "MaxElev", 1e-17, msh.MaxElev, 1)
+	chk.Float64(tst, "MaxElev", 1e-17, msh.MaxElev, 1)
 }
 
 func Test_msh03(tst *testing.T) {
@@ -97,7 +97,7 @@ func Test_msh03(tst *testing.T) {
 	}
 
 	io.Pforan("MaxElev = %v\n", msh.MaxElev)
-	chk.Scalar(tst, "MaxElev", 1e-17, msh.MaxElev, 1)
+	chk.Float64(tst, "MaxElev", 1e-17, msh.MaxElev, 1)
 }
 
 func Test_msh04(tst *testing.T) {
@@ -185,7 +185,7 @@ func Test_sim01(tst *testing.T) {
 	io.Pfcyan("\nLinSol.Name = %v\n", sim.LinSol.Name)
 
 	chk.IntAssert(sim.Ndim, 2)
-	chk.Scalar(tst, "maxElev", 1e-15, sim.MaxElev, 1)
+	chk.Float64(tst, "maxElev", 1e-15, sim.MaxElev, 1)
 }
 
 func Test_sim02(tst *testing.T) {
@@ -222,19 +222,19 @@ func Test_sim02(tst *testing.T) {
 
 	io.Pf("\n")
 	chk.IntAssert(sim.Ndim, 2)
-	chk.Scalar(tst, "MaxElev", 1e-15, sim.MaxElev, 10.0)
+	chk.Float64(tst, "MaxElev", 1e-15, sim.MaxElev, 10.0)
 	io.Pf("\n")
-	chk.Scalar(tst, "liq: RhoL0", 1e-15, sim.LiqMdl.R0, 1.0)
-	chk.Scalar(tst, "liq: Pl0  ", 1e-15, sim.LiqMdl.P0, 0.0)
-	chk.Scalar(tst, "liq: Cl   ", 1e-15, sim.LiqMdl.C, 4.53e-07)
-	chk.Scalar(tst, "liq: Grav ", 1e-15, sim.LiqMdl.Grav, 10.0)
-	chk.Scalar(tst, "liq: H    ", 1e-15, sim.LiqMdl.H, 10.0)
+	chk.Float64(tst, "liq: RhoL0", 1e-15, sim.LiqMdl.R0, 1.0)
+	chk.Float64(tst, "liq: Pl0  ", 1e-15, sim.LiqMdl.P0, 0.0)
+	chk.Float64(tst, "liq: Cl   ", 1e-15, sim.LiqMdl.C, 4.53e-07)
+	chk.Float64(tst, "liq: Grav ", 1e-15, sim.LiqMdl.Grav, 10.0)
+	chk.Float64(tst, "liq: H    ", 1e-15, sim.LiqMdl.H, 10.0)
 	io.Pf("\n")
-	chk.Scalar(tst, "gas: RhoG0", 1e-15, sim.GasMdl.R0, 0.0012)
-	chk.Scalar(tst, "gas: Pg0  ", 1e-15, sim.GasMdl.P0, 0.0)
-	chk.Scalar(tst, "gas: Cg   ", 1e-15, sim.GasMdl.C, 1.17e-5)
-	chk.Scalar(tst, "gas: Grav ", 1e-15, sim.GasMdl.Grav, 10.0)
-	chk.Scalar(tst, "gas: H    ", 1e-15, sim.GasMdl.H, 10.0)
+	chk.Float64(tst, "gas: RhoG0", 1e-15, sim.GasMdl.R0, 0.0012)
+	chk.Float64(tst, "gas: Pg0  ", 1e-15, sim.GasMdl.P0, 0.0)
+	chk.Float64(tst, "gas: Cg   ", 1e-15, sim.GasMdl.C, 1.17e-5)
+	chk.Float64(tst, "gas: Grav ", 1e-15, sim.GasMdl.Grav, 10.0)
+	chk.Float64(tst, "gas: H    ", 1e-15, sim.GasMdl.H, 10.0)
 
 	if chk.Verbose {
 		sim.LiqMdl.Plot("/tmp/gofem", "fig_sim02_liq", 21)
@@ -260,8 +260,8 @@ func Test_sim03(tst *testing.T) {
 	}
 	io.Pforan("V = %v\n", V)
 	io.Pfpink("S = %v\n", S)
-	chk.Vector(tst, "values", 1e-15, V, values)
-	chk.Vector(tst, "stddev", 1e-15, S, stddev)
+	chk.Array(tst, "values", 1e-15, V, values)
+	chk.Array(tst, "stddev", 1e-15, S, stddev)
 
 	chk.IntAssert(len(sim.AdjRandom), 6)
 	V = make([]float64, len(values))
@@ -272,8 +272,8 @@ func Test_sim03(tst *testing.T) {
 	}
 	io.Pforan("\nV = %v\n", V)
 	io.Pfpink("S = %v\n", S)
-	chk.Vector(tst, "values", 1e-15, V, values)
-	chk.Vector(tst, "stddev", 1e-15, S, stddev)
+	chk.Array(tst, "values", 1e-15, V, values)
+	chk.Array(tst, "stddev", 1e-15, S, stddev)
 
 	chk.IntAssert(len(sim.AdjDependent), 5)
 	values = []float64{0.08333, 0.08333, 0.08333, 0.26670, 0.2}
@@ -282,7 +282,7 @@ func Test_sim03(tst *testing.T) {
 		V[i] = prm.V
 	}
 	io.Pforan("\nV = %v\n", V)
-	chk.Vector(tst, "values", 1e-15, V, values)
+	chk.Array(tst, "values", 1e-15, V, values)
 
 	M1_A := sim.Adjustable[0]
 	M1_I22 := sim.AdjDependent[0]
@@ -292,6 +292,6 @@ func Test_sim03(tst *testing.T) {
 	M1_I22.Set(M1_I22.V * M1_I22.Other.V * M1_I22.Other.V)
 	io.Pfpink("M1: A   = %v\n", M1_A.V)
 	io.Pfpink("M1: I22 = %v\n", M1_I22.V)
-	chk.Scalar(tst, "A  ", 1e-15, M1_A.V, 0.3)
-	chk.Scalar(tst, "I22", 1e-15, M1_I22.V, 0.0074997)
+	chk.Float64(tst, "A  ", 1e-15, M1_A.V, 0.3)
+	chk.Float64(tst, "I22", 1e-15, M1_I22.V, 0.0074997)
 }

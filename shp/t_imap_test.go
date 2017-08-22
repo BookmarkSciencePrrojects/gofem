@@ -65,7 +65,7 @@ func Test_imap(tst *testing.T) {
 			}
 		}
 
-		chk.Matrix(tst, "checking", tol, R, shape.NatCoords)
+		chk.Deep2(tst, "checking", tol, R, shape.NatCoords)
 
 		io.PfGreen("OK\n")
 	}

@@ -41,12 +41,12 @@ func Test_m1(tst *testing.T) {
 	}
 
 	m := mdl.(*M1)
-	chk.Scalar(tst, "a0", 1e-15, m.a0, 1.0)
-	chk.Scalar(tst, "a1", 1e-15, m.a1, 2.0)
-	chk.Scalar(tst, "a2", 1e-15, m.a2, 3.0)
-	chk.Scalar(tst, "a3", 1e-15, m.a3, 4.0)
-	chk.Scalar(tst, "rho", 1e-15, m.Rho, 3.3)
-	chk.Matrix(tst, "kcte", 1e-15, m.Kcte, [][]float64{
+	chk.Float64(tst, "a0", 1e-15, m.a0, 1.0)
+	chk.Float64(tst, "a1", 1e-15, m.a1, 2.0)
+	chk.Float64(tst, "a2", 1e-15, m.a2, 3.0)
+	chk.Float64(tst, "a3", 1e-15, m.a3, 4.0)
+	chk.Float64(tst, "rho", 1e-15, m.Rho, 3.3)
+	chk.Deep2(tst, "kcte", 1e-15, m.Kcte, [][]float64{
 		{0.1, 0, 0},
 		{0, 0.1, 0},
 		{0, 0, 0.1},
@@ -56,8 +56,8 @@ func Test_m1(tst *testing.T) {
 	kten := la.MatAlloc(ndim, ndim)
 	m.Kten(kten, u)
 	kval := 1.0 + 2.0*u + 3.0*u*u + 4.0*u*u*u
-	chk.Scalar(tst, "kval", 1e-15, m.Kval(u), kval)
-	chk.Matrix(tst, "kcte", 1e-15, kten, [][]float64{
+	chk.Float64(tst, "kval", 1e-15, m.Kval(u), kval)
+	chk.Deep2(tst, "kcte", 1e-15, kten, [][]float64{
 		{0.1 * kval, 0, 0},
 		{0, 0.1 * kval, 0},
 		{0, 0, 0.1 * kval},

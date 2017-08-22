@@ -231,7 +231,7 @@ func Test_sgm515(tst *testing.T) {
 	uy := dom.Sol.Y[eqy]
 	uy_cor := -5.310671749739340E-06
 	io.Pforan("uy @ top = %v (%v)\n", uy, uy_cor)
-	chk.Scalar(tst, "uy @ top", 1e-12, uy, uy_cor)
+	chk.Float64(tst, "uy @ top", 1e-12, uy, uy_cor)
 
 	// check
 	if true {
@@ -265,7 +265,7 @@ func Test_sgm527(tst *testing.T) {
 	uy := dom.Sol.Y[eqy]
 	uy_cor := -5.298917281673461E-06
 	io.Pforan("uy @ top = %v (%v)\n", uy, uy_cor)
-	chk.Scalar(tst, "uy @ top", 1e-12, uy, uy_cor)
+	chk.Float64(tst, "uy @ top", 1e-12, uy, uy_cor)
 
 	// check
 	if true {

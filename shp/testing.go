@@ -119,7 +119,7 @@ func CheckIsop(tst *testing.T, shape *Shape, C [][]float64, Cnat [][]float64) {
 			}
 		}
 		io.Pforan("x = %v\n", x)
-		chk.Vector(tst, "x", 1e-17, x, C[i])
+		chk.Array(tst, "x", 1e-17, x, C[i])
 	}
 }
 

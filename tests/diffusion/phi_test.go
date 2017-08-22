@@ -78,10 +78,10 @@ func Test_phi01(tst *testing.T) {
 
 	// check initial values
 	r := 0.25
-	chk.Scalar(tst, "h @ nod 4", 1e-17, dom.Sol.Y[2], -r)
-	chk.Scalar(tst, "h @ nod 8", 1e-17, dom.Sol.Y[21], math.Sqrt(2)/2.0-r)
+	chk.Float64(tst, "h @ nod 4", 1e-17, dom.Sol.Y[2], -r)
+	chk.Float64(tst, "h @ nod 8", 1e-17, dom.Sol.Y[21], math.Sqrt(2)/2.0-r)
 	for _, eq := range []int{5, 6, 13, 17} {
-		chk.Scalar(tst, io.Sf("h @ eq %d", eq), 1e-17, dom.Sol.Y[eq], 0)
+		chk.Float64(tst, io.Sf("h @ eq %d", eq), 1e-17, dom.Sol.Y[eq], 0)
 	}
 }
 

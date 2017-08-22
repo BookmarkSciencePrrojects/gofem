@@ -100,8 +100,8 @@ func (o CteStressPstrain) CheckDispl(tst *testing.T, t float64, u, x []float64, 
 	// check displacements
 	ux := o.lx * εx * x[0] / o.lx
 	uy := o.ly * εy * x[1] / o.ly
-	chk.Scalar(tst, "ux", tol, u[0], ux)
-	chk.Scalar(tst, "uy", tol, u[1], uy)
+	chk.Float64(tst, "ux", tol, u[0], ux)
+	chk.Float64(tst, "uy", tol, u[1], uy)
 }
 
 // CheckStress check stresses
@@ -111,8 +111,8 @@ func (o CteStressPstrain) CheckStress(tst *testing.T, t float64, σ, x []float64
 	σx, σy, σz, _, _ := o.Solution(t)
 
 	// check stresses
-	chk.Scalar(tst, "σx ", tol, σ[0], σx)
-	chk.Scalar(tst, "σy ", tol, σ[1], σy)
-	chk.Scalar(tst, "σz ", tol, σ[2], σz)
-	chk.Scalar(tst, "σxy", tol, σ[3], 0)
+	chk.Float64(tst, "σx ", tol, σ[0], σx)
+	chk.Float64(tst, "σy ", tol, σ[1], σy)
+	chk.Float64(tst, "σz ", tol, σ[2], σz)
+	chk.Float64(tst, "σxy", tol, σ[3], 0)
 }

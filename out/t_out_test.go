@@ -122,7 +122,7 @@ func Test_out01(tst *testing.T) {
 	io.Pforan("uxR = %v\n", uxR)
 	chk.IntAssert(len(uxC), 2)
 	idx := len(uxC) - 1
-	chk.Vector(tst, "uxR", 1e-17, uxR, []float64{uxC[idx], uxC[idx]})
+	chk.Array(tst, "uxR", 1e-17, uxR, []float64{uxC[idx], uxC[idx]})
 
 	// solution
 	var sol ana.CteStressPstrain

@@ -67,7 +67,7 @@ func Test_fileio01(tst *testing.T) {
 	io.Pfgreen("domB.Sol.Y (after) = %v\n", domB.Sol.Y)
 
 	// check
-	chk.Vector(tst, "Y", 1e-17, domA.Sol.Y, domB.Sol.Y)
-	chk.Vector(tst, "dy/dt", 1e-17, domA.Sol.Dydt, domB.Sol.Dydt)
-	chk.Vector(tst, "d²y/dt²", 1e-17, domA.Sol.D2ydt2, domB.Sol.D2ydt2)
+	chk.Array(tst, "Y", 1e-17, domA.Sol.Y, domB.Sol.Y)
+	chk.Array(tst, "dy/dt", 1e-17, domA.Sol.Dydt, domB.Sol.Dydt)
+	chk.Array(tst, "d²y/dt²", 1e-17, domA.Sol.D2ydt2, domB.Sol.D2ydt2)
 }

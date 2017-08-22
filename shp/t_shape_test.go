@@ -63,7 +63,7 @@ func Test_shape02(tst *testing.T) {
 	shape := factory["qua4"]
 	shape.CalcAtIp(xmat, r, true)
 	io.Pforan("J = %v\n", shape.J)
-	chk.Scalar(tst, "J", 1e-17, shape.J, (dx/dr)*(dy/ds))
+	chk.Float64(tst, "J", 1e-17, shape.J, (dx/dr)*(dy/ds))
 
 	tol := 1e-14
 	verb := chk.Verbose

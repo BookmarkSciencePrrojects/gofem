@@ -49,7 +49,7 @@ func Test_sigini01(tst *testing.T) {
 		eqx := n.GetEq("ux")
 		eqy := n.GetEq("uy")
 		u := []float64{dom.Sol.Y[eqx], dom.Sol.Y[eqy]}
-		chk.Vector(tst, "u", tolu, u, nil)
+		chk.Array(tst, "u", tolu, u, nil)
 	}
 
 	// analytical solution
@@ -65,7 +65,7 @@ func Test_sigini01(tst *testing.T) {
 	for idx, _ := range e.IpsElem {
 		σ := e.States[idx].Sig
 		io.Pforan("σ = %v\n", σ)
-		chk.Vector(tst, "σ", tols, σ, σref)
+		chk.Array(tst, "σ", tols, σ, σref)
 	}
 }
 
@@ -192,7 +192,7 @@ func Test_selfweight01(tst *testing.T) {
 	uy := dom.Sol.Y[eqy]
 	uy_cor := -8.737017006803450E-05
 	io.Pforan("uy @ top = %v (%v)\n", uy, uy_cor)
-	chk.Scalar(tst, "uy @ top", 1e-11, uy, uy_cor)
+	chk.Float64(tst, "uy @ top", 1e-11, uy, uy_cor)
 
 	// check
 	if true {

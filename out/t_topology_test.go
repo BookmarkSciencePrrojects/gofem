@@ -45,14 +45,14 @@ func Test_topo01(tst *testing.T) {
 			chk.Panic("vid=%d is not in map", vid)
 		}
 	}
-	chk.Scalar(tst, "Δx", 1e-15, surf.Dx[0], 4.0/3.0)
-	chk.Scalar(tst, "Δy", 1e-15, surf.Dx[1], 4.0/3.0)
-	chk.Scalar(tst, "Δz", 1e-15, surf.Dx[2], 0)
+	chk.Float64(tst, "Δx", 1e-15, surf.Dx[0], 4.0/3.0)
+	chk.Float64(tst, "Δy", 1e-15, surf.Dx[1], 4.0/3.0)
+	chk.Float64(tst, "Δz", 1e-15, surf.Dx[2], 0)
 	chk.Ints(tst, "Iu", surf.Iu, []int{0, 1})
-	chk.Scalar(tst, "Δu", 1e-15, surf.Du[0], 4.0/3.0)
-	chk.Scalar(tst, "Δv", 1e-15, surf.Du[1], 4.0/3.0)
-	chk.Vector(tst, "Umin", 1e-15, surf.Umin, []float64{0, 0})
-	chk.Vector(tst, "Umax", 1e-15, surf.Umax, []float64{4, 4})
+	chk.Float64(tst, "Δu", 1e-15, surf.Du[0], 4.0/3.0)
+	chk.Float64(tst, "Δv", 1e-15, surf.Du[1], 4.0/3.0)
+	chk.Array(tst, "Umin", 1e-15, surf.Umin, []float64{0, 0})
+	chk.Array(tst, "Umax", 1e-15, surf.Umax, []float64{4, 4})
 	chk.Ints(tst, "Nu", surf.Nu, []int{4, 4})
 
 	// define entities

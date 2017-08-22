@@ -93,7 +93,7 @@ func Test_extrapapolation(tst *testing.T) {
 
 			// Compare vectors N and NN
 			msg := name + "_" + strconv.Itoa(nip)
-			chk.Vector(tst, msg, tol, NN, N)
+			chk.Array(tst, msg, tol, NN, N)
 		}
 	}
 }

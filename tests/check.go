@@ -119,28 +119,28 @@ func CompareResults(tst *testing.T, simfilepath, cmpfname, alias string, tolK, t
 					if err != nil {
 						chk.Panic("CompareResults: AddToKb failed\n")
 					}
-					chk.Matrix(tst, io.Sf("K%d", eid), tolK, e.K, Ksg)
+					chk.Deep2(tst, io.Sf("K%d", eid), tolK, e.K, Ksg)
 				}
 				if e, ok := dom.Elems[eid].(*solid.Beam); ok {
 					err = e.AddToKb(dom.Kb, dom.Sol, true)
 					if err != nil {
 						chk.Panic("CompareResults: AddToKb failed\n")
 					}
-					chk.Matrix(tst, io.Sf("K%d", eid), tolK, e.K, Ksg)
+					chk.Deep2(tst, io.Sf("K%d", eid), tolK, e.K, Ksg)
 				}
 				if e, ok := dom.Elems[eid].(*solid.Rod); ok {
 					err = e.AddToKb(dom.Kb, dom.Sol, true)
 					if err != nil {
 						chk.Panic("CompareResults: AddToKb failed\n")
 					}
-					chk.Matrix(tst, io.Sf("K%d", eid), tolK, e.K, Ksg)
+					chk.Deep2(tst, io.Sf("K%d", eid), tolK, e.K, Ksg)
 				}
 				if e, ok := dom.Elems[eid].(*solid.ElastRod); ok {
 					err = e.AddToKb(dom.Kb, dom.Sol, true)
 					if err != nil {
 						chk.Panic("CompareResults: AddToKb failed\n")
 					}
-					chk.Matrix(tst, io.Sf("K%d", eid), tolK, e.K, Ksg)
+					chk.Deep2(tst, io.Sf("K%d", eid), tolK, e.K, Ksg)
 				}
 			}
 		}

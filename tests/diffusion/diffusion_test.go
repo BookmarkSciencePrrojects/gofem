@@ -103,7 +103,7 @@ func Test_diffu01a(tst *testing.T) {
 		chk.IntAssert(len(c.Eqs), 1)
 		chk.IntAssert(len(c.ValsA), 1)
 		chk.String(tst, c.Key, "u")
-		chk.Scalar(tst, "A", 1e-15, c.ValsA[0], 1.0)
+		chk.Float64(tst, "A", 1e-15, c.ValsA[0], 1.0)
 		eq := c.Eqs[0]
 		ct_u_eqs = append(ct_u_eqs, eq)
 	}

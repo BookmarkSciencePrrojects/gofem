@@ -155,8 +155,8 @@ func Test_pp01a(tst *testing.T) {
 		pg := dom.Sol.Y[eqg]
 		plC, _ := dom.Sim.LiqMdl.Calc(z)
 		pgC, _ := dom.Sim.GasMdl.Calc(z)
-		chk.Scalar(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, pl), 1e-17, pl, plC)
-		chk.Scalar(tst, io.Sf("nod %3d : pg(@ %4g)= %6g", nod.Vert.Id, z, pg), 1e-17, pg, pgC)
+		chk.Float64(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, pl), 1e-17, pl, plC)
+		chk.Float64(tst, io.Sf("nod %3d : pg(@ %4g)= %6g", nod.Vert.Id, z, pg), 1e-17, pg, pgC)
 	}
 
 	// intial values @ integration points
@@ -169,9 +169,9 @@ func Test_pp01a(tst *testing.T) {
 			z := e.Cell.Shp.IpRealCoords(e.X, ip)[1]
 			_, ρLC := dom.Sim.LiqMdl.Calc(z)
 			_, ρGC := dom.Sim.GasMdl.Calc(z)
-			chk.Scalar(tst, io.Sf("sl(@ %18g)= %18g", z, s.A_sl), 1e-17, s.A_sl, slmax)
-			chk.Scalar(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-9, s.A_ρL, ρLC)
-			chk.Scalar(tst, io.Sf("ρG(@ %18g)= %18g", z, s.A_ρG), 1e-14, s.A_ρG, ρGC)
+			chk.Float64(tst, io.Sf("sl(@ %18g)= %18g", z, s.A_sl), 1e-17, s.A_sl, slmax)
+			chk.Float64(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-9, s.A_ρL, ρLC)
+			chk.Float64(tst, io.Sf("ρG(@ %18g)= %18g", z, s.A_ρG), 1e-14, s.A_ρG, ρGC)
 		}
 	}
 }

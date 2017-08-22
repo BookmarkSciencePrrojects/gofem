@@ -121,7 +121,7 @@ func Test_nurbs01(tst *testing.T) {
 		eqx := n.GetEq("ux")
 		eqy := n.GetEq("uy")
 		u := []float64{dom.Sol.Y[eqx], dom.Sol.Y[eqy]}
-		chk.Vector(tst, "u", tolu, u, nil)
+		chk.Array(tst, "u", tolu, u, nil)
 	}
 
 	// analytical solution
@@ -137,7 +137,7 @@ func Test_nurbs01(tst *testing.T) {
 	for idx, _ := range e.IpsElem {
 		σ := e.States[idx].Sig
 		io.Pforan("σ = %v\n", σ)
-		chk.Vector(tst, "σ", tols, σ, σref)
+		chk.Array(tst, "σ", tols, σ, σref)
 	}
 }
 

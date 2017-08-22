@@ -24,5 +24,5 @@ func Test_path01(tst *testing.T) {
 		return
 	}
 	io.Pforan("pth = %+v\n", pth)
-	chk.Vector(tst, "sx", 1e-17, pth.Sx, []float64{1, 1, 1, 0})
+	chk.Array(tst, "sx", 1e-17, pth.Sx, []float64{1, 1, 1, 0})
 }

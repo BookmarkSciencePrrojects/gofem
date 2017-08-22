@@ -24,21 +24,21 @@ func check_constants(tst *testing.T, E, ν, Kcor, Gcor, lcor float64) {
 	io.Pf("G = %v\n", G)
 	io.Pf("l = %v\n", l)
 
-	chk.Scalar(tst, "KfromEν", 1e-17, K, Kcor)
-	chk.Scalar(tst, "GfromEν", 1e-17, G, Gcor)
-	chk.Scalar(tst, "lfromEν", 1e-17, l, lcor)
+	chk.Float64(tst, "KfromEν", 1e-17, K, Kcor)
+	chk.Float64(tst, "GfromEν", 1e-17, G, Gcor)
+	chk.Float64(tst, "lfromEν", 1e-17, l, lcor)
 
 	EfromKG, νfromKG := Calc_E_from_KG(K, G), Calc_nu_from_KG(K, G)
-	chk.Scalar(tst, "EfromKG", 1e-17, EfromKG, E)
-	chk.Scalar(tst, "νfromKG", 1e-17, νfromKG, ν)
+	chk.Float64(tst, "EfromKG", 1e-17, EfromKG, E)
+	chk.Float64(tst, "νfromKG", 1e-17, νfromKG, ν)
 
 	EfromlG, νfromlG := Calc_E_from_lG(l, G), Calc_nu_from_lG(l, G)
-	chk.Scalar(tst, "EfromlG", 1e-17, EfromlG, E)
-	chk.Scalar(tst, "νfromlG", 1e-17, νfromlG, ν)
+	chk.Float64(tst, "EfromlG", 1e-17, EfromlG, E)
+	chk.Float64(tst, "νfromlG", 1e-17, νfromlG, ν)
 
 	EfromKν, GfromKν := Calc_E_from_Knu(K, ν), Calc_G_from_Knu(K, ν)
-	chk.Scalar(tst, "EfromKν", 1e-17, EfromKν, E)
-	chk.Scalar(tst, "GfromKν", 1e-17, GfromKν, G)
+	chk.Float64(tst, "EfromKν", 1e-17, EfromKν, E)
+	chk.Float64(tst, "GfromKν", 1e-17, GfromKν, G)
 }
 
 func Test_elast01(tst *testing.T) {
@@ -81,7 +81,7 @@ func Test_elast02(tst *testing.T) {
 	a := K + 4.0*G/3.0
 	b := K - 2.0*G/3.0
 	c := 2.0 * G
-	chk.Matrix(tst, "D", 1e-12, D, [][]float64{
+	chk.Deep2(tst, "D", 1e-12, D, [][]float64{
 		{a, b, b, 0},
 		{b, a, b, 0},
 		{b, b, a, 0},

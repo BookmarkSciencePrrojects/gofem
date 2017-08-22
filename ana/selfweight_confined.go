@@ -106,11 +106,11 @@ func (o ConfinedSelfWeight) Displ(t float64, x []float64) (u []float64) {
 // CheckStress check stresses
 func (o ConfinedSelfWeight) CheckStress(tst *testing.T, t float64, σ, x []float64, tol float64) {
 	σana := o.Stress(t, x)
-	chk.Vector(tst, "σ", tol, σ, σana)
+	chk.Array(tst, "σ", tol, σ, σana)
 }
 
 // CheckDispl checks displacements
 func (o ConfinedSelfWeight) CheckDispl(tst *testing.T, t float64, u, x []float64, tol float64) {
 	uana := o.Displ(t, x)
-	chk.Vector(tst, "u", tol, u, uana)
+	chk.Array(tst, "u", tol, u, uana)
 }

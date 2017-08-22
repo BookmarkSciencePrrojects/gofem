@@ -107,8 +107,8 @@ fixreadme() {
 
 custom() {
     pkg=$1
-    old="fun.Params"
-    new="dbf.Params"
+    old="chk.Matrix"
+    new="chk.Deep2"
     for f in *.go; do
         echo $f
         sed -i 's,'"$old"','"$new"',' $f

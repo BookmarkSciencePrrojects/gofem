@@ -124,14 +124,14 @@ func Test_beam01b(tst *testing.T) {
 	qn, L := 15.0, 1.0
 	Mcentre := qn * L * L / 8.0
 	io.Pforan("M22 = %v (%v)\n", M22, Mcentre)
-	chk.Scalar(tst, "M22 @ centre", 1e-17, M22[0], Mcentre)
+	chk.Float64(tst, "M22 @ centre", 1e-17, M22[0], Mcentre)
 
 	// check moment using OutIpsData
 	idx_centre := 5 // considering 11 stations
 	res := ele.NewIpsMap()
 	e.OutIpVals(res, dom.Sol)
 	io.Pfcyan("M22 @ centre (OutIpsData) = %v\n", res.Get("M22", idx_centre))
-	chk.Scalar(tst, "M22 @ centre (OutIpsData)", 1e-17, res.Get("M22", idx_centre), Mcentre)
+	chk.Float64(tst, "M22 @ centre (OutIpsData)", 1e-17, res.Get("M22", idx_centre), Mcentre)
 }
 
 func Test_beam02(tst *testing.T) {
@@ -156,7 +156,7 @@ func Test_beam02(tst *testing.T) {
 	qn, L := 15.0, 1.0
 	Mleft := -qn * L * L / 2.0
 	io.Pforan("M22 = %v (%v)\n", M22, Mleft)
-	chk.Scalar(tst, "M @ left", 1e-15, M22[0], Mleft)
+	chk.Float64(tst, "M @ left", 1e-15, M22[0], Mleft)
 }
 
 func Test_beam03(tst *testing.T) {
@@ -197,7 +197,7 @@ func Test_beam03(tst *testing.T) {
 	check_M := func(beamId int, ξ, Mref, tol float64) {
 		ele := dom.Cid2elem[beamId].(*solid.Beam)
 		M22 := ele.CalcMoment2d(dom.Sol, ξ, 1)
-		chk.Scalar(tst, io.Sf("Beam %d: M22(ξ=%g) = %.6f", ele.Id(), ξ, M22[0]), tol, M22[0], Mref)
+		chk.Float64(tst, io.Sf("Beam %d: M22(ξ=%g) = %.6f", ele.Id(), ξ, M22[0]), tol, M22[0], Mref)
 	}
 
 	// check

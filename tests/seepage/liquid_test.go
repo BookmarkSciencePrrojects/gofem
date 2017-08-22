@@ -132,7 +132,7 @@ func Test_p01a(tst *testing.T) {
 		eq := nod.Dofs[0].Eq
 		pl := dom.Sol.Y[eq]
 		plC, _ := dom.Sim.LiqMdl.Calc(z)
-		chk.Scalar(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, pl), 1e-17, pl, plC)
+		chk.Float64(tst, io.Sf("nod %3d : pl(@ %4g)= %6g", nod.Vert.Id, z, pl), 1e-17, pl, plC)
 	}
 
 	// intial values @ integration points
@@ -143,8 +143,8 @@ func Test_p01a(tst *testing.T) {
 			s := e.States[idx]
 			z := e.Cell.Shp.IpRealCoords(e.X, ip)[1]
 			_, ρLC := dom.Sim.LiqMdl.Calc(z)
-			chk.Scalar(tst, io.Sf("sl(@ %18g)= %18g", z, s.A_sl), 1e-17, s.A_sl, 1)
-			chk.Scalar(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-10, s.A_ρL, ρLC)
+			chk.Float64(tst, io.Sf("sl(@ %18g)= %18g", z, s.A_sl), 1e-17, s.A_sl, 1)
+			chk.Float64(tst, io.Sf("ρL(@ %18g)= %18g", z, s.A_ρL), 1e-10, s.A_ρL, ρLC)
 		}
 	}
 }

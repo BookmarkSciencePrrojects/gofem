@@ -116,9 +116,9 @@ func Test_bjoint01a(tst *testing.T) {
 	q1 := joint.States[0].Phi[0]
 	q2 := joint.States[0].Phi[1]
 	io.Pfyel("τ=%g q1=%g q2=%g\n", τ, q1, q2)
-	chk.Scalar(tst, "τ", 1e-17, τ, 0)
-	chk.Scalar(tst, "q1", 1e-15, q1, 0)
-	chk.Scalar(tst, "q2", 1e-15, q2, 0)
+	chk.Float64(tst, "τ", 1e-17, τ, 0)
+	chk.Float64(tst, "q1", 1e-15, q1, 0)
+	chk.Float64(tst, "q2", 1e-15, q2, 0)
 
 	// contact force vector
 	joint.AddToRhs(dom.Fb, dom.Sol)
@@ -145,7 +145,7 @@ func Test_bjoint01b(tst *testing.T) {
 	// extrapolated values
 	dom := main.Domains[0]
 	for vid, vals := range dom.Sol.Ext {
-		chk.Vector(tst, io.Sf("sig @ vid %d", vid), 1e-15, vals, []float64{-1, -1, -1, 0})
+		chk.Array(tst, io.Sf("sig @ vid %d", vid), 1e-15, vals, []float64{-1, -1, -1, 0})
 	}
 }
 
