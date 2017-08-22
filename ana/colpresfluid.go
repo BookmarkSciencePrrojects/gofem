@@ -8,6 +8,7 @@ import (
 	"math"
 
 	"github.com/cpmech/gosl/chk"
+	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/ode"
 	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
@@ -28,38 +29,23 @@ import (
 //            \ dR/dT /    \  C・dp/dT   /
 //
 type ColumnFluidPressure struct {
-	R0   float64    // intrinsic density corresponding to p0
-	P0   float64    // pressure corresponding to R0
-	C    float64    // compressibility coefficient; e.g. R0/Kbulk or M/(R・θ)
-	Grav float64    // gravity acceleration (positive constant)
-	H    float64    // elevation where (R0,p0) is known
-	sol  ode.Solver // ODE solver
+	R0   float64 // intrinsic density corresponding to p0
+	P0   float64 // pressure corresponding to R0
+	C    float64 // compressibility coefficient; e.g. R0/Kbulk or M/(R・θ)
+	Grav float64 // gravity acceleration (positive constant)
+	H    float64 // elevation where (R0,p0) is known
 
 	// auxiliary (mutable) variable
 	delz float64 // Δz
 }
 
 // Init initialises this structure
-func (o *ColumnFluidPressure) Init(R0, p0, C, g, H float64, withNum bool) {
-
-	// input data
+func (o *ColumnFluidPressure) Init(R0, p0, C, g, H float64) {
 	o.R0 = R0
 	o.P0 = p0
 	o.C = C
 	o.Grav = g
 	o.H = H
-
-	// numerical solver with ξ := {p, R}
-	if withNum {
-		o.sol.Init("Radau5", 2, func(f []float64, dT, T float64, ξ []float64) error {
-			Δz := o.delz
-			R := ξ[1]
-			f[0] = R * o.Grav * Δz // dp/dT
-			f[1] = o.C * f[0]      // dR/dT
-			return nil
-		}, nil, nil, nil)
-		o.sol.Distr = false // must be sure to disable this; otherwise it causes problems in parallel runs
-	}
 }
 
 // Calc computes pressure and density
@@ -73,7 +59,7 @@ func (o ColumnFluidPressure) Calc(z float64) (p, R float64) {
 func (o *ColumnFluidPressure) CalcNum(z float64) (p, R float64) {
 	o.delz = o.H - z
 	ξ := []float64{o.P0, o.R0}
-	err := o.sol.Solve(ξ, 0, 1, 1, false)
+	err := ode.Dopri8simple(o.odefcn, ξ, 1.0, 1e-9)
 	if err != nil {
 		chk.Panic("ColumnFluidPressure failed when calculating pressure using ODE solver: %v", err)
 	}
@@ -104,4 +90,13 @@ func (o ColumnFluidPressure) Plot(dirout, fnkey, subscript string, np int) {
 	plt.SetTicksNormal()
 
 	plt.Save(dirout, fnkey)
+}
+
+// odefcn implements the f(T,ξ)=dξ/dT function
+func (o *ColumnFluidPressure) odefcn(f la.Vector, dT, T float64, ξ la.Vector) error {
+	Δz := o.delz
+	R := ξ[1]
+	f[0] = R * o.Grav * Δz // dp/dT
+	f[1] = o.C * f[0]      // dR/dT
+	return nil
 }
