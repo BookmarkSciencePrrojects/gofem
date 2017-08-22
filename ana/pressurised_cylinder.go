@@ -43,7 +43,7 @@ type PressCylin struct {
 	Plim float64 // limiting pressure
 
 	// auxiliary
-	P_fx float64 // P value to be passed to fx function
+	Pfx float64 // P value to be passed to fx function
 }
 
 // Init initialises this structure
@@ -94,14 +94,14 @@ func (o PressCylin) ElastOuterU(P float64) (ub float64) {
 	return
 }
 
-// Calc_c computes the elastic/plastic transition zone
+// CalcC computes the elastic/plastic transition zone
 // TODO: check what's 'c' exactly
-func (o *PressCylin) Calc_c(P float64) float64 {
+func (o *PressCylin) CalcC(P float64) float64 {
 	var nls num.NlSolver
 	defer nls.Free()
-	o.P_fx = P
+	o.Pfx = P
 	Res := []float64{(o.a + o.b) / 2.0} // initial values
-	nls.Init(1, o.fx_fun, nil, o.dfdx_fun, true, false, nil)
+	nls.Init(1, o.fxFun, nil, o.dfdxFun, true, false, nil)
 	nls.Solve(Res, true)
 	return Res[0]
 }
@@ -121,7 +121,7 @@ func (o PressCylin) Stresses(c, r float64) (sr, st float64) {
 
 // plot //////////////////////////////////////////////////////////////////////////
 
-// CalcLoadDisp returns the internal pressure and outer displacements for
+// CalcPressDisp returns the internal pressure and outer displacements for
 // plotting the load-displacement graph
 func (o PressCylin) CalcPressDisp(np int) (P, Ub []float64) {
 
@@ -143,13 +143,14 @@ func (o PressCylin) CalcPressDisp(np int) (P, Ub []float64) {
 	return
 }
 
+// CalcStresses computes stresses
 func (o PressCylin) CalcStresses(Pvals []float64, nr int) (R []float64, Sr, St [][]float64) {
 	R = utl.LinSpace(o.a, o.b, nr)
 	np := len(Pvals)
-	Sr = la.MatAlloc(np, nr)
-	St = la.MatAlloc(np, nr)
+	Sr = utl.Alloc(np, nr)
+	St = utl.Alloc(np, nr)
 	for i, P := range Pvals {
-		c := o.Calc_c(P)
+		c := o.CalcC(P)
 		for j := 0; j < nr; j++ {
 			Sr[i][j], St[i][j] = o.Stresses(c, R[j])
 		}
@@ -159,16 +160,16 @@ func (o PressCylin) CalcStresses(Pvals []float64, nr int) (R []float64, Sr, St [
 
 // auxiliary /////////////////////////////////////////////////////////////////////
 
-// fx_fun implements the nonlinear problem to be solved whe finding c
-func (o PressCylin) fx_fun(fx, X []float64) (err error) {
+// fxFun implements the nonlinear problem to be solved whe finding c
+func (o PressCylin) fxFun(fx, X la.Vector) (err error) {
 	x := X[0]
-	fx[0] = o.P_fx/o.Y - (math.Log(x/o.a) + (1.0-x*x/(o.b*o.b))/2.0)
+	fx[0] = o.Pfx/o.Y - (math.Log(x/o.a) + (1.0-x*x/(o.b*o.b))/2.0)
 	return
 }
 
-// dfdx_fun is the derivative of fx_fun
-func (o PressCylin) dfdx_fun(dfdx [][]float64, X []float64) (err error) {
+// dfdxFun is the derivative of fxFun
+func (o PressCylin) dfdxFun(dfdx *la.Matrix, X la.Vector) (err error) {
 	x := X[0]
-	dfdx[0][0] = -1.0/x + x/(o.b*o.b)
+	dfdx.Set(0, 0, -1.0/x+x/(o.b*o.b))
 	return
 }
