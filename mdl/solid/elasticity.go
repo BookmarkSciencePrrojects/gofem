@@ -7,6 +7,7 @@ package solid
 import (
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
@@ -14,7 +15,7 @@ import (
 
 // KGcalculator defines calculators of elasticity coefficients K and G
 type KGcalculator interface {
-	Init(prms fun.Params) (err error)
+	Init(prms dbf.Params) (err error)
 	Calc(s *State) (K, G float64)
 }
 
@@ -23,7 +24,7 @@ var kgcfactory = map[string]func() KGcalculator{}
 
 // GetKgc returns a KG calculator
 // It returns nil on errors
-func GetKgc(name string, prms fun.Params) KGcalculator {
+func GetKgc(name string, prms dbf.Params) KGcalculator {
 	allocator, ok := kgcfactory[name]
 	if !ok {
 		return nil
@@ -53,7 +54,7 @@ func (o *SmallElasticity) GetRho() float64 {
 }
 
 // Init initialises this structure
-func (o *SmallElasticity) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *SmallElasticity) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 	o.Nsig = 2 * ndim
 	o.Pse = pstress
 	var has_E, has_ν, has_l, has_G, has_K bool
@@ -107,7 +108,7 @@ func (o *SmallElasticity) Init(ndim int, pstress bool, prms fun.Params) (err err
 }
 
 // GetPrms gets (an example) of parameters
-func (o SmallElasticity) GetPrms() fun.Params {
+func (o SmallElasticity) GetPrms() dbf.Params {
 	return []*fun.P{
 		&fun.P{N: "E", V: o.E},
 		&fun.P{N: "nu", V: o.Nu},

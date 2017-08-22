@@ -8,7 +8,7 @@ import (
 	"math"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
 )
@@ -38,7 +38,7 @@ type PlateHole struct {
 }
 
 // Init initialises this structure
-func (o *PlateHole) Init(prms fun.Params) {
+func (o *PlateHole) Init(prms dbf.Params) {
 
 	// default values
 	o.r = 1.0

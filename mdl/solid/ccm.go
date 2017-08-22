@@ -9,6 +9,7 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/tsr"
 )
@@ -50,7 +51,7 @@ func (o *CamClayMod) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *CamClayMod) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *CamClayMod) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 
 	// basic data
 	o.Nsig = 2 * ndim
@@ -102,7 +103,7 @@ func (o *CamClayMod) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o *CamClayMod) GetPrms() fun.Params {
+func (o *CamClayMod) GetPrms() dbf.Params {
 	return []*fun.P{
 		&fun.P{N: "phi", V: 25},
 		&fun.P{N: "Mfix", V: 1},

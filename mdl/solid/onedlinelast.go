@@ -4,7 +4,10 @@
 
 package solid
 
-import "github.com/cpmech/gosl/fun"
+import (
+	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
+)
 
 // OnedLinElast implements a linear elastic model for 1D elements
 type OnedLinElast struct {
@@ -37,7 +40,7 @@ func (o *OnedLinElast) GetA() float64 {
 }
 
 // Init initialises model
-func (o *OnedLinElast) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *OnedLinElast) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 	prms.Connect(&o.E, "E", "oned-elast model")
 	prms.Connect(&o.G, "G", "oned-elast model")
 	prms.Connect(&o.A, "A", "oned-elast model")
@@ -54,7 +57,7 @@ func (o *OnedLinElast) InitIntVars(σ []float64) (s *State, err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o OnedLinElast) GetPrms() fun.Params {
+func (o OnedLinElast) GetPrms() dbf.Params {
 	return []*fun.P{
 		&fun.P{N: "E", V: 2.0000e+08},
 		&fun.P{N: "G", V: 7.5758e+07},

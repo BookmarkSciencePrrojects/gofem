@@ -15,6 +15,7 @@ import (
 	"github.com/cpmech/gofem/mdl/fluid"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/rnd"
 	"github.com/cpmech/gosl/utl"
@@ -258,9 +259,9 @@ type Simulation struct {
 	GasMdl      *fluid.Model // gas model to use when computing density and pressure along column; from stage #0
 
 	// adjustable parameters
-	Adjustable   fun.Params     // adjustable parameters (not dependent)
+	Adjustable   dbf.Params     // adjustable parameters (not dependent)
 	AdjRandom    rnd.Variables  // adjustable parameters that are random variables (not dependent)
-	AdjDependent fun.Params     // adjustable parameters that depend on other adjustable parameters
+	AdjDependent dbf.Params     // adjustable parameters that depend on other adjustable parameters
 	adjmap       map[int]*fun.P // auxiliary map with adjustable (not dependent)
 }
 

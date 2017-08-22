@@ -20,6 +20,7 @@ import (
 	"github.com/cpmech/gofem/mdl/retention"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/utl"
 )
@@ -63,7 +64,7 @@ type Model struct {
 }
 
 // Init initialises this structure
-func (o *Model) Init(prms fun.Params, Cnd conduct.Model, Lrm retention.Model, Liq *fluid.Model, Gas *fluid.Model, grav float64) (err error) {
+func (o *Model) Init(prms dbf.Params, Cnd conduct.Model, Lrm retention.Model, Liq *fluid.Model, Gas *fluid.Model, grav float64) (err error) {
 
 	// constants
 	o.NmaxIt = 20
@@ -182,16 +183,16 @@ func (o *Model) Init(prms fun.Params, Cnd conduct.Model, Lrm retention.Model, Li
 }
 
 // GetPrms gets (an example) of parameters
-func (o Model) GetPrms(example bool) fun.Params {
+func (o Model) GetPrms(example bool) dbf.Params {
 	if example {
-		return fun.Params{
+		return dbf.Params{
 			&fun.P{N: "nf0", V: 0.3},   // [-]
 			&fun.P{N: "RhoS0", V: 2.7}, // [Mg/m³]
 			&fun.P{N: "kl", V: 1e-3},   // [m/s]
 			&fun.P{N: "kg", V: 1e-2},   // [m/s]
 		}
 	}
-	return fun.Params{
+	return dbf.Params{
 		&fun.P{N: "nf0", V: o.Nf0},
 		&fun.P{N: "RhoS0", V: o.RhoS0},
 	}

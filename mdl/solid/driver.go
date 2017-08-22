@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
 )
@@ -41,7 +41,7 @@ type Driver struct {
 }
 
 // Init initialises driver
-func (o *Driver) Init(simfnk, modelname string, ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *Driver) Init(simfnk, modelname string, ndim int, pstress bool, prms dbf.Params) (err error) {
 	o.nsig = 2 * ndim
 	o.model, err = New(modelname)
 	if err != nil {

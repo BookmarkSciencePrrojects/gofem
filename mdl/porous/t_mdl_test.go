@@ -11,7 +11,7 @@ import (
 	"github.com/cpmech/gofem/mdl/fluid"
 	"github.com/cpmech/gofem/mdl/retention"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/plt"
 )
 
@@ -35,7 +35,7 @@ func Test_mdl01(tst *testing.T) {
 	lrm_name := "ref-m1"
 	//lrm_name := "vg"
 	var Lrm retention.Model
-	var prm fun.Params
+	var prm dbf.Params
 	sl0 := 0.95
 	switch lrm_name {
 	case "ref-m1":

@@ -14,6 +14,7 @@ import (
 	"github.com/cpmech/gofem/tests"
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/gm"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
@@ -165,7 +166,7 @@ func Test_nurbs02(tst *testing.T) {
 
 	// solution
 	var sol ana.CteStressPstrain
-	sol.Init(fun.Params{
+	sol.Init(dbf.Params{
 		&fun.P{N: "qnH0", V: -20},
 		&fun.P{N: "qnV0", V: -20},
 		&fun.P{N: "qnH", V: -50},
@@ -219,7 +220,7 @@ func Test_nurbs03(tst *testing.T) {
 
 	// solution
 	var sol ana.CteStressPstrain
-	sol.Init(fun.Params{
+	sol.Init(dbf.Params{
 		&fun.P{N: "qnH", V: -50},
 		&fun.P{N: "qnV", V: -100},
 	})

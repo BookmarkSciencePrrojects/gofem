@@ -7,6 +7,7 @@ package inp
 import (
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/plt"
 	"github.com/cpmech/gosl/utl"
@@ -25,7 +26,7 @@ type PlotFdata struct {
 type FuncData struct {
 	Name     string     `json:"name"`     // name of function. ex: zero, load, myfunction1, etc.
 	Type     string     `json:"type"`     // type of function. ex: cte, rmp
-	Prms     fun.Params `json:"prms"`     // parameters
+	Prms     dbf.Params `json:"prms"`     // parameters
 	PltExtra string     `json:"pltextra"` // extra arguments for plotting
 
 	// extra data for plotting

@@ -10,6 +10,7 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // VanGen implements van Genuchten's model
@@ -29,7 +30,7 @@ func init() {
 }
 
 // Init initialises model
-func (o *VanGen) Init(prms fun.Params) (err error) {
+func (o *VanGen) Init(prms dbf.Params) (err error) {
 	o.pcmin, o.slmax = 1e-3, 1.0
 	for _, p := range prms {
 		switch strings.ToLower(p.N) {
@@ -59,7 +60,7 @@ func (o *VanGen) Init(prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o VanGen) GetPrms(example bool) fun.Params {
+func (o VanGen) GetPrms(example bool) dbf.Params {
 	return []*fun.P{
 		&fun.P{N: "alp", V: 0.08},
 		&fun.P{N: "m", V: 4},

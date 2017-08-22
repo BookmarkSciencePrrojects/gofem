@@ -7,6 +7,7 @@ package solid
 import (
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/tsr"
 )
 
@@ -34,7 +35,7 @@ func (o *VonMises) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *VonMises) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *VonMises) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 
 	// parse parameters
 	err = o.SmallElasticity.Init(ndim, pstress, prms)
@@ -61,7 +62,7 @@ func (o *VonMises) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o VonMises) GetPrms() fun.Params {
+func (o VonMises) GetPrms() dbf.Params {
 	return []*fun.P{
 		&fun.P{N: "qy0", V: 0.5},
 		&fun.P{N: "H", V: 0},

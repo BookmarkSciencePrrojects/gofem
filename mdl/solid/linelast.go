@@ -4,7 +4,7 @@
 
 package solid
 
-import "github.com/cpmech/gosl/fun"
+import "github.com/cpmech/gosl/fun/dbf"
 
 // LinElast implements a linear elastic model
 type LinElast struct {
@@ -21,12 +21,12 @@ func (o *LinElast) Free() {
 }
 
 // Init initialises model
-func (o *LinElast) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *LinElast) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 	return o.SmallElasticity.Init(ndim, pstress, prms)
 }
 
 // GetPrms gets (an example) of parameters
-func (o LinElast) GetPrms() fun.Params {
+func (o LinElast) GetPrms() dbf.Params {
 	return o.SmallElasticity.GetPrms()
 }
 

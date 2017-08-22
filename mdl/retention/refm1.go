@@ -9,6 +9,7 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/utl"
 )
 
@@ -47,7 +48,7 @@ func init() {
 }
 
 // Init initialises model
-func (o *RefM1) Init(prms fun.Params) (err error) {
+func (o *RefM1) Init(prms dbf.Params) (err error) {
 
 	// parameters
 	o.model, o.A, o.pcr, o.y0 = 0, 70.0, 0.02, 1.0
@@ -106,7 +107,7 @@ func (o *RefM1) Init(prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o RefM1) GetPrms(example bool) fun.Params {
+func (o RefM1) GetPrms(example bool) dbf.Params {
 	return []*fun.P{
 		&fun.P{N: "lamd", V: 3},
 		&fun.P{N: "lamw", V: 3},

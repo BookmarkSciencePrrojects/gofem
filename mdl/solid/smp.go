@@ -9,6 +9,7 @@ import (
 
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/tsr"
 )
 
@@ -57,7 +58,7 @@ func (o *SmpInvs) GetRho() float64 {
 }
 
 // Init initialises model
-func (o *SmpInvs) Init(ndim int, pstress bool, prms fun.Params) (err error) {
+func (o *SmpInvs) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 
 	// basic data
 	o.Nsig = 2 * ndim
@@ -119,7 +120,7 @@ func (o *SmpInvs) Init(ndim int, pstress bool, prms fun.Params) (err error) {
 }
 
 // GetPrms gets (an example) of parameters
-func (o SmpInvs) GetPrms() fun.Params {
+func (o SmpInvs) GetPrms() dbf.Params {
 	return []*fun.P{
 		&fun.P{N: "c", V: 1},
 		&fun.P{N: "phi", V: 20},

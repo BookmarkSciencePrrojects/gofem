@@ -7,13 +7,13 @@ package conduct
 
 import (
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // Model defines liquid-gas conductivity models
 type Model interface {
-	Init(prms fun.Params) error      // Init initialises this structure
-	GetPrms(example bool) fun.Params // gets (an example) of parameters
+	Init(prms dbf.Params) error      // Init initialises this structure
+	GetPrms(example bool) dbf.Params // gets (an example) of parameters
 	Klr(sl float64) float64          // Klr returns klr
 	Kgr(sg float64) float64          // Kgr returns kgr
 	DklrDsl(sl float64) float64      // DklrDsl returns ∂klr/∂sl

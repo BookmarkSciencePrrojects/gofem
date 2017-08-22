@@ -7,7 +7,7 @@ package ana
 import (
 	"math"
 
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/num"
 	"github.com/cpmech/gosl/utl"
@@ -47,7 +47,7 @@ type PressCylin struct {
 }
 
 // Init initialises this structure
-func (o *PressCylin) Init(prms fun.Params) {
+func (o *PressCylin) Init(prms dbf.Params) {
 
 	// default values
 	o.a = 100    // [mm]

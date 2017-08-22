@@ -9,11 +9,12 @@ echo "    0 -- count lines [default]"
 echo "    1 -- execute goimports"
 echo "    2 -- generate depedency graphs"
 echo "    3 -- fix links in README files"
+echo "    4 -- run sed [must be customised]"
 
 JOB=0
 if [[ $# != 0 ]]; then
     JOB=$1
-    if [[ $JOB -lt 0 || $JOB -gt 3 ]]; then
+    if [[ $JOB -lt 0 || $JOB -gt 4 ]]; then
         echo
         echo "Job number $1 is invalid"
         echo
@@ -104,6 +105,17 @@ fixreadme() {
     sed -i 's,'"$old"','"$new"',' README.md
 }
 
+custom() {
+    pkg=$1
+    old="fun.Params"
+    new="dbf.Params"
+    for f in *.go; do
+        echo $f
+        sed -i 's,'"$old"','"$new"',' $f
+        goimports -w $f
+    done
+}
+
 if [[ $JOB == 1 ]]; then
     ALL="$ALL $EXA"
 fi
@@ -126,6 +138,9 @@ for pkg in $ALL; do
     fi
     if [[ $JOB == 3 ]]; then
         fixreadme $pkg
+    fi
+    if [[ $JOB == 4 ]]; then
+        custom $pkg
     fi
     cd $HERE
     (( idx++ ))

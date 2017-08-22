@@ -7,6 +7,7 @@ package conduct
 import (
 	"github.com/cpmech/gosl/chk"
 	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 // M1 implements the liquid-gas conductivity model # 1
@@ -35,8 +36,8 @@ func init() {
 }
 
 // GetPrms gets (an example) of parameters
-func (o M1) GetPrms(example bool) fun.Params {
-	return fun.Params{
+func (o M1) GetPrms(example bool) dbf.Params {
+	return dbf.Params{
 		&fun.P{N: "lam0l", V: 0.001},
 		&fun.P{N: "lam1l", V: 1.2},
 		&fun.P{N: "alpl", V: 0.01},
@@ -49,7 +50,7 @@ func (o M1) GetPrms(example bool) fun.Params {
 }
 
 // Init initialises this structure
-func (o *M1) Init(prms fun.Params) (err error) {
+func (o *M1) Init(prms dbf.Params) (err error) {
 	for _, p := range prms {
 		switch p.N {
 		case "lam0l":
@@ -72,7 +73,7 @@ func (o *M1) Init(prms fun.Params) (err error) {
 			return chk.Err("parameter named %q is incorrect\n", p.N)
 		}
 	}
-	err = o.klr.Init(fun.Params{
+	err = o.klr.Init(dbf.Params{
 		&fun.P{N: "lam0", V: o.λ0l},
 		&fun.P{N: "lam1", V: o.λ1l},
 		&fun.P{N: "alp", V: o.αl},
@@ -81,7 +82,7 @@ func (o *M1) Init(prms fun.Params) (err error) {
 	if err != nil {
 		return
 	}
-	err = o.kgr.Init(fun.Params{
+	err = o.kgr.Init(dbf.Params{
 		&fun.P{N: "lam0", V: o.λ0g},
 		&fun.P{N: "lam1", V: o.λ1g},
 		&fun.P{N: "alp", V: o.αg},
