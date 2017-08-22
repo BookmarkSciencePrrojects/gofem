@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 )
 
@@ -27,22 +27,22 @@ func Test_smp01(tst *testing.T) {
 	ndim, pstress := 2, false
 	simfnk, modelname := "test", "smp"
 	var drv Driver
-	err := drv.Init(simfnk, modelname, ndim, pstress, []*fun.P{
-		&fun.P{N: "c", V: 1},
-		&fun.P{N: "phi", V: 20},
-		&fun.P{N: "a", V: -1},
-		&fun.P{N: "b", V: 0.0},
-		&fun.P{N: "bet", V: 1},
-		&fun.P{N: "eps", V: 1e-3},
-		&fun.P{N: "le", V: 1},
-		&fun.P{N: "pr", V: 1.0},
-		&fun.P{N: "G0", V: G},
-		&fun.P{N: "K0", V: K},
-		&fun.P{N: "p0", V: 0.0},
-		&fun.P{N: "ev0", V: 0.0},
-		&fun.P{N: "rtyp", V: 1.0},
-		&fun.P{N: "r", V: 1.0},
-		&fun.P{N: "pe", V: 10.0},
+	err := drv.Init(simfnk, modelname, ndim, pstress, []*dbf.P{
+		&dbf.P{N: "c", V: 1},
+		&dbf.P{N: "phi", V: 20},
+		&dbf.P{N: "a", V: -1},
+		&dbf.P{N: "b", V: 0.0},
+		&dbf.P{N: "bet", V: 1},
+		&dbf.P{N: "eps", V: 1e-3},
+		&dbf.P{N: "le", V: 1},
+		&dbf.P{N: "pr", V: 1.0},
+		&dbf.P{N: "G0", V: G},
+		&dbf.P{N: "K0", V: K},
+		&dbf.P{N: "p0", V: 0.0},
+		&dbf.P{N: "ev0", V: 0.0},
+		&dbf.P{N: "rtyp", V: 1.0},
+		&dbf.P{N: "r", V: 1.0},
+		&dbf.P{N: "pe", V: 10.0},
 	})
 
 	// set flags

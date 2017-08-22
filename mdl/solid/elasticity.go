@@ -6,7 +6,6 @@ package solid
 
 import (
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/la"
@@ -109,9 +108,9 @@ func (o *SmallElasticity) Init(ndim int, pstress bool, prms dbf.Params) (err err
 
 // GetPrms gets (an example) of parameters
 func (o SmallElasticity) GetPrms() dbf.Params {
-	return []*fun.P{
-		&fun.P{N: "E", V: o.E},
-		&fun.P{N: "nu", V: o.Nu},
+	return []*dbf.P{
+		&dbf.P{N: "E", V: o.E},
+		&dbf.P{N: "nu", V: o.Nu},
 	}
 }
 

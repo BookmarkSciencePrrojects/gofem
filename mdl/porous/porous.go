@@ -19,7 +19,6 @@ import (
 	"github.com/cpmech/gofem/mdl/fluid"
 	"github.com/cpmech/gofem/mdl/retention"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/utl"
@@ -186,15 +185,15 @@ func (o *Model) Init(prms dbf.Params, Cnd conduct.Model, Lrm retention.Model, Li
 func (o Model) GetPrms(example bool) dbf.Params {
 	if example {
 		return dbf.Params{
-			&fun.P{N: "nf0", V: 0.3},   // [-]
-			&fun.P{N: "RhoS0", V: 2.7}, // [Mg/m³]
-			&fun.P{N: "kl", V: 1e-3},   // [m/s]
-			&fun.P{N: "kg", V: 1e-2},   // [m/s]
+			&dbf.P{N: "nf0", V: 0.3},   // [-]
+			&dbf.P{N: "RhoS0", V: 2.7}, // [Mg/m³]
+			&dbf.P{N: "kl", V: 1e-3},   // [m/s]
+			&dbf.P{N: "kg", V: 1e-2},   // [m/s]
 		}
 	}
 	return dbf.Params{
-		&fun.P{N: "nf0", V: o.Nf0},
-		&fun.P{N: "RhoS0", V: o.RhoS0},
+		&dbf.P{N: "nf0", V: o.Nf0},
+		&dbf.P{N: "RhoS0", V: o.RhoS0},
 	}
 }
 

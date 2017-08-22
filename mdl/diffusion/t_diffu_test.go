@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/la"
 	"github.com/cpmech/gosl/utl"
 )
@@ -24,13 +24,13 @@ func Test_m1(tst *testing.T) {
 		return
 	}
 
-	prms := []*fun.P{
-		&fun.P{N: "a0", V: 1.0},
-		&fun.P{N: "a1", V: 2.0},
-		&fun.P{N: "a2", V: 3.0},
-		&fun.P{N: "a3", V: 4.0},
-		&fun.P{N: "rho", V: 3.3},
-		&fun.P{N: "k", V: 0.1},
+	prms := []*dbf.P{
+		&dbf.P{N: "a0", V: 1.0},
+		&dbf.P{N: "a1", V: 2.0},
+		&dbf.P{N: "a2", V: 3.0},
+		&dbf.P{N: "a3", V: 4.0},
+		&dbf.P{N: "rho", V: 3.3},
+		&dbf.P{N: "k", V: 0.1},
 	}
 
 	ndim := 3

@@ -8,7 +8,6 @@ package fluid
 import (
 	"math"
 
-	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/fun/dbf"
 )
 
@@ -55,17 +54,17 @@ func (o Model) GetPrms(example bool) dbf.Params {
 	if example {
 		if o.Gas {
 			return dbf.Params{ // dry air
-				&fun.P{N: "R0", V: 0.0012}, // [Mg/m³]
-				&fun.P{N: "P0", V: 0.0},    // [kPa]
-				&fun.P{N: "C", V: 1.17e-5}, // [Mg/(m³・kPa)]
-				&fun.P{N: "Gas", V: 1},     // [-]
+				&dbf.P{N: "R0", V: 0.0012}, // [Mg/m³]
+				&dbf.P{N: "P0", V: 0.0},    // [kPa]
+				&dbf.P{N: "C", V: 1.17e-5}, // [Mg/(m³・kPa)]
+				&dbf.P{N: "Gas", V: 1},     // [-]
 			}
 		}
 		return dbf.Params{ // water
-			&fun.P{N: "R0", V: 1.0},    // [Mg/m³]
-			&fun.P{N: "P0", V: 0.0},    // [kPa]
-			&fun.P{N: "C", V: 4.53e-7}, // [Mg/(m³・kPa)]
-			&fun.P{N: "Gas", V: 0},     // [-]
+			&dbf.P{N: "R0", V: 1.0},    // [Mg/m³]
+			&dbf.P{N: "P0", V: 0.0},    // [kPa]
+			&dbf.P{N: "C", V: 4.53e-7}, // [Mg/(m³・kPa)]
+			&dbf.P{N: "Gas", V: 0},     // [-]
 		}
 	}
 	var gas float64
@@ -73,10 +72,10 @@ func (o Model) GetPrms(example bool) dbf.Params {
 		gas = 1
 	}
 	return dbf.Params{
-		&fun.P{N: "R0", V: o.R0},
-		&fun.P{N: "P0", V: o.P0},
-		&fun.P{N: "C", V: o.C},
-		&fun.P{N: "Gas", V: gas},
+		&dbf.P{N: "R0", V: o.R0},
+		&dbf.P{N: "P0", V: o.P0},
+		&dbf.P{N: "C", V: o.C},
+		&dbf.P{N: "Gas", V: gas},
 	}
 }
 

@@ -27,30 +27,30 @@ func Test_colpresfluid01(tst *testing.T) {
 	g := 10.0
 
 	var col ColumnFluidPressure
-	col.Init(R0, p0, C, g, H, true)
+	col.Init(R0, p0, C, g, H)
 
-	tol := 1e-4
+	tol := 1e-8
 	np := 11
 	dz := H / float64(np-1)
-	io.PfWhite("%8s%14s%14s%14s%14s%23s\n", "z", "p_ana", "R_ana", "p_num", "R_num", "err_p")
+	io.PfWhite("%8s%14s%14s%14s%14s%23s\n", "z", "pAna", "Rana", "pNum", "Rnum", "errp")
 	for i := 0; i < np; i++ {
 		z := H - float64(i)*dz
-		p_ana, R_ana := col.Calc(z)
-		p_num, R_num := col.CalcNum(z)
-		err_p := math.Abs(p_ana - p_num)
-		io.Pf("%8.4f%14.8f%14.8f%14.8f%14.8f%23.15e\n", z, p_ana, R_ana, p_num, R_num, err_p)
-		chk.AnaNum(tst, "p", tol, p_ana, p_num, false)
+		pAna, Rana := col.Calc(z)
+		pNum, Rnum := col.CalcNum(z)
+		errp := math.Abs(pAna - pNum)
+		io.Pf("%8.4f%14.8f%14.8f%14.8f%14.8f%23.15e\n", z, pAna, Rana, pNum, Rnum, errp)
+		chk.AnaNum(tst, "p", tol, pAna, pNum, false)
 	}
 
 	np = 101
 	Z := utl.LinSpace(0, H, np)
-	P_ana := make([]float64, np)
-	R_ana := make([]float64, np)
-	P_num := make([]float64, np)
-	R_num := make([]float64, np)
+	Pana := make([]float64, np)
+	Rana := make([]float64, np)
+	Pnum := make([]float64, np)
+	Rnum := make([]float64, np)
 	for i, z := range Z {
-		P_ana[i], R_ana[i] = col.Calc(z)
-		P_num[i], R_num[i] = col.CalcNum(z)
+		Pana[i], Rana[i] = col.Calc(z)
+		Pnum[i], Rnum[i] = col.CalcNum(z)
 	}
 
 	pMaxLin := R0 * g * H
@@ -59,14 +59,14 @@ func Test_colpresfluid01(tst *testing.T) {
 
 		plt.Reset(false, nil)
 		plt.Subplot(2, 1, 1)
-		plt.Plot(P_num, Z, &plt.A{C: "r", Ls: "-", L: "num"})
-		plt.Plot(P_ana, Z, &plt.A{C: "b", Ls: ".", L: "ana", Me: 20})
+		plt.Plot(Pnum, Z, &plt.A{C: "r", Ls: "-", L: "num"})
+		plt.Plot(Pana, Z, &plt.A{C: "b", Ls: ".", L: "ana", Me: 20})
 		plt.Plot([]float64{p0, pMaxLin}, []float64{H, 0}, &plt.A{C: "k", Ls: "--"})
 		plt.Gll("$p$", "$z$", nil)
 
 		plt.Subplot(2, 1, 2)
-		plt.Plot(R_num, Z, &plt.A{C: "r", Ls: "-", L: "num"})
-		plt.Plot(R_ana, Z, &plt.A{C: "b", Ls: ".", L: "ana", Me: 20})
+		plt.Plot(Rnum, Z, &plt.A{C: "r", Ls: "-", L: "num"})
+		plt.Plot(Rana, Z, &plt.A{C: "b", Ls: ".", L: "ana", Me: 20})
 		plt.Plot([]float64{R0, R0 + C*pMaxLin}, []float64{H, 0}, &plt.A{C: "k", Ls: "--"})
 		plt.Gll("$\\rho$", "$z$", nil)
 

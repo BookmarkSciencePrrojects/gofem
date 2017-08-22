@@ -8,7 +8,6 @@ import (
 	"math"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/utl"
 )
@@ -108,19 +107,19 @@ func (o *RefM1) Init(prms dbf.Params) (err error) {
 
 // GetPrms gets (an example) of parameters
 func (o RefM1) GetPrms(example bool) dbf.Params {
-	return []*fun.P{
-		&fun.P{N: "lamd", V: 3},
-		&fun.P{N: "lamw", V: 3},
-		&fun.P{N: "xrd", V: 2.0},
-		&fun.P{N: "xrw", V: 2.0},
-		&fun.P{N: "y0", V: 1.0},
-		&fun.P{N: "yr", V: 0.005},
-		&fun.P{N: "betd", V: 2},
-		&fun.P{N: "betw", V: 2},
-		&fun.P{N: "bet1", V: 2},
-		&fun.P{N: "bet2", V: 2},
-		&fun.P{N: "alp", V: 0.5},
-		&fun.P{N: "nowet", V: 0, Inact: true},
+	return []*dbf.P{
+		&dbf.P{N: "lamd", V: 3},
+		&dbf.P{N: "lamw", V: 3},
+		&dbf.P{N: "xrd", V: 2.0},
+		&dbf.P{N: "xrw", V: 2.0},
+		&dbf.P{N: "y0", V: 1.0},
+		&dbf.P{N: "yr", V: 0.005},
+		&dbf.P{N: "betd", V: 2},
+		&dbf.P{N: "betw", V: 2},
+		&dbf.P{N: "bet1", V: 2},
+		&dbf.P{N: "bet2", V: 2},
+		&dbf.P{N: "alp", V: 0.5},
+		&dbf.P{N: "nowet", V: 0, Inact: true},
 	}
 }
 

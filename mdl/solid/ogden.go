@@ -8,7 +8,6 @@ import (
 	"math"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/tsr"
 )
@@ -84,7 +83,7 @@ func (o *Ogden) Init(ndim int, pstress bool, prms dbf.Params) (err error) {
 
 // GetPrms gets (an example) of parameters
 func (o Ogden) GetPrms() dbf.Params {
-	return []*fun.P{}
+	return []*dbf.P{}
 }
 
 // InitIntVars initialises internal (secondary) variables

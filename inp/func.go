@@ -76,7 +76,7 @@ func (o FuncsData) PlotAll(pd *PlotFdata, dirout, fnkey string) {
 				plt.Text(x, y, io.Sf("%g", y), nil)
 			}
 			/* TODO
-			fun.PlotT(ff, "", "", pd.Ti, pd.Tf, nil, pd.Np,
+			dbf.PlotT(ff, "", "", pd.Ti, pd.Tf, nil, pd.Np,
 				f.LabelT, f.LabelF, f.LabelG, f.LabelH, f.ArgsF, f.ArgsG, f.ArgsH)
 			*/
 			plt.Save(dirout, io.Sf("functions-%s-%s", fnkey, f.Name))

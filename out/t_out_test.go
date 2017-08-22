@@ -11,7 +11,6 @@ import (
 	"github.com/cpmech/gofem/ele/solid"
 	"github.com/cpmech/gofem/fem"
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
 	"github.com/cpmech/gosl/fun/dbf"
 	"github.com/cpmech/gosl/io"
 	"github.com/cpmech/gosl/utl"
@@ -127,8 +126,8 @@ func Test_out01(tst *testing.T) {
 	// solution
 	var sol ana.CteStressPstrain
 	sol.Init(dbf.Params{
-		&fun.P{N: "qnH", V: -50},
-		&fun.P{N: "qnV", V: -100},
+		&dbf.P{N: "qnH", V: -50},
+		&dbf.P{N: "qnV", V: -100},
 	})
 
 	// check displacements
@@ -200,8 +199,8 @@ func Test_out02(tst *testing.T) {
 	// solution
 	var sol ana.CteStressPstrain
 	sol.Init(dbf.Params{
-		&fun.P{N: "qnH", V: -50},
-		&fun.P{N: "qnV", V: -100},
+		&dbf.P{N: "qnH", V: -50},
+		&dbf.P{N: "qnV", V: -100},
 	})
 
 	// check displacements

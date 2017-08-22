@@ -38,14 +38,14 @@ func init() {
 // GetPrms gets (an example) of parameters
 func (o M1) GetPrms(example bool) dbf.Params {
 	return dbf.Params{
-		&fun.P{N: "lam0l", V: 0.001},
-		&fun.P{N: "lam1l", V: 1.2},
-		&fun.P{N: "alpl", V: 0.01},
-		&fun.P{N: "betl", V: 10},
-		&fun.P{N: "lam0g", V: 2.0},
-		&fun.P{N: "lam1g", V: 0.001},
-		&fun.P{N: "alpg", V: 0.01},
-		&fun.P{N: "betg", V: 10},
+		&dbf.P{N: "lam0l", V: 0.001},
+		&dbf.P{N: "lam1l", V: 1.2},
+		&dbf.P{N: "alpl", V: 0.01},
+		&dbf.P{N: "betl", V: 10},
+		&dbf.P{N: "lam0g", V: 2.0},
+		&dbf.P{N: "lam1g", V: 0.001},
+		&dbf.P{N: "alpg", V: 0.01},
+		&dbf.P{N: "betg", V: 10},
 	}
 }
 
@@ -74,19 +74,19 @@ func (o *M1) Init(prms dbf.Params) (err error) {
 		}
 	}
 	err = o.klr.Init(dbf.Params{
-		&fun.P{N: "lam0", V: o.λ0l},
-		&fun.P{N: "lam1", V: o.λ1l},
-		&fun.P{N: "alp", V: o.αl},
-		&fun.P{N: "bet", V: o.βl},
+		&dbf.P{N: "lam0", V: o.λ0l},
+		&dbf.P{N: "lam1", V: o.λ1l},
+		&dbf.P{N: "alp", V: o.αl},
+		&dbf.P{N: "bet", V: o.βl},
 	})
 	if err != nil {
 		return
 	}
 	err = o.kgr.Init(dbf.Params{
-		&fun.P{N: "lam0", V: o.λ0g},
-		&fun.P{N: "lam1", V: o.λ1g},
-		&fun.P{N: "alp", V: o.αg},
-		&fun.P{N: "bet", V: o.βg},
+		&dbf.P{N: "lam0", V: o.λ0g},
+		&dbf.P{N: "lam1", V: o.λ1g},
+		&dbf.P{N: "alp", V: o.αg},
+		&dbf.P{N: "bet", V: o.βg},
 	})
 	return
 }

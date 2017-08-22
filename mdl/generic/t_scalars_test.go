@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/cpmech/gosl/chk"
-	"github.com/cpmech/gosl/fun"
+	"github.com/cpmech/gosl/fun/dbf"
 )
 
 func Test_scalars01(tst *testing.T) {
@@ -22,33 +22,33 @@ func Test_scalars01(tst *testing.T) {
 		return
 	}
 
-	prms := []*fun.P{
-		&fun.P{N: "A", V: 1},
-		&fun.P{N: "B", V: 2},
-		&fun.P{N: "C", V: 3},
-		&fun.P{N: "D", V: 4},
-		&fun.P{N: "E", V: 5},
-		&fun.P{N: "F", V: 6},
-		&fun.P{N: "G", V: 7},
-		&fun.P{N: "H", V: 8},
-		&fun.P{N: "I", V: 9},
-		&fun.P{N: "J", V: 10},
-		&fun.P{N: "K", V: 11},
-		&fun.P{N: "L", V: 12},
-		&fun.P{N: "M", V: 13},
-		&fun.P{N: "N", V: 14},
-		&fun.P{N: "O", V: 15},
-		&fun.P{N: "P", V: 16},
-		&fun.P{N: "Q", V: 17},
-		&fun.P{N: "R", V: 18},
-		&fun.P{N: "S", V: 19},
-		&fun.P{N: "T", V: 20},
-		&fun.P{N: "U", V: 21},
-		&fun.P{N: "V", V: 22},
-		&fun.P{N: "W", V: 23},
-		&fun.P{N: "X", V: 24},
-		&fun.P{N: "Y", V: 25},
-		&fun.P{N: "Z", V: 26},
+	prms := []*dbf.P{
+		&dbf.P{N: "A", V: 1},
+		&dbf.P{N: "B", V: 2},
+		&dbf.P{N: "C", V: 3},
+		&dbf.P{N: "D", V: 4},
+		&dbf.P{N: "E", V: 5},
+		&dbf.P{N: "F", V: 6},
+		&dbf.P{N: "G", V: 7},
+		&dbf.P{N: "H", V: 8},
+		&dbf.P{N: "I", V: 9},
+		&dbf.P{N: "J", V: 10},
+		&dbf.P{N: "K", V: 11},
+		&dbf.P{N: "L", V: 12},
+		&dbf.P{N: "M", V: 13},
+		&dbf.P{N: "N", V: 14},
+		&dbf.P{N: "O", V: 15},
+		&dbf.P{N: "P", V: 16},
+		&dbf.P{N: "Q", V: 17},
+		&dbf.P{N: "R", V: 18},
+		&dbf.P{N: "S", V: 19},
+		&dbf.P{N: "T", V: 20},
+		&dbf.P{N: "U", V: 21},
+		&dbf.P{N: "V", V: 22},
+		&dbf.P{N: "W", V: 23},
+		&dbf.P{N: "X", V: 24},
+		&dbf.P{N: "Y", V: 25},
+		&dbf.P{N: "Z", V: 26},
 	}
 
 	ndim := 3

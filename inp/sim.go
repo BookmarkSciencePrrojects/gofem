@@ -262,7 +262,7 @@ type Simulation struct {
 	Adjustable   dbf.Params     // adjustable parameters (not dependent)
 	AdjRandom    rnd.Variables  // adjustable parameters that are random variables (not dependent)
 	AdjDependent dbf.Params     // adjustable parameters that depend on other adjustable parameters
-	adjmap       map[int]*fun.P // auxiliary map with adjustable (not dependent)
+	adjmap       map[int]*dbf.P // auxiliary map with adjustable (not dependent)
 }
 
 // Simulation //////////////////////////////////////////////////////////////////////////////////////
@@ -437,7 +437,7 @@ func ReadSim(simfilepath, alias string, erasePrev, createDirOut bool, goroutineI
 	}
 
 	// adjustable and random parameters
-	o.adjmap = make(map[int]*fun.P)
+	o.adjmap = make(map[int]*dbf.P)
 	for _, mat := range o.MatModels.Materials {
 		for _, prm := range mat.Prms {
 			o.append_adjustable_parameter(prm)
@@ -649,7 +649,7 @@ func (o *Simulation) PrmGetAdj(adj int) (val float64) {
 }
 
 // append_adjustable_parameter add prm to lists
-func (o *Simulation) append_adjustable_parameter(prm *fun.P) {
+func (o *Simulation) append_adjustable_parameter(prm *dbf.P) {
 
 	// adjustable parameter
 	if prm.Adj > 0 {
